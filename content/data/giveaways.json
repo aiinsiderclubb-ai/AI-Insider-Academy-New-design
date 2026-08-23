@@ -1,0 +1,119 @@
+{
+ "GIVEAWAYS": [
+  {
+   "id": "claude-pro",
+   "slug": "claude-pro",
+   "status": "active",
+   "brand": "Claude",
+   "icon": "brain",
+   "logoText": "Claude",
+   "accent": "#d97757",
+   "gradient": "linear-gradient(145deg, #2a1a14 0%, #d97757 45%, #8b5cf6 100%)",
+   "prizeRu": "Claude Pro",
+   "prizeEn": "Claude Pro",
+   "prizeDetailRu": "× 1 месяц",
+   "prizeDetailEn": "× 1 month",
+   "winnersCount": 1,
+   "startsAt": "2026-07-10T00:00:00+03:00",
+   "endsAt": "2026-08-31T23:59:59+03:00",
+   "telegramChannel": "aiinsiderclub",
+   "telegramInviteUrl": "https://t.me/+ECZbsUy0bD03NGFk",
+   "telegramPostUrl": "",
+   "tagRu": "Активный розыгрыш",
+   "tagEn": "Active giveaway",
+   "headlineRu": "Выиграйте Claude Pro",
+   "headlineEn": "Win Claude Pro",
+   "leadRu": "Подписка на Claude Pro — для глубокой работы с AI, длинным контекстом и проектами. Разыгрываем среди подписчиков AI Insider.",
+   "leadEn": "Claude Pro subscription — for deep AI work, long context and projects. We are giving it away to AI Insider community members.",
+   "rulesRu": [
+    {
+     "title": "Бесплатное участие",
+     "text": "Участие бесплатное. Один подтверждённый аккаунт получает один шанс."
+    },
+    {
+     "title": "Проверка участия",
+     "text": "Для участия нужно подключить Telegram и быть подписанным на канал AI Insider."
+    },
+    {
+     "title": "Как выбираем победителя",
+     "text": "Победитель выбирается сервером случайно среди уникальных подтверждённых участников."
+    },
+    {
+     "title": "Публикация итогов",
+     "text": "Итоги публикуем в Telegram и на этой странице."
+    },
+    {
+     "title": "Что получит победитель",
+     "text": "Приз — промокод или оплата подписки Claude Pro на 1 месяц."
+    },
+    {
+     "title": "Честная игра",
+     "text": "Команда AI Insider может отказать участнику при нарушении правил или фейковом аккаунте."
+    }
+   ],
+   "rulesEn": [
+    {
+     "title": "Free to enter",
+     "text": "Participation is free. One verified account receives one chance."
+    },
+    {
+     "title": "Entry verification",
+     "text": "Connect Telegram and subscribe to the AI Insider channel to enter."
+    },
+    {
+     "title": "How we pick a winner",
+     "text": "The server randomly selects one unique verified participant."
+    },
+    {
+     "title": "Results",
+     "text": "Results are published on Telegram and this page."
+    },
+    {
+     "title": "What you win",
+     "text": "Prize is a promo code or Claude Pro subscription for 1 month."
+    },
+    {
+     "title": "Fair play",
+     "text": "AI Insider team may disqualify entries that break rules or use fake accounts."
+    }
+   ],
+   "faqRu": [
+    {
+     "q": "Как выбирается победитель?",
+     "a": "Сервер выбирает одного победителя случайно среди уникальных подтверждённых участников. Итоги публикуем в Telegram и на странице розыгрыша."
+    },
+    {
+     "q": "Как я получу приз?",
+     "a": "Мы свяжемся с победителем в Telegram / по email аккаунта Academy и передадим промокод или оплатим подписку Claude Pro на 1 месяц."
+    },
+    {
+     "q": "Можно ли участвовать без Telegram?",
+     "a": "Для базового участия и проверки подписки нужен Telegram-бот AI Insider и канал AI Insider. Без этого сервер не примет заявку."
+    },
+    {
+     "q": "Когда итоги?",
+     "a": "Сразу после окончания таймера. Анонс — в Telegram-канале AI Insider и на этой странице."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How is the winner chosen?",
+     "a": "The server randomly selects one winner among unique verified participants. Results go live on Telegram and this page."
+    },
+    {
+     "q": "How do I receive the prize?",
+     "a": "We contact the winner via Telegram / Academy email and send a promo code or pay for 1 month of Claude Pro."
+    },
+    {
+     "q": "Can I enter without Telegram?",
+     "a": "Base entry requires the AI Insider Telegram bot and AI Insider channel so we can verify participation."
+    },
+    {
+     "q": "When are results announced?",
+     "a": "Right after the timer ends — on the AI Insider Telegram channel and this page."
+    }
+   ]
+  }
+ ],
+ "TELEGRAM_COMMUNITY": "https://t.me/+gu0HQTZLad9lOWE0"
+}

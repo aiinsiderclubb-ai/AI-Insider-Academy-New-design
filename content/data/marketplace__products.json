@@ -1,0 +1,2843 @@
+{
+ "AI_INCOME_COLLECTION": [
+  {
+   "productId": "mp-income-agency-os",
+   "outcomeRu": "Запустить AI-агентство и закрывать клиентов на внедрение + retainer",
+   "outcomeEn": "Launch an AI agency and close implementation + retainer clients",
+   "launchRu": "1–2 дня",
+   "launchEn": "1–2 days",
+   "serviceRu": "Услуга 1 500–10 000€",
+   "serviceEn": "€1,500–€10,000 service"
+  },
+  {
+   "productId": "mp-income-zapier-migration",
+   "outcomeRu": "Продавать миграцию и поддержку n8n как продуктовую услугу",
+   "outcomeEn": "Sell n8n migration and maintenance as a productized service",
+   "launchRu": "4–8 часов",
+   "launchEn": "4–8 hours",
+   "serviceRu": "Проект 800–4 500€",
+   "serviceEn": "€800–€4,500 project"
+  },
+  {
+   "productId": "mp-voice-beauty-salon",
+   "outcomeRu": "Внедрять запись и обработку звонков для локального бизнеса",
+   "outcomeEn": "Deploy call handling and booking for local businesses",
+   "launchRu": "1 день",
+   "launchEn": "1 day",
+   "serviceRu": "Setup + monthly retainer",
+   "serviceEn": "Setup + monthly retainer"
+  },
+  {
+   "productId": "mp-income-real-estate",
+   "outcomeRu": "Автоматизировать путь от лида до просмотра недвижимости",
+   "outcomeEn": "Automate the path from lead to property viewing",
+   "launchRu": "1–3 дня",
+   "launchEn": "1–3 days",
+   "serviceRu": "Вертикальное внедрение",
+   "serviceEn": "Vertical implementation"
+  },
+  {
+   "productId": "mp-income-ecommerce-retention",
+   "outcomeRu": "Снизить нагрузку поддержки и возвращать потерянную выручку",
+   "outcomeEn": "Reduce support load and recover lost revenue",
+   "launchRu": "1–2 дня",
+   "launchEn": "1–2 days",
+   "serviceRu": "Setup + usage",
+   "serviceEn": "Setup + usage"
+  },
+  {
+   "productId": "mp-income-revenue-recovery",
+   "outcomeRu": "Автоматизировать возврат просроченной выручки",
+   "outcomeEn": "Automate overdue revenue recovery",
+   "launchRu": "4–6 часов",
+   "launchEn": "4–6 hours",
+   "serviceRu": "Fee + outcome bonus",
+   "serviceEn": "Fee + outcome bonus"
+  },
+  {
+   "productId": "mp-income-content-service",
+   "outcomeRu": "Продавать контент-систему брендам и экспертам по подписке",
+   "outcomeEn": "Sell a subscription content system to brands and experts",
+   "launchRu": "3–6 часов",
+   "launchEn": "3–6 hours",
+   "serviceRu": "500–2 500€/месяц",
+   "serviceEn": "€500–€2,500/month"
+  },
+  {
+   "productId": "mp-biz-agent-audit",
+   "outcomeRu": "Продавать аудит безопасности и ROI AI-систем",
+   "outcomeEn": "Sell AI system security and ROI audits",
+   "launchRu": "2–4 часа",
+   "launchEn": "2–4 hours",
+   "serviceRu": "Аудит 750–2 500€",
+   "serviceEn": "€750–€2,500 audit"
+  }
+ ],
+ "FEATURED_SECTIONS": [
+  {
+   "id": "top-selling",
+   "titleRu": "Топ продаж",
+   "titleEn": "Top selling",
+   "badge": "top-selling"
+  },
+  {
+   "id": "new",
+   "titleRu": "Новинки",
+   "titleEn": "New releases",
+   "badge": "new"
+  },
+  {
+   "id": "most-downloaded",
+   "titleRu": "Чаще всего скачивают",
+   "titleEn": "Most downloaded",
+   "badge": "most-downloaded"
+  },
+  {
+   "id": "trending",
+   "titleRu": "В тренде на этой неделе",
+   "titleEn": "Trending this week",
+   "badge": "trending"
+  }
+ ],
+ "MARKETPLACE_PRODUCTS": [
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending"
+   ],
+   "badge": null,
+   "relatedIds": [
+    "mp-prompt-seo-vault",
+    "mp-prompt-sales-vault"
+   ],
+   "recommendsForCourses": [
+    "ai-content-creator",
+    "ai-productivity-master"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "prompt",
+    "titleRu": "Бесплатный промпт: оффер за 60 секунд",
+    "titleEn": "Free prompt: offer in 60 seconds",
+    "contentRu": "Ты — маркетолог SaaS. Напиши оффер для [продукт] на аудиторию [кто].\nФормат:\n1) Боль (1 предложение)\n2) Обещание результата\n3) Доказательство / механизм\n4) CTA\nБез воды, на русском, максимум 80 слов.",
+    "contentEn": "You are a SaaS marketer. Write an offer for [product] targeting [audience].\nFormat:\n1) Pain (1 sentence)\n2) Outcome promise\n3) Proof / mechanism\n4) CTA\nNo fluff, max 80 words."
+   },
+   "coverImage": null,
+   "id": "mp-prompt-chatgpt-vault",
+   "slug": "chatgpt-prompt-vault",
+   "categoryId": "prompt-packs",
+   "productType": "prompt-pack",
+   "titleRu": "ChatGPT Prompt Vault",
+   "titleEn": "ChatGPT Prompt Vault",
+   "shortRu": "500+ промптов для бизнеса, маркетинга и продаж.",
+   "shortEn": "500+ prompts for business, marketing and sales.",
+   "priceEur": 29,
+   "rating": 4.9,
+   "reviewCount": 312,
+   "downloads": 4800,
+   "coverGradient": "linear-gradient(135deg, #7c3aed, #ec4899)",
+   "coverIcon": "✨",
+   "creatorId": "creator-insider",
+   "includedRu": [
+    "500+ ChatGPT prompts",
+    "Marketing & SEO packs",
+    "Sales scripts",
+    "Notion index"
+   ],
+   "includedEn": [
+    "500+ ChatGPT prompts",
+    "Marketing & SEO packs",
+    "Sales scripts",
+    "Notion index"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "relatedIds": [
+    "mp-prompt-chatgpt-vault"
+   ],
+   "recommendsForCourses": [
+    "ai-content-creator"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-prompt-seo-vault",
+   "slug": "seo-prompt-vault",
+   "categoryId": "prompt-packs",
+   "productType": "prompt-pack",
+   "titleRu": "SEO Prompt Vault",
+   "titleEn": "SEO Prompt Vault",
+   "shortRu": "Промпты для статей, мета-тегов и семантики.",
+   "shortEn": "Prompts for articles, meta tags and semantics.",
+   "priceEur": 24,
+   "rating": 4.8,
+   "reviewCount": 156,
+   "downloads": 2100,
+   "coverGradient": "linear-gradient(135deg, #06b6d4, #22c55e)",
+   "coverIcon": "🔍",
+   "creatorId": "creator-insider",
+   "includedRu": [
+    "200+ SEO prompts",
+    "Content briefs",
+    "Keyword clusters"
+   ],
+   "includedEn": [
+    "200+ SEO prompts",
+    "Content briefs",
+    "Keyword clusters"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-prompt-chatgpt-vault",
+    "mp-biz-outreach-pack"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-prompt-sales-vault",
+   "slug": "sales-prompt-vault",
+   "categoryId": "prompt-packs",
+   "productType": "prompt-pack",
+   "titleRu": "Sales Prompt Vault",
+   "titleEn": "Sales Prompt Vault",
+   "shortRu": "Скрипты холодных касаний, follow-up и закрытия сделок.",
+   "shortEn": "Cold outreach, follow-up and closing prompts.",
+   "priceEur": 19,
+   "rating": 4.7,
+   "reviewCount": 98,
+   "downloads": 1650,
+   "coverGradient": "linear-gradient(135deg, #f97316, #ef4444)",
+   "coverIcon": "💼",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-prompt-chatgpt-vault"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-prompt-marketing-vault",
+   "slug": "marketing-prompt-vault",
+   "categoryId": "prompt-packs",
+   "productType": "prompt-pack",
+   "titleRu": "Marketing Prompt Vault",
+   "titleEn": "Marketing Prompt Vault",
+   "shortRu": "Реклама, лендинги, email и соцсети.",
+   "shortEn": "Ads, landing pages, email and social.",
+   "priceEur": 29,
+   "rating": 4.8,
+   "reviewCount": 201,
+   "downloads": 2900,
+   "coverGradient": "linear-gradient(135deg, #a855f7, #f97316)",
+   "coverIcon": "📣",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "relatedIds": [
+    "mp-prompt-chatgpt-vault"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-prompt-research-vault",
+   "slug": "ai-research-prompt-vault",
+   "categoryId": "prompt-packs",
+   "productType": "prompt-pack",
+   "titleRu": "AI Research Prompt Vault",
+   "titleEn": "AI Research Prompt Vault",
+   "shortRu": "Исследования рынка, конкурентов и идей.",
+   "shortEn": "Market, competitor and idea research.",
+   "priceEur": 39,
+   "rating": 4.9,
+   "reviewCount": 87,
+   "downloads": 980,
+   "coverGradient": "linear-gradient(135deg, #6366f1, #06b6d4)",
+   "coverIcon": "🧠",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending"
+   ],
+   "badge": null,
+   "relatedIds": [
+    "mp-workflow-crm",
+    "mp-workflow-whatsapp"
+   ],
+   "recommendsForCourses": [
+    "ai-automation-engineer",
+    "first-automation-n8n"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "workflow",
+    "titleRu": "Бесплатный фрагмент: логика lead capture",
+    "titleEn": "Free sample: lead capture logic",
+    "contentRu": "Webhook (form)\n  → IF email valid\n    → Enrich (Clearbit / Apollo)\n    → CRM: create/update lead\n    → Slack #leads notify\n    → IF score >= hot → assign owner\n  ELSE\n    → Reply “invalid email”",
+    "contentEn": "Webhook (form)\n  → IF email valid\n    → Enrich (Clearbit / Apollo)\n    → CRM: create/update lead\n    → Slack #leads notify\n    → IF score >= hot → assign owner\n  ELSE\n    → Reply “invalid email”"
+   },
+   "coverImage": null,
+   "id": "mp-workflow-lead-gen",
+   "slug": "lead-generation-workflow",
+   "categoryId": "n8n-workflows",
+   "productType": "automation-pack",
+   "titleRu": "Lead Generation Workflow",
+   "titleEn": "Lead Generation Workflow",
+   "shortRu": "Сбор лидов из форм, соцсетей и CRM.",
+   "shortEn": "Capture leads from forms, social and CRM.",
+   "priceEur": 49,
+   "rating": 4.9,
+   "reviewCount": 224,
+   "downloads": 3400,
+   "coverGradient": "linear-gradient(135deg, #16a34a, #06b6d4)",
+   "coverIcon": "📈",
+   "creatorId": "creator-n8n-lab",
+   "includedRu": [
+    "n8n workflow JSON",
+    "Setup guide PDF",
+    "CRM mapping"
+   ],
+   "includedEn": [
+    "n8n workflow JSON",
+    "Setup guide PDF",
+    "CRM mapping"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-workflow-lead-gen",
+    "mp-agent-sales"
+   ],
+   "recommendsForCourses": [
+    "ai-automation-engineer"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-workflow-whatsapp",
+   "slug": "whatsapp-sales-bot",
+   "categoryId": "n8n-workflows",
+   "productType": "automation-pack",
+   "titleRu": "WhatsApp Sales Bot",
+   "titleEn": "WhatsApp Sales Bot",
+   "shortRu": "Автоответы, квалификация и передача менеджеру.",
+   "shortEn": "Auto-replies, qualification and handoff.",
+   "priceEur": 79,
+   "rating": 4.8,
+   "reviewCount": 178,
+   "downloads": 2200,
+   "coverGradient": "linear-gradient(135deg, #22c55e, #84cc16)",
+   "coverIcon": "💬",
+   "creatorId": "creator-n8n-lab"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-agent-support"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-workflow-support",
+   "slug": "ai-support-automation",
+   "categoryId": "n8n-workflows",
+   "productType": "automation-pack",
+   "titleRu": "AI Support Automation",
+   "titleEn": "AI Support Automation",
+   "shortRu": "Тикеты, FAQ и эскалация в n8n + AI.",
+   "shortEn": "Tickets, FAQ and AI escalation in n8n.",
+   "priceEur": 59,
+   "rating": 4.7,
+   "reviewCount": 134,
+   "downloads": 1800,
+   "coverGradient": "linear-gradient(135deg, #6366f1, #22c55e)",
+   "coverIcon": "🎧",
+   "creatorId": "creator-n8n-lab"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-creator-reels-pack"
+   ],
+   "recommendsForCourses": [
+    "ai-content-creator"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-workflow-content",
+   "slug": "content-automation-workflow",
+   "categoryId": "n8n-workflows",
+   "productType": "automation-pack",
+   "titleRu": "Content Automation",
+   "titleEn": "Content Automation",
+   "shortRu": "Генерация и публикация контента по расписанию.",
+   "shortEn": "Scheduled content generation and publishing.",
+   "priceEur": 39,
+   "rating": 4.6,
+   "reviewCount": 92,
+   "downloads": 1500,
+   "coverGradient": "linear-gradient(135deg, #ec4899, #f97316)",
+   "coverIcon": "📝",
+   "creatorId": "creator-n8n-lab"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "relatedIds": [
+    "mp-workflow-lead-gen"
+   ],
+   "recommendsForCourses": [
+    "ai-automation-engineer",
+    "ai-business-builder"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-workflow-crm",
+   "slug": "crm-automation-kit",
+   "categoryId": "n8n-workflows",
+   "productType": "automation-pack",
+   "titleRu": "CRM Automation Kit",
+   "titleEn": "CRM Automation Kit",
+   "shortRu": "Синхронизация лидов, сделок и напоминаний.",
+   "shortEn": "Sync leads, deals and reminders.",
+   "priceEur": 99,
+   "rating": 4.9,
+   "reviewCount": 67,
+   "downloads": 890,
+   "coverGradient": "linear-gradient(135deg, #0ea5e9, #6366f1)",
+   "coverIcon": "🗂️",
+   "creatorId": "creator-n8n-lab"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-workflow-support",
+    "mp-agent-knowledge"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-agent-support",
+   "slug": "customer-support-agent",
+   "categoryId": "ai-agents",
+   "productType": "agent-pack",
+   "titleRu": "Customer Support Agent",
+   "titleEn": "Customer Support Agent",
+   "shortRu": "Шаблон RAG-агента для поддержки клиентов.",
+   "shortEn": "RAG support agent template.",
+   "priceEur": 79,
+   "rating": 4.9,
+   "reviewCount": 145,
+   "downloads": 1900,
+   "coverGradient": "linear-gradient(135deg, #6366f1, #8b5cf6)",
+   "coverIcon": "🤖",
+   "creatorId": "creator-agent-studio"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-workflow-whatsapp",
+    "mp-agent-lead-qual"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer",
+    "ai-business-builder"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-agent-sales",
+   "slug": "sales-agent-template",
+   "categoryId": "ai-agents",
+   "productType": "agent-pack",
+   "titleRu": "Sales Agent",
+   "titleEn": "Sales Agent",
+   "shortRu": "Квалификация лидов и follow-up 24/7.",
+   "shortEn": "Lead qualification and 24/7 follow-up.",
+   "priceEur": 99,
+   "rating": 4.8,
+   "reviewCount": 112,
+   "downloads": 1400,
+   "coverGradient": "linear-gradient(135deg, #f97316, #a855f7)",
+   "coverIcon": "🎯",
+   "creatorId": "creator-agent-studio"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-agent-sales",
+    "mp-workflow-lead-gen"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-agent-lead-qual",
+   "slug": "lead-qualification-agent",
+   "categoryId": "ai-agents",
+   "productType": "agent-pack",
+   "titleRu": "Lead Qualification Agent",
+   "titleEn": "Lead Qualification Agent",
+   "shortRu": "Скоринг и маршрутизация лидов.",
+   "shortEn": "Lead scoring and routing.",
+   "priceEur": 69,
+   "rating": 4.7,
+   "reviewCount": 76,
+   "downloads": 1100,
+   "coverGradient": "linear-gradient(135deg, #22c55e, #6366f1)",
+   "coverIcon": "⚡",
+   "creatorId": "creator-agent-studio"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "relatedIds": [
+    "mp-agent-sales"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-agent-booking",
+   "slug": "appointment-booking-agent",
+   "categoryId": "ai-agents",
+   "productType": "agent-pack",
+   "titleRu": "Appointment Booking Agent",
+   "titleEn": "Appointment Booking Agent",
+   "shortRu": "Запись на звонки через чат и календарь.",
+   "shortEn": "Book calls via chat and calendar.",
+   "priceEur": 89,
+   "rating": 4.6,
+   "reviewCount": 54,
+   "downloads": 720,
+   "coverGradient": "linear-gradient(135deg, #06b6d4, #a855f7)",
+   "coverIcon": "📅",
+   "creatorId": "creator-agent-studio"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending"
+   ],
+   "relatedIds": [
+    "mp-prompt-research-vault"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-agent-research",
+   "slug": "ai-research-agent",
+   "categoryId": "ai-agents",
+   "productType": "agent-pack",
+   "titleRu": "AI Research Agent",
+   "titleEn": "AI Research Agent",
+   "shortRu": "Сбор данных, отчёты и саммари.",
+   "shortEn": "Data gathering, reports and summaries.",
+   "priceEur": 149,
+   "rating": 4.9,
+   "reviewCount": 41,
+   "downloads": 560,
+   "coverGradient": "linear-gradient(135deg, #7c3aed, #06b6d4)",
+   "coverIcon": "🔬",
+   "creatorId": "creator-agent-studio"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-agent-support"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-agent-knowledge",
+   "slug": "knowledge-base-agent",
+   "categoryId": "ai-agents",
+   "productType": "agent-pack",
+   "titleRu": "Knowledge Base Agent",
+   "titleEn": "Knowledge Base Agent",
+   "shortRu": "RAG по вашим документам и FAQ.",
+   "shortEn": "RAG over your docs and FAQ.",
+   "priceEur": 129,
+   "rating": 4.8,
+   "reviewCount": 63,
+   "downloads": 840,
+   "coverGradient": "linear-gradient(135deg, #8b5cf6, #22c55e)",
+   "coverIcon": "📚",
+   "creatorId": "creator-agent-studio"
+  },
+  {
+   "fileTypes": [
+    "DOCX",
+    "PDF"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-biz-discovery",
+    "mp-biz-sop"
+   ],
+   "recommendsForCourses": [
+    "ai-business-builder"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-biz-agency-proposal",
+   "slug": "agency-proposal-template",
+   "categoryId": "business-templates",
+   "productType": "business-pack",
+   "titleRu": "Agency Proposal Template",
+   "titleEn": "Agency Proposal Template",
+   "shortRu": "Proposal, pricing и scope для AI-услуг.",
+   "shortEn": "Proposal, pricing and scope for AI services.",
+   "priceEur": 29,
+   "rating": 4.8,
+   "reviewCount": 189,
+   "downloads": 2600,
+   "coverGradient": "linear-gradient(135deg, #e11d48, #a855f7)",
+   "coverIcon": "📄",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-prompt-sales-vault",
+    "mp-biz-agency-proposal"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-biz-outreach-pack",
+   "slug": "outreach-templates-pack",
+   "categoryId": "business-templates",
+   "productType": "business-pack",
+   "titleRu": "Outreach Templates",
+   "titleEn": "Outreach Templates",
+   "shortRu": "Email, LinkedIn и DM для агентств.",
+   "shortEn": "Email, LinkedIn and DM for agencies.",
+   "priceEur": 24,
+   "rating": 4.7,
+   "reviewCount": 134,
+   "downloads": 1900,
+   "coverGradient": "linear-gradient(135deg, #f97316, #f43f5e)",
+   "coverIcon": "✉️",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-biz-agency-proposal"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-biz-discovery",
+   "slug": "discovery-call-framework",
+   "categoryId": "business-templates",
+   "productType": "business-pack",
+   "titleRu": "Discovery Call Framework",
+   "titleEn": "Discovery Call Framework",
+   "shortRu": "Скрипты и чеклисты discovery-звонков.",
+   "shortEn": "Discovery call scripts and checklists.",
+   "priceEur": 19,
+   "rating": 4.9,
+   "reviewCount": 98,
+   "downloads": 1750,
+   "coverGradient": "linear-gradient(135deg, #6366f1, #f97316)",
+   "coverIcon": "📞",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "relatedIds": [
+    "mp-biz-agency-proposal"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-biz-sop",
+   "slug": "sop-library-ai-agency",
+   "categoryId": "business-templates",
+   "productType": "business-pack",
+   "titleRu": "SOP Library for AI Agency",
+   "titleEn": "SOP Library for AI Agency",
+   "shortRu": "20+ SOP для delivery и onboarding.",
+   "shortEn": "20+ SOPs for delivery and onboarding.",
+   "priceEur": 49,
+   "rating": 4.8,
+   "reviewCount": 72,
+   "downloads": 920,
+   "coverGradient": "linear-gradient(135deg, #0f172a, #6366f1)",
+   "coverIcon": "📑",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending"
+   ],
+   "relatedIds": [
+    "mp-saas-leadgen"
+   ],
+   "recommendsForCourses": [
+    "ai-business-builder",
+    "ai-agent-engineer"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-saas-chatbot",
+   "slug": "ai-chatbot-saas-kit",
+   "categoryId": "saas-kits",
+   "productType": "saas-kit",
+   "titleRu": "AI Chatbot SaaS Kit",
+   "titleEn": "AI Chatbot SaaS Kit",
+   "shortRu": "MVP: UI, API, billing checklist.",
+   "shortEn": "MVP: UI, API, billing checklist.",
+   "priceEur": 199,
+   "rating": 4.7,
+   "reviewCount": 45,
+   "downloads": 480,
+   "coverGradient": "linear-gradient(135deg, #a855f7, #06b6d4)",
+   "coverIcon": "💬",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-saas-chatbot",
+    "mp-workflow-lead-gen"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-saas-leadgen",
+   "slug": "ai-lead-generation-saas",
+   "categoryId": "saas-kits",
+   "productType": "saas-kit",
+   "titleRu": "AI Lead Generation SaaS",
+   "titleEn": "AI Lead Generation SaaS",
+   "shortRu": "Архитектура и шаблоны lead-gen SaaS.",
+   "shortEn": "Architecture and lead-gen SaaS templates.",
+   "priceEur": 249,
+   "rating": 4.8,
+   "reviewCount": 38,
+   "downloads": 360,
+   "coverGradient": "linear-gradient(135deg, #f97316, #7c3aed)",
+   "coverIcon": "🚀",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "relatedIds": [],
+   "recommendsForCourses": [
+    "ai-content-creator"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-saas-content",
+   "slug": "ai-content-platform-kit",
+   "categoryId": "saas-kits",
+   "productType": "saas-kit",
+   "titleRu": "AI Content Platform",
+   "titleEn": "AI Content Platform",
+   "shortRu": "Контент-платформа: auth, credits, prompts.",
+   "shortEn": "Content platform: auth, credits, prompts.",
+   "priceEur": 299,
+   "rating": 4.6,
+   "reviewCount": 29,
+   "downloads": 210,
+   "coverGradient": "linear-gradient(135deg, #ec4899, #6366f1)",
+   "coverIcon": "🖥️",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-agent-booking"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-saas-voice",
+   "slug": "ai-voice-agent-saas",
+   "categoryId": "saas-kits",
+   "productType": "saas-kit",
+   "titleRu": "AI Voice Agent SaaS",
+   "titleEn": "AI Voice Agent SaaS",
+   "shortRu": "Voice stack, Twilio guide, pricing model.",
+   "shortEn": "Voice stack, Twilio guide, pricing model.",
+   "priceEur": 279,
+   "rating": 4.7,
+   "reviewCount": 22,
+   "downloads": 180,
+   "coverGradient": "linear-gradient(135deg, #06b6d4, #8b5cf6)",
+   "coverIcon": "🎙️",
+   "creatorId": "creator-agent-studio"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-creator-reels-pack",
+    "mp-creator-shorts"
+   ],
+   "recommendsForCourses": [
+    "ai-content-creator"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-creator-hooks",
+   "slug": "viral-hooks-database",
+   "categoryId": "creator-resources",
+   "productType": "template",
+   "titleRu": "Viral Hooks Database",
+   "titleEn": "Viral Hooks Database",
+   "shortRu": "500+ hooks для Reels, Shorts и TikTok.",
+   "shortEn": "500+ hooks for Reels, Shorts and TikTok.",
+   "priceEur": 29,
+   "rating": 4.9,
+   "reviewCount": 267,
+   "downloads": 4100,
+   "coverGradient": "linear-gradient(135deg, #db2777, #f97316)",
+   "coverIcon": "🔥",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-creator-hooks",
+    "mp-creator-shorts"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-creator-reels-pack",
+   "slug": "reels-templates-pack",
+   "categoryId": "creator-resources",
+   "productType": "template",
+   "titleRu": "Reels Templates Pack",
+   "titleEn": "Reels Templates Pack",
+   "shortRu": "100 сценариев и структур Reels.",
+   "shortEn": "100 Reels scripts and structures.",
+   "priceEur": 24,
+   "rating": 4.8,
+   "reviewCount": 198,
+   "downloads": 3200,
+   "coverGradient": "linear-gradient(135deg, #ec4899, #a855f7)",
+   "coverIcon": "🎬",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-creator-reels-pack"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-creator-shorts",
+   "slug": "shorts-templates-pack",
+   "categoryId": "creator-resources",
+   "productType": "template",
+   "titleRu": "Shorts Templates Pack",
+   "titleEn": "Shorts Templates Pack",
+   "shortRu": "100 Shorts-сценариев под разные ниши.",
+   "shortEn": "100 Shorts scripts for niches.",
+   "priceEur": 24,
+   "rating": 4.7,
+   "reviewCount": 156,
+   "downloads": 2800,
+   "coverGradient": "linear-gradient(135deg, #f43f5e, #f97316)",
+   "coverIcon": "▶️",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "relatedIds": [
+    "mp-creator-hooks"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-creator-calendar",
+   "slug": "content-calendar-365",
+   "categoryId": "creator-resources",
+   "productType": "template",
+   "titleRu": "Content Calendar 365",
+   "titleEn": "Content Calendar 365",
+   "shortRu": "Годовой контент-план с идеями.",
+   "shortEn": "Year-long content plan with ideas.",
+   "priceEur": 19,
+   "rating": 4.8,
+   "reviewCount": 112,
+   "downloads": 2400,
+   "coverGradient": "linear-gradient(135deg, #22c55e, #06b6d4)",
+   "coverIcon": "📆",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [],
+   "relatedIds": [
+    "mp-creator-reels-pack"
+   ],
+   "recommendsForCourses": [],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-creator-canva",
+   "slug": "canva-pack-creators",
+   "categoryId": "creator-resources",
+   "productType": "template",
+   "titleRu": "Canva Pack for Creators",
+   "titleEn": "Canva Pack for Creators",
+   "shortRu": "Шаблоны постов, stories и thumbnails.",
+   "shortEn": "Post, story and thumbnail templates.",
+   "priceEur": 39,
+   "rating": 4.6,
+   "reviewCount": 88,
+   "downloads": 1500,
+   "coverGradient": "linear-gradient(135deg, #8b5cf6, #ec4899)",
+   "coverIcon": "🎨",
+   "creatorId": "creator-insider"
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "PDF"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending",
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-voice-clinic-services",
+    "mp-agent-booking"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer"
+   ],
+   "screenshots": [
+    "/marketplace/voice-agent-kit-beauty-salon-shot-1.svg",
+    "/marketplace/voice-agent-kit-beauty-salon-shot-2.svg"
+   ],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "prompt",
+    "titleRu": "Бесплатный фрагмент: приветствие салона",
+    "titleEn": "Free sample: salon greeting",
+    "contentRu": "Ты — голосовой ассистент салона красоты. Цель: записать клиента на услугу.\nПравила:\n1) Уточни услугу, мастера и удобное время.\n2) Проверь слот в календаре (tool: check_slot).\n3) Подтверди запись коротко и тепло.\n4) Если слот занят — предложи 2 альтернативы.\nТон: дружелюбный, без канцелярита, максимум 2 предложения за реплику.",
+    "contentEn": "You are a beauty salon voice assistant. Goal: book the client.\nRules:\n1) Confirm service, stylist and preferred time.\n2) Check calendar slot (tool: check_slot).\n3) Confirm booking briefly and warmly.\n4) If busy — offer 2 alternatives.\nTone: friendly, no jargon, max 2 sentences per turn."
+   },
+   "coverImage": null,
+   "id": "mp-voice-beauty-salon",
+   "slug": "voice-agent-kit-beauty-salon",
+   "categoryId": "voice-agents",
+   "productType": "agent-pack",
+   "titleRu": "Voice Agent Kit: Beauty Salon",
+   "titleEn": "Voice Agent Kit: Beauty Salon",
+   "shortRu": "Голосовой агент записи для салона: сценарии диалогов, интеграция с календарём, шаблоны Vapi/Retell/ElevenLabs, инструкция запуска за 1 день.",
+   "shortEn": "Voice booking agent for salons: dialog flows, calendar integration, Vapi/Retell/ElevenLabs templates, 1-day launch guide.",
+   "priceEur": 79,
+   "coverGradient": "linear-gradient(135deg, #14b8a6, #a855f7)",
+   "coverIcon": "💇",
+   "creatorId": "creator-agent-studio",
+   "includedRu": [
+    "Сценарии диалогов",
+    "Интеграция с календарём",
+    "Шаблоны Vapi / Retell / ElevenLabs",
+    "Инструкция запуска за 1 день"
+   ],
+   "includedEn": [
+    "Dialog scenarios",
+    "Calendar integration",
+    "Vapi / Retell / ElevenLabs templates",
+    "1-day launch guide"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "PDF"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending",
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-voice-beauty-salon",
+    "mp-agent-booking"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer"
+   ],
+   "screenshots": [
+    "/marketplace/voice-agent-kit-clinic-services-shot-1.svg",
+    "/marketplace/voice-agent-kit-clinic-services-shot-2.svg"
+   ],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "prompt",
+    "titleRu": "Бесплатный фрагмент: квалификация пациента",
+    "titleEn": "Free sample: patient qualification",
+    "contentRu": "Перед записью уточни:\n- Новый или повторный визит?\n- Симптом / цель визита (1 фраза)\n- Срочность: сегодня / на этой неделе / планово\nЕсли срочно и нет слота — эскалируй на администратора (tool: handoff_human).",
+    "contentEn": "Before booking ask:\n- New or returning patient?\n- Visit goal in one sentence\n- Urgency: today / this week / planned\nIf urgent and no slots — hand off to admin (tool: handoff_human)."
+   },
+   "coverImage": null,
+   "id": "mp-voice-clinic-services",
+   "slug": "voice-agent-kit-clinic-services",
+   "categoryId": "voice-agents",
+   "productType": "agent-pack",
+   "titleRu": "Voice Agent Kit: Clinic & Services",
+   "titleEn": "Voice Agent Kit: Clinic & Services",
+   "shortRu": "Запись на приём голосом: квалификация, напоминания, перенос записи. Шаблоны под Vapi и Retell.",
+   "shortEn": "Voice appointment booking: qualification, reminders, rescheduling. Vapi and Retell templates.",
+   "priceEur": 79,
+   "coverGradient": "linear-gradient(135deg, #06b6d4, #6366f1)",
+   "coverIcon": "🏥",
+   "creatorId": "creator-agent-studio",
+   "includedRu": [
+    "Сценарии записи на приём",
+    "Квалификация и напоминания",
+    "Перенос записи",
+    "Шаблоны Vapi и Retell"
+   ],
+   "includedEn": [
+    "Appointment booking flows",
+    "Qualification and reminders",
+    "Rescheduling logic",
+    "Vapi and Retell templates"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "MD"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending",
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-mcp-claude-skills",
+    "mp-agent-knowledge"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer"
+   ],
+   "screenshots": [
+    "/marketplace/mcp-starter-pack-business-shot-1.svg",
+    "/marketplace/mcp-starter-pack-business-shot-2.svg"
+   ],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "workflow",
+    "titleRu": "Бесплатный фрагмент: mcp.json (Slack)",
+    "titleEn": "Free sample: mcp.json (Slack)",
+    "contentRu": "{\n  \"mcpServers\": {\n    \"slack\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-slack\"],\n      \"env\": {\n        \"SLACK_BOT_TOKEN\": \"xoxb-YOUR_TOKEN\",\n        \"SLACK_TEAM_ID\": \"T01234567\"\n      }\n    }\n  }\n}",
+    "contentEn": "{\n  \"mcpServers\": {\n    \"slack\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-slack\"],\n      \"env\": {\n        \"SLACK_BOT_TOKEN\": \"xoxb-YOUR_TOKEN\",\n        \"SLACK_TEAM_ID\": \"T01234567\"\n      }\n    }\n  }\n}"
+   },
+   "coverImage": null,
+   "id": "mp-mcp-starter-business",
+   "slug": "mcp-starter-pack-business",
+   "categoryId": "mcp-skills",
+   "productType": "agent-pack",
+   "titleRu": "MCP Starter Pack for Business",
+   "titleEn": "MCP Starter Pack for Business",
+   "shortRu": "Готовые конфиги MCP-серверов: CRM, Postgres, Slack, GitHub. Подключи AI-агента к своим системам за вечер.",
+   "shortEn": "Ready MCP server configs: CRM, Postgres, Slack, GitHub. Connect your AI agent to your stack in one evening.",
+   "priceEur": 49,
+   "coverGradient": "linear-gradient(135deg, #818cf8, #6366f1)",
+   "coverIcon": "🔌",
+   "creatorId": "creator-agent-studio",
+   "includedRu": [
+    "Конфиги MCP: CRM, Postgres, Slack, GitHub",
+    "Инструкция подключения",
+    "Примеры запросов агента"
+   ],
+   "includedEn": [
+    "MCP configs: CRM, Postgres, Slack, GitHub",
+    "Setup guide",
+    "Sample agent prompts"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending",
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-mcp-starter-business",
+    "mp-prompt-chatgpt-vault"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer",
+    "ai-content-creator"
+   ],
+   "screenshots": [
+    "/marketplace/claude-skills-library-shot-1.svg",
+    "/marketplace/claude-skills-library-shot-2.svg"
+   ],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "prompt",
+    "titleRu": "Бесплатный Skill: weekly report",
+    "titleEn": "Free Skill: weekly report",
+    "contentRu": "Skill: weekly-ops-report\nКогда пользователь просит «недельный отчёт»:\n1) Собери метрики из CRM (MCP) за 7 дней\n2) Выдели 3 инсайта и 1 риск\n3) Дай 3 действия на следующую неделю\nФормат: TL;DR → цифры → инсайты → план",
+    "contentEn": "Skill: weekly-ops-report\nWhen user asks for a weekly report:\n1) Pull CRM metrics (MCP) for last 7 days\n2) Extract 3 insights and 1 risk\n3) Propose 3 actions for next week\nFormat: TL;DR → numbers → insights → plan"
+   },
+   "coverImage": null,
+   "id": "mp-mcp-claude-skills",
+   "slug": "claude-skills-library",
+   "categoryId": "mcp-skills",
+   "productType": "agent-pack",
+   "titleRu": "Claude Skills Library",
+   "titleEn": "Claude Skills Library",
+   "shortRu": "Библиотека готовых Skills под бизнес-задачи: отчёты, лидогенерация, контент. Работает поверх твоих MCP.",
+   "shortEn": "Ready Skills for business tasks: reports, lead gen, content. Works on top of your MCP stack.",
+   "priceEur": 39,
+   "coverGradient": "linear-gradient(135deg, #d97757, #8b5cf6)",
+   "coverIcon": "🧠",
+   "creatorId": "creator-insider",
+   "includedRu": [
+    "Skills: отчёты, лиды, контент",
+    "Шаблоны под Claude",
+    "Связка с MCP-серверами"
+   ],
+   "includedEn": [
+    "Skills: reports, leads, content",
+    "Claude templates",
+    "MCP integration notes"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "PDF"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending",
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-agent-support",
+    "mp-agent-sales",
+    "mp-workflow-lead-gen"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer",
+    "ai-automation-engineer"
+   ],
+   "screenshots": [
+    "/marketplace/multi-agent-ops-team-shot-1.svg",
+    "/marketplace/multi-agent-ops-team-shot-2.svg"
+   ],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "workflow",
+    "titleRu": "Бесплатный фрагмент: роутинг оркестратора",
+    "titleEn": "Free sample: orchestrator routing",
+    "contentRu": "orchestrator.route(message):\n  if intent == \"lead\"     → agent.sales.qualify(message)\n  if intent == \"support\"  → agent.support.answer(message)\n  if intent == \"report\"   → agent.analyst.summarize(period)\n  if intent == \"email\"    → agent.inbox.triage(thread)\n  else                    → ask_clarifying_question()",
+    "contentEn": "orchestrator.route(message):\n  if intent == \"lead\"     → agent.sales.qualify(message)\n  if intent == \"support\"  → agent.support.answer(message)\n  if intent == \"report\"   → agent.analyst.summarize(period)\n  if intent == \"email\"    → agent.inbox.triage(thread)\n  else                    → ask_clarifying_question()"
+   },
+   "coverImage": null,
+   "id": "mp-agent-multi-ops",
+   "slug": "multi-agent-ops-team",
+   "categoryId": "ai-agents",
+   "productType": "agent-pack",
+   "titleRu": "Multi-Agent Ops Team",
+   "titleEn": "Multi-Agent Ops Team",
+   "shortRu": "Команда из 4 агентов с оркестратором: триаж почты, лиды, саппорт, отчёты. Схема, конфиги, инструкция.",
+   "shortEn": "Team of 4 agents with orchestrator: email triage, leads, support, reports. Diagram, configs, setup guide.",
+   "priceEur": 129,
+   "coverGradient": "linear-gradient(135deg, #6366f1, #22c55e)",
+   "coverIcon": "👥",
+   "creatorId": "creator-agent-studio",
+   "includedRu": [
+    "4 агента + оркестратор",
+    "Триаж почты, лиды, саппорт, отчёты",
+    "Схема и конфиги",
+    "Инструкция внедрения"
+   ],
+   "includedEn": [
+    "4 agents + orchestrator",
+    "Email triage, leads, support, reports",
+    "Architecture diagram and configs",
+    "Deployment guide"
+   ]
+  },
+  {
+   "fileTypes": [
+    "PDF",
+    "DOCX",
+    "XLSX"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending",
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-biz-agency-proposal",
+    "mp-biz-sop"
+   ],
+   "recommendsForCourses": [
+    "ai-business-builder",
+    "ai-agent-engineer"
+   ],
+   "screenshots": [
+    "/marketplace/agent-audit-kit-shot-1.svg",
+    "/marketplace/agent-audit-kit-shot-2.svg"
+   ],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "prompt",
+    "titleRu": "Бесплатный чеклист: безопасность агента",
+    "titleEn": "Free checklist: agent security",
+    "contentRu": "□ Логи запросов включены, PII маскируется\n□ Есть human escalation при confidence < 0.6\n□ Инструменты с write-доступом требуют подтверждения\n□ Rate limit и budget cap на API\n□ Политика «что агент НЕ делает» задокументирована\n□ Тестовый сценарий jailbreak пройден",
+    "contentEn": "□ Request logs on, PII masked\n□ Human escalation if confidence < 0.6\n□ Write tools require confirmation\n□ API rate limit and budget cap\n□ Documented “what the agent must NOT do”\n□ Jailbreak test scenario passed"
+   },
+   "coverImage": null,
+   "id": "mp-biz-agent-audit",
+   "slug": "agent-audit-kit",
+   "categoryId": "business-templates",
+   "productType": "business-pack",
+   "titleRu": "Agent Audit Kit",
+   "titleEn": "Agent Audit Kit",
+   "shortRu": "Governance-набор: чеклисты безопасности агентов, шаблоны политик, калькулятор ROI для клиентов.",
+   "shortEn": "Governance kit: agent security checklists, policy templates, client ROI calculator.",
+   "priceEur": 59,
+   "coverGradient": "linear-gradient(135deg, #0f172a, #f43f5e)",
+   "coverIcon": "🛡️",
+   "creatorId": "creator-insider",
+   "includedRu": [
+    "Чеклисты безопасности агентов",
+    "Шаблоны политик",
+    "Калькулятор ROI",
+    "Governance framework"
+   ],
+   "includedEn": [
+    "Agent security checklists",
+    "Policy templates",
+    "ROI calculator",
+    "Governance framework"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "DOCX",
+    "XLSX",
+    "PDF"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new",
+    "trending"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-biz-agency-proposal",
+    "mp-biz-agent-audit",
+    "mp-workflow-lead-gen"
+   ],
+   "recommendsForCourses": [
+    "ai-business-builder",
+    "ai-automation-engineer"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-income-agency-os",
+   "slug": "ai-automation-agency-os",
+   "categoryId": "business-templates",
+   "productType": "business-system",
+   "releaseStatus": "preview",
+   "titleRu": "AI Automation Agency OS",
+   "titleEn": "AI Automation Agency OS",
+   "shortRu": "Полная операционная система для продажи AI-автоматизаций: аудит, оффер, смета, договор, onboarding и retainer.",
+   "shortEn": "Complete operating system for selling AI automation: audit, offer, pricing, contract, onboarding and retainer.",
+   "priceEur": 119,
+   "coverGradient": "linear-gradient(135deg, #6d28d9 0%, #f97316 100%)",
+   "creatorId": "creator-insider",
+   "includedRu": [
+    "AI-аудит бизнеса",
+    "Калькулятор цены и ROI",
+    "Proposal + договор",
+    "Onboarding и delivery SOP",
+    "90-дневный retainer"
+   ],
+   "includedEn": [
+    "AI business audit",
+    "Pricing and ROI calculator",
+    "Proposal and contract",
+    "Onboarding and delivery SOP",
+    "90-day retainer"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "PDF",
+    "XLSX"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new",
+    "trending"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-workflow-crm",
+    "mp-biz-agent-audit"
+   ],
+   "recommendsForCourses": [
+    "ai-automation-engineer",
+    "first-automation-n8n"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-income-zapier-migration",
+   "slug": "zapier-to-n8n-migration-system",
+   "categoryId": "n8n-workflows",
+   "productType": "workflow-system",
+   "releaseStatus": "preview",
+   "titleRu": "Zapier → n8n Migration System",
+   "titleEn": "Zapier → n8n Migration System",
+   "shortRu": "Методика и workflow для переноса клиентов с Zapier/Make на n8n: аудит, карта миграции, тесты и monitoring.",
+   "shortEn": "A client-ready system for moving Zapier/Make workflows to n8n: audit, migration map, tests and monitoring.",
+   "priceEur": 89,
+   "coverGradient": "linear-gradient(135deg, #7c3aed 0%, #fb923c 100%)",
+   "creatorId": "creator-automation-lab",
+   "includedRu": [
+    "Migration audit",
+    "Карта зависимостей",
+    "n8n workflow templates",
+    "QA checklist",
+    "Maintenance offer"
+   ],
+   "includedEn": [
+    "Migration audit",
+    "Dependency map",
+    "n8n workflow templates",
+    "QA checklist",
+    "Maintenance offer"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "PDF"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new",
+    "trending"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-agent-lead-qual",
+    "mp-agent-booking",
+    "mp-workflow-crm"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer",
+    "ai-business-builder"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-income-real-estate",
+   "slug": "real-estate-lead-to-viewing",
+   "categoryId": "ai-agents",
+   "productType": "vertical-system",
+   "releaseStatus": "preview",
+   "titleRu": "Real Estate Lead → Viewing",
+   "titleEn": "Real Estate Lead → Viewing",
+   "shortRu": "Вертикальная система для агентств недвижимости: квалификация лида, подбор объекта, follow-up и запись на просмотр.",
+   "shortEn": "Vertical system for real estate teams: lead qualification, property matching, follow-up and viewing booking.",
+   "priceEur": 149,
+   "coverGradient": "linear-gradient(135deg, #4c1d95 0%, #f97316 100%)",
+   "creatorId": "creator-agent-studio",
+   "includedRu": [
+    "Lead qualification agent",
+    "CRM routing",
+    "Property matching prompts",
+    "Viewing booking workflow",
+    "KPI dashboard spec"
+   ],
+   "includedEn": [
+    "Lead qualification agent",
+    "CRM routing",
+    "Property matching prompts",
+    "Viewing booking workflow",
+    "KPI dashboard spec"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "PDF"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new",
+    "trending"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-agent-support",
+    "mp-agent-sales",
+    "mp-workflow-support"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer",
+    "ai-automation-engineer"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-income-ecommerce-retention",
+   "slug": "ecommerce-support-retention-engine",
+   "categoryId": "ai-agents",
+   "productType": "vertical-system",
+   "releaseStatus": "preview",
+   "titleRu": "E-commerce Support & Retention Engine",
+   "titleEn": "E-commerce Support & Retention Engine",
+   "shortRu": "AI-система для магазина: ответы по заказам, возвраты, abandoned cart, review requests и повторные продажи.",
+   "shortEn": "AI commerce system for order support, returns, abandoned carts, review requests and repeat sales.",
+   "priceEur": 139,
+   "coverGradient": "linear-gradient(135deg, #581c87 0%, #ea580c 100%)",
+   "creatorId": "creator-agent-studio",
+   "includedRu": [
+    "Order support agent",
+    "Return triage",
+    "Cart recovery workflow",
+    "Review automation",
+    "Retention playbook"
+   ],
+   "includedEn": [
+    "Order support agent",
+    "Return triage",
+    "Cart recovery workflow",
+    "Review automation",
+    "Retention playbook"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "PDF"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-workflow-crm",
+    "mp-agent-sales"
+   ],
+   "recommendsForCourses": [
+    "ai-automation-engineer",
+    "ai-business-builder"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-income-revenue-recovery",
+   "slug": "revenue-recovery-agent",
+   "categoryId": "ai-agents",
+   "productType": "agent-pack",
+   "releaseStatus": "preview",
+   "titleRu": "Revenue Recovery Agent",
+   "titleEn": "Revenue Recovery Agent",
+   "shortRu": "Агент для поиска просроченных счетов, персонального follow-up и эскалации менеджеру без потери отношений с клиентом.",
+   "shortEn": "Agent for overdue invoice detection, personalized follow-up and safe escalation to an account manager.",
+   "priceEur": 99,
+   "coverGradient": "linear-gradient(135deg, #6d28d9 0%, #f59e0b 100%)",
+   "creatorId": "creator-automation-lab",
+   "includedRu": [
+    "Invoice monitor",
+    "Follow-up sequences",
+    "Risk classification",
+    "Human approval step",
+    "Recovery report"
+   ],
+   "includedEn": [
+    "Invoice monitor",
+    "Follow-up sequences",
+    "Risk classification",
+    "Human approval step",
+    "Recovery report"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "JSON",
+    "PDF",
+    "DOCX"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-workflow-content",
+    "mp-creator-reels-pack",
+    "mp-creator-calendar"
+   ],
+   "recommendsForCourses": [
+    "ai-content-creator",
+    "ai-business-builder"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": null,
+   "coverImage": null,
+   "id": "mp-income-content-service",
+   "slug": "content-repurposing-service-system",
+   "categoryId": "creator-resources",
+   "productType": "workflow-system",
+   "releaseStatus": "preview",
+   "titleRu": "Content Repurposing Service System",
+   "titleEn": "Content Repurposing Service System",
+   "shortRu": "Готовая услуга для клиентов: из одного видео создаёт Shorts, посты, email, статью и контент-план с approval flow.",
+   "shortEn": "Productized client service turning one video into Shorts, posts, email, article and an approval-ready content plan.",
+   "priceEur": 79,
+   "coverGradient": "linear-gradient(135deg, #7e22ce 0%, #fb923c 100%)",
+   "creatorId": "creator-insider",
+   "includedRu": [
+    "Repurposing workflow",
+    "Approval portal spec",
+    "Client intake",
+    "Quality checklist",
+    "Service pricing sheet"
+   ],
+   "includedEn": [
+    "Repurposing workflow",
+    "Approval portal spec",
+    "Client intake",
+    "Quality checklist",
+    "Service pricing sheet"
+   ]
+  }
+ ]
+}

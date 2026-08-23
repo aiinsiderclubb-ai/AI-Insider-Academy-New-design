@@ -1,0 +1,1354 @@
+{
+ "CURRICULUM": {
+  "ai-user-pro": {
+   "idea": "AI User Pro — 10 уроков по современной AI-экосистеме: ChatGPT, Claude, Gemini, Perplexity, промпты и личный AI-стек.",
+   "ideaEn": "AI User Pro — 10 lessons on the modern AI ecosystem: ChatGPT, Claude, Gemini, Perplexity, prompts and your personal AI stack.",
+   "durationRu": "10 уроков (30–45 минут)",
+   "durationEn": "10 lessons (30–45 min)",
+   "audience": [
+    "Новички в AI",
+    "Офисные сотрудники",
+    "Предприниматели",
+    "Студенты",
+    "Фрилансеры",
+    "Маркетологи",
+    "Менеджеры"
+   ],
+   "audienceEn": [
+    "AI beginners",
+    "Office workers",
+    "Entrepreneurs",
+    "Students",
+    "Freelancers",
+    "Marketers",
+    "Managers"
+   ],
+   "finalResult": "Собственная AI-система: инструменты, промпты, шаблоны и рабочие процессы.",
+   "finalResultEn": "Personal AI system: tools, prompts, templates and workflows.",
+   "weeks": [
+    {
+     "number": 1,
+     "title": "Понимание AI и рынка инструментов",
+     "titleEn": "Understanding AI and the tool landscape",
+     "goal": "Дать полное понимание типов AI-инструментов и выбора под задачи.",
+     "goalEn": "Understand AI tool types and how to choose the right ones.",
+     "skills": [
+      "Отличия ChatGPT, Claude, Gemini, Perplexity",
+      "Текстовые vs визуальные AI",
+      "Где AI полезен, а где нет",
+      "Ошибки новичков",
+      "Оценка и проверка ответов",
+      "Безопасность данных"
+     ],
+     "skillsEn": [
+      "ChatGPT vs Claude vs Gemini vs Perplexity",
+      "Text vs visual AI",
+      "When AI helps vs hurts",
+      "Beginner mistakes",
+      "Evaluating AI answers",
+      "Data safety"
+     ],
+     "outcome": "Первый AI Toolkit — список инструментов под текст, поиск, изображения, документы, презентации, анализ и продуктивность.",
+     "outcomeEn": "Your first AI Toolkit for text, search, images, docs, slides, analysis, and productivity."
+    },
+    {
+     "number": 2,
+     "title": "Prompt Engineering",
+     "titleEn": "Prompt Engineering",
+     "goal": "Научить формулировать запросы для стабильного качественного результата.",
+     "goalEn": "Formulate prompts for consistent, high-quality outputs.",
+     "skills": [
+      "Роль, контекст, формат, ограничения",
+      "Примеры и улучшение ответов",
+      "Цепочки промптов",
+      "Промпты для повторяемых задач",
+      "ТЗ для AI"
+     ],
+     "skillsEn": [
+      "Role, context, format, constraints",
+      "Examples and iteration",
+      "Prompt chains",
+      "Reusable prompts",
+      "Briefs for AI"
+     ],
+     "outcome": "Личная библиотека промптов: анализ, идеи, переписывание, планирование, структура, проверка, документы.",
+     "outcomeEn": "Personal prompt library for analysis, ideas, rewriting, planning, structure, proofreading, and documents."
+    },
+    {
+     "number": 3,
+     "title": "AI для личной продуктивности",
+     "titleEn": "AI for personal productivity",
+     "goal": "Использовать AI как персонального помощника для планирования и рутины.",
+     "goalEn": "Use AI as a personal assistant for planning and routine work.",
+     "skills": [
+      "Планирование дня и недели",
+      "Разбивка задач и чек-листы",
+      "Резюме текстов",
+      "Подготовка к встречам",
+      "Шаблоны повторяющихся задач"
+     ],
+     "skillsEn": [
+      "Daily and weekly planning",
+      "Task breakdown and checklists",
+      "Summaries",
+      "Meeting prep",
+      "Recurring task templates"
+     ],
+     "outcome": "Личная AI-система продуктивности: шаблоны дня, недели, задач, встреч и решений.",
+     "outcomeEn": "Personal AI productivity system with day, week, task, meeting, and decision templates."
+    },
+    {
+     "number": 4,
+     "title": "Поиск, анализ и исследования",
+     "titleEn": "Search, analysis, and research",
+     "goal": "Использовать AI для анализа информации, сравнения и выводов.",
+     "goalEn": "Use AI for analysis, comparison, and research conclusions.",
+     "skills": [
+      "Быстрые исследования",
+      "Сравнение продуктов и идей",
+      "Факты vs предположения",
+      "Summary и отчёты",
+      "Сравнительные таблицы"
+     ],
+     "skillsEn": [
+      "Quick research",
+      "Comparing products and ideas",
+      "Facts vs assumptions",
+      "Summaries and reports",
+      "Comparison tables"
+     ],
+     "outcome": "AI-исследование на выбранную тему: проблема, сравнение решений, выводы, рекомендации, отчёт.",
+     "outcomeEn": "AI research project: problem, solution comparison, conclusions, recommendations, and report."
+    },
+    {
+     "number": 5,
+     "title": "Тексты и документы",
+     "titleEn": "Texts and documents",
+     "goal": "Создавать, редактировать и улучшать тексты для личных и рабочих задач.",
+     "goalEn": "Create, edit, and improve texts for personal and work use.",
+     "skills": [
+      "Письма, посты, инструкции, КП",
+      "Смена стиля и аудитории",
+      "Перевод и локализация",
+      "Черновик → готовый документ"
+     ],
+     "skillsEn": [
+      "Emails, posts, guides, proposals",
+      "Style and audience adaptation",
+      "Translation and localization",
+      "Draft to final document"
+     ],
+     "outcome": "Пакет рабочих текстов: письмо, пост, описание услуги, мини-КП, инструкция.",
+     "outcomeEn": "Work text pack: email, post, service description, mini-proposal, and guide."
+    },
+    {
+     "number": 6,
+     "title": "Изображения, презентации и визуалы",
+     "titleEn": "Images, presentations, and visuals",
+     "goal": "Создавать визуальные материалы без навыков дизайна.",
+     "goalEn": "Create visual materials without design skills.",
+     "skills": [
+      "Промпты для изображений",
+      "Визуалы для соцсетей и баннеры",
+      "Презентации через AI",
+      "Единый визуальный стиль"
+     ],
+     "skillsEn": [
+      "Image prompts",
+      "Social visuals and banners",
+      "AI presentations",
+      "Consistent visual style"
+     ],
+     "outcome": "Визуальный пакет: 3–5 изображений, обложка, баннер, структура презентации, стиль проекта.",
+     "outcomeEn": "Visual pack: 3–5 images, cover, banner, presentation outline, and project style."
+    },
+    {
+     "number": 7,
+     "title": "AI для работы и бизнеса",
+     "titleEn": "AI for work and business",
+     "goal": "Находить процессы, где AI экономит время и ресурсы.",
+     "goalEn": "Find processes where AI saves time and resources.",
+     "skills": [
+      "Рутинные задачи и процессы",
+      "AI-помощники под задачи",
+      "Шаблоны для отделов",
+      "Расчёт пользы от AI"
+     ],
+     "skillsEn": [
+      "Routine tasks and processes",
+      "Task-specific AI assistants",
+      "Department templates",
+      "ROI of AI adoption"
+     ],
+     "outcome": "Карта AI-внедрения: процессы, улучшения, инструменты, ожидаемый результат, экономия времени.",
+     "outcomeEn": "AI adoption map: processes, improvements, tools, expected results, and time saved."
+    },
+    {
+     "number": 8,
+     "title": "Финальный проект: Personal AI Operating System",
+     "titleEn": "Capstone: Personal AI Operating System",
+     "goal": "Собрать все навыки в один рабочий проект.",
+     "goalEn": "Combine all skills into one working system.",
+     "skills": [
+      "Соединение инструментов",
+      "Рабочие шаблоны",
+      "Оформление AI-процессов",
+      "Системное использование AI",
+      "Презентация системы"
+     ],
+     "skillsEn": [
+      "Connecting tools",
+      "Work templates",
+      "Documenting AI workflows",
+      "Systematic AI use",
+      "Presenting your system"
+     ],
+     "outcome": "Personal AI Operating System: промпты, инструменты, шаблоны, процессы и карта применения AI.",
+     "outcomeEn": "Personal AI Operating System with prompts, tools, templates, workflows, and AI usage map."
+    }
+   ]
+  },
+  "ai-content-creator": {
+   "idea": "AI Content Creator — 8 уроков: тексты, AI-дизайн, видео, Shorts/Reels, контент-план и личный бренд.",
+   "ideaEn": "AI Content Creator — 8 lessons: copy, AI design, video, Shorts/Reels, content planning and personal brand.",
+   "durationRu": "8 уроков (30–45 минут)",
+   "durationEn": "8 lessons (30–45 min)",
+   "audience": [
+    "Контент-мейкеры",
+    "SMM-специалисты",
+    "Блогеры",
+    "Эксперты",
+    "Фрилансеры",
+    "Малый бизнес",
+    "Маркетологи"
+   ],
+   "audienceEn": [
+    "Content creators",
+    "SMM specialists",
+    "Bloggers",
+    "Experts",
+    "Freelancers",
+    "Small business",
+    "Marketers"
+   ],
+   "finalResult": "Полноценная контент-система: тексты, визуал, видео и план публикаций.",
+   "finalResultEn": "Full content system: copy, visuals, video and publishing plan.",
+   "weeks": [
+    {
+     "number": 1,
+     "title": "Фундамент AI-контента и личного бренда",
+     "titleEn": "AI content and personal brand foundation",
+     "goal": "Понять, какой контент создавать, для кого и в каком стиле.",
+     "goalEn": "Define what content to create, for whom, and in what style.",
+     "skills": [
+      "Ниша и аудитория",
+      "Позиционирование и конкуренты",
+      "Рубрики и tone of voice",
+      "Площадки публикации"
+     ],
+     "skillsEn": [
+      "Niche and audience",
+      "Positioning and competitors",
+      "Rubrics and tone of voice",
+      "Publishing platforms"
+     ],
+     "outcome": "Контент-фундамент: ниша, аудитория, позиционирование, стиль, 5–7 рубрик, темы на месяц.",
+     "outcomeEn": "Content foundation: niche, audience, positioning, style, 5–7 rubrics, and first-month topics."
+    },
+    {
+     "number": 2,
+     "title": "AI-копирайтинг и текстовый контент",
+     "titleEn": "AI copywriting and text content",
+     "goal": "Создавать тексты для разных платформ с помощью AI.",
+     "goalEn": "Create platform-specific copy with AI.",
+     "skills": [
+      "Посты Telegram и Instagram",
+      "Сценарии Reels/TikTok",
+      "Хуки и сторителлинг",
+      "Адаптация под площадки"
+     ],
+     "skillsEn": [
+      "Telegram and Instagram posts",
+      "Reels/TikTok scripts",
+      "Hooks and storytelling",
+      "Platform adaptation"
+     ],
+     "outcome": "Контент-план на 30 дней: 5 постов, 10 идей видео, 10 хуков, 5 сценариев.",
+     "outcomeEn": "30-day content plan: 5 posts, 10 video ideas, 10 hooks, 5 scripts."
+    },
+    {
+     "number": 3,
+     "title": "AI-визуалы и дизайн контента",
+     "titleEn": "AI visuals and content design",
+     "goal": "Создавать визуальный стиль и графику через AI.",
+     "goalEn": "Build visual style and graphics with AI.",
+     "skills": [
+      "Визуальные концепции и обложки",
+      "Единый стиль и moodboard",
+      "Промпты для изображений",
+      "Canva, Midjourney, Ideogram"
+     ],
+     "skillsEn": [
+      "Visual concepts and covers",
+      "Consistent style and moodboard",
+      "Image prompts",
+      "Canva, Midjourney, Ideogram"
+     ],
+     "outcome": "Визуальный набор бренда: 3–5 обложек, 5 визуалов, стиль, moodboard, промпты.",
+     "outcomeEn": "Brand visual kit: 3–5 covers, 5 post visuals, style, moodboard, and prompts."
+    },
+    {
+     "number": 4,
+     "title": "AI-видео: сценарии, генерация и монтаж",
+     "titleEn": "AI video: scripts, generation, editing",
+     "goal": "Создавать короткие видео с помощью AI от идеи до ролика.",
+     "goalEn": "Create short AI videos from idea to finished clip.",
+     "skills": [
+      "Сценарии и раскадровка",
+      "Генерация видео и voice-over",
+      "Монтаж и форматы Reels/TikTok/Shorts"
+     ],
+     "skillsEn": [
+      "Scripts and storyboards",
+      "Video generation and voice-over",
+      "Editing for Reels/TikTok/Shorts"
+     ],
+     "outcome": "3 AI-видео: образовательное, развлекательное, продающее или экспертное.",
+     "outcomeEn": "3 AI videos: educational, entertaining, and sales or expert."
+    },
+    {
+     "number": 5,
+     "title": "Короткий контент: Reels, TikTok, Shorts",
+     "titleEn": "Short-form content systems",
+     "goal": "Создавать короткий контент регулярно, а не случайно.",
+     "goalEn": "Produce short-form content consistently.",
+     "skills": [
+      "Механика коротких видео",
+      "Хук и удержание внимания",
+      "Сериальный формат",
+      "Адаптация трендов"
+     ],
+     "skillsEn": [
+      "Short video mechanics",
+      "Hooks and retention",
+      "Serial formats",
+      "Trend adaptation"
+     ],
+     "outcome": "Серия из 7 коротких видео для своей ниши.",
+     "outcomeEn": "Series of 7 short videos for your niche."
+    },
+    {
+     "number": 6,
+     "title": "Контент-конвейер и автоматизация",
+     "titleEn": "Content pipeline and automation",
+     "goal": "Выстроить систему быстрого и регулярного производства контента.",
+     "goalEn": "Build a fast, repeatable content production system.",
+     "skills": [
+      "Контент-процесс и база идей",
+      "Repurposing: видео → пост → сценарий",
+      "Notion, Sheets, Canva, CapCut"
+     ],
+     "skillsEn": [
+      "Content process and idea bank",
+      "Repurposing across formats",
+      "Notion, Sheets, Canva, CapCut"
+     ],
+     "outcome": "AI Content Machine: база идей, календарь, шаблоны постов и сценариев, процесс от идеи до публикации.",
+     "outcomeEn": "AI Content Machine: idea bank, calendar, post and script templates, idea-to-publish workflow."
+    },
+    {
+     "number": 7,
+     "title": "Монетизация AI-контента",
+     "titleEn": "Monetizing AI content",
+     "goal": "Связать контент с продажами, заявками и ростом бренда.",
+     "goalEn": "Connect content to sales, leads, and brand growth.",
+     "skills": [
+      "Контент и продукт",
+      "Прогревающие и продающие посты",
+      "Лид-магниты и воронка",
+      "Анализ результата"
+     ],
+     "skillsEn": [
+      "Content and product fit",
+      "Warm-up and sales posts",
+      "Lead magnets and funnel",
+      "Performance analysis"
+     ],
+     "outcome": "Контент-воронка: лид-магнит, 5 прогревающих постов, 3 продающих, оффер, путь к заявке.",
+     "outcomeEn": "Content funnel: lead magnet, 5 warm-up posts, 3 sales posts, offer, and path to application."
+    },
+    {
+     "number": 8,
+     "title": "Финальный проект: AI-контент-бренд",
+     "titleEn": "Capstone: AI content brand",
+     "goal": "Собрать все элементы в полноценный контент-проект.",
+     "goalEn": "Assemble everything into a complete content brand.",
+     "skills": [
+      "Стратегия и визуальный стиль",
+      "Сериальный контент",
+      "Регулярные публикации",
+      "Презентация бренда"
+     ],
+     "skillsEn": [
+      "Strategy and visual style",
+      "Serial content",
+      "Regular publishing",
+      "Brand presentation"
+     ],
+     "outcome": "Готовый AI-контент-бренд: позиционирование, план, 10 постов, 7 видео, конвейер, монетизация.",
+     "outcomeEn": "Ready AI content brand: positioning, plan, 10 posts, 7 videos, pipeline, monetization."
+    }
+   ]
+  },
+  "no-code-automation": {
+   "idea": "No-Code Automation Engineer — создание автоматизаций без программирования: связка сервисов, обработка данных, AI в процессах.",
+   "ideaEn": "No-Code Automation Engineer teaches business automations without code: connect services, process data, embed AI in workflows.",
+   "audience": [
+    "Новички в автоматизации",
+    "Маркетологи",
+    "Предприниматели",
+    "Ассистенты",
+    "Менеджеры",
+    "Фрилансеры",
+    "No-code специалисты"
+   ],
+   "audienceEn": [
+    "Automation beginners",
+    "Marketers",
+    "Entrepreneurs",
+    "Assistants",
+    "Managers",
+    "Freelancers",
+    "No-code specialists"
+   ],
+   "finalResult": "Полноценная бизнес-автоматизация: заявки, AI-анализ лидов, письма, Telegram, CRM, отчёты.",
+   "finalResultEn": "Full business automation: leads, AI lead analysis, emails, Telegram, CRM, and reports.",
+   "weeks": [
+    {
+     "number": 1,
+     "title": "Основы автоматизации",
+     "titleEn": "Automation fundamentals",
+     "goal": "Видеть процессы, находить рутину и понимать, что автоматизировать.",
+     "goalEn": "See processes, spot routine work, and know what to automate.",
+     "skills": [
+      "Задача vs процесс",
+      "Триггеры, действия, условия",
+      "Схема процесса",
+      "Ограничения no-code"
+     ],
+     "skillsEn": [
+      "Task vs process",
+      "Triggers, actions, conditions",
+      "Process mapping",
+      "No-code limits"
+     ],
+     "outcome": "Карта процесса: входные данные, шаги, участники, инструменты, что автоматизировать.",
+     "outcomeEn": "Process map: inputs, steps, stakeholders, tools, and automation opportunities."
+    },
+    {
+     "number": 2,
+     "title": "n8n с нуля: первые workflow",
+     "titleEn": "n8n from scratch: first workflows",
+     "goal": "Создавать первые рабочие сценарии в n8n.",
+     "goalEn": "Build your first working n8n workflows.",
+     "skills": [
+      "Интерфейс n8n и nodes",
+      "Triggers и передача данных",
+      "Тестирование и ошибки",
+      "Цепочки 3–5 шагов"
+     ],
+     "skillsEn": [
+      "n8n UI and nodes",
+      "Triggers and data flow",
+      "Testing and errors",
+      "3–5 step chains"
+     ],
+     "outcome": "Workflow: форма → Sheets, Sheets → Telegram, новый лид → уведомление.",
+     "outcomeEn": "Workflows: form → Sheets, Sheets → Telegram, new lead → notification."
+    },
+    {
+     "number": 3,
+     "title": "Данные, таблицы и условия",
+     "titleEn": "Data, spreadsheets, and conditions",
+     "goal": "Обрабатывать данные внутри автоматизаций.",
+     "goalEn": "Process data inside automations.",
+     "skills": [
+      "JSON и структура данных",
+      "IF-условия и фильтры",
+      "Google Sheets",
+      "Очистка и форматирование"
+     ],
+     "skillsEn": [
+      "JSON and data structure",
+      "IF conditions and filters",
+      "Google Sheets",
+      "Cleaning and formatting"
+     ],
+     "outcome": "Автоматизация: получение данных → условия → сортировка → сохранение → уведомление.",
+     "outcomeEn": "Automation: fetch data → conditions → sort → save → notify."
+    },
+    {
+     "number": 4,
+     "title": "API и интеграции",
+     "titleEn": "API and integrations",
+     "goal": "Подключать сервисы через API, даже без готового блока.",
+     "goalEn": "Connect services via API even without a native node.",
+     "skills": [
+      "GET, POST, headers, body",
+      "HTTP Request",
+      "Чтение документации",
+      "Авторизация и ошибки"
+     ],
+     "skillsEn": [
+      "GET, POST, headers, body",
+      "HTTP Request node",
+      "Reading API docs",
+      "Auth and errors"
+     ],
+     "outcome": "Интеграция через API: внешний сервис, CRM, Telegram Bot, webhook.",
+     "outcomeEn": "API integration: external service, CRM, Telegram Bot, or webhook."
+    },
+    {
+     "number": 5,
+     "title": "AI внутри автоматизаций",
+     "titleEn": "AI inside automations",
+     "goal": "Использовать AI как часть автоматизированного процесса.",
+     "goalEn": "Use AI as part of an automated workflow.",
+     "skills": [
+      "OpenAI в workflow",
+      "Промпты для автоматизаций",
+      "Классификация заявок",
+      "Summary и AI-ответы"
+     ],
+     "skillsEn": [
+      "OpenAI in workflows",
+      "Automation prompts",
+      "Lead classification",
+      "Summaries and AI replies"
+     ],
+     "outcome": "AI workflow: заявка → AI-анализ → категория → таблица → уведомление менеджеру.",
+     "outcomeEn": "AI workflow: lead → AI analysis → category → sheet → manager notification."
+    },
+    {
+     "number": 6,
+     "title": "Автоматизация бизнес-процессов",
+     "titleEn": "Business process automation",
+     "goal": "Создавать автоматизации для реальных отделов.",
+     "goalEn": "Build automations for real business departments.",
+     "skills": [
+      "Продажи, маркетинг, поддержка, HR",
+      "Сбор требований",
+      "Архитектура без лишней сложности"
+     ],
+     "skillsEn": [
+      "Sales, marketing, support, HR",
+      "Requirements gathering",
+      "Simple architecture"
+     ],
+     "outcome": "Автоматизация отдела: лид → CRM → AI-квалификация → email → Telegram → Sheets.",
+     "outcomeEn": "Department automation: lead → CRM → AI qualification → email → Telegram → Sheets."
+    },
+    {
+     "number": 7,
+     "title": "Надёжность и продакшн",
+     "titleEn": "Reliability and production",
+     "goal": "Делать автоматизации стабильными, а не просто «рабочими».",
+     "goalEn": "Make automations stable, not just working once.",
+     "skills": [
+      "Обработка ошибок и fallback",
+      "Логирование",
+      "Защита данных",
+      "Документация и лимиты"
+     ],
+     "skillsEn": [
+      "Error handling and fallback",
+      "Logging",
+      "Data protection",
+      "Documentation and limits"
+     ],
+     "outcome": "Улучшенный workflow: ошибки, логи, уведомления, документация, схема.",
+     "outcomeEn": "Improved workflow: errors, logs, alerts, documentation, and diagram."
+    },
+    {
+     "number": 8,
+     "title": "Финальный проект: Business Automation System",
+     "titleEn": "Capstone: Business Automation System",
+     "goal": "Собрать полноценную no-code автоматизацию для бизнеса.",
+     "goalEn": "Build a complete no-code automation for business.",
+     "skills": [
+      "Проектирование и тестирование",
+      "AI-блок и интеграции",
+      "Презентация клиенту"
+     ],
+     "skillsEn": [
+      "Design and testing",
+      "AI block and integrations",
+      "Client presentation"
+     ],
+     "outcome": "Business Automation System: задача, схема, n8n workflow, AI, интеграции, документация, демо.",
+     "outcomeEn": "Business Automation System: brief, diagram, n8n workflow, AI, integrations, docs, demo."
+    }
+   ]
+  },
+  "ai-conversational-systems": {
+   "idea": "AI Conversational Systems — чат-боты и голосовые AI-агенты для бизнеса: Telegram, сайт, телефония, CRM и коммерческая упаковка.",
+   "ideaEn": "AI Conversational Systems — chatbots and voice AI agents for business: Telegram, web, telephony, CRM and commercial delivery.",
+   "audience": [
+    "No-code специалисты",
+    "Automation engineers",
+    "Маркетологи",
+    "Владельцы бизнеса",
+    "Фрилансеры",
+    "Поддержка"
+   ],
+   "audienceEn": [
+    "No-code specialists",
+    "Automation engineers",
+    "Marketers",
+    "Business owners",
+    "Freelancers",
+    "Support teams"
+   ],
+   "finalResult": "Коммерческий AI-чатбот и голосовой AI-сотрудник: CRM, сценарии, телефония и заявки.",
+   "finalResultEn": "Commercial AI chatbot and voice employee: CRM, scenarios, telephony and lead capture.",
+   "weeks": [
+    {
+     "number": 1,
+     "title": "Архитектура чатботов",
+     "titleEn": "Chatbot architecture",
+     "goal": "Понять, из чего состоит чатбот и как его проектировать.",
+     "goalEn": "Understand chatbot components and how to design them.",
+     "skills": [
+      "Виды ботов и сценарии",
+      "Карта диалогов и интенты",
+      "Fallback и бизнес-результат"
+     ],
+     "skillsEn": [
+      "Bot types and scenarios",
+      "Dialog maps and intents",
+      "Fallback and business outcome"
+     ],
+     "outcome": "Концепция чатбота: цель, аудитория, сценарии, интенты, карта диалогов.",
+     "outcomeEn": "Chatbot concept: goal, audience, scenarios, intents, dialog map."
+    },
+    {
+     "number": 2,
+     "title": "Telegram-боты и базовая логика",
+     "titleEn": "Telegram bots and basic logic",
+     "goal": "Создать первого рабочего Telegram-бота.",
+     "goalEn": "Build your first working Telegram bot.",
+     "skills": [
+      "BotFather и подключение n8n",
+      "Кнопки, меню, команды",
+      "Сбор данных и уведомления"
+     ],
+     "skillsEn": [
+      "BotFather and n8n",
+      "Buttons, menus, commands",
+      "Data collection and alerts"
+     ],
+     "outcome": "Telegram-бот: приветствие, меню, сценарии, сбор данных, уведомление админу.",
+     "outcomeEn": "Telegram bot: greeting, menu, scenarios, data capture, admin notification."
+    },
+    {
+     "number": 3,
+     "title": "Подключение AI",
+     "titleEn": "Connecting AI",
+     "goal": "Превратить обычного бота в AI-бота.",
+     "goalEn": "Turn a basic bot into an AI bot.",
+     "skills": [
+      "Системный промпт и роль",
+      "Стиль и ограничения",
+      "Контроль качества ответов"
+     ],
+     "skillsEn": [
+      "System prompt and role",
+      "Style and constraints",
+      "Answer quality control"
+     ],
+     "outcome": "AI-бот-консультант в заданной роли и стиле.",
+     "outcomeEn": "AI consultant bot with defined role and style."
+    },
+    {
+     "number": 4,
+     "title": "Память и персонализация",
+     "titleEn": "Memory and personalization",
+     "goal": "Бот помнит пользователя, историю и контекст.",
+     "goalEn": "Bot remembers user, history, and context.",
+     "skills": [
+      "Краткосрочная и долгосрочная память",
+      "Профили пользователей",
+      "Sheets/Airtable/БД"
+     ],
+     "skillsEn": [
+      "Short and long-term memory",
+      "User profiles",
+      "Sheets/Airtable/DB"
+     ],
+     "outcome": "Бот с памятью: имя, данные, предыдущие ответы, персонализация.",
+     "outcomeEn": "Bot with memory: name, data, history, personalized replies."
+    },
+    {
+     "number": 5,
+     "title": "База знаний и RAG",
+     "titleEn": "Knowledge base and RAG",
+     "goal": "Ответы по материалам компании, а не «из головы».",
+     "goalEn": "Answers from company materials, not hallucinations.",
+     "skills": [
+      "Подготовка FAQ и документов",
+      "RAG на базовом уровне",
+      "Обновление знаний"
+     ],
+     "skillsEn": [
+      "FAQ and document prep",
+      "Basic RAG",
+      "Updating knowledge"
+     ],
+     "outcome": "Бот по базе знаний для школы, ресторана, агентства или поддержки.",
+     "outcomeEn": "Knowledge-base bot for school, restaurant, agency, or support."
+    },
+    {
+     "number": 6,
+     "title": "CRM, таблицы и уведомления",
+     "titleEn": "CRM, spreadsheets, and notifications",
+     "goal": "Чатбот как часть бизнес-системы.",
+     "goalEn": "Chatbot as part of the business stack.",
+     "skills": [
+      "Сбор заявок и CRM",
+      "Классификация и follow-up",
+      "Связь с автоматизациями"
+     ],
+     "skillsEn": [
+      "Lead capture and CRM",
+      "Classification and follow-up",
+      "Automation integration"
+     ],
+     "outcome": "Бот для лидогенерации: данные клиента, интерес, заявка, CRM, уведомление.",
+     "outcomeEn": "Lead-gen bot: client data, interest, application, CRM, notification."
+    },
+    {
+     "number": 7,
+     "title": "Продажи и поддержка",
+     "titleEn": "Sales and support bots",
+     "goal": "Чатбот для продаж, поддержки, записи и FAQ.",
+     "goalEn": "Bots for sales, support, booking, and FAQ.",
+     "skills": [
+      "Квалификация и возражения",
+      "Передача менеджеру",
+      "Метрики эффективности"
+     ],
+     "skillsEn": [
+      "Qualification and objections",
+      "Handoff to manager",
+      "Performance metrics"
+     ],
+     "outcome": "Коммерческий сценарий: диагностика, рекомендации, заявка, менеджер, follow-up.",
+     "outcomeEn": "Commercial flow: diagnosis, recommendations, application, manager, follow-up."
+    },
+    {
+     "number": 8,
+     "title": "Финальный проект: Commercial AI Chatbot",
+     "titleEn": "Capstone: Commercial AI Chatbot",
+     "goal": "Полноценный AI-чатбот для реального бизнеса.",
+     "goalEn": "Full AI chatbot for real business use.",
+     "skills": [
+      "AI + база знаний + бизнес-логика",
+      "Тестирование и документация",
+      "Презентация пользы"
+     ],
+     "skillsEn": [
+      "AI + knowledge + business logic",
+      "Testing and documentation",
+      "Value presentation"
+     ],
+     "outcome": "Commercial AI Chatbot: концепция, диалоги, Telegram/web, AI, KB, память, CRM, уведомления.",
+     "outcomeEn": "Commercial AI Chatbot: concept, dialogs, Telegram/web, AI, KB, memory, CRM, alerts."
+    }
+   ]
+  },
+  "ai-saas-builder": {
+   "idea": "AI SaaS Builder — пошаговый путь от идеи до запущенного AI SaaS: MVP, no-code стек, Supabase, AI API, auth, Stripe и первые пользователи.",
+   "ideaEn": "AI SaaS Builder is a step-by-step path from idea to launched AI SaaS: MVP, no-code stack, Supabase, AI API, auth, Stripe and first users.",
+   "durationRu": "12 уроков",
+   "durationEn": "12 lessons",
+   "audience": [
+    "Новички, которые хотят создать свой первый SaaS",
+    "Фрилансеры, желающие перейти на подписочную модель дохода",
+    "Владельцы агентств и студий",
+    "Разработчики No-Code решений",
+    "Специалисты по AI и автоматизациям",
+    "Предприниматели, которые хотят запустить собственный IT-продукт",
+    "Все, кто хочет создать AI SaaS без команды разработчиков"
+   ],
+   "audienceEn": [
+    "Beginners who want to build their first SaaS",
+    "Freelancers moving to subscription income",
+    "Agency and studio owners",
+    "No-code developers",
+    "AI and automation specialists",
+    "Entrepreneurs launching their own IT product",
+    "Anyone who wants to build AI SaaS without a dev team"
+   ],
+   "outcomes": [
+    "Найдёт перспективную SaaS-идею",
+    "Проведёт анализ рынка и конкурентов",
+    "Спроектирует MVP продукта",
+    "Освоит Lovable и Bolt.new",
+    "Научится создавать SaaS через Replit",
+    "Настроит базу данных через Supabase",
+    "Подключит AI-модели и API",
+    "Реализует регистрацию пользователей",
+    "Настроит систему платежей и подписок",
+    "Развернёт продукт в интернете",
+    "Получит первых пользователей",
+    "Запустит собственный AI SaaS продукт"
+   ],
+   "outcomesEn": [
+    "Find a promising SaaS idea",
+    "Run market and competitor analysis",
+    "Design an MVP",
+    "Master Lovable and Bolt.new",
+    "Build SaaS with Replit",
+    "Set up Supabase database",
+    "Connect AI models and APIs",
+    "Implement user registration",
+    "Set up payments and subscriptions",
+    "Deploy the product online",
+    "Acquire first users",
+    "Launch your own AI SaaS product"
+   ],
+   "finalResult": "Запущенный AI SaaS: MVP, auth, Supabase, AI-функция, Stripe и первые пользователи.",
+   "finalResultEn": "Launched AI SaaS: MVP, auth, Supabase, AI feature, Stripe and first users.",
+   "weeks": [
+    {
+     "number": 1,
+     "title": "Идея и валидация SaaS",
+     "titleEn": "SaaS idea and validation",
+     "goal": "Найти перспективную идею и проверить спрос.",
+     "goalEn": "Find a promising idea and validate demand.",
+     "skills": [
+      "SaaS-идеи с AI",
+      "Анализ рынка",
+      "Конкуренты"
+     ],
+     "skillsEn": [
+      "AI SaaS ideas",
+      "Market analysis",
+      "Competitors"
+     ],
+     "outcome": "Валидированная SaaS-идея с анализом рынка.",
+     "outcomeEn": "Validated SaaS idea with market analysis."
+    },
+    {
+     "number": 2,
+     "title": "MVP и no-code стек",
+     "titleEn": "MVP and no-code stack",
+     "goal": "Спроектировать MVP и выбрать инструменты.",
+     "goalEn": "Design MVP and choose tools.",
+     "skills": [
+      "Lovable и Bolt.new",
+      "Replit",
+      "UX MVP"
+     ],
+     "skillsEn": [
+      "Lovable and Bolt.new",
+      "Replit",
+      "MVP UX"
+     ],
+     "outcome": "MVP-прототип в Lovable/Bolt или Replit.",
+     "outcomeEn": "MVP prototype in Lovable/Bolt or Replit."
+    },
+    {
+     "number": 3,
+     "title": "Supabase и auth",
+     "titleEn": "Supabase and auth",
+     "goal": "База данных и регистрация пользователей.",
+     "goalEn": "Database and user registration.",
+     "skills": [
+      "Supabase setup",
+      "Auth flows",
+      "Profiles"
+     ],
+     "skillsEn": [
+      "Supabase setup",
+      "Auth flows",
+      "Profiles"
+     ],
+     "outcome": "Рабочая auth + Supabase schema.",
+     "outcomeEn": "Working auth and Supabase schema."
+    },
+    {
+     "number": 4,
+     "title": "AI и API",
+     "titleEn": "AI and API",
+     "goal": "Подключить AI-модели к продукту.",
+     "goalEn": "Connect AI models to the product.",
+     "skills": [
+      "OpenAI API",
+      "Prompts in product",
+      "Rate limits"
+     ],
+     "skillsEn": [
+      "OpenAI API",
+      "Prompts in product",
+      "Rate limits"
+     ],
+     "outcome": "AI-функция в MVP через API.",
+     "outcomeEn": "AI feature in MVP via API."
+    },
+    {
+     "number": 5,
+     "title": "Платежи и подписки",
+     "titleEn": "Payments and subscriptions",
+     "goal": "Stripe и монетизация.",
+     "goalEn": "Stripe and monetization.",
+     "skills": [
+      "Stripe checkout",
+      "Subscriptions",
+      "Webhooks"
+     ],
+     "skillsEn": [
+      "Stripe checkout",
+      "Subscriptions",
+      "Webhooks"
+     ],
+     "outcome": "Оплата и подписка в продукте.",
+     "outcomeEn": "Payments and subscription in product."
+    },
+    {
+     "number": 6,
+     "title": "Деплой и запуск",
+     "titleEn": "Deploy and launch",
+     "goal": "Выложить продукт и получить первых пользователей.",
+     "goalEn": "Ship product and get first users.",
+     "skills": [
+      "Deploy",
+      "Landing",
+      "First users"
+     ],
+     "skillsEn": [
+      "Deploy",
+      "Landing",
+      "First users"
+     ],
+     "outcome": "AI SaaS в интернете с первыми пользователями.",
+     "outcomeEn": "AI SaaS live with first users."
+    }
+   ]
+  },
+  "ai-agent-architect": {
+   "idea": "AI Agent Engineer — продвинутый курс по агентным системам: OpenAI/Claude Agents, Tool Calling, память, Vector DB, RAG, CrewAI, LangGraph и продакшен.",
+   "ideaEn": "AI Agent Engineer is an advanced course on agent systems: OpenAI/Claude Agents, Tool Calling, memory, Vector DB, RAG, CrewAI, LangGraph and production.",
+   "durationRu": "18 уроков",
+   "durationEn": "18 lessons",
+   "audience": [
+    "AI-разработчики и энтузиасты",
+    "Специалисты по автоматизации процессов",
+    "No-Code разработчики",
+    "Владельцы агентств и SaaS-продуктов",
+    "Технические специалисты, желающие изучить AI Agents",
+    "Предприниматели, внедряющие AI в бизнес",
+    "Все, кто хочет создавать продвинутые агентные системы"
+   ],
+   "audienceEn": [
+    "AI developers and enthusiasts",
+    "Process automation specialists",
+    "No-code developers",
+    "Agency and SaaS product owners",
+    "Technical specialists learning AI agents",
+    "Entrepreneurs implementing AI in business",
+    "Anyone building advanced agent systems"
+   ],
+   "outcomes": [
+    "Поймёт архитектуру современных AI-агентов",
+    "Освоит OpenAI Agents и Claude Agents",
+    "Научится работать с Tool Calling",
+    "Реализует память для AI-агентов",
+    "Настроит Vector Database",
+    "Создаст полноценную RAG систему",
+    "Построит мультиагентную архитектуру",
+    "Освоит CrewAI и LangGraph",
+    "Научится оркестрировать десятки агентов",
+    "Создаст исследовательских AI-агентов",
+    "Построит бизнес-агентов для автоматизации процессов",
+    "Разработает автономных агентов",
+    "Освоит мониторинг и отладку агентных систем",
+    "Развернёт агентов в продакшене",
+    "Создаст собственную мультиагентную AI-платформу"
+   ],
+   "outcomesEn": [
+    "Understand modern AI agent architecture",
+    "Master OpenAI Agents and Claude Agents",
+    "Work with Tool Calling",
+    "Implement agent memory",
+    "Set up a Vector Database",
+    "Build a full RAG system",
+    "Design multi-agent architecture",
+    "Master CrewAI and LangGraph",
+    "Orchestrate dozens of agents",
+    "Build research AI agents",
+    "Build business agents for process automation",
+    "Develop autonomous agents",
+    "Master agent monitoring and debugging",
+    "Deploy agents to production",
+    "Build your own multi-agent AI platform"
+   ],
+   "finalResult": "Собственная мультиагентная AI-платформа: RAG, tools, orchestration и продакшен.",
+   "finalResultEn": "Your own multi-agent AI platform: RAG, tools, orchestration and production.",
+   "weeks": [
+    {
+     "number": 1,
+     "title": "Основы AI-агентов",
+     "titleEn": "AI agent fundamentals",
+     "goal": "Чем агент отличается от чатбота, workflow и ассистента.",
+     "goalEn": "How agents differ from chatbots, workflows, and assistants.",
+     "skills": [
+      "Цикл goal → plan → action → result",
+      "Роль и автономность",
+      "Риски агентных систем"
+     ],
+     "skillsEn": [
+      "Goal → plan → action → result cycle",
+      "Role and autonomy",
+      "Agent system risks"
+     ],
+     "outcome": "Концепция агента: роль, цель, задачи, вход/выход, ограничения, автономность.",
+     "outcomeEn": "Agent concept: role, goal, tasks, I/O, constraints, autonomy."
+    },
+    {
+     "number": 2,
+     "title": "Tools и Actions",
+     "titleEn": "Tools and actions",
+     "goal": "Давать агенту инструменты для действий, не только ответов.",
+     "goalEn": "Give agents tools to act, not just reply.",
+     "skills": [
+      "API, Sheets, email, CRM, Telegram",
+      "Безопасные tools",
+      "Проверка результатов"
+     ],
+     "skillsEn": [
+      "API, Sheets, email, CRM, Telegram",
+      "Safe tools",
+      "Result verification"
+     ],
+     "outcome": "Агент с tools: получить данные → обработать → записать → уведомить.",
+     "outcomeEn": "Agent with tools: fetch → process → write → notify."
+    },
+    {
+     "number": 3,
+     "title": "Память и контекст",
+     "titleEn": "Memory and context",
+     "goal": "Работа с историей, профилем и долгосрочным контекстом.",
+     "goalEn": "Work with history, profiles, and long-term context.",
+     "skills": [
+      "Краткосрочный и долгосрочный контекст",
+      "Профили и очистка",
+      "Безопасное хранение"
+     ],
+     "skillsEn": [
+      "Short and long-term context",
+      "Profiles and cleanup",
+      "Secure storage"
+     ],
+     "outcome": "Агент с памятью: пользователь, данные, прошлый контекст, адаптация.",
+     "outcomeEn": "Agent with memory: user, data, past context, adaptation."
+    },
+    {
+     "number": 4,
+     "title": "Knowledge Base",
+     "titleEn": "Knowledge base",
+     "goal": "Агенты с корпоративными знаниями и документами.",
+     "goalEn": "Agents with corporate knowledge and documents.",
+     "skills": [
+      "RAG и ограничение источниками",
+      "FAQ и обновление KB",
+      "Снижение галлюцинаций"
+     ],
+     "skillsEn": [
+      "RAG and source grounding",
+      "FAQ and KB updates",
+      "Reducing hallucinations"
+     ],
+     "outcome": "Агент на KB: HR, support, sales, внутренний консультант или документация.",
+     "outcomeEn": "KB agent: HR, support, sales, internal consultant, or docs."
+    },
+    {
+     "number": 5,
+     "title": "Multi-Agent Systems",
+     "titleEn": "Multi-agent systems",
+     "goal": "Несколько AI-агентов работают вместе.",
+     "goalEn": "Multiple AI agents working together.",
+     "skills": [
+      "Orchestrator и специалисты",
+      "Передача задач",
+      "Агент-ревьюер"
+     ],
+     "skillsEn": [
+      "Orchestrator and specialists",
+      "Task handoff",
+      "Reviewer agent"
+     ],
+     "outcome": "Multi-agent: менеджер, исследователь, копирайтер, аналитик, ревьюер.",
+     "outcomeEn": "Multi-agent: manager, researcher, copywriter, analyst, reviewer."
+    },
+    {
+     "number": 6,
+     "title": "Планирование и автономность",
+     "titleEn": "Planning and autonomy",
+     "goal": "Агент планирует задачу и выполняет по шагам.",
+     "goalEn": "Agent plans and executes tasks step by step.",
+     "skills": [
+      "Planning prompt",
+      "Human approval",
+      "Промежуточные результаты"
+     ],
+     "skillsEn": [
+      "Planning prompt",
+      "Human approval",
+      "Intermediate results"
+     ],
+     "outcome": "Автономный процесс: задача → план → шаги → проверка → output.",
+     "outcomeEn": "Autonomous process: task → plan → steps → check → output."
+    },
+    {
+     "number": 7,
+     "title": "Enterprise-архитектура",
+     "titleEn": "Enterprise architecture",
+     "goal": "Агентные системы для реальных компаний.",
+     "goalEn": "Agent systems for real companies.",
+     "skills": [
+      "Безопасность и права доступа",
+      "Схема системы и ROI",
+      "Документация"
+     ],
+     "skillsEn": [
+      "Security and access control",
+      "System diagram and ROI",
+      "Documentation"
+     ],
+     "outcome": "Архитектура AI Agent System: проблема, роли, tools, KB, интеграции, риски.",
+     "outcomeEn": "AI Agent System architecture: problem, roles, tools, KB, integrations, risks."
+    },
+    {
+     "number": 8,
+     "title": "Финальный проект: AI Agent Department",
+     "titleEn": "Capstone: AI Agent Department",
+     "goal": "Мини-отдел из AI-агентов.",
+     "goalEn": "A mini department of AI agents.",
+     "skills": [
+      "Multi-agent workflow",
+      "Tools, память, KB",
+      "Демо и документация"
+     ],
+     "skillsEn": [
+      "Multi-agent workflow",
+      "Tools, memory, KB",
+      "Demo and documentation"
+     ],
+     "outcome": "AI Agent Department: orchestrator, 2–4 агента, tools, память, KB, сценарий, архитектура.",
+     "outcomeEn": "AI Agent Department: orchestrator, 2–4 agents, tools, memory, KB, scenario, architecture."
+    }
+   ]
+  },
+  "ai-agency-builder": {
+   "idea": "AI Agency Builder — пошаговая программа для запуска собственного AI-агентства: ниша, оффер, упаковка, лиды, продажи и delivery без программирования.",
+   "ideaEn": "AI Agency Builder is a step-by-step program to launch your AI agency: niche, offer, packaging, leads, sales and delivery — no coding required.",
+   "durationRu": "10 уроков",
+   "durationEn": "10 lessons",
+   "audience": [
+    "Фрилансеры, которые хотят перейти на агентскую модель",
+    "Специалисты по AI и автоматизациям",
+    "Маркетологи и SEO-специалисты",
+    "Владельцы малого бизнеса",
+    "Студенты и новички, которые хотят зарабатывать на AI",
+    "Все, кто хочет запустить собственное AI-агентство без программирования"
+   ],
+   "audienceEn": [
+    "Freelancers moving to an agency model",
+    "AI and automation specialists",
+    "Marketers and SEO specialists",
+    "Small business owners",
+    "Students and beginners who want to earn with AI",
+    "Anyone who wants to launch an AI agency without coding"
+   ],
+   "outcomes": [
+    "Выберет прибыльную нишу",
+    "Создаст AI-оффер",
+    "Упакует своё агентство",
+    "Получит первые кейсы",
+    "Настроит систему лидогенерации",
+    "Освоит холодный аутрич",
+    "Научится проводить продажи",
+    "Выстроит процесс работы с клиентами",
+    "Получит первую систему привлечения клиентов",
+    "Запустит собственное AI-агентство"
+   ],
+   "outcomesEn": [
+    "Choose a profitable niche",
+    "Create an AI offer",
+    "Package your agency",
+    "Build first case studies",
+    "Set up a lead generation system",
+    "Master cold outreach",
+    "Learn how to run sales calls",
+    "Build a client delivery process",
+    "Launch your first client acquisition system",
+    "Start your own AI agency"
+   ],
+   "finalResult": "Запущенное AI-агентство: ниша, оффер, упаковка, кейсы, лидогенерация, продажи и система работы с клиентами.",
+   "finalResultEn": "A launched AI agency: niche, offer, packaging, case studies, lead gen, sales and client delivery system.",
+   "weeks": [
+    {
+     "number": 1,
+     "title": "AI-рынок и ниши",
+     "titleEn": "AI market and niches",
+     "goal": "Выбрать AI-услуги и целевую аудиторию.",
+     "goalEn": "Choose AI services and target audience.",
+     "skills": [
+      "Спрос и боли клиентов",
+      "Chatbot, automation, voice, content",
+      "Специализация без распыления"
+     ],
+     "skillsEn": [
+      "Demand and client pain",
+      "Chatbot, automation, voice, content",
+      "Focused specialization"
+     ],
+     "outcome": "Ниша агентства: аудитория, боль, решение, почему платят, список клиентов.",
+     "outcomeEn": "Agency niche: audience, pain, solution, why they pay, prospect list."
+    },
+    {
+     "number": 2,
+     "title": "Упаковка услуг",
+     "titleEn": "Service packaging",
+     "goal": "Превратить навыки в понятные продаваемые услуги.",
+     "goalEn": "Turn skills into clear, sellable services.",
+     "skills": [
+      "Продуктовая линейка и тарифы",
+      "Entry / core / premium",
+      "Результат, не процесс"
+     ],
+     "skillsEn": [
+      "Product line and tiers",
+      "Entry / core / premium",
+      "Outcomes, not process"
+     ],
+     "outcome": "Линейка услуг: аудит, чатбот, автоматизация, voice, контент, поддержка.",
+     "outcomeEn": "Service line: audit, chatbot, automation, voice, content, support."
+    },
+    {
+     "number": 3,
+     "title": "Оффер и КП",
+     "titleEn": "Offer and proposal",
+     "goal": "Оффер, понятный бизнесу, с конкретной пользой.",
+     "goalEn": "Business-friendly offer with clear value.",
+     "skills": [
+      "Проблема → результат → что входит",
+      "One-page offer и презентация"
+     ],
+     "skillsEn": [
+      "Problem → result → scope",
+      "One-page offer and deck"
+     ],
+     "outcome": "AI-оффер: кому, проблема, результат, состав, сроки, цена, следующий шаг.",
+     "outcomeEn": "AI offer: who, problem, result, scope, timeline, price, next step."
+    },
+    {
+     "number": 4,
+     "title": "Поиск клиентов",
+     "titleEn": "Client acquisition",
+     "goal": "Находить первых клиентов без большого бюджета.",
+     "goalEn": "Find first clients without a big ad budget.",
+     "skills": [
+      "Google Maps, LinkedIn, Telegram",
+      "Персонализированный outreach",
+      "Follow-up и таблица лидов"
+     ],
+     "skillsEn": [
+      "Google Maps, LinkedIn, Telegram",
+      "Personalized outreach",
+      "Follow-up and lead sheet"
+     ],
+     "outcome": "Система поиска: 50 лидов, 3 шаблона сообщений, 2 follow-up, план outreach.",
+     "outcomeEn": "Acquisition system: 50 leads, 3 message templates, 2 follow-ups, daily outreach plan."
+    },
+    {
+     "number": 5,
+     "title": "Продажи AI-услуг",
+     "titleEn": "Selling AI services",
+     "goal": "Discovery call и работа с возражениями.",
+     "goalEn": "Discovery calls and handling objections.",
+     "skills": [
+      "Диагностические вопросы",
+      "Продажа результата, не технологии",
+      "Follow-up после созвона"
+     ],
+     "skillsEn": [
+      "Diagnostic questions",
+      "Sell outcomes, not tech",
+      "Post-call follow-up"
+     ],
+     "outcome": "Sales kit: скрипт, вопросы, возражения, презентация, follow-up.",
+     "outcomeEn": "Sales kit: script, questions, objections, deck, follow-up."
+    },
+    {
+     "number": 6,
+     "title": "Delivery проектов",
+     "titleEn": "Project delivery",
+     "goal": "Выполнять проекты без хаоса.",
+     "goalEn": "Deliver projects without chaos.",
+     "skills": [
+      "Onboarding и ТЗ",
+      "Этапы, тестирование, передача",
+      "Инструкции для клиента"
+     ],
+     "skillsEn": [
+      "Onboarding and brief",
+      "Phases, testing, handoff",
+      "Client instructions"
+     ],
+     "outcome": "Delivery system: анкета, ТЗ, структура проекта, чек-лист, передача.",
+     "outcomeEn": "Delivery system: intake form, brief, project structure, QA checklist, handoff."
+    },
+    {
+     "number": 7,
+     "title": "Процессы и повторные продажи",
+     "titleEn": "Operations and retainers",
+     "goal": "Разовые проекты → стабильный бизнес.",
+     "goalEn": "Turn one-off projects into recurring revenue.",
+     "skills": [
+      "Стандартизация и retainer",
+      "Кейсы и портфолио",
+      "Делегирование"
+     ],
+     "skillsEn": [
+      "Standardization and retainers",
+      "Cases and portfolio",
+      "Delegation"
+     ],
+     "outcome": "Операционная система: процессы, шаблоны, поддержка, retainer, кейсы.",
+     "outcomeEn": "Operations: processes, templates, support, retainer, case studies."
+    },
+    {
+     "number": 8,
+     "title": "Финальный проект: AI Agency Launch Kit",
+     "titleEn": "Capstone: AI Agency Launch Kit",
+     "goal": "Готовая модель агентства для выхода на рынок.",
+     "goalEn": "Ready agency model to go to market.",
+     "skills": [
+      "Презентация агентства",
+      "План первых 30 дней",
+      "Система продаж и delivery"
+     ],
+     "skillsEn": [
+      "Agency presentation",
+      "First 30 days plan",
+      "Sales and delivery system"
+     ],
+     "outcome": "AI Agency Launch Kit: ниша, линейка, оффер, лиды, sales, delivery, retainer, план 30 дней.",
+     "outcomeEn": "AI Agency Launch Kit: niche, line, offer, leads, sales, delivery, retainer, 30-day plan."
+    }
+   ]
+  }
+ }
+}

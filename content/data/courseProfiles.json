@@ -1,0 +1,452 @@
+{
+ "COURSE_PROFILES": {
+  "ai-start": {
+   "shortDescription": "7 коротких уроков: основы AI, ChatGPT, промпты и первые шаги к заработку.",
+   "shortDescriptionEn": "7 short lessons: AI basics, ChatGPT, prompts and your first steps to earning with AI.",
+   "fullDescription": "AI Starter Week — бесплатная стартовая неделя для тех, кто только знакомится с AI. Вы поймёте, как работает искусственный интеллект, освоите ChatGPT, Claude, Gemini и Perplexity, научитесь писать промпты и увидите реальные сценарии для работы, учёбы и дохода.",
+   "fullDescriptionEn": "AI Starter Week is a free intro week for complete beginners. You will understand how AI works, master ChatGPT, Claude, Gemini and Perplexity, learn prompt basics and see real use cases for work, study and income.",
+   "courseIdea": "AI Starter Week — бесплатная стартовая неделя для тех, кто только знакомится с AI. Вы поймёте, как работает искусственный интеллект, освоите ChatGPT, Claude, Gemini и Perplexity, научитесь писать промпты и увидите реальные сценарии для работы, учёбы и дохода.",
+   "courseIdeaEn": "AI Starter Week is a free intro week for complete beginners. You will understand how AI works, master ChatGPT, Claude, Gemini and Perplexity, learn prompt basics and see real use cases for work, study and income.",
+   "forAudience": [
+    "Полных новичков в AI",
+    "Студентов и школьников",
+    "Фрилансеров и предпринимателей на старте",
+    "Маркетологов и менеджеров без технического бэка",
+    "Всех, кто хочет понять AI за 7 дней"
+   ],
+   "forAudienceEn": [
+    "Complete AI beginners",
+    "Students",
+    "Freelancers and early-stage entrepreneurs",
+    "Non-technical marketers and managers",
+    "Anyone who wants to understand AI in 7 days"
+   ],
+   "goals": [
+    "Поймёт, что такое AI и как он меняет рынок",
+    "Создаст первые запросы в ChatGPT",
+    "Сравнит Claude, Gemini и Perplexity",
+    "Освоит базовый Prompt Engineering",
+    "Применит AI в работе и учёбе",
+    "Узнает способы монетизации AI-навыков",
+    "Составит личный план развития в AI"
+   ],
+   "goalsEn": [
+    "Understand what AI is and how it changes the market",
+    "Write your first ChatGPT prompts",
+    "Compare Claude, Gemini and Perplexity",
+    "Learn prompt engineering basics",
+    "Apply AI to work and study",
+    "Discover ways to monetize AI skills",
+    "Build a personal AI learning roadmap"
+   ],
+   "finalProject": "Личная дорожная карта AI-специалиста и настроенный AI-помощник под ваши задачи.",
+   "finalProjectEn": "Personal AI learning roadmap and an assistant configured for your tasks."
+  },
+  "ai-for-productivity": {
+   "shortDescription": "4 урока: AI для задач, документов, обучения и личного productivity-стека.",
+   "shortDescriptionEn": "4 lessons: AI for tasks, documents, learning and your personal productivity stack.",
+   "fullDescription": "AI for Productivity — короткий бесплатный курс о том, как встроить AI в ежедневную рутину: письма, документы, саммари, планирование и персональные workflow без кода.",
+   "fullDescriptionEn": "AI for Productivity is a free mini-course on embedding AI into daily work: email, docs, summaries, planning and personal workflows — no coding.",
+   "courseIdea": "AI for Productivity — короткий бесплатный курс о том, как встроить AI в ежедневную рутину: письма, документы, саммари, планирование и персональные workflow без кода.",
+   "courseIdeaEn": "AI for Productivity is a free mini-course on embedding AI into daily work: email, docs, summaries, planning and personal workflows — no coding.",
+   "forAudience": [
+    "Офисных сотрудников и менеджеров",
+    "Фрилансеров с высокой нагрузкой",
+    "Консультантов и экспертов",
+    "Руководителей небольших команд",
+    "Всех, кто хочет экономить 1–2 часа в день"
+   ],
+   "forAudienceEn": [
+    "Office workers and managers",
+    "Busy freelancers",
+    "Consultants and experts",
+    "Small team leads",
+    "Anyone who wants to save 1–2 hours daily"
+   ],
+   "goals": [
+    "Настроит AI как личного помощника",
+    "Автоматизирует рутинные задачи",
+    "Будет быстро создавать документы и письма",
+    "Ускорит обучение новым навыкам",
+    "Соберёт личную AI-систему продуктивности"
+   ],
+   "goalsEn": [
+    "Set up AI as a personal assistant",
+    "Automate routine tasks",
+    "Create documents and emails faster",
+    "Learn new skills faster with AI",
+    "Build a personal AI productivity system"
+   ],
+   "finalProject": "Personal productivity stack с 3 рабочими AI-workflow.",
+   "finalProjectEn": "Personal productivity stack with 3 working AI workflows."
+  },
+  "first-automation-n8n": {
+   "shortDescription": "5 уроков: первая автоматизация в n8n с Telegram и ChatGPT — без кода.",
+   "shortDescriptionEn": "5 lessons: your first n8n automation with Telegram and ChatGPT — no code.",
+   "fullDescription": "First Automation in n8n — бесплатный практический курс: от логики автоматизаций до первого workflow, Telegram-бота и AI-шага в n8n. Идеальный мост между «просто AI» и платными Pro-программами.",
+   "fullDescriptionEn": "First Automation in n8n is a free hands-on course from automation logic to your first workflow, Telegram bot and AI step in n8n.",
+   "courseIdea": "First Automation in n8n — бесплатный практический курс: от логики автоматизаций до первого workflow, Telegram-бота и AI-шага в n8n. Идеальный мост между «просто AI» и платными Pro-программами.",
+   "courseIdeaEn": "First Automation in n8n is a free hands-on course from automation logic to your first workflow, Telegram bot and AI step in n8n.",
+   "forAudience": [
+    "No-code новичков",
+    "Предпринимателей с ручными процессами",
+    "Ops- и office-менеджеров",
+    "SMM и маркетологов",
+    "Выпускников AI Starter Week"
+   ],
+   "forAudienceEn": [
+    "No-code beginners",
+    "Entrepreneurs with manual processes",
+    "Ops and office managers",
+    "SMM and marketers",
+    "AI Starter Week graduates"
+   ],
+   "goals": [
+    "Поймёт логику автоматизаций",
+    "Освоит интерфейс n8n",
+    "Создаст Telegram-бота с AI",
+    "Подключит ChatGPT к workflow",
+    "Запустит финальную автоматизацию"
+   ],
+   "goalsEn": [
+    "Understand automation logic",
+    "Learn the n8n interface",
+    "Build a Telegram bot with AI",
+    "Connect ChatGPT to a workflow",
+    "Ship a complete automation"
+   ],
+   "finalProject": "Рабочий n8n-workflow с AI-шагом и уведомлениями.",
+   "finalProjectEn": "Working n8n workflow with an AI step and notifications."
+  },
+  "ai-insider-accelerator": {
+   "shortDescription": "Intake-программа: все AI-направления, тест и выбор специализации. Подача заявки.",
+   "shortDescriptionEn": "Intake program: all AI tracks, test and specialization choice. Apply to enroll.",
+   "fullDescription": "AI Insider Accelerator — открытый набор для тех, кто хочет выбрать свой путь в AI. За 12 уроков вы пройдёте контент, автоматизации, чат-ботов, голосовых агентов, AI-агентов и монетизацию, сдадите intake-тест и выберете специализацию под себя.",
+   "fullDescriptionEn": "AI Insider Accelerator is an open intake for choosing your AI path. In 12 lessons you explore content, automation, chatbots, voice agents, AI agents and monetization, pass the intake test and pick your track.",
+   "courseIdea": "AI Insider Accelerator — открытый набор для тех, кто хочет выбрать свой путь в AI. За 12 уроков вы пройдёте контент, автоматизации, чат-ботов, голосовых агентов, AI-агентов и монетизацию, сдадите intake-тест и выберете специализацию под себя.",
+   "courseIdeaEn": "AI Insider Accelerator is an open intake for choosing your AI path. In 12 lessons you explore content, automation, chatbots, voice agents, AI agents and monetization, pass the intake test and pick your track.",
+   "forAudience": [
+    "Тех, кто выбирает карьеру в AI",
+    "Выпускников бесплатных курсов Academy",
+    "Предпринимателей перед выбором Pro-трека",
+    "Фрилансеров в поиске ниши",
+    "Новичков, готовых к структурированному intake"
+   ],
+   "forAudienceEn": [
+    "People choosing an AI career path",
+    "Free course graduates",
+    "Entrepreneurs before picking a Pro track",
+    "Freelancers finding their niche",
+    "Beginners ready for structured intake"
+   ],
+   "goals": [
+    "Пройдёт все ключевые направления AI",
+    "Поймёт, какой трек подходит лично вам",
+    "Сдаст intake-тест и анкету",
+    "Выберет специализацию",
+    "Соберёт capstone-проект",
+    "Получит доступ к выбранному Pro-курсу"
+   ],
+   "goalsEn": [
+    "Explore all key AI tracks",
+    "Find which track fits you",
+    "Complete intake test and application",
+    "Choose your specialization",
+    "Complete the capstone project",
+    "Unlock your chosen Pro path"
+   ],
+   "finalProject": "Персональная AI-система и выбранная специализация для продолжения обучения.",
+   "finalProjectEn": "Personal AI system and chosen specialization for your next program."
+  },
+  "ai-user-pro": {
+   "shortDescription": "10 уроков: ChatGPT, Claude, Gemini, Perplexity, промпты, бизнес и личный AI-стек.",
+   "shortDescriptionEn": "10 lessons: ChatGPT, Claude, Gemini, Perplexity, prompts, business and personal AI stack.",
+   "fullDescription": "AI User Pro — практический курс для уверенной ежедневной работы с AI. Вы освоите топ-модели 2026 года, продвинутые промпты, сценарии для бизнеса и продаж и соберёте собственную AI-систему.",
+   "fullDescriptionEn": "AI User Pro teaches confident daily AI use: top 2026 models, advanced prompts, business and sales workflows, and your personal AI stack.",
+   "courseIdea": "AI User Pro — практический курс для уверенной ежедневной работы с AI. Вы освоите топ-модели 2026 года, продвинутые промпты, сценарии для бизнеса и продаж и соберёте собственную AI-систему.",
+   "courseIdeaEn": "AI User Pro teaches confident daily AI use: top 2026 models, advanced prompts, business and sales workflows, and your personal AI stack.",
+   "forAudience": [
+    "Специалистов, которые уже пробовали ChatGPT",
+    "Менеджеров и team leads",
+    "Фрилансеров и консультантов",
+    "Предпринимателей без dev-команды",
+    "Выпускников бесплатных курсов Academy"
+   ],
+   "forAudienceEn": [
+    "People who already tried ChatGPT",
+    "Managers and team leads",
+    "Freelancers and consultants",
+    "Entrepreneurs without a dev team",
+    "Academy free course graduates"
+   ],
+   "goals": [
+    "Освоит современную AI-экосистему",
+    "Доведёт ChatGPT и Claude до pro-уровня",
+    "Интегрирует Gemini и Perplexity",
+    "Создаст профессиональные промпты",
+    "Применит AI в бизнесе и продажах",
+    "Соберёт личный AI-стек",
+    "Завершит финальный проект — AI-систему"
+   ],
+   "goalsEn": [
+    "Master the modern AI ecosystem",
+    "Reach pro level with ChatGPT and Claude",
+    "Integrate Gemini and Perplexity",
+    "Create professional prompts",
+    "Apply AI to business and sales",
+    "Build a personal AI stack",
+    "Complete capstone — your AI system"
+   ],
+   "finalProject": "Собственная AI-система: инструменты, промпты, шаблоны и рабочие процессы.",
+   "finalProjectEn": "Personal AI system: tools, prompts, templates and workflows."
+  },
+  "ai-content-creator": {
+   "shortDescription": "8 уроков: тексты, AI-дизайн, видео, Shorts/Reels, контент-план и личный бренд.",
+   "shortDescriptionEn": "8 lessons: copy, AI design, video, Shorts/Reels, content plan and personal brand.",
+   "fullDescription": "AI Content Creator — курс для создателей контента: тексты, визуал, видео и контент-план полностью через AI. Canva, Midjourney, Runway, Kling, Veo и система публикаций.",
+   "fullDescriptionEn": "AI Content Creator covers copy, visuals, video and content planning entirely with AI — Canva, Midjourney, Runway, Kling, Veo and a publishing system.",
+   "courseIdea": "AI Content Creator — курс для создателей контента: тексты, визуал, видео и контент-план полностью через AI. Canva, Midjourney, Runway, Kling, Veo и система публикаций.",
+   "courseIdeaEn": "AI Content Creator covers copy, visuals, video and content planning entirely with AI — Canva, Midjourney, Runway, Kling, Veo and a publishing system.",
+   "forAudience": [
+    "Блогеров и контент-мейкеров",
+    "SMM-специалистов",
+    "Экспертов и коучей",
+    "Владельцев малого бизнеса",
+    "Фрилансеров в нише контента"
+   ],
+   "forAudienceEn": [
+    "Bloggers and creators",
+    "SMM specialists",
+    "Experts and coaches",
+    "Small business owners",
+    "Freelance content specialists"
+   ],
+   "goals": [
+    "Поймёт AI-контент в 2026 году",
+    "Будет генерировать тексты через AI",
+    "Создаст визуал в Canva и Midjourney",
+    "Сделает видео и Shorts/Reels",
+    "Построит контент-план",
+    "Укрепит личный бренд",
+    "Запустит полноценную контент-систему"
+   ],
+   "goalsEn": [
+    "Understand AI content in 2026",
+    "Generate copy with AI",
+    "Create visuals in Canva and Midjourney",
+    "Produce video and Shorts/Reels",
+    "Build a content calendar",
+    "Strengthen personal brand",
+    "Launch a full content system"
+   ],
+   "finalProject": "Полноценная контент-система: тексты, визуал, видео и план публикаций.",
+   "finalProjectEn": "Full content system: copy, visuals, video and publishing plan."
+  },
+  "no-code-automation": {
+   "shortDescription": "Pro-курс по n8n: CRM, webhooks, AI-ноды и автоматизация бизнес-процессов.",
+   "shortDescriptionEn": "Pro n8n course: CRM, webhooks, AI nodes and business process automation.",
+   "fullDescription": "No-Code Automation Engineer — профессиональная программа по n8n: архитектура workflow, интеграции, CRM, обработка заявок и AI-ноды. Для тех, кто хочет продавать автоматизации бизнесу.",
+   "fullDescriptionEn": "No-Code Automation Engineer is a professional n8n program: workflow architecture, integrations, CRM, lead processing and AI nodes — for selling automations to businesses.",
+   "courseIdea": "No-Code Automation Engineer — профессиональная программа по n8n: архитектура workflow, интеграции, CRM, обработка заявок и AI-ноды. Для тех, кто хочет продавать автоматизации бизнесу.",
+   "courseIdeaEn": "No-Code Automation Engineer is a professional n8n program: workflow architecture, integrations, CRM, lead processing and AI nodes — for selling automations to businesses.",
+   "forAudience": [
+    "Выпускников First Automation in n8n",
+    "No-code специалистов",
+    "Ops и office-менеджеров",
+    "Фрилансеров в автоматизации",
+    "Владельцев агентств на старте"
+   ],
+   "forAudienceEn": [
+    "First Automation in n8n graduates",
+    "No-code specialists",
+    "Ops and office managers",
+    "Automation freelancers",
+    "Early-stage agency owners"
+   ],
+   "goals": [
+    "Спроектирует автоматизации под бизнес",
+    "Освоит n8n на pro-уровне",
+    "Интегрирует CRM и мессенджеры",
+    "Добавит AI-шаги в workflow",
+    "Настроит мониторинг и ошибки",
+    "Соберёт production-автоматизацию",
+    "Сможет продавать услуги автоматизации"
+   ],
+   "goalsEn": [
+    "Design business automations",
+    "Master n8n at pro level",
+    "Integrate CRM and messengers",
+    "Add AI steps to workflows",
+    "Set up monitoring and error handling",
+    "Build production automations",
+    "Sell automation services"
+   ],
+   "finalProject": "Production-автоматизация обработки заявок для реального бизнеса.",
+   "finalProjectEn": "Production lead-processing automation for a real business."
+  },
+  "ai-conversational-systems": {
+   "shortDescription": "12 уроков: чат-боты и голосовые AI-агенты — Telegram, Vapi, ElevenLabs, CRM.",
+   "shortDescriptionEn": "12 lessons: chatbots and voice AI agents — Telegram, Vapi, ElevenLabs, CRM.",
+   "fullDescription": "AI Conversational Systems — единый курс по чат-ботам и голосовым AI-агентам: сценарии, база знаний, телефония, CRM и упаковка услуги для клиентов.",
+   "fullDescriptionEn": "AI Conversational Systems — one program for chatbots and voice AI agents: scenarios, knowledge base, telephony, CRM and client-ready delivery.",
+   "courseIdea": "AI Conversational Systems — единый курс по чат-ботам и голосовым AI-агентам: сценарии, база знаний, телефония, CRM и упаковка услуги для клиентов.",
+   "courseIdeaEn": "AI Conversational Systems — one program for chatbots and voice AI agents: scenarios, knowledge base, telephony, CRM and client-ready delivery.",
+   "forAudience": [
+    "No-code и automation специалистов",
+    "Фрилансеров в conversational AI",
+    "SMM, маркетологов и поддержку",
+    "Владельцев малого бизнеса",
+    "Выпускников automation-треков"
+   ],
+   "forAudienceEn": [
+    "No-code and automation specialists",
+    "Conversational AI freelancers",
+    "SMM, marketers and support teams",
+    "Small business owners",
+    "Automation track graduates"
+   ],
+   "goals": [
+    "Соберёт коммерческого AI-чатбота",
+    "Запустит голосового AI-агента",
+    "Подключит Telegram, сайт и телефонию",
+    "Интегрирует CRM и автоматизации",
+    "Упакует conversational-услугу для клиентов"
+   ],
+   "goalsEn": [
+    "Build a commercial AI chatbot",
+    "Launch a voice AI agent",
+    "Connect Telegram, web and telephony",
+    "Integrate CRM and automations",
+    "Package conversational services for clients"
+   ],
+   "finalProject": "Коммерческий AI-бот и голосовой AI-сотрудник под нишу клиента.",
+   "finalProjectEn": "Commercial AI chatbot and voice employee for a client niche."
+  },
+  "ai-saas-builder": {
+   "shortDescription": "12 уроков: MVP AI SaaS на Lovable, Replit, Supabase, Stripe — без dev-команды.",
+   "shortDescriptionEn": "12 lessons: AI SaaS MVP with Lovable, Replit, Supabase, Stripe — no dev team.",
+   "fullDescription": "AI SaaS Builder — от идеи до запущенного продукта: валидация, MVP, Lovable, Bolt.new, Replit, Supabase, AI API, auth, Stripe и первые пользователи.",
+   "fullDescriptionEn": "AI SaaS Builder takes you from idea to launched product: validation, MVP, Lovable, Bolt.new, Replit, Supabase, AI API, auth, Stripe and first users.",
+   "courseIdea": "AI SaaS Builder — от идеи до запущенного продукта: валидация, MVP, Lovable, Bolt.new, Replit, Supabase, AI API, auth, Stripe и первые пользователи.",
+   "courseIdeaEn": "AI SaaS Builder takes you from idea to launched product: validation, MVP, Lovable, Bolt.new, Replit, Supabase, AI API, auth, Stripe and first users.",
+   "forAudience": [
+    "Новичков, которые хотят создать свой первый SaaS",
+    "Фрилансеров, желающих подписочную модель",
+    "Владельцев агентств и студий",
+    "No-code разработчиков",
+    "Предпринимателей без dev-команды"
+   ],
+   "forAudienceEn": [
+    "Beginners building their first SaaS",
+    "Freelancers moving to subscriptions",
+    "Agency and studio owners",
+    "No-code developers",
+    "Entrepreneurs without a dev team"
+   ],
+   "goals": [
+    "Найдёт перспективную SaaS-идею",
+    "Проведёт анализ рынка",
+    "Спроектирует MVP",
+    "Освоит Lovable, Bolt.new и Replit",
+    "Настроит Supabase и auth",
+    "Подключит AI API и Stripe",
+    "Развернёт продукт и получит первых пользователей"
+   ],
+   "goalsEn": [
+    "Find a promising SaaS idea",
+    "Run market analysis",
+    "Design an MVP",
+    "Master Lovable, Bolt.new and Replit",
+    "Set up Supabase and auth",
+    "Connect AI API and Stripe",
+    "Deploy and acquire first users"
+   ],
+   "finalProject": "Запущенный AI SaaS с регистрацией, оплатой и первыми пользователями.",
+   "finalProjectEn": "Launched AI SaaS with auth, billing and first users."
+  },
+  "ai-agent-architect": {
+   "shortDescription": "18 уроков: OpenAI/Claude Agents, RAG, CrewAI, LangGraph и multi-agent в продакшене.",
+   "shortDescriptionEn": "18 lessons: OpenAI/Claude Agents, RAG, CrewAI, LangGraph and multi-agent in production.",
+   "fullDescription": "AI Agent Engineer — продвинутый курс по агентным системам: Tool Calling, память, Vector DB, RAG, CrewAI, LangGraph, оркестрация и деплой в production.",
+   "fullDescriptionEn": "AI Agent Engineer is an advanced course on agent systems: Tool Calling, memory, Vector DB, RAG, CrewAI, LangGraph, orchestration and production deploy.",
+   "courseIdea": "AI Agent Engineer — продвинутый курс по агентным системам: Tool Calling, память, Vector DB, RAG, CrewAI, LangGraph, оркестрация и деплой в production.",
+   "courseIdeaEn": "AI Agent Engineer is an advanced course on agent systems: Tool Calling, memory, Vector DB, RAG, CrewAI, LangGraph, orchestration and production deploy.",
+   "forAudience": [
+    "AI-разработчиков и энтузиастов",
+    "Automation и chatbot специалистов",
+    "No-code разработчиков",
+    "Владельцев SaaS и агентств",
+    "Техспециалистов, внедряющих AI в бизнес"
+   ],
+   "forAudienceEn": [
+    "AI developers and enthusiasts",
+    "Automation and chatbot specialists",
+    "No-code developers",
+    "SaaS and agency owners",
+    "Technical specialists implementing AI"
+   ],
+   "goals": [
+    "Поймёт архитектуру AI-агентов",
+    "Освоит OpenAI Agents и Claude Agents",
+    "Реализует Tool Calling и память",
+    "Построит RAG и Vector DB",
+    "Соберёт multi-agent систему",
+    "Освоит CrewAI и LangGraph",
+    "Развернёт агентов в продакшене"
+   ],
+   "goalsEn": [
+    "Understand AI agent architecture",
+    "Master OpenAI and Claude Agents",
+    "Implement Tool Calling and memory",
+    "Build RAG and Vector DB",
+    "Assemble multi-agent systems",
+    "Master CrewAI and LangGraph",
+    "Deploy agents to production"
+   ],
+   "finalProject": "Собственная мультиагентная AI-платформа в production.",
+   "finalProjectEn": "Your own multi-agent AI platform in production."
+  },
+  "ai-agency-builder": {
+   "shortDescription": "10 уроков: запуск AI-агентства — ниша, оффер, лиды, продажи и delivery.",
+   "shortDescriptionEn": "10 lessons: launch an AI agency — niche, offer, leads, sales and delivery.",
+   "fullDescription": "AI Agency Builder — пошаговый путь к собственному AI-агентству: ниша, упаковка услуг, холодный аутрич, продажи, delivery и масштабирование без программирования.",
+   "fullDescriptionEn": "AI Agency Builder is a step-by-step path to your AI agency: niche, service packaging, cold outreach, sales, delivery and scaling — no coding.",
+   "courseIdea": "AI Agency Builder — пошаговый путь к собственному AI-агентству: ниша, упаковка услуг, холодный аутрич, продажи, delivery и масштабирование без программирования.",
+   "courseIdeaEn": "AI Agency Builder is a step-by-step path to your AI agency: niche, service packaging, cold outreach, sales, delivery and scaling — no coding.",
+   "forAudience": [
+    "Фрилансеров, переходящих на агентскую модель",
+    "Automation и bot специалистов",
+    "Маркетологов и SEO-специалистов",
+    "Владельцев малого бизнеса",
+    "Новичков, готовых зарабатывать на AI"
+   ],
+   "forAudienceEn": [
+    "Freelancers moving to an agency model",
+    "Automation and bot specialists",
+    "Marketers and SEO specialists",
+    "Small business owners",
+    "Beginners ready to earn with AI"
+   ],
+   "goals": [
+    "Выберет прибыльную нишу",
+    "Создаст AI-оффер и упакует агентство",
+    "Настроит лидогенерацию и аутрич",
+    "Научится продавать AI-услуги",
+    "Выстроит delivery-процесс",
+    "Получит первых клиентов",
+    "Запустит AI-агентство"
+   ],
+   "goalsEn": [
+    "Choose a profitable niche",
+    "Create an AI offer and package the agency",
+    "Set up lead gen and outreach",
+    "Learn to sell AI services",
+    "Build a delivery process",
+    "Acquire first clients",
+    "Launch your AI agency"
+   ],
+   "finalProject": "Запущенное AI-агентство с системой привлечения клиентов.",
+   "finalProjectEn": "Launched AI agency with client acquisition system."
+  }
+ }
+}

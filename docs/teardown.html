@@ -1,0 +1,851 @@
+<title>Insider Teardown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@600;700;800&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#F4F3F1;
+  --surface:#FFFFFF;
+  --surface-2:#FAF9F7;
+  --ink:#17130F;
+  --ink-2:#4A423B;
+  --muted:#7B736C;
+  --line:#E6E1DB;
+  --line-strong:#D3CCC3;
+  --accent:#EE4E12;
+  --accent-ink:#B8360A;
+  --accent-soft:#FDECE4;
+  --ok:#0B7F5C;
+  --ok-soft:#E2F2EC;
+  --warn:#A8700A;
+  --warn-soft:#F8EFDC;
+  --crit:#B72517;
+  --crit-soft:#FBE7E4;
+  --shadow:0 1px 2px rgba(23,19,15,.05), 0 8px 24px -12px rgba(23,19,15,.16);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#100E0C;
+    --surface:#191512;
+    --surface-2:#1F1A16;
+    --ink:#F6F2ED;
+    --ink-2:#CFC6BC;
+    --muted:#988F86;
+    --line:#2B2520;
+    --line-strong:#3B332C;
+    --accent:#FF6B33;
+    --accent-ink:#FF8A5C;
+    --accent-soft:#2A1710;
+    --ok:#3FBF93;
+    --ok-soft:#10231C;
+    --warn:#D9A03A;
+    --warn-soft:#241B0C;
+    --crit:#F0705E;
+    --crit-soft:#2A1310;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#100E0C;
+  --surface:#191512;
+  --surface-2:#1F1A16;
+  --ink:#F6F2ED;
+  --ink-2:#CFC6BC;
+  --muted:#988F86;
+  --line:#2B2520;
+  --line-strong:#3B332C;
+  --accent:#FF6B33;
+  --accent-ink:#FF8A5C;
+  --accent-soft:#2A1710;
+  --ok:#3FBF93;
+  --ok-soft:#10231C;
+  --warn:#D9A03A;
+  --warn-soft:#241B0C;
+  --crit:#F0705E;
+  --crit-soft:#2A1310;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Golos Text", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Geologica","Golos Text",ui-sans-serif,system-ui,sans-serif;font-weight:800;text-wrap:balance;margin:0;letter-spacing:-.02em;line-height:1.08}
+p{margin:0}
+a{color:var(--accent-ink);text-decoration:none;border-bottom:1px solid color-mix(in oklab, var(--accent) 35%, transparent)}
+a:hover{border-bottom-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+.eyebrow{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- shell ---------- */
+.shell{max-width:1320px;margin:0 auto;padding:0 28px 120px;display:grid;grid-template-columns:216px minmax(0,1fr);gap:56px;align-items:start}
+.rail{position:sticky;top:0;padding:40px 0;display:flex;flex-direction:column;gap:4px}
+.rail .rail-title{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.rail a{display:flex;gap:10px;align-items:baseline;padding:7px 10px;margin-left:-10px;border-radius:8px;border:0;color:var(--ink-2);font-size:13.5px;line-height:1.3}
+.rail a:hover{background:var(--surface);color:var(--ink)}
+.rail a .n{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--muted)}
+.main{min-width:0;padding-top:40px}
+
+@media (max-width:1080px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0;padding:0 20px 90px}
+  .rail{display:none}
+  .main{padding-top:28px}
+}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--line);padding-bottom:40px;margin-bottom:56px}
+.brandline{display:flex;align-items:center;gap:12px;margin-bottom:34px;flex-wrap:wrap}
+.mark{width:26px;height:26px;border-radius:7px;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;font-family:"Geologica",sans-serif;flex:none}
+.brandline .sep{width:1px;height:16px;background:var(--line-strong)}
+h1{font-size:clamp(38px,6.2vw,68px);letter-spacing:-.035em}
+h1 em{font-style:normal;color:var(--accent)}
+.dek{margin-top:20px;max-width:62ch;font-size:18px;color:var(--ink-2);line-height:1.55}
+.meta{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 10px}
+.meta span{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+
+/* ---------- sections ---------- */
+section{scroll-margin-top:24px;margin-bottom:76px}
+.sec-head{display:flex;gap:16px;align-items:baseline;border-top:2px solid var(--ink);padding-top:16px;margin-bottom:12px}
+.sec-head .num{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--accent);letter-spacing:.1em;flex:none;padding-top:6px}
+h2{font-size:clamp(26px,3.4vw,38px)}
+.sec-dek{color:var(--ink-2);max-width:66ch;margin-bottom:32px;font-size:16.5px}
+h3{font-size:19px;letter-spacing:-.015em;margin-bottom:14px}
+h4{font-size:15px;font-weight:700;letter-spacing:-.01em}
+
+/* ---------- map ---------- */
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:14px}
+.zone{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 20px 18px;box-shadow:var(--shadow)}
+.zone > .eyebrow{display:block;margin-bottom:10px}
+.zone h4{margin-bottom:12px}
+.zone ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:1px}
+.zone li{font-size:13.5px;color:var(--ink-2);padding:5px 0;border-top:1px dotted var(--line);display:flex;justify-content:space-between;gap:12px;line-height:1.4}
+.zone li:first-child{border-top:0}
+.zone li code{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);white-space:nowrap;padding-top:2px}
+.zone.hot{border-color:color-mix(in oklab, var(--accent) 32%, var(--line))}
+.zone.hot > .eyebrow{color:var(--accent-ink)}
+
+.flowbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 28px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+.flowbar b{font-family:"JetBrains Mono",monospace;font-size:11.5px;font-weight:500;letter-spacing:.04em;background:var(--surface-2);border:1px solid var(--line);padding:5px 10px;border-radius:7px;color:var(--ink-2)}
+.flowbar b.k{background:var(--accent);border-color:var(--accent);color:#fff}
+.flowbar i{color:var(--muted);font-style:normal;font-size:12px}
+
+/* ---------- roles table ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--surface-2);position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+td.k{font-weight:600;color:var(--ink);white-space:nowrap}
+td .mono{font-size:12px;color:var(--muted)}
+
+/* ---------- findings ---------- */
+.sevlegend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.chip{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;padding:4px 9px;border-radius:6px;border:1px solid transparent;white-space:nowrap}
+.chip.crit{background:var(--crit-soft);color:var(--crit);border-color:color-mix(in oklab,var(--crit) 25%,transparent)}
+.chip.high{background:var(--warn-soft);color:var(--warn);border-color:color-mix(in oklab,var(--warn) 25%,transparent)}
+.chip.med{background:var(--surface-2);color:var(--muted);border-color:var(--line-strong)}
+.chip.ok{background:var(--ok-soft);color:var(--ok);border-color:color-mix(in oklab,var(--ok) 25%,transparent)}
+
+.findings{display:flex;flex-direction:column;gap:10px}
+.f{display:grid;grid-template-columns:44px minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line-strong);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.f.crit{border-left-color:var(--crit)}
+.f.high{border-left-color:var(--warn)}
+.f.med{border-left-color:var(--line-strong)}
+.f .idx{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);padding:16px 0 0 14px}
+.f .body{padding:15px 18px 16px 0}
+.f-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:7px}
+.f h4{margin:0;flex:1 1 260px;min-width:0}
+.f p{font-size:14px;color:var(--ink-2);margin-bottom:9px;max-width:78ch}
+.fix{font-size:13.5px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;display:flex;gap:9px;max-width:82ch}
+.fix .lbl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);flex:none;padding-top:3px}
+
+/* ---------- IA tree ---------- */
+.tree{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);overflow-x:auto}
+.tree pre{margin:0;font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.85;color:var(--ink-2);white-space:pre}
+.tree pre b{color:var(--ink);font-weight:500}
+.tree pre u{color:var(--accent-ink);text-decoration:none}
+
+/* ---------- tokens ---------- */
+.tokens{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tok{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.tok .sw{height:60px;border-bottom:1px solid var(--line)}
+.tok .tx{padding:9px 12px 11px}
+.tok .tx b{display:block;font-size:12.5px;font-weight:600}
+.tok .tx span{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted)}
+
+.typespec{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:12px;margin-top:16px}
+.ts{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow)}
+.ts .sample{font-size:30px;line-height:1.1;margin:6px 0 12px;letter-spacing:-.03em}
+.ts .sample.d{font-family:"Geologica",sans-serif;font-weight:800}
+.ts .sample.b{font-family:"Golos Text",sans-serif;font-weight:600;font-size:26px}
+.ts .sample.m{font-family:"JetBrains Mono",monospace;font-weight:500;font-size:22px}
+.ts p{font-size:13px;color:var(--muted)}
+
+/* ---------- plan ---------- */
+.phases{display:flex;flex-direction:column;gap:0}
+.ph{display:grid;grid-template-columns:92px minmax(0,1fr);gap:20px;padding:18px 0;border-top:1px solid var(--line)}
+.ph:first-child{border-top:2px solid var(--ink)}
+.ph .tag{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;color:var(--accent);padding-top:3px}
+.ph h4{margin-bottom:6px}
+.ph p{font-size:14px;color:var(--ink-2);max-width:74ch}
+.ph ul{margin:8px 0 0;padding-left:18px;color:var(--ink-2);font-size:13.5px}
+.ph li{margin-bottom:3px}
+
+.note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:14px 18px;border-radius:0 10px 10px 0;font-size:14px;color:var(--ink);max-width:80ch}
+
+footer{border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+
+<div class="shell">
+  <nav class="rail">
+    <div class="rail-title">Разделы</div>
+    <a href="#map"><span class="n">01</span> Карта продукта</a>
+    <a href="#money"><span class="n">02</span> Монетизация и роли</a>
+    <a href="#audit"><span class="n">03</span> UX-аудит</a>
+    <a href="#ia"><span class="n">04</span> Новая архитектура</a>
+    <a href="#system"><span class="n">05</span> Дизайн-система</a>
+    <a href="#plan"><span class="n">06</span> Что построено</a>
+    <a href="#status"><span class="n">07</span> Состояние сборки</a>
+  </nav>
+
+  <main class="main">
+    <header class="masthead">
+      <div class="brandline">
+        <span class="mark">A</span>
+        <span class="eyebrow">AI Insider Academy</span>
+        <span class="sep"></span>
+        <span class="eyebrow">Product teardown · 22.08.2026</span>
+      </div>
+      <h1>Разобрали платформу<br>по винтикам. И <em>собрали заново.</em></h1>
+      <p class="dek">Полный обход прежней платформы как обычный пользователь: гость, студент, покупатель. 38 экранов, 4 воронки покупки, 9 ролей, 58 таблиц данных. Ниже — что там было, что ломалось, какая архитектура пришла на смену и что уже работает в новом коде.</p>
+      <div class="meta">
+        <span>38 экранов пройдено</span>
+        <span>46 экранов собрано</span>
+        <span>25 находок</span>
+        <span>5 критических</span>
+        <span>41 товар в Marketplace</span>
+        <span>9 курсов · 116 уроков</span>
+        <span>3 языка</span>
+      </div>
+    </header>
+
+    <!-- ============ 01 MAP ============ -->
+    <section id="map">
+      <div class="sec-head"><span class="num">01</span><h2>Карта продукта</h2></div>
+      <p class="sec-dek">Платформа — не «сайт с курсами». Это четыре независимых бизнеса под одной крышей: Academy (обучение), Marketplace (цифровой магазин с чужими креаторами), Memberships (подписки) и Community (форум, розыгрыши, Telegram). Плюс операционный контур: модерация, выплаты, governance.</p>
+
+      <div class="flowbar">
+        <b class="k">Landing</b><i>→</i><b>Catalog</b><i>→</i><b>Course</b><i>→</i><b class="k">Checkout</b><i>→</i><b>Cabinet</b><i>→</i><b>Learning space</b><i>→</i><b>Homework</b><i>→</i><b>Review</b><i>→</i><b class="k">Certificate</b>
+      </div>
+      <div class="flowbar">
+        <b class="k">Marketplace</b><i>→</i><b>Category</b><i>→</i><b>Product</b><i>→</i><b>Free sample</b><i>→</i><b class="k">License tier</b><i>→</i><b>Checkout</b><i>→</i><b>Entitlement</b><i>→</i><b>Download</b><i>→</i><b>Review</b>
+      </div>
+
+      <div class="zones">
+        <div class="zone hot">
+          <span class="eyebrow">Витрина · гость</span>
+          <h4>Публичная часть</h4>
+          <ul>
+            <li>Главная <code>/:lang</code></li>
+            <li>Каталог курсов <code>/courses</code></li>
+            <li>Карта обучения <code>/learning-map</code></li>
+            <li>Страница курса <code>/courses/:slug</code></li>
+            <li>Оформление курса <code>/courses/:slug/buy</code></li>
+            <li>Memberships <code>/memberships</code></li>
+            <li>Club / Pro <code>/memberships/:tier</code></li>
+            <li>Блог <code>/blog</code></li>
+            <li>Статья <code>/blog/:slug</code></li>
+            <li>Форум <code>/forum</code></li>
+            <li>Тема форума <code>/forum/:slug</code></li>
+            <li>Розыгрыши <code>/events</code></li>
+            <li>Розыгрыш <code>/giveaway/:slug</code></li>
+            <li>Оферта · Privacy · Refund <code>/legal</code></li>
+            <li>Правила розыгрышей <code>/giveaway-rules</code></li>
+          </ul>
+        </div>
+
+        <div class="zone hot">
+          <span class="eyebrow">Магазин · ядро выручки</span>
+          <h4>Marketplace &amp; Vault</h4>
+          <ul>
+            <li>Каталог, 41 товар <code>/marketplace</code></li>
+            <li>8 категорий + 4 сортировки <code>?cat=</code></li>
+            <li>Vault (5 продуктов + bundle) <code>?tab=vault</code></li>
+            <li>Карточка товара <code>/marketplace/:slug</code></li>
+            <li>Бесплатный сэмпл промпта <code>preview</code></li>
+            <li>Лицензии Personal/Client/Agency <code>/buy</code></li>
+            <li>Отзывы с модерацией <code>reviews</code></li>
+            <li>Похожие товары <code>related</code></li>
+            <li>Drop недели, «Скоро», тренды <code>badges</code></li>
+            <li>Программа креатора 70/30 <code>creator</code></li>
+            <li>Скидки Club −10% / Pro −25% <code>tier</code></li>
+          </ul>
+        </div>
+
+        <div class="zone">
+          <span class="eyebrow">Приватная зона · студент</span>
+          <h4>Кабинет</h4>
+          <ul>
+            <li>Онбординг (выбор трека) <code>/onboarding</code></li>
+            <li>Дашборд <code>/cabinet</code></li>
+            <li>Мои курсы <code>#courses</code></li>
+            <li>Учебное пространство <code>?lesson=n</code></li>
+            <li>Домашние задания <code>homework</code></li>
+            <li>Peer review <code>peer-reviews</code></li>
+            <li>Сертификаты <code>certificates</code></li>
+            <li>Достижения и стрик <code>achievements</code></li>
+            <li>Челлендж недели <code>challenge</code></li>
+            <li>Загрузки Marketplace <code>downloads</code></li>
+            <li>Реферальная программа <code>referral</code></li>
+            <li>Календарь вебинаров <code>/calendar</code></li>
+            <li>Команды: создать / вступить <code>/teams</code></li>
+            <li>Настройки аккаунта <code>/account</code></li>
+            <li>Telegram-уведомления <code>prefs</code></li>
+          </ul>
+        </div>
+
+        <div class="zone">
+          <span class="eyebrow">Операционка · админ</span>
+          <h4>Админ-панель</h4>
+          <ul>
+            <li>Дашборд и аналитика <code>/dashboard</code></li>
+            <li>Здоровье данных <code>/data-health</code></li>
+            <li>Редактор курсов <code>PUT /courses</code></li>
+            <li>Редактор блога и календаря <code>PUT /blog</code></li>
+            <li>Проверка ДЗ <code>PATCH /homework</code></li>
+            <li>Модерация отзывов <code>/reviews</code></li>
+            <li>Выдача сертификатов <code>/certificates</code></li>
+            <li>Заявки Accelerator <code>/applications</code></li>
+            <li>Розыгрыши: draw, publish, CSV <code>/giveaways</code></li>
+            <li>Товары и ассеты, версии <code>/marketplace</code></li>
+            <li>Выплаты креаторам <code>/creator-payouts</code></li>
+            <li>Промокоды <code>/promo-codes</code></li>
+            <li>Feature flags <code>/feature-flags</code></li>
+            <li>Audit log <code>/audit-log</code></li>
+            <li>Рассылка в Telegram <code>/broadcast</code></li>
+            <li>Ручная выдача доступа <code>/grant-course</code></li>
+            <li>Google Sheets sync <code>/sheets</code></li>
+            <li>Governance: eval-suites, инциденты <code>/governance</code></li>
+            <li>n8n connections, деплой агентов <code>/n8n</code></li>
+          </ul>
+        </div>
+
+        <div class="zone">
+          <span class="eyebrow">Инфраструктура</span>
+          <h4>Сквозные системы</h4>
+          <ul>
+            <li>Auth: email+пароль, OAuth <code>/auth</code></li>
+            <li>Подтверждение email кодом <code>verify</code></li>
+            <li>Сброс пароля <code>reset</code></li>
+            <li>Entitlements (доступы) <code>access</code></li>
+            <li>Платежи: Stripe, LiqPay, Tribute, Demo <code>4 провайдера</code></li>
+            <li>Вебхуки и фулфилмент <code>webhooks</code></li>
+            <li>Подписанные ссылки на файлы <code>signed</code></li>
+            <li>Уведомления в продукте <code>notifications</code></li>
+            <li>Telegram-бот и привязка по ID <code>@Notify</code></li>
+            <li>Email-очередь и шаблоны <code>queue</code></li>
+            <li>i18n RU / UK / EN <code>3 локали</code></li>
+            <li>Аналитика визитов и кликов <code>analytics</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02 MONEY ============ -->
+    <section id="money">
+      <div class="sec-head"><span class="num">02</span><h2>Монетизация и роли</h2></div>
+      <p class="sec-dek">Восемь способов заплатить и девять уровней доступа. Это главная ценность старой платформы — и главный источник путаницы в текущем интерфейсе. Новая архитектура обязана сохранить всю модель и при этом объяснять её за один экран.</p>
+
+      <div class="tablewrap" style="margin-bottom:16px">
+        <table>
+          <thead><tr><th>Модель</th><th>Цена</th><th>Что открывает</th><th>Срок</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Отдельный курс</td><td class="mono">29–79 €</td><td>Все уроки курса, ДЗ, сертификат, материалы</td><td>Навсегда</td></tr>
+            <tr><td class="k">Курс + ментор</td><td class="mono">+130 €</td><td>Проверка каждого ДЗ, приёмка проекта, вопросы весь курс</td><td>Навсегда</td></tr>
+            <tr><td class="k">Пакеты</td><td class="mono">69 / 119 / 179 €</td><td>Creator · Freelancer · Business Pack + бонусы</td><td>Навсегда</td></tr>
+            <tr><td class="k">Vault-продукт</td><td class="mono">19–49 €</td><td>Промпты, n8n workflow, документы агентства</td><td>Навсегда + апдейты</td></tr>
+            <tr><td class="k">Vault Bundle</td><td class="mono">159 €</td><td>Все 5 Vault-продуктов</td><td>Навсегда + апдейты</td></tr>
+            <tr><td class="k">Marketplace-товар</td><td class="mono">19–299 €</td><td>Три лицензии: Personal · Client (до 5) · Agency</td><td>Навсегда + апдейты</td></tr>
+            <tr><td class="k">Club</td><td class="mono">59 €/мес</td><td>Базовые курсы, Telegram, Prompt Library, −10% в Marketplace</td><td>Пока активна</td></tr>
+            <tr><td class="k">Pro</td><td class="mono">99 €/мес</td><td>Все курсы включая Pro-only, workflow, шаблоны, −25%</td><td>Пока активна</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Роль</th><th>Как появляется</th><th>Ключевые возможности</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Гость</td><td>Без регистрации</td><td>Витрина, блог, форум на чтение, страница розыгрыша</td></tr>
+            <tr><td class="k">Студент (free)</td><td>Регистрация</td><td>3 бесплатных курса, форум, участие в розыгрыше, реферальная ссылка</td></tr>
+            <tr><td class="k">Студент (курс)</td><td>Разовая покупка</td><td>Уроки курса, сдача ДЗ, сертификат, материалы</td></tr>
+            <tr><td class="k">Студент + ментор</td><td>Апгрейд +130 €</td><td>Персональная проверка ДЗ и финального проекта</td></tr>
+            <tr><td class="k">Club</td><td>Подписка</td><td>Базовые курсы, закрытый Telegram, скидка в Marketplace</td></tr>
+            <tr><td class="k">Pro</td><td>Подписка</td><td>Всё + Pro-only курсы, шаблоны, разборы кейсов</td></tr>
+            <tr><td class="k">Владелец команды</td><td>Создание team</td><td>Инвайт-код, выдача курсов участникам, корпоративный доступ</td></tr>
+            <tr><td class="k">Креатор</td><td>Заявка в Marketplace</td><td>Загрузка товаров, версии ассетов, выплаты 70/30</td></tr>
+            <tr><td class="k">Куратор / ментор</td><td>Назначение</td><td>Очередь ДЗ, оценки «Выполнено · Хорошо · Отлично»</td></tr>
+            <tr><td class="k">Админ</td><td><span class="mono">ADMIN_PASSWORD</span></td><td>19 зон управления: контент, деньги, модерация, governance</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ 03 AUDIT ============ -->
+    <section id="audit">
+      <div class="sec-head"><span class="num">03</span><h2>UX-аудит</h2></div>
+      <p class="sec-dek">25 находок, собранных в реальном обходе — не по коду. Каждая проверена на экране. Отсортированы по влиянию на деньги и доверие: сначала то, что прямо блокирует покупку, потом то, что размывает премиальность.</p>
+
+      <div class="sevlegend">
+        <span class="chip crit">Critical · блокирует выручку или создаёт юридический риск</span>
+        <span class="chip high">High · ломает доверие или воронку</span>
+        <span class="chip med">Medium · трение и качество</span>
+      </div>
+
+      <div class="findings">
+
+        <div class="f crit"><div class="idx">01</div><div class="body">
+          <div class="f-top"><h4>Оплата курса не проходит — и пользователь видит английское «Not found»</h4><span class="chip crit">Critical</span></div>
+          <p><span class="mono">POST /api/payments/demo</span> отвечает 404, а фронт выводит сырую строку ошибки провайдера рядом с полем промокода. Пользователь не понимает, отклонили промокод или платёж. Воронка обрывается на последнем шаге.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Единый слой ошибок платежа: карта кодов → человеческий текст на трёх языках, состояние кнопки «повторить», сохранение корзины. Ни одна строка от бэкенда не попадает в UI напрямую.</span></div>
+        </div></div>
+
+        <div class="f crit"><div class="idx">02</div><div class="body">
+          <div class="f-top"><h4>Цены противоречат друг другу между главной и Memberships</h4><span class="chip crit">Critical</span></div>
+          <p>На главной блок «Как купить» обещает подписку <span class="mono">24 €/мес или 179 €/год</span> и «Всю программу за 219 €». На странице Memberships те же подписки стоят <span class="mono">59 €</span> и <span class="mono">99 €</span>, а максимальный пакет в каталоге — 179 €. Три разных прайса на одном сайте.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Единый источник цен: каталог тарифов приходит из API, все витрины рендерят из него. Ручные цифры в вёрстке запрещены на уровне типов.</span></div>
+        </div></div>
+
+        <div class="f crit"><div class="idx">03</div><div class="body">
+          <div class="f-top"><h4>Marketplace сообщает о закрытых продажах только на последнем шаге</h4><span class="chip crit">Critical</span></div>
+          <p>Пользователь проходит карточку товара, выбирает лицензию Personal / Client / Agency — и лишь на экране оплаты читает «Продажи временно закрыты до завершения безопасного запуска». Вся работа по выбору обнуляется.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Состояние доступности — свойство товара, а не платёжки. Бейдж в карточке, дизейбл кнопки, предзаказ с уведомлением на email/Telegram, когда продажи откроются.</span></div>
+        </div></div>
+
+        <div class="f crit"><div class="idx">04</div><div class="body">
+          <div class="f-top"><h4>Оферта, Privacy и Refund — черновики с TODO при работающей кассе</h4><span class="chip crit">Critical</span></div>
+          <p>На <span class="mono">/oferta</span> открыто написано: «TODO: Полное наименование юрлица», «TODO: IBAN», «TODO: применимое право», статус <span class="mono">DRAFT</span>. Рядом — кнопки Stripe и LiqPay. Это одновременно юридический риск и убийца доверия для человека, который решает отдать 179 €.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Реквизиты выносим в конфиг и рендерим из него; сборка падает, если поле пустое. До заполнения — платёжные методы недоступны.</span></div>
+        </div></div>
+
+        <div class="f crit"><div class="idx">05</div><div class="body">
+          <div class="f-top"><h4>В учебном пространстве нет видео ни в одном уроке</h4><span class="chip crit">Critical</span></div>
+          <p>Каждый урок бесплатного курса показывает заглушку «Материал урока появится здесь после публикации видео». Продукт, который продаёт видеокурсы, не проигрывает видео — это состояние по умолчанию, а не исключение.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Плеер как первоклассный компонент: адаптивный поток, глава-маркеры, скорость, субтитры, запоминание позиции, «продолжить с 07:12». Пустое состояние — отдельный экран с датой публикации и подпиской на анонс.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">06</div><div class="body">
+          <div class="f-top"><h4>Два конфликтующих фирменных цвета</h4><span class="chip high">High</span></div>
+          <p>Шапка и главный CTA на десктопе — оранжевые; Marketplace, авторизация, кабинет и мобильная версия — фиолетовые. Один пользователь за одну сессию видит два разных бренда.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Один акцент — оранжевый — и семантические цвета отдельно от него. Токены вместо литералов, проверка контраста в обеих темах.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">07</div><div class="body">
+          <div class="f-top"><h4>Русская версия блога отдаёт украинские тексты</h4><span class="chip high">High</span></div>
+          <p><span class="mono">/ru/blog</span> перечисляет «Автоматизація KPI-дашборду», «Як сегментувати клієнтів» — заголовки и описания на другом языке. То же в карточках архива. Бьёт и по доверию, и по SEO на трёх локалях.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Контракт локали: пост без перевода не попадает в выдачу этой локали, а показывает явный бейдж «доступно на UA» с переключателем.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">08</div><div class="body">
+          <div class="f-top"><h4>Тестовые данные на витрине</h4><span class="chip high">High</span></div>
+          <p>Блок отзывов на главной открывается двумя карточками «Test — Nice!» и «Test — Great course» с пятью звёздами, а весь форум состоит из одной темы, написанной пользователем «Test User (All Access)». Средняя оценка 4,7 посчитана с их учётом.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Флаг <span class="mono">is_seed</span> у демо-записей, исключение из публичных выборок и из агрегатов рейтинга. Пустая витрина отзывов честнее фальшивой.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">09</div><div class="body">
+          <div class="f-top"><h4>Аккаунт «All Access» упирается в пейволл</h4><span class="chip high">High</span></div>
+          <p>Пользователь с меткой All Access открывает урок 2 платного курса и видит «Доступно по подписке. Купите курс для просмотра». Метка роли и реальные entitlements разъезжаются — тот же класс ошибки ждёт реального подписчика Pro.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Один резолвер доступа на сервере: покупка ∪ пакет ∪ подписка ∪ грант команды ∪ ручная выдача. UI спрашивает «можно ли», а не собирает правила у себя.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">10</div><div class="body">
+          <div class="f-top"><h4>В Marketplace 41 товар и ни одного поля поиска</h4><span class="chip high">High</span></div>
+          <p>Есть 8 категорий и 4 сортировки. Нет поиска, фильтра по цене, по рейтингу, по формату файлов, по уровню лицензии. Нет избранного, нет сравнения, нет истории просмотров. Для раздела, который позиционируется как полноценный магазин, это витрина, а не магазин.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Поиск с мгновенной выдачей и подсветкой, фасетные фильтры с счётчиками, сохранение состояния в URL, wishlist, «вы смотрели», коллекции и бандлы как отдельная сущность.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">11</div><div class="body">
+          <div class="f-top"><h4>Одиннадцать пунктов навигации без иерархии</h4><span class="chip high">High</span></div>
+          <p>«Каталог», «Программы», «Memberships» и «Vault» ведут в четыре разных места, которые пользователь не различает: Vault живёт внутри Marketplace как таб, «Программы» — это карта обучения, Memberships — подписки. Меню не отвечает на вопрос «где я куплю то, что мне нужно».</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Свести к четырём входам: Учиться · Магазин · Подписки · Сообщество. Всё остальное — второй уровень внутри раздела.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">12</div><div class="body">
+          <div class="f-top"><h4>Кабинет — одна длинная лента из четырнадцати виджетов</h4><span class="chip high">High</span></div>
+          <p>Прогресс, стрик, ритм недели, загрузки, активность, личный ID, челлендж недели, покупки, рекомендации, курсы, награды, корпоративный доступ, Telegram, сертификаты, рефералы — всё подряд, одним скроллом, без приоритета. Главное действие «продолжить обучение» соседствует по весу с блоком реферальной ссылки.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Одно главное действие сверху, остальное — по разделам: Обучение · Покупки · Достижения · Команда. Виджет попадает на дашборд, только если по нему можно что-то сделать сегодня.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">13</div><div class="body">
+          <div class="f-top"><h4>Мобильная вёрстка сделана по остаточному принципу</h4><span class="chip high">High</span></div>
+          <p>На 375 px «На сайт» переносится на две строки в шапке, рядом теснятся четыре круглые кнопки и бургер; заголовок героя набран десктопным кеглем и занимает полтора экрана; кнопка чата перекрывает контент.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Мобайл — первичный макет, а не сжатый десктоп. Нижняя навигация в приватной зоне, крупные цели нажатия, типографика по вьюпорту.</span></div>
+        </div></div>
+
+        <div class="f high"><div class="idx">14</div><div class="body">
+          <div class="f-top"><h4>Правая колонка оформления Marketplace ломается на десктопе</h4><span class="chip high">High</span></div>
+          <p>При 1440 px подписи лицензий («Client — до 5 клиентов», «Agency — без лимита клиентов») переносятся по одному слову в строку и наезжают на цену. Ключевой экран выбора того, за что платят вдвое дороже, выглядит сломанным.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Лицензии — не радиокнопки в узкой колонке, а полноширинные карточки со сравнением: кому подходит, сколько клиентов, что можно перепродавать.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">15</div><div class="body">
+          <div class="f-top"><h4>В отзыве светится email автора</h4><span class="chip med">Medium</span></div>
+          <p>Карточка отзыва показывает имя «James R.» и рядом <span class="mono">s***d@insiderai.local</span>. Маскировка частичная, домен и длина видны, значения для пользователя это не несёт.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Убрать email из публичного отзыва. Доверие даёт бейдж «покупка подтверждена», а не почта.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">16</div><div class="body">
+          <div class="f-top"><h4>Онбординг обещает три шага, показывает два</h4><span class="chip med">Medium</span></div>
+          <p>Счётчик идёт <span class="mono">01 / 03</span>, после первого выбора сразу <span class="mono">03 / 03</span>. Шаг 2 не существует. Пользователь считает, что что-то пропустил.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Либо честные два шага, либо заполнить второй тем, что реально нужно продукту: уровень, цель, сколько времени в неделю.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">17</div><div class="body">
+          <div class="f-top"><h4>«Все файлы» ведёт в никуда</h4><span class="chip med">Medium</span></div>
+          <p>Блок «Загрузки» в кабинете ссылается на <span class="mono">/account?tab=downloads</span>, но страница настроек не знает такого таба и открывает профиль. Материалы курса найти нельзя.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Отдельный раздел «Библиотека»: файлы курсов, купленные ассеты, версии, история скачиваний, подписанные ссылки.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">18</div><div class="body">
+          <div class="f-top"><h4>Каждая загрузка страницы дублирует запросы</h4><span class="chip med">Medium</span></div>
+          <p>На один переход приходится <span class="mono">/api/health</span> ×5, <span class="mono">/api/me</span> ×2, <span class="mono">/api/courses</span> ×2, <span class="mono">/api/me/notifications</span> ×3. Плюс 401 в консоли на каждом холодном старте от пробы сессии.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Серверные загрузки данных, дедупликация и кэш запросов на клиенте, проба сессии — один раз на приложение и без ошибки в консоли.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">19</div><div class="body">
+          <div class="f-top"><h4>Пустые состояния — просто серая строка текста</h4><span class="chip med">Medium</span></div>
+          <p>«Пока нет покупок», «Пока нет сертификатов», «Учитесь — награды появятся здесь», «Пока нет подтверждённых отзывов». Ни объяснения, что нужно сделать, ни понятного следующего шага, ни визуального веса.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Пустое состояние = мини-лендинг: что здесь будет, зачем это нужно, одно действие. Для сертификатов — превью будущего документа с именем пользователя.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">20</div><div class="body">
+          <div class="f-top"><h4>Розыгрыш показывает «0 участников» рядом с таймером</h4><span class="chip med">Medium</span></div>
+          <p>Механика хорошая — рефералы +3, Telegram +1, шеринг +2 — но первое, что видит человек: приз, обратный отсчёт и ноль участников. Социальное доказательство работает в минус.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>До порога показывать не счётчик, а шансы и дедлайн: «осталось 9 дней · до 4 шансов на аккаунт». Счётчик включать после первой сотни.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">21</div><div class="body">
+          <div class="f-top"><h4>Поддержка — это ссылка в Telegram</h4><span class="chip med">Medium</span></div>
+          <p>Пункт «Служба поддержки» уводит из продукта в личку. При этом на бэкенде уже есть <span class="mono">GET/POST /api/me/support</span> и таблица <span class="mono">support_messages</span> — тикеты просто не показаны в интерфейсе.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Поддержка внутри кабинета: тред с историей, привязка к заказу или уроку, статус, а Telegram — как дополнительный канал доставки.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">22</div><div class="body">
+          <div class="f-top"><h4>Лента отзывов дублирует одни и те же карточки</h4><span class="chip med">Medium</span></div>
+          <p>Бегущая строка на главной прокручивает пять отзывов, затем те же пять ещё раз — приём для бесшовной анимации виден пользователю как повтор и обесценивает блок.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Дубли только в дорисованной части ленты, вне доступного дерева, с <span class="mono">aria-hidden</span>; счётчик отзывов считает уникальные.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">23</div><div class="body">
+          <div class="f-top"><h4>Хлебных крошек нет нигде, кроме карточки товара</h4><span class="chip med">Medium</span></div>
+          <p>В курсе, уроке, статье блога, теме форума нет пути назад по иерархии — только кнопка «← Вернуться к курсам». На третьем уровне вложенности пользователь теряет контекст.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Крошки на всех страницах глубже второго уровня + разметка BreadcrumbList для выдачи.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">24</div><div class="body">
+          <div class="f-top"><h4>Загрузка — спиннер вместо каркаса</h4><span class="chip med">Medium</span></div>
+          <p>Первый экран показывает круг и надпись «Загрузка…» на месте всего контента. Воспринимаемая скорость страдает: пользователь не видит, что именно грузится и сколько этого будет.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Скелетоны по форме будущего контента, стриминг разделов по мере готовности, мгновенный рендер шапки и навигации.</span></div>
+        </div></div>
+
+        <div class="f med"><div class="idx">25</div><div class="body">
+          <div class="f-top"><h4>Доступность на уровне «браузер разберётся»</h4><span class="chip med">Medium</span></div>
+          <p>Переключатель языка — три кнопки без роли и состояния; фокус нигде не оформлен; приглушённый текст на тёмно-фиолетовом фоне держится на грани контраста; иконочные кнопки в шапке подписаны, но порядок обхода с клавиатуры не выстроен.</p>
+          <div class="fix"><span class="lbl">Fix</span><span>Видимый фокус на всех интерактивных элементах, контраст ≥ 4.5:1 в обеих темах, переключатель языка как группа с выбранным состоянием, полный проход сценария покупки с клавиатуры.</span></div>
+        </div></div>
+
+      </div>
+    </section>
+
+    <!-- ============ 04 IA ============ -->
+    <section id="ia">
+      <div class="sec-head"><span class="num">04</span><h2>Новая архитектура</h2></div>
+      <p class="sec-dek">Четыре входа вместо одиннадцати. Публичная часть отвечает на «что я получу», приватная — на «что мне делать сейчас». Marketplace получает собственную навигацию магазина, а не таб внутри каталога.</p>
+
+      <div class="tree"><pre><b>ПУБЛИЧНО</b>
+├── /                          <u>Главная</u> — один нарратив: путь от вопроса к результату
+├── /learn                     <u>Учиться</u>
+│   ├── /learn                 каталог: курсы · пакеты · программы · Accelerator
+│   ├── /learn/path            карта обучения (этапы, ветвление по треку)
+│   ├── /learn/[course]        страница курса: программа, ментор, проект, сертификат
+│   └── /learn/[course]/buy    оформление: тариф · ментор · промокод · оплата
+├── /store                     <u>Магазин</u>
+│   ├── /store                 поиск · фасеты · коллекции · new · best · drops
+│   ├── /store/c/[category]    категория с фасетами и счётчиками
+│   ├── /store/[product]       карточка: превью, лицензии, автор, отзывы, related
+│   ├── /store/bundles/[slug]  бандлы и Vault-наборы
+│   └── /store/creators/[id]   витрина креатора
+├── /plans                     <u>Подписки</u> — Club / Pro, сравнение, годовой режим
+├── /community                 <u>Сообщество</u>
+│   ├── /community/forum       вопросы и ответы, категории, решённые темы
+│   ├── /community/events      эфиры, AMA, календарь
+│   ├── /community/giveaways   дропы и розыгрыши
+│   └── /community/blog        журнал, 3 локали
+└── /legal/*                   оферта · приватность · возврат · правила
+
+<b>ПРИВАТНО</b>
+├── /app                       <u>Сегодня</u> — одно действие: продолжить урок
+├── /app/learning              мои курсы · прогресс · дедлайны · ДЗ на доработке
+├── /app/study/[course]/[n]    <u>Учебное пространство</u>
+│   │                          плеер · конспект · заметки · ресурсы · обсуждение
+│   ├── ?mode=focus            режим фокуса без интерфейса
+│   ├── ?panel=notes           заметки с таймкодами
+│   └── ?panel=ai              AI-наставник по материалам урока
+├── /app/homework              сдача, статусы, обратная связь куратора, peer review
+├── /app/library               файлы курсов, купленные ассеты, версии, скачивания
+├── /app/achievements          прогресс, стрик, награды, сертификаты
+├── /app/orders                покупки, чеки, подписка, счета, возвраты
+├── /app/team                  команда: участники, выдача доступов, инвайты
+├── /app/referrals             ссылка, приглашённые, накопленная скидка
+├── /app/support               тикеты внутри продукта + Telegram как канал
+└── /app/settings              профиль · безопасность · Telegram · уведомления · язык
+
+<b>АДМИН</b>  <u>/studio</u>
+├── /studio                    пульс: выручка, регистрации, конверсия, очереди
+├── /studio/revenue            платежи, возвраты, подписки, выплаты креаторам
+├── /studio/learners           пользователи, доступы, ручные гранты, команды
+├── /studio/courses            редактор курсов, модулей, уроков, ДЗ
+├── /studio/queue              очередь ДЗ, заявок Accelerator, отзывов
+├── /studio/store              товары, ассеты, версии, креаторы, модерация
+├── /studio/growth             промокоды, рефералы, розыгрыши, рассылки
+├── /studio/content            блог, календарь, локализация
+├── /studio/ops                feature flags, audit log, health, sheets, вебхуки
+└── /studio/governance         eval-suites, прогоны, инциденты, ретеншн данных</pre></div>
+
+      <p class="note" style="margin-top:22px"><b>Что меняется по сути.</b> Vault перестаёт быть табом и становится коллекцией внутри магазина. «Программы» и «Каталог» сливаются в <span class="mono">/learn</span>. Кабинет разбивается на «Сегодня» и разделы задач. Админка перестаёт быть CRUD-списками и строится вокруг очередей: что требует моего решения прямо сейчас.</p>
+    </section>
+
+    <!-- ============ 05 SYSTEM ============ -->
+    <section id="system">
+      <div class="sec-head"><span class="num">05</span><h2>Дизайн-система</h2></div>
+      <p class="sec-dek">Светлая база, тёплые нейтрали, один акцент. Оранжевый работает только там, где от пользователя ждут действия — поэтому он всегда заметен. Семантика (успех, ошибка, предупреждение) живёт отдельно от бренда и никогда с ним не конкурирует.</p>
+
+      <h3>Палитра</h3>
+      <p style="max-width:66ch;color:var(--ink-2);margin-bottom:16px;font-size:15px">Тёмная база и один светящийся оранжевый — как в референсе, но в нашем тоне. Светлая тема осталась осознанным выбором пользователя, а не наследованием настройки системы.</p>
+      <div class="tokens">
+        <div class="tok"><div class="sw" style="background:#FF7A1A"></div><div class="tx"><b>Accent</b><span>#FF7A1A</span></div></div>
+        <div class="tok"><div class="sw" style="background:#FF9040"></div><div class="tx"><b>Accent hover</b><span>#FF9040</span></div></div>
+        <div class="tok"><div class="sw" style="background:#0A0908"></div><div class="tx"><b>Ground</b><span>#0A0908</span></div></div>
+        <div class="tok"><div class="sw" style="background:#121110"></div><div class="tx"><b>Surface</b><span>#121110</span></div></div>
+        <div class="tok"><div class="sw" style="background:#232120"></div><div class="tx"><b>Border</b><span>#232120</span></div></div>
+        <div class="tok"><div class="sw" style="background:#FFFFFF;box-shadow:inset 0 0 0 1px #E6E1DB"></div><div class="tx"><b>Ink</b><span>#FFFFFF</span></div></div>
+        <div class="tok"><div class="sw" style="background:#3FBF93"></div><div class="tx"><b>Success</b><span>#3FBF93</span></div></div>
+        <div class="tok"><div class="sw" style="background:#E0A83C"></div><div class="tx"><b>Warning</b><span>#E0A83C</span></div></div>
+        <div class="tok"><div class="sw" style="background:#F0705E"></div><div class="tx"><b>Danger</b><span>#F0705E</span></div></div>
+      </div>
+
+      <h3 style="margin-top:34px">Главы</h3>
+      <p style="max-width:66ch;color:var(--ink-2);margin-bottom:16px;font-size:15px">Длинная страница — не один бесконечный лист, а смена грунта под читателем. Секция объявляет главу, токены следуют за ней: карточки, линии и текст внутри остаются верными без ручных переопределений. Так на светлой теме появляются тёмные блоки, а разговор о деньгах идёт на тёплом оранжевом развороте.</p>
+      <div class="tablewrap" style="margin-bottom:8px">
+        <table>
+          <thead><tr><th>Глава</th><th>Тёмная тема</th><th>Светлая тема</th><th>Где</th></tr></thead>
+          <tbody>
+            <tr><td class="k">ground</td><td>#0A0908</td><td>#F5F4F2</td><td>основной поток страницы</td></tr>
+            <tr><td class="k">ch-paper</td><td>#121110</td><td>#FFFFFF</td><td>обещание курса, отзывы, «дальше»</td></tr>
+            <tr><td class="k">ch-ink</td><td>#0A0908</td><td>#0A0908</td><td>обложка, программа, FAQ — тёмные всегда</td></tr>
+            <tr><td class="k">ch-tint</td><td>#241608</td><td>#FDEDDF</td><td>цены и тарифы</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:34px">Движение</h3>
+      <p style="max-width:66ch;color:var(--ink-2);margin-bottom:16px;font-size:15px">Никаких библиотек анимации: CSS-переходы плюс IntersectionObserver — тот же приём, на котором построен референс. Всё выключается по <span class="mono">prefers-reduced-motion</span>.</p>
+      <div class="tablewrap" style="margin-bottom:8px">
+        <table>
+          <thead><tr><th>Приём</th><th>Где работает</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Reveal при скролле</td><td>Каждая секция и карточка выходит снизу с задержкой каскадом; каскад обрезан на шестом элементе, чтобы длинная сетка не заканчивалась двухсекундной паузой</td></tr>
+            <tr><td class="k">Рельс маршрута</td><td>Волосяная линия вверху заполняется прогрессом и показывает 001 / 008</td></tr>
+            <tr><td class="k">Чип раздела</td><td>Плавающая метка в углу называет текущую остановку и прячется у подвала</td></tr>
+            <tr><td class="k">Счётчики</td><td>Цифры досчитываются один раз, когда попадают в кадр</td></tr>
+            <tr><td class="k">Бегущая строка</td><td>Категории Marketplace едут лентой, дубль скрыт от скринридера</td></tr>
+            <tr><td class="k">Капсула шапки</td><td>Прозрачная сверху, на скролле сжимается в плавающую пилюлю с блюром — без сдвига вёрстки</td></tr>
+            <tr><td class="k">Переход между страницами</td><td>Входящая страница поднимается на 12 px за 450 мс</td></tr>
+            <tr><td class="k">Карточки</td><td>Подъём и тень при наведении, обложка увеличивается на 4%</td></tr>
+            <tr><td class="k">Маркер-подсветка</td><td>Оранжевая заливка на ключевой строке заголовка, как в референсе. Полоса рисуется размерным градиентом в <span class="mono">em</span> и привязана к буквам, а не к площади шрифта — иначе она срезает выносные строки выше</td></tr>
+            <tr><td class="k">Набор заголовка</td><td>Каждое слово (или строка) выезжает из своей маски с задержкой — заголовок выглядит набранным, а не проявленным</td></tr>
+            <tr><td class="k">Открытие кадра</td><td>Обложка курса и сертификат раскрываются <span class="mono">clip-path</span> снизу вверх</td></tr>
+            <tr><td class="k">Параллакс</td><td>Обложка курса идёт против скролла; картинка увеличена ровно на ход, чтобы кадр не опустел</td></tr>
+            <tr><td class="k">Рельс программы</td><td>Вертикальная линия рядом с модулями заполняется по мере чтения — длину курса видно, а не читаешь числом</td></tr>
+            <tr><td class="k">Прожектор</td><td>Тёмная глава теплеет там, где курсор; только при настоящем указателе</td></tr>
+            <tr><td class="k">Магнит</td><td>Главная кнопка тянется к курсору на 7 px и возвращается</td></tr>
+            <tr><td class="k">Аккордеон</td><td>Панель раскрывается высотой через <span class="mono">::details-content</span> там, где браузер умеет интерполировать до <span class="mono">auto</span></td></tr>
+            <tr><td class="k">Липкая полоса покупки</td><td>Появляется, когда обложка ушла, и уходит, пока на экране блок с ценами</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:34px">Типографика</h3>
+      <div class="typespec">
+        <div class="ts">
+          <span class="eyebrow">Display</span>
+          <div class="sample d">Geologica</div>
+          <p>Только заголовки уровня экрана. Вес 800, трекинг −0.035em. Полноценная кириллица — без неё русский заголовок молча уезжал в системный шрифт.</p>
+        </div>
+        <div class="ts">
+          <span class="eyebrow">Интерфейс</span>
+          <div class="sample b">Golos Text</div>
+          <p>Весь UI и длинный текст. Гротеск, спроектированный под кириллицу: читается на 13–17 px и не спорит с дисплейным начертанием.</p>
+        </div>
+        <div class="ts">
+          <span class="eyebrow">Данные</span>
+          <div class="sample m">29 € · AIA-X5MUH7</div>
+          <p>JetBrains Mono для цен, ID, таймкодов, надзаголовков. Табличные цифры выравнивают колонки в отчётах и чеках.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:34px">Правила</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Ось</th><th>Решение</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Плотность</td><td>Шкала 4 px. Карточки дышат: 20–28 px внутри, 10–14 px между. Данные в админке — компактнее на один шаг.</td></tr>
+            <tr><td class="k">Формы</td><td>Кнопки и чипы — полные пилюли. Карточки 20 px, кинематографичные блоки 36 px. Навигация живёт в капсуле.</td></tr>
+            <tr><td class="k">Тени</td><td>Двухслойные и почти незаметные. Подъём — только у интерактивных карточек при наведении.</td></tr>
+            <tr><td class="k">Границы</td><td>1 px тёплого серого. Граница вместо тени там, где элемент не кликабелен.</td></tr>
+            <tr><td class="k">Движение</td><td>120–220 мс, ease-out. Подъём карточки, стрелка в кнопке, счётчики, скелетоны, переходы страниц. Всё отключается по <span class="mono">prefers-reduced-motion</span>.</td></tr>
+            <tr><td class="k">Светлая тема</td><td>Не инверсия: тёплые нейтрали, акцент темнеет до #E8650B ради контраста на белом. Включается только вручную.</td></tr>
+            <tr><td class="k">Состояния</td><td>Для каждого списка проектируются четыре экрана: пусто · загрузка · ошибка · много данных.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ 06 PLAN ============ -->
+    <section id="plan">
+      <div class="sec-head"><span class="num">06</span><h2>Что построено</h2></div>
+      <p class="sec-dek">Next.js 16 · TypeScript · Tailwind v4 · существующий Express API. Фронтенд написан с нуля: ни один компонент не перенесён из прежнего проекта. Контент — 1 МБ курсов, товаров, статей и юридических текстов — мигрирован без потерь.</p>
+
+      <div class="phases">
+        <div class="ph"><div class="tag">ГОТОВО</div><div>
+          <h4>Фундамент</h4>
+          <p>Каркас приложения, токены, примитивы, слой данных.</p>
+          <ul>
+            <li>App Router, три локали, серверные загрузки данных</li>
+            <li>Токены темы, типографика, сетка, движение</li>
+            <li>Библиотека примитивов: кнопки, поля, чипы, карточки, диалоги, тосты, таблицы, скелетоны</li>
+            <li>Типизированный клиент к существующему API + резолвер доступов</li>
+          </ul>
+        </div></div>
+
+        <div class="ph"><div class="tag">ГОТОВО</div><div>
+          <h4>Витрина</h4>
+          <p>Всё, что видит гость до оплаты.</p>
+          <ul>
+            <li>Главная, каталог, страница курса (восемь глав вместо одиннадцати панелей), карта обучения</li>
+            <li>Подписки со сравнением и годовым режимом</li>
+            <li>Блог и форум с корректной локализацией</li>
+            <li>Розыгрыши и календарь событий</li>
+          </ul>
+        </div></div>
+
+        <div class="ph"><div class="tag">ГОТОВО</div><div>
+          <h4>Магазин</h4>
+          <p>Marketplace как самостоятельный продукт.</p>
+          <ul>
+            <li>Поиск, фасеты, сортировки, коллекции, дропы</li>
+            <li>Карточка товара: превью, лицензии, автор, отзывы, related, upsell</li>
+            <li>Wishlist, «вы смотрели», бандлы, cross-sell</li>
+            <li>Витрины креаторов и модель 70/30</li>
+          </ul>
+        </div></div>
+
+        <div class="ph"><div class="tag">ГОТОВО</div><div>
+          <h4>Оплата и доступ</h4>
+          <p>Единая касса для курсов, пакетов, товаров и подписок.</p>
+          <ul>
+            <li>Один checkout, четыре провайдера, честные состояния ошибок</li>
+            <li>Промокоды, реферальные скидки, скидки Club и Pro</li>
+            <li>Заказы, чеки, управление подпиской, возвраты</li>
+            <li>Реквизиты из конфигурации, юридические страницы без черновиков</li>
+          </ul>
+        </div></div>
+
+        <div class="ph"><div class="tag">ГОТОВО</div><div>
+          <h4>Обучение</h4>
+          <p>Ядро продукта — то, ради чего возвращаются каждый день.</p>
+          <ul>
+            <li>Плеер с главами, скоростью, субтитрами и позицией</li>
+            <li>Заметки с таймкодами, закладки, поиск внутри курса</li>
+            <li>Домашние задания, статусы, обратная связь, peer review</li>
+            <li>Прогресс, стрик, награды, сертификаты</li>
+            <li>Режим фокуса, режим чтения, горячие клавиши, AI-наставник</li>
+          </ul>
+        </div></div>
+
+        <div class="ph"><div class="tag">ГОТОВО</div><div>
+          <h4>Studio</h4>
+          <p>Админка, построенная вокруг очередей решений, а не таблиц.</p>
+          <ul>
+            <li>Пульс: выручка, регистрации, конверсия, что требует внимания</li>
+            <li>Очереди: ДЗ, заявки, отзывы, выплаты</li>
+            <li>Редакторы курсов, товаров, контента с предпросмотром</li>
+            <li>Промокоды, флаги, audit log, governance</li>
+          </ul>
+        </div></div>
+      </div>
+    </section>
+
+
+    <!-- ============ 07 STATUS ============ -->
+    <section id="status">
+      <div class="sec-head"><span class="num">07</span><h2>Состояние сборки</h2></div>
+      <p class="sec-dek">Что уже работает на живом API, что построено, но не проверено глазами, и что осталось за пределами фронтенда.</p>
+
+      <h3>Проверено в браузере</h3>
+      <div class="tablewrap" style="margin-bottom:20px">
+        <table>
+          <thead><tr><th>Экран</th><th>Что подтверждено</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Главная</td><td>Данные из API, счётчики 11 / 118 / 41 / 3, светлая и тёмная темы, мобильная вёрстка</td></tr>
+            <tr><td class="k">Каталог</td><td>Фасеты пишут состояние в URL, вкладка «Пакеты» переключается, «Сбросить фильтры» появляется</td></tr>
+            <tr><td class="k">Страница курса</td><td>Программа по модулям, стандарт проверки ДЗ, сертификат, пакеты, отзывы, FAQ</td></tr>
+            <tr><td class="k">Оформление курса</td><td>Предзапуск определяется заранее — вместо ошибки честное «продажи откроются позже»</td></tr>
+            <tr><td class="k">Marketplace</td><td>41 товар, поиск, 8 категорий со счётчиками, сортировки, дроп недели, коллекции</td></tr>
+            <tr><td class="k">Карточка товара</td><td>Три лицензии полноценными карточками, бесплатный промпт с копированием, наборы, похожие</td></tr>
+            <tr><td class="k">Избранное</td><td>Сердце на карточке, состояние живёт между полками и переживает перезагрузку</td></tr>
+            <tr><td class="k">Подписки</td><td>Переключатель месяц/год: 419 € и 659 € с расчётом экономии 289 €</td></tr>
+            <tr><td class="k">Журнал</td><td>8 русских материалов; 39 украинских вынесены в отдельный блок с бейджем UA</td></tr>
+            <tr><td class="k">Вход и кабинет</td><td>Реальный вход, сессия в httpOnly-cookie, дашборд «Сегодня» с прогрессом</td></tr>
+            <tr><td class="k">Учебное пространство</td><td>Список уроков, поиск по курсу, заметки, AI-наставник, горячие клавиши, режим фокуса</td></tr>
+            <tr><td class="k">Настройки</td><td>Профиль, email, пароль, Telegram, гранулярные уведомления</td></tr>
+            <tr><td class="k">Юридические страницы</td><td>Оглавление, реквизиты и предупреждение о незаполненных полях</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Построено, но не проверено глазами</h3>
+      <p class="note" style="margin-bottom:20px"><b>Studio.</b> Панель закрыта серверным <span class="mono">ADMIN_PASSWORD</span> — пароля у меня не было. Интерфейс собран по контрактам <span class="mono">/api/admin/*</span>: пульс с графиками, очереди ДЗ / заявок / отзывов с действиями, ученики, выручка, курсы, Marketplace, контент, промокоды, розыгрыши, флаги, audit log. Первый вход стоит пройти вместе.</p>
+
+      <h3>Осталось за пределами фронтенда</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Что</th><th>Почему это не задача интерфейса</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Видео уроков</td><td>Ни у одного урока нет файла. Плеер показывает честную заглушку с подпиской на анонс вместо пустого чёрного прямоугольника.</td></tr>
+            <tr><td class="k">Тексты статей</td><td>У 47 материалов есть только лид. Прежняя версия подставляла один шаблон всем — теперь страница прямо говорит, что полная версия готовится.</td></tr>
+            <tr><td class="k">Реквизиты продавца</td><td><span class="mono">TODO:</span> в юрлице, IBAN и юрисдикции. Пока поля пусты, страницы предупреждают, а касса остаётся закрытой.</td></tr>
+            <tr><td class="k">Entitlements Marketplace</td><td><span class="mono">GET /api/marketplace/me/entitlements</span> отвечает <span class="mono">no such column: p.title</span> — баг на стороне API, купленные товары не видны.</td></tr>
+            <tr><td class="k">Избранное на сервере</td><td>В API нет эндпоинта — список хранится на устройстве.</td></tr>
+            <tr><td class="k">Переводы на украинский</td><td>39 материалов написаны по-украински, 8 по-русски; общего перевода нет ни в одну сторону.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <span>AI Insider Academy · product teardown</span>
+      <span class="mono">38 экранов пройдено · 25 находок · 46 экранов собрано</span>
+    </footer>
+  </main>
+</div>

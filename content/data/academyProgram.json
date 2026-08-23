@@ -1,0 +1,3582 @@
+{
+ "academyCourses": [
+  {
+   "id": "ai-start",
+   "slug": "ai-start",
+   "title": "AI Starter Week",
+   "titleEn": "AI Starter Week",
+   "shortDescription": "7 коротких уроков: основы AI, ChatGPT, промпты и первые шаги к заработку.",
+   "shortDescriptionEn": "7 short lessons: AI basics, ChatGPT, prompts and your first steps to earning with AI.",
+   "description": "7 коротких уроков: основы AI, ChatGPT, промпты и первые шаги к заработку.",
+   "descriptionEn": "7 short lessons: AI basics, ChatGPT, prompts and your first steps to earning with AI.",
+   "fullDescription": "AI Starter Week — бесплатная стартовая неделя для тех, кто только знакомится с AI. Вы поймёте, как работает искусственный интеллект, освоите ChatGPT, Claude, Gemini и Perplexity, научитесь писать промпты и увидите реальные сценарии для работы, учёбы и дохода.",
+   "fullDescriptionEn": "AI Starter Week is a free intro week for complete beginners. You will understand how AI works, master ChatGPT, Claude, Gemini and Perplexity, learn prompt basics and see real use cases for work, study and income.",
+   "duration": "7 уроков (10–20 минут)",
+   "durationEn": "7 lessons (10–20 min)",
+   "price": 0,
+   "priceEur": 0,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": true,
+   "image": "/courses/ai-start.png?v=2",
+   "category": "Старт",
+   "categoryEn": "Start",
+   "level": "Basic",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-1",
+   "tools": [
+    "ChatGPT",
+    "Claude",
+    "Gemini",
+    "Perplexity"
+   ],
+   "toolsEn": [
+    "ChatGPT",
+    "Claude",
+    "Gemini",
+    "Perplexity"
+   ],
+   "skills": [
+    "ChatGPT",
+    "Prompt Engineering",
+    "AI для учёбы и работы",
+    "AI для продуктивности"
+   ],
+   "skillsEn": [
+    "ChatGPT",
+    "Prompt Engineering",
+    "AI для учёбы и работы",
+    "AI для продуктивности"
+   ],
+   "forAudience": [
+    "Полных новичков в AI",
+    "Студентов и школьников",
+    "Фрилансеров и предпринимателей на старте",
+    "Маркетологов и менеджеров без технического бэка",
+    "Всех, кто хочет понять AI за 7 дней"
+   ],
+   "forAudienceEn": [
+    "Complete AI beginners",
+    "Students",
+    "Freelancers and early-stage entrepreneurs",
+    "Non-technical marketers and managers",
+    "Anyone who wants to understand AI in 7 days"
+   ],
+   "finalProject": "Личная дорожная карта AI-специалиста и настроенный AI-помощник под ваши задачи.",
+   "finalProjectEn": "Personal AI learning roadmap and an assistant configured for your tasks.",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Поймёт, что такое AI и как он меняет рынок",
+    "Создаст первые запросы в ChatGPT",
+    "Сравнит Claude, Gemini и Perplexity",
+    "Освоит базовый Prompt Engineering",
+    "Применит AI в работе и учёбе",
+    "Узнает способы монетизации AI-навыков",
+    "Составит личный план развития в AI"
+   ],
+   "goalsEn": [
+    "Understand what AI is and how it changes the market",
+    "Write your first ChatGPT prompts",
+    "Compare Claude, Gemini and Perplexity",
+    "Learn prompt engineering basics",
+    "Apply AI to work and study",
+    "Discover ways to monetize AI skills",
+    "Build a personal AI learning roadmap"
+   ],
+   "lessons": [
+    {
+     "id": "as1",
+     "title": "Урок 1. Что такое AI и почему он меняет мир",
+     "titleEn": "Lesson 1. What AI is and why it changes the world",
+     "description": "Изучаем основы искусственного интеллекта, возможности и реальные кейсы.",
+     "descriptionEn": "AI fundamentals, capabilities and real-world use cases.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Изучаем основы искусственного интеллекта, возможности и реальные кейсы.",
+     "weekGoalEn": "AI fundamentals, capabilities and real-world use cases."
+    },
+    {
+     "id": "as2",
+     "title": "Урок 2. Знакомство с ChatGPT",
+     "titleEn": "Lesson 2. Getting started with ChatGPT",
+     "description": "Создание первых запросов и работа с AI.",
+     "descriptionEn": "Writing your first prompts and working with AI.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Создание первых запросов и работа с AI.",
+     "weekGoalEn": "Writing your first prompts and working with AI."
+    },
+    {
+     "id": "as3",
+     "title": "Урок 3. Claude, Gemini и Perplexity",
+     "titleEn": "Lesson 3. Claude, Gemini and Perplexity",
+     "description": "Обзор лучших AI-инструментов 2026 года.",
+     "descriptionEn": "Overview of the best AI tools in 2026.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Обзор лучших AI-инструментов 2026 года.",
+     "weekGoalEn": "Overview of the best AI tools in 2026."
+    },
+    {
+     "id": "as4",
+     "title": "Урок 4. Как правильно общаться с AI",
+     "titleEn": "Lesson 4. How to communicate with AI effectively",
+     "description": "Основы Prompt Engineering.",
+     "descriptionEn": "Prompt Engineering fundamentals.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Основы Prompt Engineering.",
+     "weekGoalEn": "Prompt Engineering fundamentals."
+    },
+    {
+     "id": "as5",
+     "title": "Урок 5. AI для работы и учебы",
+     "titleEn": "Lesson 5. AI for work and study",
+     "description": "Практические сценарии использования.",
+     "descriptionEn": "Practical use cases.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практические сценарии использования.",
+     "weekGoalEn": "Practical use cases."
+    },
+    {
+     "id": "as6",
+     "title": "Урок 6. Как заработать на AI",
+     "titleEn": "Lesson 6. How to earn with AI",
+     "description": "Популярные способы монетизации навыков.",
+     "descriptionEn": "Popular ways to monetize AI skills.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Популярные способы монетизации навыков.",
+     "weekGoalEn": "Popular ways to monetize AI skills."
+    },
+    {
+     "id": "as7",
+     "title": "Урок 7. План развития AI-специалиста",
+     "titleEn": "Lesson 7. AI specialist development plan",
+     "description": "Построение личной дорожной карты обучения.",
+     "descriptionEn": "Building your personal learning roadmap.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Построение личной дорожной карты обучения.",
+     "weekGoalEn": "Building your personal learning roadmap."
+    }
+   ],
+   "courseIdea": "AI Starter Week — бесплатная стартовая неделя для тех, кто только знакомится с AI. Вы поймёте, как работает искусственный интеллект, освоите ChatGPT, Claude, Gemini и Perplexity, научитесь писать промпты и увидите реальные сценарии для работы, учёбы и дохода.",
+   "courseIdeaEn": "AI Starter Week is a free intro week for complete beginners. You will understand how AI works, master ChatGPT, Claude, Gemini and Perplexity, learn prompt basics and see real use cases for work, study and income.",
+   "difficulty": null,
+   "audienceLabelRu": "Для всех",
+   "audienceLabelEn": "For everyone",
+   "status": "published"
+  },
+  {
+   "id": "ai-for-productivity",
+   "slug": "ai-for-productivity",
+   "title": "AI for Productivity",
+   "titleEn": "AI for Productivity",
+   "shortDescription": "4 урока: AI для задач, документов, обучения и личного productivity-стека.",
+   "shortDescriptionEn": "4 lessons: AI for tasks, documents, learning and your personal productivity stack.",
+   "description": "4 урока: AI для задач, документов, обучения и личного productivity-стека.",
+   "descriptionEn": "4 lessons: AI for tasks, documents, learning and your personal productivity stack.",
+   "fullDescription": "AI for Productivity — короткий бесплатный курс о том, как встроить AI в ежедневную рутину: письма, документы, саммари, планирование и персональные workflow без кода.",
+   "fullDescriptionEn": "AI for Productivity is a free mini-course on embedding AI into daily work: email, docs, summaries, planning and personal workflows — no coding.",
+   "duration": "5 уроков (10–20 мин)",
+   "durationEn": "5 lessons (10–20 мин)",
+   "price": 0,
+   "priceEur": 0,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": true,
+   "image": "/courses/ai-for-productivity.png?v=2",
+   "category": "Продуктивность",
+   "categoryEn": "Productivity",
+   "level": "Basic",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-1",
+   "tools": [
+    "ChatGPT",
+    "Notion AI",
+    "Google Workspace"
+   ],
+   "toolsEn": [
+    "ChatGPT",
+    "Notion AI",
+    "Google Workspace"
+   ],
+   "skills": [
+    "Email drafting",
+    "Summarization",
+    "Planning with AI"
+   ],
+   "skillsEn": [
+    "Email drafting",
+    "Summarization",
+    "Planning with AI"
+   ],
+   "forAudience": [
+    "Офисных сотрудников и менеджеров",
+    "Фрилансеров с высокой нагрузкой",
+    "Консультантов и экспертов",
+    "Руководителей небольших команд",
+    "Всех, кто хочет экономить 1–2 часа в день"
+   ],
+   "forAudienceEn": [
+    "Office workers and managers",
+    "Busy freelancers",
+    "Consultants and experts",
+    "Small team leads",
+    "Anyone who wants to save 1–2 hours daily"
+   ],
+   "finalProject": "Personal productivity stack с 3 рабочими AI-workflow.",
+   "finalProjectEn": "Personal productivity stack with 3 working AI workflows.",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Настроит AI как личного помощника",
+    "Автоматизирует рутинные задачи",
+    "Будет быстро создавать документы и письма",
+    "Ускорит обучение новым навыкам",
+    "Соберёт личную AI-систему продуктивности"
+   ],
+   "goalsEn": [
+    "Set up AI as a personal assistant",
+    "Automate routine tasks",
+    "Create documents and emails faster",
+    "Learn new skills faster with AI",
+    "Build a personal AI productivity system"
+   ],
+   "lessons": [
+    {
+     "id": "ap1",
+     "title": "Урок 1. AI как личный помощник",
+     "titleEn": "Lesson 1. AI как личный помощник",
+     "description": "Практика: AI как личный помощник.",
+     "descriptionEn": "Practice: AI как личный помощник.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI как личный помощник.",
+     "weekGoalEn": "Practice: AI как личный помощник."
+    },
+    {
+     "id": "ap2",
+     "title": "Урок 2. AI для работы и бизнеса",
+     "titleEn": "Lesson 2. AI для работы и бизнеса",
+     "description": "Практика: AI для работы и бизнеса.",
+     "descriptionEn": "Practice: AI для работы и бизнеса.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для работы и бизнеса.",
+     "weekGoalEn": "Practice: AI для работы и бизнеса."
+    },
+    {
+     "id": "ap3",
+     "title": "Урок 3. AI для обучения",
+     "titleEn": "Lesson 3. AI для обучения",
+     "description": "Практика: AI для обучения.",
+     "descriptionEn": "Practice: AI для обучения.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для обучения.",
+     "weekGoalEn": "Practice: AI для обучения."
+    },
+    {
+     "id": "ap4",
+     "title": "Урок 4. Экономия времени с AI",
+     "titleEn": "Lesson 4. Экономия времени с AI",
+     "description": "Практика: Экономия времени с AI.",
+     "descriptionEn": "Practice: Экономия времени с AI.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Экономия времени с AI.",
+     "weekGoalEn": "Practice: Экономия времени с AI."
+    },
+    {
+     "id": "ap5",
+     "title": "Урок 5. Личная AI-система продуктивности",
+     "titleEn": "Lesson 5. Личная AI-система продуктивности",
+     "description": "Практика: Личная AI-система продуктивности.",
+     "descriptionEn": "Practice: Личная AI-система продуктивности.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Личная AI-система продуктивности.",
+     "weekGoalEn": "Practice: Личная AI-система продуктивности."
+    }
+   ],
+   "courseIdea": "AI for Productivity — короткий бесплатный курс о том, как встроить AI в ежедневную рутину: письма, документы, саммари, планирование и персональные workflow без кода.",
+   "courseIdeaEn": "AI for Productivity is a free mini-course on embedding AI into daily work: email, docs, summaries, planning and personal workflows — no coding.",
+   "difficulty": null,
+   "audienceLabelRu": "Для всех",
+   "audienceLabelEn": "For everyone",
+   "status": "published"
+  },
+  {
+   "id": "first-automation-n8n",
+   "slug": "first-automation-n8n",
+   "title": "First Automation in n8n",
+   "titleEn": "First Automation in n8n",
+   "shortDescription": "5 уроков: первая автоматизация в n8n с Telegram и ChatGPT — без кода.",
+   "shortDescriptionEn": "5 lessons: your first n8n automation with Telegram and ChatGPT — no code.",
+   "description": "5 уроков: первая автоматизация в n8n с Telegram и ChatGPT — без кода.",
+   "descriptionEn": "5 lessons: your first n8n automation with Telegram and ChatGPT — no code.",
+   "fullDescription": "First Automation in n8n — бесплатный практический курс: от логики автоматизаций до первого workflow, Telegram-бота и AI-шага в n8n. Идеальный мост между «просто AI» и платными Pro-программами.",
+   "fullDescriptionEn": "First Automation in n8n is a free hands-on course from automation logic to your first workflow, Telegram bot and AI step in n8n.",
+   "duration": "5 уроков (10–20 минут)",
+   "durationEn": "5 lessons (10–20 min)",
+   "price": 0,
+   "priceEur": 0,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": true,
+   "image": "/courses/first-automation-n8n.png?v=2",
+   "category": "Автоматизация",
+   "categoryEn": "Automation",
+   "level": "Basic",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-1",
+   "tools": [
+    "n8n",
+    "ChatGPT API",
+    "Google Sheets"
+   ],
+   "toolsEn": [
+    "n8n",
+    "ChatGPT API",
+    "Google Sheets"
+   ],
+   "skills": [
+    "Workflow basics",
+    "Triggers & actions",
+    "AI node integration"
+   ],
+   "skillsEn": [
+    "Workflow basics",
+    "Triggers & actions",
+    "AI node integration"
+   ],
+   "forAudience": [
+    "No-code новичков",
+    "Предпринимателей с ручными процессами",
+    "Ops- и office-менеджеров",
+    "SMM и маркетологов",
+    "Выпускников AI Starter Week"
+   ],
+   "forAudienceEn": [
+    "No-code beginners",
+    "Entrepreneurs with manual processes",
+    "Ops and office managers",
+    "SMM and marketers",
+    "AI Starter Week graduates"
+   ],
+   "finalProject": "Рабочий n8n-workflow с AI-шагом и уведомлениями.",
+   "finalProjectEn": "Working n8n workflow with an AI step and notifications.",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Поймёт логику автоматизаций",
+    "Освоит интерфейс n8n",
+    "Создаст Telegram-бота с AI",
+    "Подключит ChatGPT к workflow",
+    "Запустит финальную автоматизацию"
+   ],
+   "goalsEn": [
+    "Understand automation logic",
+    "Learn the n8n interface",
+    "Build a Telegram bot with AI",
+    "Connect ChatGPT to a workflow",
+    "Ship a complete automation"
+   ],
+   "lessons": [
+    {
+     "id": "fn1",
+     "title": "Урок 1. Что такое автоматизация",
+     "titleEn": "Lesson 1. What automation is",
+     "description": "Логика работы автоматизаций.",
+     "descriptionEn": "How automations work.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Логика работы автоматизаций.",
+     "weekGoalEn": "How automations work."
+    },
+    {
+     "id": "fn2",
+     "title": "Урок 2. Интерфейс n8n",
+     "titleEn": "Lesson 2. n8n interface",
+     "description": "Создание первого workflow.",
+     "descriptionEn": "Building your first workflow.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Создание первого workflow.",
+     "weekGoalEn": "Building your first workflow."
+    },
+    {
+     "id": "fn3",
+     "title": "Урок 3. Telegram + AI",
+     "titleEn": "Lesson 3. Telegram + AI",
+     "description": "Создаем первого Telegram-бота.",
+     "descriptionEn": "Building your first Telegram bot.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Создаем первого Telegram-бота.",
+     "weekGoalEn": "Building your first Telegram bot."
+    },
+    {
+     "id": "fn4",
+     "title": "Урок 4. AI Agent в n8n",
+     "titleEn": "Lesson 4. AI Agent in n8n",
+     "description": "Подключаем ChatGPT к автоматизации.",
+     "descriptionEn": "Connecting ChatGPT to your automation.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Подключаем ChatGPT к автоматизации.",
+     "weekGoalEn": "Connecting ChatGPT to your automation."
+    },
+    {
+     "id": "fn5",
+     "title": "Урок 5. Финальный проект",
+     "titleEn": "Lesson 5. Capstone project",
+     "description": "Создаем полноценную автоматизацию.",
+     "descriptionEn": "Building a complete automation.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Создаем полноценную автоматизацию.",
+     "weekGoalEn": "Building a complete automation."
+    }
+   ],
+   "courseIdea": "First Automation in n8n — бесплатный практический курс: от логики автоматизаций до первого workflow, Telegram-бота и AI-шага в n8n. Идеальный мост между «просто AI» и платными Pro-программами.",
+   "courseIdeaEn": "First Automation in n8n is a free hands-on course from automation logic to your first workflow, Telegram bot and AI step in n8n.",
+   "difficulty": null,
+   "audienceLabelRu": "Для всех",
+   "audienceLabelEn": "For everyone",
+   "status": "published"
+  },
+  {
+   "id": "ai-insider-accelerator",
+   "slug": "ai-insider-accelerator",
+   "title": "AI Insider Accelerator",
+   "titleEn": "AI Insider Accelerator",
+   "shortDescription": "Intake-программа: все AI-направления, тест и выбор специализации. Подача заявки.",
+   "shortDescriptionEn": "Intake program: all AI tracks, test and specialization choice. Apply to enroll.",
+   "description": "Intake-программа: все AI-направления, тест и выбор специализации. Подача заявки.",
+   "descriptionEn": "Intake program: all AI tracks, test and specialization choice. Apply to enroll.",
+   "fullDescription": "AI Insider Accelerator — открытый набор для тех, кто хочет выбрать свой путь в AI. За 12 уроков вы пройдёте контент, автоматизации, чат-ботов, голосовых агентов, AI-агентов и монетизацию, сдадите intake-тест и выберете специализацию под себя.",
+   "fullDescriptionEn": "AI Insider Accelerator is an open intake for choosing your AI path. In 12 lessons you explore content, automation, chatbots, voice agents, AI agents and monetization, pass the intake test and pick your track.",
+   "duration": "12 уроков · intake",
+   "durationEn": "12 lessons · intake",
+   "price": 0,
+   "priceEur": 0,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": false,
+   "image": "/courses/ai-insider-accelerator.png?v=1",
+   "category": "Accelerator",
+   "categoryEn": "Accelerator",
+   "level": "Basic",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-2",
+   "tools": [
+    "ChatGPT",
+    "Claude",
+    "n8n",
+    "Telegram",
+    "Vapi",
+    "ElevenLabs"
+   ],
+   "toolsEn": [
+    "ChatGPT",
+    "Claude",
+    "n8n",
+    "Telegram",
+    "Vapi",
+    "ElevenLabs"
+   ],
+   "skills": [
+    "Контент",
+    "Автоматизации",
+    "Чат-боты",
+    "Голосовые агенты",
+    "AI-агенты",
+    "Монетизация"
+   ],
+   "skillsEn": [
+    "Контент",
+    "Автоматизации",
+    "Чат-боты",
+    "Голосовые агенты",
+    "AI-агенты",
+    "Монетизация"
+   ],
+   "forAudience": [
+    "Тех, кто выбирает карьеру в AI",
+    "Выпускников бесплатных курсов Academy",
+    "Предпринимателей перед выбором Pro-трека",
+    "Фрилансеров в поиске ниши",
+    "Новичков, готовых к структурированному intake"
+   ],
+   "forAudienceEn": [
+    "People choosing an AI career path",
+    "Free course graduates",
+    "Entrepreneurs before picking a Pro track",
+    "Freelancers finding their niche",
+    "Beginners ready for structured intake"
+   ],
+   "finalProject": "Персональная AI-система и выбранная специализация для продолжения обучения.",
+   "finalProjectEn": "Personal AI system and chosen specialization for your next program.",
+   "hasHomework": true,
+   "catalogHidden": false,
+   "goals": [
+    "Пройдёт все ключевые направления AI",
+    "Поймёт, какой трек подходит лично вам",
+    "Сдаст intake-тест и анкету",
+    "Выберет специализацию",
+    "Соберёт capstone-проект",
+    "Получит доступ к выбранному Pro-курсу"
+   ],
+   "goalsEn": [
+    "Explore all key AI tracks",
+    "Find which track fits you",
+    "Complete intake test and application",
+    "Choose your specialization",
+    "Complete the capstone project",
+    "Unlock your chosen Pro path"
+   ],
+   "lessons": [
+    {
+     "id": "acc1",
+     "title": "Урок 1. Карта AI-индустрии 2026",
+     "titleEn": "Lesson 1. AI industry map 2026",
+     "description": "Обзор рынка и ключевых направлений.",
+     "descriptionEn": "Market overview and key tracks.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Обзор рынка и ключевых направлений.",
+     "weekGoalEn": "Market overview and key tracks."
+    },
+    {
+     "id": "acc2",
+     "title": "Урок 2. AI для контента и маркетинга",
+     "titleEn": "Lesson 2. AI for content and marketing",
+     "description": "Как AI меняет контент и продвижение.",
+     "descriptionEn": "How AI transforms content and marketing.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Как AI меняет контент и продвижение.",
+     "weekGoalEn": "How AI transforms content and marketing."
+    },
+    {
+     "id": "acc3",
+     "title": "Урок 3. Автоматизации и n8n",
+     "titleEn": "Lesson 3. Automations and n8n",
+     "description": "Логика workflow и первые сценарии.",
+     "descriptionEn": "Workflow logic and first scenarios.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Логика workflow и первые сценарии.",
+     "weekGoalEn": "Workflow logic and first scenarios."
+    },
+    {
+     "id": "acc4",
+     "title": "Урок 4. Чат-боты для бизнеса",
+     "titleEn": "Lesson 4. Chatbots for business",
+     "description": "Где боты приносят деньги.",
+     "descriptionEn": "Where bots drive revenue.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Где боты приносят деньги.",
+     "weekGoalEn": "Where bots drive revenue."
+    },
+    {
+     "id": "acc5",
+     "title": "Урок 5. Голосовые AI-агенты",
+     "titleEn": "Lesson 5. Voice AI agents",
+     "description": "Сценарии voice agents в продажах и поддержке.",
+     "descriptionEn": "Voice agent use cases in sales and support.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Сценарии voice agents в продажах и поддержке.",
+     "weekGoalEn": "Voice agent use cases in sales and support."
+    },
+    {
+     "id": "acc6",
+     "title": "Урок 6. AI-агенты и RAG",
+     "titleEn": "Lesson 6. AI agents and RAG",
+     "description": "От чатбота к автономному агенту.",
+     "descriptionEn": "From chatbot to autonomous agent.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "От чатбота к автономному агенту.",
+     "weekGoalEn": "From chatbot to autonomous agent."
+    },
+    {
+     "id": "acc7",
+     "title": "Урок 7. Prompt Engineering Pro",
+     "titleEn": "Lesson 7. Prompt Engineering Pro",
+     "description": "Профессиональные промпты под задачи.",
+     "descriptionEn": "Professional prompts for real tasks.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Профессиональные промпты под задачи.",
+     "weekGoalEn": "Professional prompts for real tasks."
+    },
+    {
+     "id": "acc8",
+     "title": "Урок 8. AI для продаж и лидов",
+     "titleEn": "Lesson 8. AI for sales and leads",
+     "description": "Автоматизация коммуникаций и CRM.",
+     "descriptionEn": "Automating comms and CRM.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Автоматизация коммуникаций и CRM.",
+     "weekGoalEn": "Automating comms and CRM."
+    },
+    {
+     "id": "acc9",
+     "title": "Урок 9. Монетизация AI-навыков",
+     "titleEn": "Lesson 9. Monetizing AI skills",
+     "description": "Как зарабатывать на AI-услугах.",
+     "descriptionEn": "How to earn from AI services.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Как зарабатывать на AI-услугах.",
+     "weekGoalEn": "How to earn from AI services."
+    },
+    {
+     "id": "acc10",
+     "title": "Урок 10. Intake-тест и анкета",
+     "titleEn": "Lesson 10. Intake test and application",
+     "description": "Диагностика уровня и целей.",
+     "descriptionEn": "Level and goals assessment.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Диагностика уровня и целей.",
+     "weekGoalEn": "Level and goals assessment."
+    },
+    {
+     "id": "acc11",
+     "title": "Урок 11. Выбор специализации",
+     "titleEn": "Lesson 11. Choosing your track",
+     "description": "Подбор Pro-курса под вашу цель.",
+     "descriptionEn": "Matching a Pro track to your goal.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Подбор Pro-курса под вашу цель.",
+     "weekGoalEn": "Matching a Pro track to your goal."
+    },
+    {
+     "id": "acc12",
+     "title": "Урок 12. Финальный проект",
+     "titleEn": "Lesson 12. Capstone project",
+     "description": "Персональная AI-система для работы или бизнеса.",
+     "descriptionEn": "Personal AI system for work or business.",
+     "duration": "30–45 мин",
+     "durationEn": "30–45 min",
+     "videoUrl": "",
+     "weekGoal": "Персональная AI-система для работы или бизнеса.",
+     "weekGoalEn": "Personal AI system for work or business."
+    }
+   ],
+   "courseIdea": "AI Insider Accelerator — открытый набор для тех, кто хочет выбрать свой путь в AI. За 12 уроков вы пройдёте контент, автоматизации, чат-ботов, голосовых агентов, AI-агентов и монетизацию, сдадите intake-тест и выберете специализацию под себя.",
+   "courseIdeaEn": "AI Insider Accelerator is an open intake for choosing your AI path. In 12 lessons you explore content, automation, chatbots, voice agents, AI agents and monetization, pass the intake test and pick your track.",
+   "difficulty": null,
+   "audienceLabelRu": "Для всех",
+   "audienceLabelEn": "For everyone",
+   "status": "published"
+  },
+  {
+   "id": "ai-productivity-master",
+   "slug": "ai-productivity-master",
+   "title": "AI Productivity Master",
+   "titleEn": "AI Productivity Master",
+   "shortDescription": "15 уроков · 25–40 мин. Экономия времени, промпты и автоматизация рутины.",
+   "shortDescriptionEn": "15 lessons · 25–40 min. Save time, master prompts and automate routine work.",
+   "description": "15 уроков · 25–40 мин. Экономия времени, промпты и автоматизация рутины.",
+   "descriptionEn": "15 lessons · 25–40 min. Save time, master prompts and automate routine work.",
+   "fullDescription": "ChatGPT, Claude, Gemini, Perplexity, Deep Research, документы, таблицы, встречи, продажи и персональный AI-стек. Финальный проект — ваша система продуктивности.",
+   "fullDescriptionEn": "ChatGPT, Claude, Gemini, Perplexity, Deep Research, documents, spreadsheets, meetings, sales and a personal AI stack. Capstone: your productivity system.",
+   "duration": "15 уроков (25–40 мин)",
+   "durationEn": "15 lessons (25–40 мин)",
+   "price": 0,
+   "priceEur": 29,
+   "oldPriceEur": 39,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": false,
+   "image": "/courses/ai-productivity-master.png?v=2",
+   "category": "Продуктивность",
+   "categoryEn": "Productivity",
+   "level": "Pro",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-3",
+   "tools": [],
+   "toolsEn": [],
+   "skills": [],
+   "skillsEn": [],
+   "forAudience": [
+    "Предприниматели",
+    "Студенты",
+    "Сотрудники компаний",
+    "Фрилансеры"
+   ],
+   "forAudienceEn": [
+    "Entrepreneurs",
+    "Students",
+    "Employees",
+    "Freelancers"
+   ],
+   "finalProject": "Персональный AI-стек и финальный проект",
+   "finalProjectEn": "Personal AI stack capstone",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Экономия времени на рутине",
+    "Уверенное использование AI",
+    "Собственные промпты",
+    "Автоматизация задач"
+   ],
+   "goalsEn": [
+    "Save time",
+    "Confident AI use",
+    "Custom prompts",
+    "Task automation"
+   ],
+   "lessons": [
+    {
+     "id": "pm1",
+     "title": "Урок 1. Введение в AI Productivity",
+     "titleEn": "Lesson 1. Введение в AI Productivity",
+     "description": "Практика: Введение в AI Productivity.",
+     "descriptionEn": "Practice: Введение в AI Productivity.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Введение в AI Productivity.",
+     "weekGoalEn": "Practice: Введение в AI Productivity."
+    },
+    {
+     "id": "pm2",
+     "title": "Урок 2. ChatGPT для ежедневной работы",
+     "titleEn": "Lesson 2. ChatGPT для ежедневной работы",
+     "description": "Практика: ChatGPT для ежедневной работы.",
+     "descriptionEn": "Practice: ChatGPT для ежедневной работы.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: ChatGPT для ежедневной работы.",
+     "weekGoalEn": "Practice: ChatGPT для ежедневной работы."
+    },
+    {
+     "id": "pm3",
+     "title": "Урок 3. Claude для глубокого анализа",
+     "titleEn": "Lesson 3. Claude для глубокого анализа",
+     "description": "Практика: Claude для глубокого анализа.",
+     "descriptionEn": "Practice: Claude для глубокого анализа.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Claude для глубокого анализа.",
+     "weekGoalEn": "Practice: Claude для глубокого анализа."
+    },
+    {
+     "id": "pm4",
+     "title": "Урок 4. Gemini и экосистема Google",
+     "titleEn": "Lesson 4. Gemini и экосистема Google",
+     "description": "Практика: Gemini и экосистема Google.",
+     "descriptionEn": "Practice: Gemini и экосистема Google.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Gemini и экосистема Google.",
+     "weekGoalEn": "Practice: Gemini и экосистема Google."
+    },
+    {
+     "id": "pm5",
+     "title": "Урок 5. Perplexity и поиск информации",
+     "titleEn": "Lesson 5. Perplexity и поиск информации",
+     "description": "Практика: Perplexity и поиск информации.",
+     "descriptionEn": "Practice: Perplexity и поиск информации.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Perplexity и поиск информации.",
+     "weekGoalEn": "Practice: Perplexity и поиск информации."
+    },
+    {
+     "id": "pm6",
+     "title": "Урок 6. Deep Research",
+     "titleEn": "Lesson 6. Deep Research",
+     "description": "Практика: Deep Research.",
+     "descriptionEn": "Practice: Deep Research.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Deep Research.",
+     "weekGoalEn": "Practice: Deep Research."
+    },
+    {
+     "id": "pm7",
+     "title": "Урок 7. Создание эффективных промптов",
+     "titleEn": "Lesson 7. Создание эффективных промптов",
+     "description": "Практика: Создание эффективных промптов.",
+     "descriptionEn": "Practice: Создание эффективных промптов.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Создание эффективных промптов.",
+     "weekGoalEn": "Practice: Создание эффективных промптов."
+    },
+    {
+     "id": "pm8",
+     "title": "Урок 8. AI для написания писем",
+     "titleEn": "Lesson 8. AI для написания писем",
+     "description": "Практика: AI для написания писем.",
+     "descriptionEn": "Practice: AI для написания писем.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для написания писем.",
+     "weekGoalEn": "Practice: AI для написания писем."
+    },
+    {
+     "id": "pm9",
+     "title": "Урок 9. AI для документов",
+     "titleEn": "Lesson 9. AI для документов",
+     "description": "Практика: AI для документов.",
+     "descriptionEn": "Practice: AI для документов.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для документов.",
+     "weekGoalEn": "Practice: AI для документов."
+    },
+    {
+     "id": "pm10",
+     "title": "Урок 10. AI для таблиц и данных",
+     "titleEn": "Lesson 10. AI для таблиц и данных",
+     "description": "Практика: AI для таблиц и данных.",
+     "descriptionEn": "Practice: AI для таблиц и данных.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для таблиц и данных.",
+     "weekGoalEn": "Practice: AI для таблиц и данных."
+    },
+    {
+     "id": "pm11",
+     "title": "Урок 11. AI для встреч и саммари",
+     "titleEn": "Lesson 11. AI для встреч и саммари",
+     "description": "Практика: AI для встреч и саммари.",
+     "descriptionEn": "Practice: AI для встреч и саммари.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для встреч и саммари.",
+     "weekGoalEn": "Practice: AI для встреч и саммари."
+    },
+    {
+     "id": "pm12",
+     "title": "Урок 12. AI для планирования",
+     "titleEn": "Lesson 12. AI для планирования",
+     "description": "Практика: AI для планирования.",
+     "descriptionEn": "Practice: AI для планирования.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для планирования.",
+     "weekGoalEn": "Practice: AI для планирования."
+    },
+    {
+     "id": "pm13",
+     "title": "Урок 13. AI для продаж",
+     "titleEn": "Lesson 13. AI для продаж",
+     "description": "Практика: AI для продаж.",
+     "descriptionEn": "Practice: AI для продаж.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для продаж.",
+     "weekGoalEn": "Practice: AI для продаж."
+    },
+    {
+     "id": "pm14",
+     "title": "Урок 14. Персональный AI стек",
+     "titleEn": "Lesson 14. Персональный AI стек",
+     "description": "Практика: Персональный AI стек.",
+     "descriptionEn": "Practice: Персональный AI стек.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Персональный AI стек.",
+     "weekGoalEn": "Practice: Персональный AI стек."
+    },
+    {
+     "id": "pm15",
+     "title": "Урок 15. Финальный проект",
+     "titleEn": "Lesson 15. Финальный проект",
+     "description": "Практика: Финальный проект.",
+     "descriptionEn": "Practice: Финальный проект.",
+     "duration": "25–40 мин",
+     "durationEn": "25–40 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Финальный проект.",
+     "weekGoalEn": "Practice: Финальный проект."
+    }
+   ],
+   "difficulty": 1,
+   "audienceLabelRu": "Для новичков",
+   "audienceLabelEn": "For beginners",
+   "status": "published"
+  },
+  {
+   "id": "ai-content-creator",
+   "slug": "ai-content-creator",
+   "title": "AI Content Creator",
+   "titleEn": "AI Content Creator",
+   "shortDescription": "8 уроков: тексты, AI-дизайн, видео, Shorts/Reels, контент-план и личный бренд.",
+   "shortDescriptionEn": "8 lessons: copy, AI design, video, Shorts/Reels, content plan and personal brand.",
+   "description": "8 уроков: тексты, AI-дизайн, видео, Shorts/Reels, контент-план и личный бренд.",
+   "descriptionEn": "8 lessons: copy, AI design, video, Shorts/Reels, content plan and personal brand.",
+   "fullDescription": "AI Content Creator — курс для создателей контента: тексты, визуал, видео и контент-план полностью через AI. Canva, Midjourney, Runway, Kling, Veo и система публикаций.",
+   "fullDescriptionEn": "AI Content Creator covers copy, visuals, video and content planning entirely with AI — Canva, Midjourney, Runway, Kling, Veo and a publishing system.",
+   "duration": "12 уроков (25–40 мин)",
+   "durationEn": "12 lessons (25–40 мин)",
+   "price": 0,
+   "priceEur": 39,
+   "oldPriceEur": 49,
+   "badge": "new",
+   "faq": null,
+   "isFreeTrial": false,
+   "image": "/courses/ai-content-creator.png?v=2",
+   "category": "Контент",
+   "categoryEn": "Content",
+   "level": "Pro",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-3",
+   "tools": [],
+   "toolsEn": [],
+   "skills": [],
+   "skillsEn": [],
+   "forAudience": [
+    "Блогеров и контент-мейкеров",
+    "SMM-специалистов",
+    "Экспертов и коучей",
+    "Владельцев малого бизнеса",
+    "Фрилансеров в нише контента"
+   ],
+   "forAudienceEn": [
+    "Bloggers and creators",
+    "SMM specialists",
+    "Experts and coaches",
+    "Small business owners",
+    "Freelance content specialists"
+   ],
+   "finalProject": "Полноценная контент-система: тексты, визуал, видео и план публикаций.",
+   "finalProjectEn": "Full content system: copy, visuals, video and publishing plan.",
+   "hasHomework": true,
+   "catalogHidden": false,
+   "goals": [
+    "Поймёт AI-контент в 2026 году",
+    "Будет генерировать тексты через AI",
+    "Создаст визуал в Canva и Midjourney",
+    "Сделает видео и Shorts/Reels",
+    "Построит контент-план",
+    "Укрепит личный бренд",
+    "Запустит полноценную контент-систему"
+   ],
+   "goalsEn": [
+    "Understand AI content in 2026",
+    "Generate copy with AI",
+    "Create visuals in Canva and Midjourney",
+    "Produce video and Shorts/Reels",
+    "Build a content calendar",
+    "Strengthen personal brand",
+    "Launch a full content system"
+   ],
+   "lessons": [
+    {
+     "id": "ccv1",
+     "title": "Урок 1. Современный AI контент",
+     "titleEn": "Lesson 1. Современный AI контент",
+     "description": "Практика: Современный AI контент.",
+     "descriptionEn": "Practice: Современный AI контент.",
+     "duration": "46 минут",
+     "durationEn": "46 минут",
+     "videoUrl": "",
+     "week": 1,
+     "videoNumber": 1,
+     "weekGoal": "Практика: Современный AI контент.",
+     "weekGoalEn": "Practice: Современный AI контент.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "weekSkillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "lessonTopics": "идея и аудитория; структура материала; генерация через AI; редактура и подготовка к публикации.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv2",
+     "title": "Урок 2. ChatGPT для контента",
+     "titleEn": "Lesson 2. ChatGPT для контента",
+     "description": "Практика: ChatGPT для контента.",
+     "descriptionEn": "Practice: ChatGPT для контента.",
+     "duration": "40 минут",
+     "durationEn": "40 минут",
+     "videoUrl": "",
+     "week": 1,
+     "videoNumber": 2,
+     "weekGoal": "Практика: ChatGPT для контента.",
+     "weekGoalEn": "Practice: ChatGPT для контента.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "weekSkillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "lessonTopics": "базовые понятия; пошаговая логика работы; разбор примеров; практическое применение.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv3",
+     "title": "Урок 3. Контент-план через AI",
+     "titleEn": "Lesson 3. Контент-план через AI",
+     "description": "Практика: Контент-план через AI.",
+     "descriptionEn": "Practice: Контент-план через AI.",
+     "duration": "40 минут",
+     "durationEn": "40 минут",
+     "videoUrl": "",
+     "week": 2,
+     "videoNumber": 3,
+     "weekGoal": "Практика: Контент-план через AI.",
+     "weekGoalEn": "Practice: Контент-план через AI.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "weekSkillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "lessonTopics": "идея и аудитория; структура материала; генерация через AI; редактура и подготовка к публикации.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv4",
+     "title": "Урок 4. Canva AI",
+     "titleEn": "Lesson 4. Canva AI",
+     "description": "Практика: Canva AI.",
+     "descriptionEn": "Practice: Canva AI.",
+     "duration": "41 минут",
+     "durationEn": "41 минут",
+     "videoUrl": "",
+     "week": 3,
+     "videoNumber": 4,
+     "weekGoal": "Практика: Canva AI.",
+     "weekGoalEn": "Practice: Canva AI.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "weekSkillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "lessonTopics": "базовые понятия; пошаговая логика работы; разбор примеров; практическое применение.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv5",
+     "title": "Урок 5. Midjourney",
+     "titleEn": "Lesson 5. Midjourney",
+     "description": "Практика: Midjourney.",
+     "descriptionEn": "Practice: Midjourney.",
+     "duration": "43 минут",
+     "durationEn": "43 минут",
+     "videoUrl": "",
+     "week": 3,
+     "videoNumber": 5,
+     "weekGoal": "Практика: Midjourney.",
+     "weekGoalEn": "Practice: Midjourney.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "weekSkillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "lessonTopics": "идея и аудитория; структура материала; генерация через AI; редактура и подготовка к публикации.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv6",
+     "title": "Урок 6. Flux",
+     "titleEn": "Lesson 6. Flux",
+     "description": "Практика: Flux.",
+     "descriptionEn": "Practice: Flux.",
+     "duration": "43 минут",
+     "durationEn": "43 минут",
+     "videoUrl": "",
+     "week": 4,
+     "videoNumber": 6,
+     "weekGoal": "Практика: Flux.",
+     "weekGoalEn": "Practice: Flux.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "weekSkillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "lessonTopics": "идея и аудитория; структура материала; генерация через AI; редактура и подготовка к публикации.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv7",
+     "title": "Урок 7. Runway",
+     "titleEn": "Lesson 7. Runway",
+     "description": "Практика: Runway.",
+     "descriptionEn": "Practice: Runway.",
+     "duration": "48 минут",
+     "durationEn": "48 минут",
+     "videoUrl": "",
+     "week": 5,
+     "videoNumber": 7,
+     "weekGoal": "Практика: Runway.",
+     "weekGoalEn": "Practice: Runway.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "weekSkillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "lessonTopics": "базовые понятия; пошаговая логика работы; разбор примеров; практическое применение.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv8",
+     "title": "Урок 8. Kling",
+     "titleEn": "Lesson 8. Kling",
+     "description": "Практика: Kling.",
+     "descriptionEn": "Practice: Kling.",
+     "duration": "49 минут",
+     "durationEn": "49 минут",
+     "videoUrl": "",
+     "week": 5,
+     "videoNumber": 8,
+     "weekGoal": "Практика: Kling.",
+     "weekGoalEn": "Practice: Kling.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "weekSkillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "lessonTopics": "идея и аудитория; структура материала; генерация через AI; редактура и подготовка к публикации.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv9",
+     "title": "Урок 9. Veo",
+     "titleEn": "Lesson 9. Veo",
+     "description": "Практика: Veo.",
+     "descriptionEn": "Practice: Veo.",
+     "duration": "40 минут",
+     "durationEn": "40 минут",
+     "videoUrl": "",
+     "week": 6,
+     "videoNumber": 9,
+     "weekGoal": "Практика: Veo.",
+     "weekGoalEn": "Practice: Veo.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "weekSkillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "lessonTopics": "идея и аудитория; структура материала; генерация через AI; редактура и подготовка к публикации.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv10",
+     "title": "Урок 10. Shorts и Reels",
+     "titleEn": "Lesson 10. Shorts и Reels",
+     "description": "Практика: Shorts и Reels.",
+     "descriptionEn": "Practice: Shorts и Reels.",
+     "duration": "48 минут",
+     "durationEn": "48 минут",
+     "videoUrl": "",
+     "week": 7,
+     "videoNumber": 10,
+     "weekGoal": "Практика: Shorts и Reels.",
+     "weekGoalEn": "Practice: Shorts и Reels.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "weekSkillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "lessonTopics": "базовые понятия; пошаговая логика работы; разбор примеров; практическое применение.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv11",
+     "title": "Урок 11. Автоматизация контента",
+     "titleEn": "Lesson 11. Автоматизация контента",
+     "description": "Практика: Автоматизация контента.",
+     "descriptionEn": "Practice: Автоматизация контента.",
+     "duration": "43 минут",
+     "durationEn": "43 минут",
+     "videoUrl": "",
+     "week": 7,
+     "videoNumber": 11,
+     "weekGoal": "Практика: Автоматизация контента.",
+     "weekGoalEn": "Practice: Автоматизация контента.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "weekSkillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "lessonTopics": "идея и аудитория; структура материала; генерация через AI; редактура и подготовка к публикации.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": false
+    },
+    {
+     "id": "ccv12",
+     "title": "Урок 12. Финальный контент-конвейер",
+     "titleEn": "Lesson 12. Финальный контент-конвейер",
+     "description": "Практика: Финальный контент-конвейер.",
+     "descriptionEn": "Practice: Финальный контент-конвейер.",
+     "duration": "50 минут",
+     "durationEn": "50 минут",
+     "videoUrl": "",
+     "week": 8,
+     "videoNumber": 12,
+     "weekGoal": "Практика: Финальный контент-конвейер.",
+     "weekGoalEn": "Practice: Финальный контент-конвейер.",
+     "weekOutcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekOutcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "weekSkills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "weekSkillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "lessonTopics": "базовые понятия; пошаговая логика работы; разбор примеров; практическое применение.",
+     "lessonTools": "ChatGPT, Google Docs, Google Sheets, Canva, n8n или профильный инструмент урока.",
+     "lessonDemo": "преподаватель показывает рабочий пример на экране, затем объясняет, как студент повторяет этот результат самостоятельно.",
+     "hwTasks": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwTasksEn": [
+      "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+     ],
+     "hwDeliverables": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwDeliverablesEn": [
+      "готовый мини-артефакт, который входит в итоговый проект курса."
+     ],
+     "hwCriteria": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCriteriaEn": [
+      "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+     ],
+     "hwCapstone": true,
+     "hwCapstoneTitle": "Финальный проект: AI Content Brand",
+     "hwCapstoneTitleEn": "Финальный проект: AI Content Brand"
+    }
+   ],
+   "courseIdea": "AI Content Creator — курс для создателей контента: тексты, визуал, видео и контент-план полностью через AI. Canva, Midjourney, Runway, Kling, Veo и система публикаций.",
+   "courseIdeaEn": "AI Content Creator covers copy, visuals, video and content planning entirely with AI — Canva, Midjourney, Runway, Kling, Veo and a publishing system.",
+   "weeks": [
+    {
+     "number": 1,
+     "title": " видео",
+     "titleEn": " videos",
+     "goal": "Научить студента понимать и применять тему 'Контент в эпоху AI: стратегия вместо хаоса' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "goalEn": "Научить студента понимать и применять тему 'Контент в эпоху AI: стратегия вместо хаоса' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "skills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации.",
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "skillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации.",
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "outcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "outcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "videoTitles": [
+      "Контент в эпоху AI: стратегия вместо хаоса",
+      "Ниша, аудитория и позиционирование"
+     ],
+     "homework": {
+      "tasks": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "tasksEn": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "deliverables": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "deliverablesEn": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "criteria": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ],
+      "criteriaEn": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ]
+     }
+    },
+    {
+     "number": 2,
+     "title": "Контентные рубрики и темы на месяц",
+     "titleEn": "Контентные рубрики и темы на месяц",
+     "goal": "Научить студента понимать и применять тему 'Контентные рубрики и темы на месяц' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "goalEn": "Научить студента понимать и применять тему 'Контентные рубрики и темы на месяц' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "skills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "skillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "outcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "outcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "videoTitles": [
+      "Контентные рубрики и темы на месяц"
+     ],
+     "homework": {
+      "tasks": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "tasksEn": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "deliverables": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "deliverablesEn": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "criteria": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ],
+      "criteriaEn": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ]
+     }
+    },
+    {
+     "number": 3,
+     "title": " видео",
+     "titleEn": " videos",
+     "goal": "Научить студента понимать и применять тему 'AI-копирайтинг: хуки, посты и сценарии' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "goalEn": "Научить студента понимать и применять тему 'AI-копирайтинг: хуки, посты и сценарии' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "skills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение.",
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "skillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение.",
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "outcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "outcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "videoTitles": [
+      "AI-копирайтинг: хуки, посты и сценарии",
+      "Контент-план на 30 дней"
+     ],
+     "homework": {
+      "tasks": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "tasksEn": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "deliverables": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "deliverablesEn": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "criteria": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ],
+      "criteriaEn": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ]
+     }
+    },
+    {
+     "number": 4,
+     "title": "Визуальный стиль и AI-изображения",
+     "titleEn": "Визуальный стиль и AI-изображения",
+     "goal": "Научить студента понимать и применять тему 'Визуальный стиль и AI-изображения' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "goalEn": "Научить студента понимать и применять тему 'Визуальный стиль и AI-изображения' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "skills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "skillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "outcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "outcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "videoTitles": [
+      "Визуальный стиль и AI-изображения"
+     ],
+     "homework": {
+      "tasks": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "tasksEn": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "deliverables": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "deliverablesEn": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "criteria": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ],
+      "criteriaEn": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ]
+     }
+    },
+    {
+     "number": 5,
+     "title": " видео",
+     "titleEn": " videos",
+     "goal": "Научить студента понимать и применять тему 'Обложки, шаблоны и оформление в Canva' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "goalEn": "Научить студента понимать и применять тему 'Обложки, шаблоны и оформление в Canva' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "skills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение.",
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "skillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение.",
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "outcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "outcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "videoTitles": [
+      "Обложки, шаблоны и оформление в Canva",
+      "Сценарии коротких видео"
+     ],
+     "homework": {
+      "tasks": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "tasksEn": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "deliverables": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "deliverablesEn": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "criteria": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ],
+      "criteriaEn": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ]
+     }
+    },
+    {
+     "number": 6,
+     "title": "Генерация AI-видео и монтаж",
+     "titleEn": "Генерация AI-видео и монтаж",
+     "goal": "Научить студента понимать и применять тему 'Генерация AI-видео и монтаж' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "goalEn": "Научить студента понимать и применять тему 'Генерация AI-видео и монтаж' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "skills": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "skillsEn": [
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "outcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "outcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "videoTitles": [
+      "Генерация AI-видео и монтаж"
+     ],
+     "homework": {
+      "tasks": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "tasksEn": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "deliverables": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "deliverablesEn": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "criteria": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ],
+      "criteriaEn": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ]
+     }
+    },
+    {
+     "number": 7,
+     "title": " видео",
+     "titleEn": " videos",
+     "goal": "Научить студента понимать и применять тему 'Серия Reels, Shorts и TikTok из одной идеи' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "goalEn": "Научить студента понимать и применять тему 'Серия Reels, Shorts и TikTok из одной идеи' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "skills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение.",
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "skillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение.",
+      "идея и аудитория",
+      "структура материала",
+      "генерация через AI",
+      "редактура и подготовка к публикации."
+     ],
+     "outcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "outcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "videoTitles": [
+      "Серия Reels, Shorts и TikTok из одной идеи",
+      "AI Content Machine: контент-конвейер"
+     ],
+     "homework": {
+      "tasks": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "tasksEn": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "deliverables": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "deliverablesEn": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "criteria": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ],
+      "criteriaEn": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ]
+     }
+    },
+    {
+     "number": 8,
+     "title": "Финальный проект: AI Content Brand",
+     "titleEn": "Финальный проект: AI Content Brand",
+     "goal": "Научить студента понимать и применять тему 'Финальный проект: AI Content Brand' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "goalEn": "Научить студента понимать и применять тему 'Финальный проект: AI Content Brand' в рамках курса AI Content Creator, чтобы к концу урока у него был практический результат, который можно использовать в финальном проекте курса.",
+     "skills": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "skillsEn": [
+      "базовые понятия",
+      "пошаговая логика работы",
+      "разбор примеров",
+      "практическое применение."
+     ],
+     "outcome": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "outcomeEn": "готовый мини-артефакт, который входит в итоговый проект курса.",
+     "videoTitles": [
+      "Финальный проект: AI Content Brand"
+     ],
+     "homework": {
+      "tasks": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "tasksEn": [
+       "повторить практическую демонстрацию на своей теме/нише, сохранить результат и добавить его в папку итогового проекта курса."
+      ],
+      "deliverables": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "deliverablesEn": [
+       "готовый мини-артефакт, который входит в итоговый проект курса."
+      ],
+      "criteria": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ],
+      "criteriaEn": [
+       "результат открыт, понятен, применим на практике; студент может объяснить, зачем он это сделал и как это связано с финальным проектом."
+      ]
+     }
+    }
+   ],
+   "difficulty": 2,
+   "audienceLabelRu": "Для новичков и фрилансеров",
+   "audienceLabelEn": "For beginners and freelancers",
+   "status": "published"
+  },
+  {
+   "id": "ai-automation-engineer",
+   "slug": "ai-automation-engineer",
+   "title": "AI Automation Engineer",
+   "titleEn": "AI Automation Engineer",
+   "shortDescription": "22 урока · n8n, боты, CRM, voice agents и production workflows.",
+   "shortDescriptionEn": "22 lessons · n8n, bots, CRM, voice agents and production workflows.",
+   "description": "22 урока · n8n, боты, CRM, voice agents и production workflows.",
+   "descriptionEn": "22 lessons · n8n, bots, CRM, voice agents and production workflows.",
+   "fullDescription": "Автоматизации, Telegram/WhatsApp, CRM, AI Support Agent, ElevenLabs, Vapi, Retell и работа с клиентами.",
+   "fullDescriptionEn": "Automations, Telegram/WhatsApp, CRM, AI support agent, ElevenLabs, Vapi, Retell and client delivery.",
+   "duration": "22 уроков",
+   "durationEn": "22 lessons",
+   "price": 0,
+   "priceEur": 59,
+   "oldPriceEur": 79,
+   "badge": "trend-2026",
+   "faq": [
+    {
+     "q": "Нужен ли опыт в n8n перед этим курсом?",
+     "qEn": "Do I need n8n experience before this course?",
+     "a": "Нет. Первые уроки закрывают базу n8n. Если хотите мягкий старт — пройдите бесплатный «First Automation in n8n», он идеально готовит к этому курсу.",
+     "aEn": "No. The first lessons cover n8n basics. For a softer start, take the free \"First Automation in n8n\" — it prepares you for this course."
+    },
+    {
+     "q": "Смогу ли я брать клиентов после курса?",
+     "qEn": "Will I be able to take clients after the course?",
+     "a": "Да, в программе есть блок работы с клиентами: как оформить оффер, передать проект и поддерживать автоматизации в продакшене.",
+     "aEn": "Yes — the program includes a client-delivery block: offers, project handover and maintaining automations in production."
+    }
+   ],
+   "isFreeTrial": false,
+   "image": "/courses/ai-automation-engineer.png?v=2",
+   "category": "Автоматизация",
+   "categoryEn": "Automation",
+   "level": "Pro",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-3",
+   "tools": [],
+   "toolsEn": [],
+   "skills": [],
+   "skillsEn": [],
+   "forAudience": [
+    "Предприниматели",
+    "Автоматизаторы",
+    "Агентства"
+   ],
+   "forAudienceEn": [
+    "Entrepreneurs",
+    "Automation specialists",
+    "Agencies"
+   ],
+   "finalProject": "Финальный проект автоматизации",
+   "finalProjectEn": "Automation capstone project",
+   "hasHomework": true,
+   "catalogHidden": false,
+   "goals": [
+    "Автоматизации n8n",
+    "Telegram и WhatsApp боты",
+    "CRM интеграции",
+    "Voice Agents"
+   ],
+   "goalsEn": [
+    "n8n automations",
+    "Telegram and WhatsApp bots",
+    "CRM integrations",
+    "Voice agents"
+   ],
+   "lessons": [
+    {
+     "id": "ae1",
+     "title": "Урок 1. Введение в автоматизацию",
+     "titleEn": "Lesson 1. Введение в автоматизацию",
+     "description": "Практика: Введение в автоматизацию.",
+     "descriptionEn": "Practice: Введение в автоматизацию.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Введение в автоматизацию.",
+     "weekGoalEn": "Practice: Введение в автоматизацию."
+    },
+    {
+     "id": "ae2",
+     "title": "Урок 2. Установка n8n",
+     "titleEn": "Lesson 2. Установка n8n",
+     "description": "Практика: Установка n8n.",
+     "descriptionEn": "Practice: Установка n8n.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Установка n8n.",
+     "weekGoalEn": "Practice: Установка n8n."
+    },
+    {
+     "id": "ae3",
+     "title": "Урок 3. Интерфейс n8n",
+     "titleEn": "Lesson 3. Интерфейс n8n",
+     "description": "Практика: Интерфейс n8n.",
+     "descriptionEn": "Practice: Интерфейс n8n.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Интерфейс n8n.",
+     "weekGoalEn": "Practice: Интерфейс n8n."
+    },
+    {
+     "id": "ae4",
+     "title": "Урок 4. Workflow логика",
+     "titleEn": "Lesson 4. Workflow логика",
+     "description": "Практика: Workflow логика.",
+     "descriptionEn": "Practice: Workflow логика.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Workflow логика.",
+     "weekGoalEn": "Practice: Workflow логика."
+    },
+    {
+     "id": "ae5",
+     "title": "Урок 5. Webhooks",
+     "titleEn": "Lesson 5. Webhooks",
+     "description": "Практика: Webhooks.",
+     "descriptionEn": "Practice: Webhooks.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Webhooks.",
+     "weekGoalEn": "Practice: Webhooks."
+    },
+    {
+     "id": "ae6",
+     "title": "Урок 6. API основы",
+     "titleEn": "Lesson 6. API основы",
+     "description": "Практика: API основы.",
+     "descriptionEn": "Practice: API основы.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: API основы.",
+     "weekGoalEn": "Practice: API основы."
+    },
+    {
+     "id": "ae7",
+     "title": "Урок 7. Google Sheets",
+     "titleEn": "Lesson 7. Google Sheets",
+     "description": "Практика: Google Sheets.",
+     "descriptionEn": "Practice: Google Sheets.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Google Sheets.",
+     "weekGoalEn": "Practice: Google Sheets."
+    },
+    {
+     "id": "ae8",
+     "title": "Урок 8. Telegram Bot",
+     "titleEn": "Lesson 8. Telegram Bot",
+     "description": "Практика: Telegram Bot.",
+     "descriptionEn": "Practice: Telegram Bot.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Telegram Bot.",
+     "weekGoalEn": "Practice: Telegram Bot."
+    },
+    {
+     "id": "ae9",
+     "title": "Урок 9. Telegram AI Bot",
+     "titleEn": "Lesson 9. Telegram AI Bot",
+     "description": "Практика: Telegram AI Bot.",
+     "descriptionEn": "Practice: Telegram AI Bot.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Telegram AI Bot.",
+     "weekGoalEn": "Practice: Telegram AI Bot."
+    },
+    {
+     "id": "ae10",
+     "title": "Урок 10. WhatsApp Automation",
+     "titleEn": "Lesson 10. WhatsApp Automation",
+     "description": "Практика: WhatsApp Automation.",
+     "descriptionEn": "Practice: WhatsApp Automation.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: WhatsApp Automation.",
+     "weekGoalEn": "Practice: WhatsApp Automation."
+    },
+    {
+     "id": "ae11",
+     "title": "Урок 11. Email Automation",
+     "titleEn": "Lesson 11. Email Automation",
+     "description": "Практика: Email Automation.",
+     "descriptionEn": "Practice: Email Automation.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Email Automation.",
+     "weekGoalEn": "Practice: Email Automation."
+    },
+    {
+     "id": "ae12",
+     "title": "Урок 12. CRM Integration",
+     "titleEn": "Lesson 12. CRM Integration",
+     "description": "Практика: CRM Integration.",
+     "descriptionEn": "Practice: CRM Integration.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: CRM Integration.",
+     "weekGoalEn": "Practice: CRM Integration."
+    },
+    {
+     "id": "ae13",
+     "title": "Урок 13. Lead Qualification",
+     "titleEn": "Lesson 13. Lead Qualification",
+     "description": "Практика: Lead Qualification.",
+     "descriptionEn": "Practice: Lead Qualification.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Lead Qualification.",
+     "weekGoalEn": "Practice: Lead Qualification."
+    },
+    {
+     "id": "ae14",
+     "title": "Урок 14. AI Support Agent",
+     "titleEn": "Lesson 14. AI Support Agent",
+     "description": "Практика: AI Support Agent.",
+     "descriptionEn": "Practice: AI Support Agent.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI Support Agent.",
+     "weekGoalEn": "Practice: AI Support Agent."
+    },
+    {
+     "id": "ae15",
+     "title": "Урок 15. Voice Agent основы",
+     "titleEn": "Lesson 15. Voice Agent основы",
+     "description": "Практика: Voice Agent основы.",
+     "descriptionEn": "Practice: Voice Agent основы.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Voice Agent основы.",
+     "weekGoalEn": "Practice: Voice Agent основы."
+    },
+    {
+     "id": "ae16",
+     "title": "Урок 16. ElevenLabs",
+     "titleEn": "Lesson 16. ElevenLabs",
+     "description": "Практика: ElevenLabs.",
+     "descriptionEn": "Practice: ElevenLabs.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: ElevenLabs.",
+     "weekGoalEn": "Practice: ElevenLabs."
+    },
+    {
+     "id": "ae17",
+     "title": "Урок 17. Vapi",
+     "titleEn": "Lesson 17. Vapi",
+     "description": "Практика: Vapi.",
+     "descriptionEn": "Practice: Vapi.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Vapi.",
+     "weekGoalEn": "Practice: Vapi."
+    },
+    {
+     "id": "ae18",
+     "title": "Урок 18. Retell AI",
+     "titleEn": "Lesson 18. Retell AI",
+     "description": "Практика: Retell AI.",
+     "descriptionEn": "Practice: Retell AI.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Retell AI.",
+     "weekGoalEn": "Practice: Retell AI."
+    },
+    {
+     "id": "ae19",
+     "title": "Урок 19. Multi-Step Workflows",
+     "titleEn": "Lesson 19. Multi-Step Workflows",
+     "description": "Практика: Multi-Step Workflows.",
+     "descriptionEn": "Practice: Multi-Step Workflows.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Multi-Step Workflows.",
+     "weekGoalEn": "Practice: Multi-Step Workflows."
+    },
+    {
+     "id": "ae20",
+     "title": "Урок 20. Production Workflows",
+     "titleEn": "Lesson 20. Production Workflows",
+     "description": "Практика: Production Workflows.",
+     "descriptionEn": "Practice: Production Workflows.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Production Workflows.",
+     "weekGoalEn": "Practice: Production Workflows."
+    },
+    {
+     "id": "ae21",
+     "title": "Урок 21. Работа с клиентами",
+     "titleEn": "Lesson 21. Работа с клиентами",
+     "description": "Практика: Работа с клиентами.",
+     "descriptionEn": "Practice: Работа с клиентами.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Работа с клиентами.",
+     "weekGoalEn": "Practice: Работа с клиентами."
+    },
+    {
+     "id": "ae22",
+     "title": "Урок 22. Финальный проект",
+     "titleEn": "Lesson 22. Финальный проект",
+     "description": "Практика: Финальный проект.",
+     "descriptionEn": "Practice: Финальный проект.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Финальный проект.",
+     "weekGoalEn": "Practice: Финальный проект."
+    }
+   ],
+   "difficulty": 2,
+   "audienceLabelRu": "Для фрилансеров и внедренцев",
+   "audienceLabelEn": "For freelancers and integrators",
+   "status": "published"
+  },
+  {
+   "id": "ai-agent-engineer",
+   "slug": "ai-agent-engineer",
+   "title": "AI Agent Engineer",
+   "titleEn": "AI Agent Engineer",
+   "shortDescription": "20 уроков · RAG, Tool Calling, multi-agent и production deployment.",
+   "shortDescriptionEn": "20 lessons · RAG, tool calling, multi-agent and production deployment.",
+   "description": "20 уроков · RAG, Tool Calling, multi-agent и production deployment.",
+   "descriptionEn": "20 lessons · RAG, tool calling, multi-agent and production deployment.",
+   "fullDescription": "Архитектура агентов, MCP, embeddings, vector DB, LangChain, CrewAI, LangGraph, memory и monitoring.",
+   "fullDescriptionEn": "Agent architecture, MCP, embeddings, vector DB, LangChain, CrewAI, LangGraph, memory and monitoring.",
+   "duration": "20 уроков",
+   "durationEn": "20 lessons",
+   "price": 0,
+   "priceEur": 79,
+   "oldPriceEur": 99,
+   "badge": "hit",
+   "faq": [
+    {
+     "q": "Это курс для разработчиков или можно без кода?",
+     "qEn": "Is this a developer course or can I do it without code?",
+     "a": "Курс ближе к low-code: часть блоков (RAG, LangGraph) требует базового понимания Python, но каждый шаг разобран в видео на готовых шаблонах.",
+     "aEn": "It is low-code: some blocks (RAG, LangGraph) need basic Python understanding, but every step is shown in video with ready templates."
+    },
+    {
+     "q": "Чем этот курс отличается от Automation Engineer?",
+     "qEn": "How is it different from Automation Engineer?",
+     "a": "Automation Engineer — про workflow и ботов в n8n. Agent Engineer — про полноценных AI-агентов: память, RAG, tool calling, multi-agent системы и деплой.",
+     "aEn": "Automation Engineer covers n8n workflows and bots. Agent Engineer covers full AI agents: memory, RAG, tool calling, multi-agent systems and deployment."
+    }
+   ],
+   "isFreeTrial": false,
+   "image": "/courses/ai-agent-engineer.png?v=2",
+   "category": "AI-агенты",
+   "categoryEn": "AI agents",
+   "level": "Pro",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-3",
+   "tools": [],
+   "toolsEn": [],
+   "skills": [],
+   "skillsEn": [],
+   "forAudience": [
+    "Разработчики",
+    "Автоматизаторы",
+    "Владельцы агентств"
+   ],
+   "forAudienceEn": [
+    "Developers",
+    "Automation engineers",
+    "Agency owners"
+   ],
+   "finalProject": "Финальный агент",
+   "finalProjectEn": "Capstone agent",
+   "hasHomework": true,
+   "catalogHidden": false,
+   "goals": [
+    "Настоящие AI-агенты",
+    "RAG системы",
+    "Tool Calling",
+    "Multi-Agent Systems"
+   ],
+   "goalsEn": [
+    "Real AI agents",
+    "RAG systems",
+    "Tool calling",
+    "Multi-agent systems"
+   ],
+   "lessons": [
+    {
+     "id": "ag1",
+     "title": "Урок 1. Введение в AI Agents",
+     "titleEn": "Lesson 1. Введение в AI Agents",
+     "description": "Практика: Введение в AI Agents.",
+     "descriptionEn": "Practice: Введение в AI Agents.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Введение в AI Agents.",
+     "weekGoalEn": "Practice: Введение в AI Agents."
+    },
+    {
+     "id": "ag2",
+     "title": "Урок 2. Архитектура агентов",
+     "titleEn": "Lesson 2. Архитектура агентов",
+     "description": "Практика: Архитектура агентов.",
+     "descriptionEn": "Practice: Архитектура агентов.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Архитектура агентов.",
+     "weekGoalEn": "Practice: Архитектура агентов."
+    },
+    {
+     "id": "ag3",
+     "title": "Урок 3. Tool Calling",
+     "titleEn": "Lesson 3. Tool Calling",
+     "description": "Практика: Tool Calling.",
+     "descriptionEn": "Practice: Tool Calling.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Tool Calling.",
+     "weekGoalEn": "Practice: Tool Calling."
+    },
+    {
+     "id": "ag4",
+     "title": "Урок 4. Function Calling",
+     "titleEn": "Lesson 4. Function Calling",
+     "description": "Практика: Function Calling.",
+     "descriptionEn": "Practice: Function Calling.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Function Calling.",
+     "weekGoalEn": "Practice: Function Calling."
+    },
+    {
+     "id": "ag5",
+     "title": "Урок 5. MCP основы",
+     "titleEn": "Lesson 5. MCP основы",
+     "description": "Практика: MCP основы.",
+     "descriptionEn": "Practice: MCP основы.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: MCP основы.",
+     "weekGoalEn": "Practice: MCP основы."
+    },
+    {
+     "id": "ag6",
+     "title": "Урок 6. RAG основы",
+     "titleEn": "Lesson 6. RAG основы",
+     "description": "Практика: RAG основы.",
+     "descriptionEn": "Practice: RAG основы.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: RAG основы.",
+     "weekGoalEn": "Practice: RAG основы."
+    },
+    {
+     "id": "ag7",
+     "title": "Урок 7. Embeddings",
+     "titleEn": "Lesson 7. Embeddings",
+     "description": "Практика: Embeddings.",
+     "descriptionEn": "Practice: Embeddings.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Embeddings.",
+     "weekGoalEn": "Practice: Embeddings."
+    },
+    {
+     "id": "ag8",
+     "title": "Урок 8. Vector Databases",
+     "titleEn": "Lesson 8. Vector Databases",
+     "description": "Практика: Vector Databases.",
+     "descriptionEn": "Practice: Vector Databases.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Vector Databases.",
+     "weekGoalEn": "Practice: Vector Databases."
+    },
+    {
+     "id": "ag9",
+     "title": "Урок 9. Pinecone",
+     "titleEn": "Lesson 9. Pinecone",
+     "description": "Практика: Pinecone.",
+     "descriptionEn": "Practice: Pinecone.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Pinecone.",
+     "weekGoalEn": "Practice: Pinecone."
+    },
+    {
+     "id": "ag10",
+     "title": "Урок 10. Supabase Vector",
+     "titleEn": "Lesson 10. Supabase Vector",
+     "description": "Практика: Supabase Vector.",
+     "descriptionEn": "Practice: Supabase Vector.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Supabase Vector.",
+     "weekGoalEn": "Practice: Supabase Vector."
+    },
+    {
+     "id": "ag11",
+     "title": "Урок 11. Knowledge Bases",
+     "titleEn": "Lesson 11. Knowledge Bases",
+     "description": "Практика: Knowledge Bases.",
+     "descriptionEn": "Practice: Knowledge Bases.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Knowledge Bases.",
+     "weekGoalEn": "Practice: Knowledge Bases."
+    },
+    {
+     "id": "ag12",
+     "title": "Урок 12. LangChain",
+     "titleEn": "Lesson 12. LangChain",
+     "description": "Практика: LangChain.",
+     "descriptionEn": "Practice: LangChain.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: LangChain.",
+     "weekGoalEn": "Practice: LangChain."
+    },
+    {
+     "id": "ag13",
+     "title": "Урок 13. CrewAI",
+     "titleEn": "Lesson 13. CrewAI",
+     "description": "Практика: CrewAI.",
+     "descriptionEn": "Practice: CrewAI.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: CrewAI.",
+     "weekGoalEn": "Practice: CrewAI."
+    },
+    {
+     "id": "ag14",
+     "title": "Урок 14. LangGraph",
+     "titleEn": "Lesson 14. LangGraph",
+     "description": "Практика: LangGraph.",
+     "descriptionEn": "Practice: LangGraph.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: LangGraph.",
+     "weekGoalEn": "Practice: LangGraph."
+    },
+    {
+     "id": "ag15",
+     "title": "Урок 15. Multi-Agent Systems",
+     "titleEn": "Lesson 15. Multi-Agent Systems",
+     "description": "Практика: Multi-Agent Systems.",
+     "descriptionEn": "Practice: Multi-Agent Systems.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Multi-Agent Systems.",
+     "weekGoalEn": "Practice: Multi-Agent Systems."
+    },
+    {
+     "id": "ag16",
+     "title": "Урок 16. Memory Systems",
+     "titleEn": "Lesson 16. Memory Systems",
+     "description": "Практика: Memory Systems.",
+     "descriptionEn": "Practice: Memory Systems.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Memory Systems.",
+     "weekGoalEn": "Practice: Memory Systems."
+    },
+    {
+     "id": "ag17",
+     "title": "Урок 17. Agent Planning",
+     "titleEn": "Lesson 17. Agent Planning",
+     "description": "Практика: Agent Planning.",
+     "descriptionEn": "Practice: Agent Planning.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Agent Planning.",
+     "weekGoalEn": "Practice: Agent Planning."
+    },
+    {
+     "id": "ag18",
+     "title": "Урок 18. Production Deployment",
+     "titleEn": "Lesson 18. Production Deployment",
+     "description": "Практика: Production Deployment.",
+     "descriptionEn": "Practice: Production Deployment.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Production Deployment.",
+     "weekGoalEn": "Practice: Production Deployment."
+    },
+    {
+     "id": "ag19",
+     "title": "Урок 19. Monitoring",
+     "titleEn": "Lesson 19. Monitoring",
+     "description": "Практика: Monitoring.",
+     "descriptionEn": "Practice: Monitoring.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Monitoring.",
+     "weekGoalEn": "Practice: Monitoring."
+    },
+    {
+     "id": "ag20",
+     "title": "Урок 20. Финальный агент",
+     "titleEn": "Lesson 20. Финальный агент",
+     "description": "Практика: Финальный агент.",
+     "descriptionEn": "Practice: Финальный агент.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Финальный агент.",
+     "weekGoalEn": "Practice: Финальный агент."
+    }
+   ],
+   "difficulty": 3,
+   "audienceLabelRu": "Для продвинутых и разработчиков",
+   "audienceLabelEn": "For advanced users and developers",
+   "status": "published"
+  },
+  {
+   "id": "ai-business-builder",
+   "slug": "ai-business-builder",
+   "title": "AI Business Builder",
+   "titleEn": "AI Business Builder",
+   "shortDescription": "20 уроков · ниша, оффер, продажи, MVP и первый запуск AI-бизнеса.",
+   "shortDescriptionEn": "20 lessons · niche, offer, sales, MVP and launching your AI business.",
+   "description": "20 уроков · ниша, оффер, продажи, MVP и первый запуск AI-бизнеса.",
+   "descriptionEn": "20 lessons · niche, offer, sales, MVP and launching your AI business.",
+   "fullDescription": "От выбора ниши до Stripe: лендинг, аутрич, discovery calls, delivery, Lovable, Bolt, Replit и масштабирование.",
+   "fullDescriptionEn": "From niche to Stripe: landing, outreach, discovery calls, delivery, Lovable, Bolt, Replit and scaling.",
+   "duration": "20 уроков",
+   "durationEn": "20 lessons",
+   "price": 0,
+   "priceEur": 79,
+   "oldPriceEur": 99,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": false,
+   "image": "/courses/ai-business-builder.png?v=2",
+   "category": "Бизнес",
+   "categoryEn": "Business",
+   "level": "Pro",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-3",
+   "tools": [],
+   "toolsEn": [],
+   "skills": [],
+   "skillsEn": [],
+   "forAudience": [
+    "Предприниматели",
+    "Фрилансеры",
+    "Агентства"
+   ],
+   "forAudienceEn": [
+    "Entrepreneurs",
+    "Freelancers",
+    "Agencies"
+   ],
+   "finalProject": "Финальный запуск",
+   "finalProjectEn": "Launch capstone",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Первый клиент",
+    "Первый AI-продукт",
+    "Первые продажи"
+   ],
+   "goalsEn": [
+    "First client",
+    "First AI product",
+    "First sales"
+   ],
+   "lessons": [
+    {
+     "id": "bb1",
+     "title": "Урок 1. Выбор ниши",
+     "titleEn": "Lesson 1. Выбор ниши",
+     "description": "Практика: Выбор ниши.",
+     "descriptionEn": "Practice: Выбор ниши.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Выбор ниши.",
+     "weekGoalEn": "Practice: Выбор ниши."
+    },
+    {
+     "id": "bb2",
+     "title": "Урок 2. AI рынок 2026",
+     "titleEn": "Lesson 2. AI рынок 2026",
+     "description": "Практика: AI рынок 2026.",
+     "descriptionEn": "Practice: AI рынок 2026.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI рынок 2026.",
+     "weekGoalEn": "Practice: AI рынок 2026."
+    },
+    {
+     "id": "bb3",
+     "title": "Урок 3. Создание оффера",
+     "titleEn": "Lesson 3. Создание оффера",
+     "description": "Практика: Создание оффера.",
+     "descriptionEn": "Practice: Создание оффера.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Создание оффера.",
+     "weekGoalEn": "Practice: Создание оффера."
+    },
+    {
+     "id": "bb4",
+     "title": "Урок 4. Упаковка агентства",
+     "titleEn": "Lesson 4. Упаковка агентства",
+     "description": "Практика: Упаковка агентства.",
+     "descriptionEn": "Practice: Упаковка агентства.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Упаковка агентства.",
+     "weekGoalEn": "Practice: Упаковка агентства."
+    },
+    {
+     "id": "bb5",
+     "title": "Урок 5. Лендинг",
+     "titleEn": "Lesson 5. Лендинг",
+     "description": "Практика: Лендинг.",
+     "descriptionEn": "Practice: Лендинг.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Лендинг.",
+     "weekGoalEn": "Practice: Лендинг."
+    },
+    {
+     "id": "bb6",
+     "title": "Урок 6. Кейсы",
+     "titleEn": "Lesson 6. Кейсы",
+     "description": "Практика: Кейсы.",
+     "descriptionEn": "Practice: Кейсы.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Кейсы.",
+     "weekGoalEn": "Practice: Кейсы."
+    },
+    {
+     "id": "bb7",
+     "title": "Урок 7. Холодный аутрич",
+     "titleEn": "Lesson 7. Холодный аутрич",
+     "description": "Практика: Холодный аутрич.",
+     "descriptionEn": "Practice: Холодный аутрич.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Холодный аутрич.",
+     "weekGoalEn": "Practice: Холодный аутрич."
+    },
+    {
+     "id": "bb8",
+     "title": "Урок 8. LinkedIn Outreach",
+     "titleEn": "Lesson 8. LinkedIn Outreach",
+     "description": "Практика: LinkedIn Outreach.",
+     "descriptionEn": "Practice: LinkedIn Outreach.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: LinkedIn Outreach.",
+     "weekGoalEn": "Practice: LinkedIn Outreach."
+    },
+    {
+     "id": "bb9",
+     "title": "Урок 9. Email Outreach",
+     "titleEn": "Lesson 9. Email Outreach",
+     "description": "Практика: Email Outreach.",
+     "descriptionEn": "Practice: Email Outreach.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Email Outreach.",
+     "weekGoalEn": "Practice: Email Outreach."
+    },
+    {
+     "id": "bb10",
+     "title": "Урок 10. Discovery Calls",
+     "titleEn": "Lesson 10. Discovery Calls",
+     "description": "Практика: Discovery Calls.",
+     "descriptionEn": "Practice: Discovery Calls.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Discovery Calls.",
+     "weekGoalEn": "Practice: Discovery Calls."
+    },
+    {
+     "id": "bb11",
+     "title": "Урок 11. Продажи",
+     "titleEn": "Lesson 11. Продажи",
+     "description": "Практика: Продажи.",
+     "descriptionEn": "Practice: Продажи.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Продажи.",
+     "weekGoalEn": "Practice: Продажи."
+    },
+    {
+     "id": "bb12",
+     "title": "Урок 12. Закрытие клиентов",
+     "titleEn": "Lesson 12. Закрытие клиентов",
+     "description": "Практика: Закрытие клиентов.",
+     "descriptionEn": "Practice: Закрытие клиентов.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Закрытие клиентов.",
+     "weekGoalEn": "Practice: Закрытие клиентов."
+    },
+    {
+     "id": "bb13",
+     "title": "Урок 13. Delivery",
+     "titleEn": "Lesson 13. Delivery",
+     "description": "Практика: Delivery.",
+     "descriptionEn": "Practice: Delivery.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Delivery.",
+     "weekGoalEn": "Practice: Delivery."
+    },
+    {
+     "id": "bb14",
+     "title": "Урок 14. Создание MVP",
+     "titleEn": "Lesson 14. Создание MVP",
+     "description": "Практика: Создание MVP.",
+     "descriptionEn": "Practice: Создание MVP.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Создание MVP.",
+     "weekGoalEn": "Practice: Создание MVP."
+    },
+    {
+     "id": "bb15",
+     "title": "Урок 15. Lovable",
+     "titleEn": "Lesson 15. Lovable",
+     "description": "Практика: Lovable.",
+     "descriptionEn": "Practice: Lovable.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Lovable.",
+     "weekGoalEn": "Practice: Lovable."
+    },
+    {
+     "id": "bb16",
+     "title": "Урок 16. Bolt",
+     "titleEn": "Lesson 16. Bolt",
+     "description": "Практика: Bolt.",
+     "descriptionEn": "Practice: Bolt.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Bolt.",
+     "weekGoalEn": "Practice: Bolt."
+    },
+    {
+     "id": "bb17",
+     "title": "Урок 17. Replit",
+     "titleEn": "Lesson 17. Replit",
+     "description": "Практика: Replit.",
+     "descriptionEn": "Practice: Replit.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Replit.",
+     "weekGoalEn": "Practice: Replit."
+    },
+    {
+     "id": "bb18",
+     "title": "Урок 18. Stripe",
+     "titleEn": "Lesson 18. Stripe",
+     "description": "Практика: Stripe.",
+     "descriptionEn": "Practice: Stripe.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Stripe.",
+     "weekGoalEn": "Practice: Stripe."
+    },
+    {
+     "id": "bb19",
+     "title": "Урок 19. Масштабирование",
+     "titleEn": "Lesson 19. Масштабирование",
+     "description": "Практика: Масштабирование.",
+     "descriptionEn": "Practice: Масштабирование.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Масштабирование.",
+     "weekGoalEn": "Practice: Масштабирование."
+    },
+    {
+     "id": "bb20",
+     "title": "Урок 20. Финальный запуск",
+     "titleEn": "Lesson 20. Финальный запуск",
+     "description": "Практика: Финальный запуск.",
+     "descriptionEn": "Practice: Финальный запуск.",
+     "duration": "40–50 мин",
+     "durationEn": "40–50 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Финальный запуск.",
+     "weekGoalEn": "Practice: Финальный запуск."
+    }
+   ],
+   "difficulty": 2,
+   "audienceLabelRu": "Для фрилансеров и агентств",
+   "audienceLabelEn": "For freelancers and agencies",
+   "status": "published"
+  },
+  {
+   "id": "voice-agents",
+   "slug": "voice-agents",
+   "title": "Голосовые роботы для бизнеса",
+   "titleEn": "Voice Agents for Business",
+   "shortDescription": "Приём звонков и запись клиентов без администратора. Курс в разработке.",
+   "shortDescriptionEn": "Call handling and booking without a receptionist. Course in development.",
+   "description": "Приём звонков и запись клиентов без администратора. Курс в разработке.",
+   "descriptionEn": "Call handling and booking without a receptionist. Course in development.",
+   "fullDescription": "Телефония, задержка ответа, перебивание, передача живому оператору и приёмка качества. Готовим запись.",
+   "fullDescriptionEn": "Telephony, latency, barge-in, human handoff and quality acceptance. Recording in progress.",
+   "duration": "10 уроков",
+   "durationEn": "10 lessons",
+   "price": 0,
+   "priceEur": 49,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": false,
+   "image": "https://images.unsplash.com/photo-1579762599946-9e2c1ee9dc5d?w=800&q=80",
+   "category": "Автоматизация",
+   "categoryEn": "Automation",
+   "level": "Pro",
+   "format": "async",
+   "delivery": "recorded",
+   "tools": [],
+   "toolsEn": [],
+   "skills": [],
+   "skillsEn": [],
+   "forAudience": [
+    "Фрилансеры",
+    "Внедренцы",
+    "Салоны и клиники"
+   ],
+   "forAudienceEn": [
+    "Freelancers",
+    "Integrators",
+    "Salons and clinics"
+   ],
+   "finalProject": "Голосовой агент для салона или клиники",
+   "finalProjectEn": "Voice agent for a salon or clinic",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Приём звонков",
+    "Запись клиентов",
+    "Передача оператору"
+   ],
+   "goalsEn": [
+    "Call handling",
+    "Client booking",
+    "Operator handoff"
+   ],
+   "lessons": [],
+   "status": "in-development",
+   "difficulty": 2,
+   "audienceLabelRu": "Для фрилансеров и внедренцев",
+   "audienceLabelEn": "For freelancers and integrators"
+  },
+  {
+   "id": "ai-for-developers",
+   "slug": "ai-for-developers",
+   "title": "AI для разработчиков",
+   "titleEn": "AI for Developers",
+   "shortDescription": "AI как инструмент разработки: агентная работа с кодом. Курс в разработке.",
+   "shortDescriptionEn": "AI as a development tool: agentic coding workflow. Course in development.",
+   "description": "AI как инструмент разработки: агентная работа с кодом. Курс в разработке.",
+   "descriptionEn": "AI as a development tool: agentic coding workflow. Course in development.",
+   "fullDescription": "Агентная разработка, ревью и тесты с AI, свои MCP-серверы под внутренние инструменты, безопасность и встраивание в CI.",
+   "fullDescriptionEn": "Agentic development, AI-assisted review and tests, your own MCP servers, security and CI integration.",
+   "duration": "12 уроков",
+   "durationEn": "12 lessons",
+   "price": 0,
+   "priceEur": 69,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": false,
+   "image": "/courses/ai-agent-engineer.png?v=2",
+   "category": "AI-агенты",
+   "categoryEn": "AI Agents",
+   "level": "Pro",
+   "format": "async",
+   "delivery": "recorded",
+   "tools": [],
+   "toolsEn": [],
+   "skills": [],
+   "skillsEn": [],
+   "forAudience": [
+    "Разработчики",
+    "Тимлиды"
+   ],
+   "forAudienceEn": [
+    "Developers",
+    "Tech leads"
+   ],
+   "finalProject": "Свой MCP-сервер под рабочие инструменты",
+   "finalProjectEn": "Your own MCP server for internal tooling",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Агентная разработка",
+    "Свои MCP-серверы",
+    "Встраивание в CI"
+   ],
+   "goalsEn": [
+    "Agentic development",
+    "Own MCP servers",
+    "CI integration"
+   ],
+   "lessons": [],
+   "status": "in-development",
+   "difficulty": 3,
+   "audienceLabelRu": "Для разработчиков",
+   "audienceLabelEn": "For developers"
+  }
+ ],
+ "freeTrialCourses": [
+  {
+   "id": "ai-start",
+   "slug": "ai-start",
+   "title": "AI Starter Week",
+   "titleEn": "AI Starter Week",
+   "shortDescription": "7 коротких уроков: основы AI, ChatGPT, промпты и первые шаги к заработку.",
+   "shortDescriptionEn": "7 short lessons: AI basics, ChatGPT, prompts and your first steps to earning with AI.",
+   "description": "7 коротких уроков: основы AI, ChatGPT, промпты и первые шаги к заработку.",
+   "descriptionEn": "7 short lessons: AI basics, ChatGPT, prompts and your first steps to earning with AI.",
+   "fullDescription": "AI Starter Week — бесплатная стартовая неделя для тех, кто только знакомится с AI. Вы поймёте, как работает искусственный интеллект, освоите ChatGPT, Claude, Gemini и Perplexity, научитесь писать промпты и увидите реальные сценарии для работы, учёбы и дохода.",
+   "fullDescriptionEn": "AI Starter Week is a free intro week for complete beginners. You will understand how AI works, master ChatGPT, Claude, Gemini and Perplexity, learn prompt basics and see real use cases for work, study and income.",
+   "duration": "7 уроков (10–20 минут)",
+   "durationEn": "7 lessons (10–20 min)",
+   "price": 0,
+   "priceEur": 0,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": true,
+   "image": "/courses/ai-start.png?v=2",
+   "category": "Старт",
+   "categoryEn": "Start",
+   "level": "Basic",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-1",
+   "tools": [
+    "ChatGPT",
+    "Claude",
+    "Gemini",
+    "Perplexity"
+   ],
+   "toolsEn": [
+    "ChatGPT",
+    "Claude",
+    "Gemini",
+    "Perplexity"
+   ],
+   "skills": [
+    "ChatGPT",
+    "Prompt Engineering",
+    "AI для учёбы и работы",
+    "AI для продуктивности"
+   ],
+   "skillsEn": [
+    "ChatGPT",
+    "Prompt Engineering",
+    "AI для учёбы и работы",
+    "AI для продуктивности"
+   ],
+   "forAudience": [
+    "Полных новичков в AI",
+    "Студентов и школьников",
+    "Фрилансеров и предпринимателей на старте",
+    "Маркетологов и менеджеров без технического бэка",
+    "Всех, кто хочет понять AI за 7 дней"
+   ],
+   "forAudienceEn": [
+    "Complete AI beginners",
+    "Students",
+    "Freelancers and early-stage entrepreneurs",
+    "Non-technical marketers and managers",
+    "Anyone who wants to understand AI in 7 days"
+   ],
+   "finalProject": "Личная дорожная карта AI-специалиста и настроенный AI-помощник под ваши задачи.",
+   "finalProjectEn": "Personal AI learning roadmap and an assistant configured for your tasks.",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Поймёт, что такое AI и как он меняет рынок",
+    "Создаст первые запросы в ChatGPT",
+    "Сравнит Claude, Gemini и Perplexity",
+    "Освоит базовый Prompt Engineering",
+    "Применит AI в работе и учёбе",
+    "Узнает способы монетизации AI-навыков",
+    "Составит личный план развития в AI"
+   ],
+   "goalsEn": [
+    "Understand what AI is and how it changes the market",
+    "Write your first ChatGPT prompts",
+    "Compare Claude, Gemini and Perplexity",
+    "Learn prompt engineering basics",
+    "Apply AI to work and study",
+    "Discover ways to monetize AI skills",
+    "Build a personal AI learning roadmap"
+   ],
+   "lessons": [
+    {
+     "id": "as1",
+     "title": "Урок 1. Что такое AI и почему он меняет мир",
+     "titleEn": "Lesson 1. What AI is and why it changes the world",
+     "description": "Изучаем основы искусственного интеллекта, возможности и реальные кейсы.",
+     "descriptionEn": "AI fundamentals, capabilities and real-world use cases.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Изучаем основы искусственного интеллекта, возможности и реальные кейсы.",
+     "weekGoalEn": "AI fundamentals, capabilities and real-world use cases."
+    },
+    {
+     "id": "as2",
+     "title": "Урок 2. Знакомство с ChatGPT",
+     "titleEn": "Lesson 2. Getting started with ChatGPT",
+     "description": "Создание первых запросов и работа с AI.",
+     "descriptionEn": "Writing your first prompts and working with AI.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Создание первых запросов и работа с AI.",
+     "weekGoalEn": "Writing your first prompts and working with AI."
+    },
+    {
+     "id": "as3",
+     "title": "Урок 3. Claude, Gemini и Perplexity",
+     "titleEn": "Lesson 3. Claude, Gemini and Perplexity",
+     "description": "Обзор лучших AI-инструментов 2026 года.",
+     "descriptionEn": "Overview of the best AI tools in 2026.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Обзор лучших AI-инструментов 2026 года.",
+     "weekGoalEn": "Overview of the best AI tools in 2026."
+    },
+    {
+     "id": "as4",
+     "title": "Урок 4. Как правильно общаться с AI",
+     "titleEn": "Lesson 4. How to communicate with AI effectively",
+     "description": "Основы Prompt Engineering.",
+     "descriptionEn": "Prompt Engineering fundamentals.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Основы Prompt Engineering.",
+     "weekGoalEn": "Prompt Engineering fundamentals."
+    },
+    {
+     "id": "as5",
+     "title": "Урок 5. AI для работы и учебы",
+     "titleEn": "Lesson 5. AI for work and study",
+     "description": "Практические сценарии использования.",
+     "descriptionEn": "Practical use cases.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практические сценарии использования.",
+     "weekGoalEn": "Practical use cases."
+    },
+    {
+     "id": "as6",
+     "title": "Урок 6. Как заработать на AI",
+     "titleEn": "Lesson 6. How to earn with AI",
+     "description": "Популярные способы монетизации навыков.",
+     "descriptionEn": "Popular ways to monetize AI skills.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Популярные способы монетизации навыков.",
+     "weekGoalEn": "Popular ways to monetize AI skills."
+    },
+    {
+     "id": "as7",
+     "title": "Урок 7. План развития AI-специалиста",
+     "titleEn": "Lesson 7. AI specialist development plan",
+     "description": "Построение личной дорожной карты обучения.",
+     "descriptionEn": "Building your personal learning roadmap.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Построение личной дорожной карты обучения.",
+     "weekGoalEn": "Building your personal learning roadmap."
+    }
+   ],
+   "courseIdea": "AI Starter Week — бесплатная стартовая неделя для тех, кто только знакомится с AI. Вы поймёте, как работает искусственный интеллект, освоите ChatGPT, Claude, Gemini и Perplexity, научитесь писать промпты и увидите реальные сценарии для работы, учёбы и дохода.",
+   "courseIdeaEn": "AI Starter Week is a free intro week for complete beginners. You will understand how AI works, master ChatGPT, Claude, Gemini and Perplexity, learn prompt basics and see real use cases for work, study and income.",
+   "difficulty": null,
+   "audienceLabelRu": "Для всех",
+   "audienceLabelEn": "For everyone",
+   "status": "published"
+  },
+  {
+   "id": "ai-for-productivity",
+   "slug": "ai-for-productivity",
+   "title": "AI for Productivity",
+   "titleEn": "AI for Productivity",
+   "shortDescription": "4 урока: AI для задач, документов, обучения и личного productivity-стека.",
+   "shortDescriptionEn": "4 lessons: AI for tasks, documents, learning and your personal productivity stack.",
+   "description": "4 урока: AI для задач, документов, обучения и личного productivity-стека.",
+   "descriptionEn": "4 lessons: AI for tasks, documents, learning and your personal productivity stack.",
+   "fullDescription": "AI for Productivity — короткий бесплатный курс о том, как встроить AI в ежедневную рутину: письма, документы, саммари, планирование и персональные workflow без кода.",
+   "fullDescriptionEn": "AI for Productivity is a free mini-course on embedding AI into daily work: email, docs, summaries, planning and personal workflows — no coding.",
+   "duration": "5 уроков (10–20 мин)",
+   "durationEn": "5 lessons (10–20 мин)",
+   "price": 0,
+   "priceEur": 0,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": true,
+   "image": "/courses/ai-for-productivity.png?v=2",
+   "category": "Продуктивность",
+   "categoryEn": "Productivity",
+   "level": "Basic",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-1",
+   "tools": [
+    "ChatGPT",
+    "Notion AI",
+    "Google Workspace"
+   ],
+   "toolsEn": [
+    "ChatGPT",
+    "Notion AI",
+    "Google Workspace"
+   ],
+   "skills": [
+    "Email drafting",
+    "Summarization",
+    "Planning with AI"
+   ],
+   "skillsEn": [
+    "Email drafting",
+    "Summarization",
+    "Planning with AI"
+   ],
+   "forAudience": [
+    "Офисных сотрудников и менеджеров",
+    "Фрилансеров с высокой нагрузкой",
+    "Консультантов и экспертов",
+    "Руководителей небольших команд",
+    "Всех, кто хочет экономить 1–2 часа в день"
+   ],
+   "forAudienceEn": [
+    "Office workers and managers",
+    "Busy freelancers",
+    "Consultants and experts",
+    "Small team leads",
+    "Anyone who wants to save 1–2 hours daily"
+   ],
+   "finalProject": "Personal productivity stack с 3 рабочими AI-workflow.",
+   "finalProjectEn": "Personal productivity stack with 3 working AI workflows.",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Настроит AI как личного помощника",
+    "Автоматизирует рутинные задачи",
+    "Будет быстро создавать документы и письма",
+    "Ускорит обучение новым навыкам",
+    "Соберёт личную AI-систему продуктивности"
+   ],
+   "goalsEn": [
+    "Set up AI as a personal assistant",
+    "Automate routine tasks",
+    "Create documents and emails faster",
+    "Learn new skills faster with AI",
+    "Build a personal AI productivity system"
+   ],
+   "lessons": [
+    {
+     "id": "ap1",
+     "title": "Урок 1. AI как личный помощник",
+     "titleEn": "Lesson 1. AI как личный помощник",
+     "description": "Практика: AI как личный помощник.",
+     "descriptionEn": "Practice: AI как личный помощник.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI как личный помощник.",
+     "weekGoalEn": "Practice: AI как личный помощник."
+    },
+    {
+     "id": "ap2",
+     "title": "Урок 2. AI для работы и бизнеса",
+     "titleEn": "Lesson 2. AI для работы и бизнеса",
+     "description": "Практика: AI для работы и бизнеса.",
+     "descriptionEn": "Practice: AI для работы и бизнеса.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для работы и бизнеса.",
+     "weekGoalEn": "Practice: AI для работы и бизнеса."
+    },
+    {
+     "id": "ap3",
+     "title": "Урок 3. AI для обучения",
+     "titleEn": "Lesson 3. AI для обучения",
+     "description": "Практика: AI для обучения.",
+     "descriptionEn": "Practice: AI для обучения.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: AI для обучения.",
+     "weekGoalEn": "Practice: AI для обучения."
+    },
+    {
+     "id": "ap4",
+     "title": "Урок 4. Экономия времени с AI",
+     "titleEn": "Lesson 4. Экономия времени с AI",
+     "description": "Практика: Экономия времени с AI.",
+     "descriptionEn": "Practice: Экономия времени с AI.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Экономия времени с AI.",
+     "weekGoalEn": "Practice: Экономия времени с AI."
+    },
+    {
+     "id": "ap5",
+     "title": "Урок 5. Личная AI-система продуктивности",
+     "titleEn": "Lesson 5. Личная AI-система продуктивности",
+     "description": "Практика: Личная AI-система продуктивности.",
+     "descriptionEn": "Practice: Личная AI-система продуктивности.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Практика: Личная AI-система продуктивности.",
+     "weekGoalEn": "Practice: Личная AI-система продуктивности."
+    }
+   ],
+   "courseIdea": "AI for Productivity — короткий бесплатный курс о том, как встроить AI в ежедневную рутину: письма, документы, саммари, планирование и персональные workflow без кода.",
+   "courseIdeaEn": "AI for Productivity is a free mini-course on embedding AI into daily work: email, docs, summaries, planning and personal workflows — no coding.",
+   "difficulty": null,
+   "audienceLabelRu": "Для всех",
+   "audienceLabelEn": "For everyone",
+   "status": "published"
+  },
+  {
+   "id": "first-automation-n8n",
+   "slug": "first-automation-n8n",
+   "title": "First Automation in n8n",
+   "titleEn": "First Automation in n8n",
+   "shortDescription": "5 уроков: первая автоматизация в n8n с Telegram и ChatGPT — без кода.",
+   "shortDescriptionEn": "5 lessons: your first n8n automation with Telegram and ChatGPT — no code.",
+   "description": "5 уроков: первая автоматизация в n8n с Telegram и ChatGPT — без кода.",
+   "descriptionEn": "5 lessons: your first n8n automation with Telegram and ChatGPT — no code.",
+   "fullDescription": "First Automation in n8n — бесплатный практический курс: от логики автоматизаций до первого workflow, Telegram-бота и AI-шага в n8n. Идеальный мост между «просто AI» и платными Pro-программами.",
+   "fullDescriptionEn": "First Automation in n8n is a free hands-on course from automation logic to your first workflow, Telegram bot and AI step in n8n.",
+   "duration": "5 уроков (10–20 минут)",
+   "durationEn": "5 lessons (10–20 min)",
+   "price": 0,
+   "priceEur": 0,
+   "oldPriceEur": null,
+   "badge": null,
+   "faq": null,
+   "isFreeTrial": true,
+   "image": "/courses/first-automation-n8n.png?v=2",
+   "category": "Автоматизация",
+   "categoryEn": "Automation",
+   "level": "Basic",
+   "format": "async",
+   "delivery": "recorded",
+   "stage": "stage-1",
+   "tools": [
+    "n8n",
+    "ChatGPT API",
+    "Google Sheets"
+   ],
+   "toolsEn": [
+    "n8n",
+    "ChatGPT API",
+    "Google Sheets"
+   ],
+   "skills": [
+    "Workflow basics",
+    "Triggers & actions",
+    "AI node integration"
+   ],
+   "skillsEn": [
+    "Workflow basics",
+    "Triggers & actions",
+    "AI node integration"
+   ],
+   "forAudience": [
+    "No-code новичков",
+    "Предпринимателей с ручными процессами",
+    "Ops- и office-менеджеров",
+    "SMM и маркетологов",
+    "Выпускников AI Starter Week"
+   ],
+   "forAudienceEn": [
+    "No-code beginners",
+    "Entrepreneurs with manual processes",
+    "Ops and office managers",
+    "SMM and marketers",
+    "AI Starter Week graduates"
+   ],
+   "finalProject": "Рабочий n8n-workflow с AI-шагом и уведомлениями.",
+   "finalProjectEn": "Working n8n workflow with an AI step and notifications.",
+   "hasHomework": false,
+   "catalogHidden": false,
+   "goals": [
+    "Поймёт логику автоматизаций",
+    "Освоит интерфейс n8n",
+    "Создаст Telegram-бота с AI",
+    "Подключит ChatGPT к workflow",
+    "Запустит финальную автоматизацию"
+   ],
+   "goalsEn": [
+    "Understand automation logic",
+    "Learn the n8n interface",
+    "Build a Telegram bot with AI",
+    "Connect ChatGPT to a workflow",
+    "Ship a complete automation"
+   ],
+   "lessons": [
+    {
+     "id": "fn1",
+     "title": "Урок 1. Что такое автоматизация",
+     "titleEn": "Lesson 1. What automation is",
+     "description": "Логика работы автоматизаций.",
+     "descriptionEn": "How automations work.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Логика работы автоматизаций.",
+     "weekGoalEn": "How automations work."
+    },
+    {
+     "id": "fn2",
+     "title": "Урок 2. Интерфейс n8n",
+     "titleEn": "Lesson 2. n8n interface",
+     "description": "Создание первого workflow.",
+     "descriptionEn": "Building your first workflow.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Создание первого workflow.",
+     "weekGoalEn": "Building your first workflow."
+    },
+    {
+     "id": "fn3",
+     "title": "Урок 3. Telegram + AI",
+     "titleEn": "Lesson 3. Telegram + AI",
+     "description": "Создаем первого Telegram-бота.",
+     "descriptionEn": "Building your first Telegram bot.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Создаем первого Telegram-бота.",
+     "weekGoalEn": "Building your first Telegram bot."
+    },
+    {
+     "id": "fn4",
+     "title": "Урок 4. AI Agent в n8n",
+     "titleEn": "Lesson 4. AI Agent in n8n",
+     "description": "Подключаем ChatGPT к автоматизации.",
+     "descriptionEn": "Connecting ChatGPT to your automation.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Подключаем ChatGPT к автоматизации.",
+     "weekGoalEn": "Connecting ChatGPT to your automation."
+    },
+    {
+     "id": "fn5",
+     "title": "Урок 5. Финальный проект",
+     "titleEn": "Lesson 5. Capstone project",
+     "description": "Создаем полноценную автоматизацию.",
+     "descriptionEn": "Building a complete automation.",
+     "duration": "10–20 мин",
+     "durationEn": "10–20 min",
+     "videoUrl": "",
+     "weekGoal": "Создаем полноценную автоматизацию.",
+     "weekGoalEn": "Building a complete automation."
+    }
+   ],
+   "courseIdea": "First Automation in n8n — бесплатный практический курс: от логики автоматизаций до первого workflow, Telegram-бота и AI-шага в n8n. Идеальный мост между «просто AI» и платными Pro-программами.",
+   "courseIdeaEn": "First Automation in n8n is a free hands-on course from automation logic to your first workflow, Telegram bot and AI step in n8n.",
+   "difficulty": null,
+   "audienceLabelRu": "Для всех",
+   "audienceLabelEn": "For everyone",
+   "status": "published"
+  }
+ ]
+}

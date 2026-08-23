@@ -1,0 +1,19 @@
+{
+ "LEGAL_ENTITY": {
+  "draft": true,
+  "legalName": "TODO: Полное наименование юрлица / ФОП",
+  "legalNameEn": "TODO: Full legal entity name",
+  "registrationCountry": "TODO: страна регистрации (например, Україна / Estonia / …)",
+  "registrationNumber": "TODO: ЕГРПОУ / реєстраційний номер / Company ID",
+  "taxId": "TODO: ІПН / VAT / Tax ID",
+  "address": "TODO: юридический адрес (улица, город, индекс, страна)",
+  "emailClaims": "hello@aiinsider.com",
+  "emailPrivacy": "hello@aiinsider.com",
+  "telegram": "@vladyslavarcher",
+  "bankName": "TODO: название банка",
+  "iban": "TODO: IBAN",
+  "bic": "TODO: SWIFT/BIC",
+  "governingLaw": "TODO: применимое право и суд (юрисдикция)",
+  "updatedAt": "2026-07-11"
+ }
+}

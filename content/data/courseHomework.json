@@ -1,0 +1,1907 @@
+{
+ "ACADEMY_GRADING_STANDARD": {
+  "ru": {
+   "title": "Стандарт проверки AI Insider Academy",
+   "levels": [
+    {
+     "name": "Выполнено",
+     "desc": "Задание сдано, структура есть, результат можно открыть и проверить."
+    },
+    {
+     "name": "Хорошо",
+     "desc": "Задание выполнено полностью, результат логичный, есть практическое применение, студент понимает, что сделал."
+    },
+    {
+     "name": "Отлично",
+     "desc": "Результат можно показать клиенту или использовать в проекте; аккуратная структура, самостоятельные улучшения, понятна бизнес-ценность."
+    }
+   ]
+  },
+  "en": {
+   "title": "AI Insider Academy grading standard",
+   "levels": [
+    {
+     "name": "Complete",
+     "desc": "Assignment submitted, structure present, result can be opened and reviewed."
+    },
+    {
+     "name": "Good",
+     "desc": "Fully completed, logical result, practical application, student understands what they built."
+    },
+    {
+     "name": "Excellent",
+     "desc": "Result is client-ready or project-ready; clean structure, own improvements, clear business value."
+    }
+   ]
+  }
+ },
+ "DEFAULT_LESSON_HOMEWORK": {
+  "tasks": [
+   "Повторите практическую демонстрацию из видео на своей теме/нише"
+  ],
+  "tasksEn": [
+   "Repeat the practical demo from the video in your own niche/topic"
+  ],
+  "deliverables": [
+   "Сохраните результат и добавьте в папку итогового проекта курса"
+  ],
+  "deliverablesEn": [
+   "Save the result and add it to your course capstone folder"
+  ],
+  "criteria": [
+   "Результат открыт, понятен и применим на практике; можно объяснить связь с финальным проектом"
+  ],
+  "criteriaEn": [
+   "Result is clear, practical, and linked to the capstone project"
+  ]
+ },
+ "HOMEWORK_BY_COURSE": {
+  "ai-user-pro": {
+   "1": {
+    "tasks": [
+     "Протестировать минимум 5 AI-инструментов",
+     "Описать, для каких задач подходит каждый",
+     "Выбрать 3 инструмента для постоянного использования",
+     "Создать личную таблицу AI Toolkit"
+    ],
+    "tasksEn": [
+     "Test at least 5 AI tools",
+     "Describe what each tool is best for",
+     "Pick 3 tools for regular use",
+     "Create a personal AI Toolkit table"
+    ],
+    "deliverables": [
+     "Таблица с инструментами",
+     "Категории: текст, поиск, визуал, документы, продуктивность",
+     "Краткое описание каждого инструмента",
+     "Личный вывод: какие инструменты оставляете"
+    ],
+    "deliverablesEn": [
+     "Tool table",
+     "Categories: text, search, visual, docs, productivity",
+     "Short description per tool",
+     "Personal takeaway: tools you keep"
+    ],
+    "criteria": [
+     "Минимум 5 инструментов",
+     "Каждый привязан к конкретной задаче",
+     "Понятно, зачем нужен каждый сервис",
+     "Нет хаотичного списка без структуры"
+    ],
+    "criteriaEn": [
+     "At least 5 tools",
+     "Each tied to a specific task",
+     "Clear why each service is needed",
+     "Structured, not a random list"
+    ]
+   },
+   "2": {
+    "tasks": [
+     "Создать библиотеку из минимум 15 промптов: 3 для текста, 3 для анализа, 3 для планирования, 3 для идей, 3 для работы/учёбы"
+    ],
+    "tasksEn": [
+     "Build a library of at least 15 prompts: 3 text, 3 analysis, 3 planning, 3 ideas, 3 work/study"
+    ],
+    "deliverables": [
+     "База в Notion, Google Docs или Sheets",
+     "У каждого промпта: название, задача, промпт, пример результата"
+    ],
+    "deliverablesEn": [
+     "Database in Notion, Google Docs or Sheets",
+     "Each prompt: name, task, prompt text, sample output"
+    ],
+    "criteria": [
+     "Промпты не слишком короткие",
+     "Есть роль, контекст, задача и формат",
+     "Протестировано минимум 5 промптов",
+     "Улучшенная версия минимум 3 промптов"
+    ],
+    "criteriaEn": [
+     "Prompts are not too short",
+     "Role, context, task, and format included",
+     "At least 5 prompts tested",
+     "Improved version of at least 3 prompts"
+    ]
+   },
+   "3": {
+    "tasks": [
+     "Создать 5 AI-шаблонов: план дня, план недели, разбор большой задачи, подготовка к встрече, анализ недели"
+    ],
+    "tasksEn": [
+     "Create 5 AI templates: daily plan, weekly plan, big task breakdown, meeting prep, weekly review"
+    ],
+    "deliverables": [
+     "Готовые шаблоны",
+     "Инструкция, когда использовать",
+     "Пример использования каждого"
+    ],
+    "deliverablesEn": [
+     "Ready templates",
+     "When-to-use instructions",
+     "Example use for each"
+    ],
+    "criteria": [
+     "Шаблоны можно использовать повторно",
+     "Реально помогают организовать задачи",
+     "Протестировано минимум 2 шаблона на реальных задачах"
+    ],
+    "criteriaEn": [
+     "Templates are reusable",
+     "They actually organize tasks",
+     "At least 2 tested on real tasks"
+    ]
+   },
+   "4": {
+    "tasks": [
+     "Сделать мини-исследование на выбранную тему"
+    ],
+    "tasksEn": [
+     "Complete a mini-research project on a chosen topic"
+    ],
+    "deliverables": [
+     "Тема и цель",
+     "Основные вопросы",
+     "Найденная информация",
+     "Сравнение вариантов",
+     "Выводы и рекомендации"
+    ],
+    "deliverablesEn": [
+     "Topic and goal",
+     "Key questions",
+     "Findings",
+     "Option comparison",
+     "Conclusions and recommendations"
+    ],
+    "criteria": [
+     "Понятная структура",
+     "Выводы не случайные",
+     "Сравнение минимум 2–3 вариантов",
+     "Факты отделены от предположений"
+    ],
+    "criteriaEn": [
+     "Clear structure",
+     "Conclusions are reasoned",
+     "Compare at least 2–3 options",
+     "Facts separated from assumptions"
+    ]
+   },
+   "5": {
+    "tasks": [
+     "Создать текстовый пакет: деловое письмо, пост, описание услуги, сообщение клиенту, инструкция/чек-лист"
+    ],
+    "tasksEn": [
+     "Create a text pack: business email, post, service description, client message, guide/checklist"
+    ],
+    "deliverables": [
+     "5 готовых текстов в одном документе или папке"
+    ],
+    "deliverablesEn": [
+     "5 finished texts in one doc or folder"
+    ],
+    "criteria": [
+     "Единый понятный стиль",
+     "Нет «роботного» AI-языка",
+     "Тексты можно реально использовать",
+     "Финальная ручная редактура"
+    ],
+    "criteriaEn": [
+     "Consistent clear style",
+     "No robotic AI tone",
+     "Texts are usable as-is",
+     "Final manual edit done"
+    ]
+   },
+   "6": {
+    "tasks": [
+     "Создать визуальный пакет: 3 AI-изображения, 1 обложка, 1 баннер, мини-презентация 5–7 слайдов"
+    ],
+    "tasksEn": [
+     "Create visual pack: 3 AI images, 1 cover, 1 banner, 5–7 slide mini-deck"
+    ],
+    "deliverables": [
+     "Изображения и обложка",
+     "Баннер",
+     "Презентация со структурой слайдов"
+    ],
+    "deliverablesEn": [
+     "Images and cover",
+     "Banner",
+     "Presentation with slide outline"
+    ],
+    "criteria": [
+     "Визуалы связаны одной темой",
+     "Понятный стиль",
+     "Изображения не случайные",
+     "Презентация не перегружена текстом"
+    ],
+    "criteriaEn": [
+     "Visuals share one theme",
+     "Clear style",
+     "Images feel intentional",
+     "Deck is not text-heavy"
+    ]
+   },
+   "7": {
+    "tasks": [
+     "Создать карту AI-внедрения для работы или бизнеса"
+    ],
+    "tasksEn": [
+     "Create an AI adoption map for work or business"
+    ],
+    "deliverables": [
+     "Список процессов",
+     "Проблема каждого",
+     "AI-решение и инструменты",
+     "Ожидаемый результат",
+     "Экономия времени"
+    ],
+    "deliverablesEn": [
+     "Process list",
+     "Problem per process",
+     "AI solution and tools",
+     "Expected outcome",
+     "Time saved"
+    ],
+    "criteria": [
+     "Минимум 5 процессов",
+     "AI решает задачу, а не «ради AI»",
+     "Понятная польза",
+     "Можно объяснить, зачем внедрять"
+    ],
+    "criteriaEn": [
+     "At least 5 processes",
+     "AI solves a real problem",
+     "Clear benefit",
+     "Can explain why to adopt"
+    ]
+   },
+   "8": {
+    "tasks": [],
+    "tasksEn": [],
+    "deliverables": [
+     "AI Toolkit",
+     "Библиотека промптов",
+     "Шаблоны продуктивности",
+     "Шаблоны текстов",
+     "Процесс исследования",
+     "Визуальный пакет",
+     "Карта AI-внедрения"
+    ],
+    "deliverablesEn": [
+     "AI Toolkit",
+     "Prompt library",
+     "Productivity templates",
+     "Text templates",
+     "Research workflow",
+     "Visual pack",
+     "AI adoption map"
+    ],
+    "criteria": [
+     "Система собрана и структурирована",
+     "Все блоки связаны",
+     "Можно показать на защите"
+    ],
+    "criteriaEn": [
+     "System is assembled and structured",
+     "All blocks connected",
+     "Ready to present"
+    ],
+    "capstone": true,
+    "title": "Personal AI Operating System",
+    "titleEn": "Personal AI Operating System",
+    "defense": [
+     "Как использует систему",
+     "Какие задачи ускоряет",
+     "Какие инструменты выбрал",
+     "Какие шаблоны создал",
+     "Какой результат получил"
+    ],
+    "defenseEn": [
+     "How you use the system",
+     "Tasks it speeds up",
+     "Tools chosen",
+     "Templates created",
+     "Results achieved"
+    ]
+   }
+  },
+  "ai-content-creator": {
+   "1": {
+    "tasks": [
+     "Создать основу контент-проекта: ниша, аудитория, позиционирование, tone of voice, 5–7 рубрик, 30 тем"
+    ],
+    "tasksEn": [
+     "Build content foundation: niche, audience, positioning, tone of voice, 5–7 rubrics, 30 topics"
+    ],
+    "deliverables": [
+     "Документ с фундаментом проекта"
+    ],
+    "deliverablesEn": [
+     "Project foundation document"
+    ],
+    "criteria": [
+     "Ниша понятна",
+     "Аудитория описана конкретно",
+     "Рубрики не дублируют друг друга",
+     "Темы можно превратить в публикации"
+    ],
+    "criteriaEn": [
+     "Niche is clear",
+     "Audience is specific",
+     "Rubrics don’t overlap",
+     "Topics are publishable"
+    ]
+   },
+   "2": {
+    "tasks": [
+     "Создать 10 хуков, 5 постов, 5 сценариев коротких видео, контент-план на 30 дней"
+    ],
+    "tasksEn": [
+     "Create 10 hooks, 5 posts, 5 short video scripts, 30-day content plan"
+    ],
+    "deliverables": [
+     "Файл с хуками, постами, сценариями",
+     "Контент-календарь на месяц"
+    ],
+    "deliverablesEn": [
+     "Hooks, posts, scripts file",
+     "Monthly content calendar"
+    ],
+    "criteria": [
+     "Хуки цепляют внимание",
+     "Посты не одинаковые",
+     "Сценарии подходят для коротких видео",
+     "План сбалансирован по рубрикам"
+    ],
+    "criteriaEn": [
+     "Hooks grab attention",
+     "Posts vary in format",
+     "Scripts fit short video",
+     "Plan balanced across rubrics"
+    ]
+   },
+   "3": {
+    "tasks": [
+     "Создать визуальный стиль: moodboard, палитра, 3 обложки, 5 визуалов, 3 шаблона Canva"
+    ],
+    "tasksEn": [
+     "Create visual style: moodboard, palette, 3 covers, 5 visuals, 3 Canva templates"
+    ],
+    "deliverables": [
+     "Moodboard и палитра",
+     "Обложки и визуалы",
+     "Canva-шаблоны"
+    ],
+    "deliverablesEn": [
+     "Moodboard and palette",
+     "Covers and visuals",
+     "Canva templates"
+    ],
+    "criteria": [
+     "Визуалы как один бренд",
+     "Нет визуального хаоса",
+     "Шаблоны переиспользуемы",
+     "Стиль подходит теме"
+    ],
+    "criteriaEn": [
+     "Visuals feel like one brand",
+     "No visual chaos",
+     "Templates reusable",
+     "Style fits the topic"
+    ]
+   },
+   "4": {
+    "tasks": [
+     "Создать 3 коротких видео: образовательное, экспертное, продающее/прогревающее"
+    ],
+    "tasksEn": [
+     "Create 3 short videos: educational, expert, sales/warm-up"
+    ],
+    "deliverables": [
+     "3 готовых или почти готовых ролика",
+     "Сценарии к каждому"
+    ],
+    "deliverablesEn": [
+     "3 finished or near-finished clips",
+     "Script for each"
+    ],
+    "criteria": [
+     "У каждого видео есть хук",
+     "Ролик не затянут",
+     "Понятная мысль",
+     "Готово к публикации"
+    ],
+    "criteriaEn": [
+     "Each video has a hook",
+     "Not too long",
+     "Clear message",
+     "Publication-ready"
+    ]
+   },
+   "5": {
+    "tasks": [
+     "Создать серию из 7 коротких видео"
+    ],
+    "tasksEn": [
+     "Create a series of 7 short videos"
+    ],
+    "deliverables": [
+     "7 тем, 7 сценариев, 7 хуков",
+     "Визуальный стиль",
+     "План публикации"
+    ],
+    "deliverablesEn": [
+     "7 topics, 7 scripts, 7 hooks",
+     "Visual style",
+     "Publishing plan"
+    ],
+    "criteria": [
+     "Серия связана одной идеей",
+     "Ролики не повторяют друг друга",
+     "Логика публикации понятна",
+     "Каждый ролик можно снять/сгенерировать"
+    ],
+    "criteriaEn": [
+     "Series shares one idea",
+     "Videos don’t repeat",
+     "Clear publishing logic",
+     "Each clip is producible"
+    ]
+   },
+   "6": {
+    "tasks": [
+     "Создать AI Content Machine"
+    ],
+    "tasksEn": [
+     "Build an AI Content Machine"
+    ],
+    "deliverables": [
+     "База идей",
+     "Статусы контента",
+     "Шаблоны промптов",
+     "Контент-календарь",
+     "Процесс от идеи до публикации"
+    ],
+    "deliverablesEn": [
+     "Idea bank",
+     "Content statuses",
+     "Prompt templates",
+     "Content calendar",
+     "Idea-to-publish workflow"
+    ],
+    "criteria": [
+     "Система понятна",
+     "Можно добавлять идеи",
+     "Виден этап каждого материала",
+     "Процесс повторяется еженедельно"
+    ],
+    "criteriaEn": [
+     "System is clear",
+     "New ideas can be added",
+     "Stage of each piece is visible",
+     "Process repeats weekly"
+    ]
+   },
+   "7": {
+    "tasks": [
+     "Создать контент-воронку"
+    ],
+    "tasksEn": [
+     "Build a content funnel"
+    ],
+    "deliverables": [
+     "Лид-магнит",
+     "5 прогревающих постов",
+     "3 продающих поста",
+     "CTA",
+     "Путь подписчика до заявки"
+    ],
+    "deliverablesEn": [
+     "Lead magnet",
+     "5 warm-up posts",
+     "3 sales posts",
+     "CTA",
+     "Subscriber path to application"
+    ],
+    "criteria": [
+     "Оффер понятен",
+     "Контент не агрессивно продаёт",
+     "Есть логика прогрева",
+     "Понятно, что делает подписчик"
+    ],
+    "criteriaEn": [
+     "Offer is clear",
+     "Content isn’t overly pushy",
+     "Warm-up logic exists",
+     "Clear subscriber action"
+    ]
+   },
+   "8": {
+    "tasks": [],
+    "tasksEn": [],
+    "deliverables": [
+     "Позиционирование",
+     "Аудитория",
+     "Рубрики",
+     "Контент-план",
+     "Визуальный стиль",
+     "10 постов",
+     "7 видео",
+     "Воронка",
+     "Система производства"
+    ],
+    "deliverablesEn": [
+     "Positioning",
+     "Audience",
+     "Rubrics",
+     "Content plan",
+     "Visual style",
+     "10 posts",
+     "7 videos",
+     "Funnel",
+     "Production system"
+    ],
+    "criteria": [
+     "Бренд собран целиком",
+     "Готов к регулярным публикациям"
+    ],
+    "criteriaEn": [
+     "Brand fully assembled",
+     "Ready for regular publishing"
+    ],
+    "capstone": true,
+    "title": "AI Content Brand",
+    "titleEn": "AI Content Brand",
+    "defense": [
+     "Какой бренд создан",
+     "Кому он нужен",
+     "Какой контент публикует",
+     "Как создаёт материалы регулярно",
+     "Как контент ведёт к заявкам/продажам"
+    ],
+    "defenseEn": [
+     "Brand created",
+     "Who it serves",
+     "Content to publish",
+     "Regular production process",
+     "Path to leads/sales"
+    ]
+   }
+  },
+  "no-code-automation": {
+   "1": {
+    "tasks": [
+     "Выбрать один реальный процесс и описать его"
+    ],
+    "tasksEn": [
+     "Pick one real process and document it"
+    ],
+    "deliverables": [
+     "Название",
+     "Входные данные",
+     "Действия",
+     "Участники",
+     "Инструменты",
+     "Ручные шаги",
+     "Точки автоматизации"
+    ],
+    "deliverablesEn": [
+     "Name",
+     "Inputs",
+     "Actions",
+     "Stakeholders",
+     "Tools",
+     "Manual steps",
+     "Automation points"
+    ],
+    "criteria": [
+     "Процесс понятен",
+     "Шаги последовательны",
+     "Видно, где теряется время",
+     "Минимум 3 точки автоматизации"
+    ],
+    "criteriaEn": [
+     "Process is clear",
+     "Steps are sequential",
+     "Time waste is visible",
+     "At least 3 automation points"
+    ]
+   },
+   "2": {
+    "tasks": [
+     "Создать workflow: форма → Google Sheets → Telegram-уведомление"
+    ],
+    "tasksEn": [
+     "Build workflow: form → Google Sheets → Telegram notification"
+    ],
+    "deliverables": [
+     "Скриншот или экспорт n8n workflow",
+     "Тестовая строка в таблице"
+    ],
+    "deliverablesEn": [
+     "n8n workflow screenshot or export",
+     "Test row in spreadsheet"
+    ],
+    "criteria": [
+     "Данные из формы попадают в таблицу",
+     "Telegram получает уведомление",
+     "Поля передаются корректно",
+     "Workflow можно повторно запустить"
+    ],
+    "criteriaEn": [
+     "Form data lands in sheet",
+     "Telegram gets notification",
+     "Fields mapped correctly",
+     "Workflow rerunnable"
+    ]
+   },
+   "3": {
+    "tasks": [
+     "Добавить условия в workflow (IF-логика, минимум 2 ветки)"
+    ],
+    "tasksEn": [
+     "Add conditions to workflow (IF logic, at least 2 branches)"
+    ],
+    "deliverables": [
+     "Обновлённый workflow с ветвлением",
+     "Примеры тестов для каждой ветки"
+    ],
+    "deliverablesEn": [
+     "Updated workflow with branching",
+     "Test examples per branch"
+    ],
+    "criteria": [
+     "Есть IF-логика",
+     "Минимум 2 ветки",
+     "Данные фильтруются корректно",
+     "Ошибки не ломают процесс"
+    ],
+    "criteriaEn": [
+     "IF logic present",
+     "At least 2 branches",
+     "Data filtered correctly",
+     "Errors don’t break the flow"
+    ]
+   },
+   "4": {
+    "tasks": [
+     "Подключить внешний сервис через API (HTTP Request)"
+    ],
+    "tasksEn": [
+     "Connect an external service via API (HTTP Request)"
+    ],
+    "deliverables": [
+     "GET или POST",
+     "Endpoint, headers, body",
+     "Ответ используется в workflow",
+     "Тестовый пример"
+    ],
+    "deliverablesEn": [
+     "GET or POST",
+     "Endpoint, headers, body",
+     "Response used downstream",
+     "Test example"
+    ],
+    "criteria": [
+     "API-запрос работает",
+     "Понимание endpoint/headers/body",
+     "Ответ используется дальше",
+     "Есть тест"
+    ],
+    "criteriaEn": [
+     "API call works",
+     "Understands endpoint/headers/body",
+     "Response used downstream",
+     "Test included"
+    ]
+   },
+   "5": {
+    "tasks": [
+     "Создать AI-обработку заявки: категория, приоритет, summary, запись, уведомление"
+    ],
+    "tasksEn": [
+     "Build AI lead processing: category, priority, summary, save, notify"
+    ],
+    "deliverables": [
+     "Workflow с AI-блоком",
+     "Пример структурированного ответа AI"
+    ],
+    "deliverablesEn": [
+     "Workflow with AI block",
+     "Sample structured AI output"
+    ],
+    "criteria": [
+     "AI возвращает структурированный результат",
+     "Категории понятны",
+     "Результат в таблице",
+     "Уведомление с summary"
+    ],
+    "criteriaEn": [
+     "AI returns structured output",
+     "Categories are clear",
+     "Result saved to sheet",
+     "Notification includes summary"
+    ]
+   },
+   "6": {
+    "tasks": [
+     "Создать автоматизацию для одного отдела (продажи, маркетинг, поддержка, HR, контент)"
+    ],
+    "tasksEn": [
+     "Build automation for one department (sales, marketing, support, HR, content)"
+    ],
+    "deliverables": [
+     "Workflow минимум 5 шагов",
+     "Интеграция с таблицей/CRM",
+     "Уведомление",
+     "AI или условия"
+    ],
+    "deliverablesEn": [
+     "Workflow with 5+ steps",
+     "Sheet/CRM integration",
+     "Notification",
+     "AI or conditions"
+    ],
+    "criteria": [
+     "Решает реальную задачу",
+     "Минимум 5 шагов",
+     "Есть интеграция",
+     "Есть уведомление и логика"
+    ],
+    "criteriaEn": [
+     "Solves a real problem",
+     "At least 5 steps",
+     "Integration present",
+     "Notification and logic included"
+    ]
+   },
+   "7": {
+    "tasks": [
+     "Улучшить workflow: ошибки, логирование, fallback, именование nodes, документация"
+    ],
+    "tasksEn": [
+     "Improve workflow: errors, logging, fallback, node naming, documentation"
+    ],
+    "deliverables": [
+     "Обновлённый workflow",
+     "Таблица логов",
+     "Документ «как работает»"
+    ],
+    "deliverablesEn": [
+     "Updated workflow",
+     "Log table",
+     "How-it-works doc"
+    ],
+    "criteria": [
+     "Ошибки не ломают процесс",
+     "Есть логи",
+     "Понятно, что делает каждый node",
+     "Другой человек разберётся"
+    ],
+    "criteriaEn": [
+     "Errors don’t break flow",
+     "Logs exist",
+     "Each node is clear",
+     "Another person can understand it"
+    ]
+   },
+   "8": {
+    "tasks": [],
+    "tasksEn": [],
+    "deliverables": [
+     "Схема процесса",
+     "n8n workflow",
+     "AI-блок",
+     "Sheets/CRM",
+     "Telegram/email",
+     "Обработка ошибок",
+     "Логирование",
+     "Документация",
+     "Demo"
+    ],
+    "deliverablesEn": [
+     "Process diagram",
+     "n8n workflow",
+     "AI block",
+     "Sheets/CRM",
+     "Telegram/email",
+     "Error handling",
+     "Logging",
+     "Documentation",
+     "Demo"
+    ],
+    "criteria": [
+     "Система рабочая и задокументирована"
+    ],
+    "criteriaEn": [
+     "System works and is documented"
+    ],
+    "capstone": true,
+    "title": "Business Automation System",
+    "titleEn": "Business Automation System",
+    "defense": [
+     "Какую проблему решает",
+     "Как работало вручную",
+     "Как работает сейчас",
+     "Какие инструменты",
+     "Что при ошибке",
+     "Бизнес-результат"
+    ],
+    "defenseEn": [
+     "Problem solved",
+     "Manual process before",
+     "How it works now",
+     "Tools used",
+     "Error behavior",
+     "Business outcome"
+    ]
+   }
+  },
+  "ai-chatbot-developer": {
+   "1": {
+    "tasks": [
+     "Создать концепцию чатбота: ниша, цель, аудитория, сценарии, карта диалога, данные, бизнес-результат"
+    ],
+    "tasksEn": [
+     "Create chatbot concept: niche, goal, audience, scenarios, dialog map, data, business outcome"
+    ],
+    "deliverables": [
+     "Документ концепции",
+     "Карта диалогов"
+    ],
+    "deliverablesEn": [
+     "Concept doc",
+     "Dialog map"
+    ],
+    "criteria": [
+     "Бот решает конкретную задачу",
+     "Сценарии понятны",
+     "Есть fallback",
+     "Есть передача менеджеру"
+    ],
+    "criteriaEn": [
+     "Bot solves a specific task",
+     "Scenarios are clear",
+     "Fallback exists",
+     "Manager handoff planned"
+    ]
+   },
+   "2": {
+    "tasks": [
+     "Создать Telegram-бота: приветствие, меню, сбор имени и контакта, сохранение, уведомление админу"
+    ],
+    "tasksEn": [
+     "Build Telegram bot: greeting, menu, name/contact capture, save, admin notification"
+    ],
+    "deliverables": [
+     "Рабочий бот",
+     "Скриншоты диалога",
+     "Пример сохранённых данных"
+    ],
+    "deliverablesEn": [
+     "Working bot",
+     "Dialog screenshots",
+     "Sample saved data"
+    ],
+    "criteria": [
+     "Бот работает в Telegram",
+     "Данные сохраняются",
+     "Админ получает уведомление",
+     "Пользователь понимает следующий шаг"
+    ],
+    "criteriaEn": [
+     "Bot works in Telegram",
+     "Data is saved",
+     "Admin gets notification",
+     "User knows next step"
+    ]
+   },
+   "3": {
+    "tasks": [
+     "Подключить AI: системный промпт, роль, ограничения, fallback"
+    ],
+    "tasksEn": [
+     "Connect AI: system prompt, role, constraints, fallback"
+    ],
+    "deliverables": [
+     "Системный промпт",
+     "Примеры 5–10 диалогов"
+    ],
+    "deliverablesEn": [
+     "System prompt",
+     "5–10 sample dialogs"
+    ],
+    "criteria": [
+     "Есть системный промпт",
+     "Ответы в нужном стиле",
+     "Не слишком длинные",
+     "Fallback для непонятных вопросов"
+    ],
+    "criteriaEn": [
+     "System prompt exists",
+     "Replies match style",
+     "Not too long",
+     "Fallback for unclear questions"
+    ]
+   },
+   "4": {
+    "tasks": [
+     "Добавить память: user ID, имя, история, статус, персональный ответ"
+    ],
+    "tasksEn": [
+     "Add memory: user ID, name, history, status, personalized replies"
+    ],
+    "deliverables": [
+     "Таблица/БД профилей",
+     "Пример повторного диалога"
+    ],
+    "deliverablesEn": [
+     "Profile table/DB",
+     "Repeat user dialog example"
+    ],
+    "criteria": [
+     "Узнаёт повторного пользователя",
+     "Использует сохранённые данные",
+     "Обновляет профиль",
+     "Не путает пользователей"
+    ],
+    "criteriaEn": [
+     "Recognizes returning user",
+     "Uses saved data",
+     "Updates profile",
+     "Doesn’t mix users"
+    ]
+   },
+   "5": {
+    "tasks": [
+     "Создать бота по FAQ или документу"
+    ],
+    "tasksEn": [
+     "Build bot from FAQ or document"
+    ],
+    "deliverables": [
+     "Подготовленная база знаний",
+     "Примеры ответов по материалам"
+    ],
+    "deliverablesEn": [
+     "Prepared knowledge base",
+     "Sample answers from materials"
+    ],
+    "criteria": [
+     "База подготовлена",
+     "Ответы по материалам",
+     "Fallback если ответа нет",
+     "Ответы пригодны для клиентов"
+    ],
+    "criteriaEn": [
+     "KB prepared",
+     "Answers from materials",
+     "Fallback when no answer",
+     "Client-ready replies"
+    ]
+   },
+   "6": {
+    "tasks": [
+     "Подключить бота к таблице/CRM: заявка, статус, уведомление, summary, follow-up"
+    ],
+    "tasksEn": [
+     "Connect bot to sheet/CRM: lead, status, notification, summary, follow-up"
+    ],
+    "deliverables": [
+     "Workflow интеграции",
+     "Пример заявки в таблице"
+    ],
+    "deliverablesEn": [
+     "Integration workflow",
+     "Sample lead in sheet"
+    ],
+    "criteria": [
+     "Заявка не теряется",
+     "Менеджер получает понятное уведомление",
+     "Данные структурированы",
+     "Клиент получает подтверждение"
+    ],
+    "criteriaEn": [
+     "Lead not lost",
+     "Manager gets clear alert",
+     "Structured data",
+     "Client gets confirmation"
+    ]
+   },
+   "7": {
+    "tasks": [
+     "Создать коммерческий сценарий: продажи, поддержка, запись, консультант или FAQ"
+    ],
+    "tasksEn": [
+     "Build commercial scenario: sales, support, booking, consultant, or FAQ"
+    ],
+    "deliverables": [
+     "Полный сценарий с ветками",
+     "Обработка возражений/сложных вопросов"
+    ],
+    "deliverablesEn": [
+     "Full scenario with branches",
+     "Objection/complex question handling"
+    ],
+    "criteria": [
+     "Сценарий ведёт к результату",
+     "Есть передача человеку",
+     "Измеримый бизнес-результат"
+    ],
+    "criteriaEn": [
+     "Scenario drives to outcome",
+     "Human handoff exists",
+     "Measurable business result"
+    ]
+   },
+   "8": {
+    "tasks": [],
+    "tasksEn": [],
+    "deliverables": [
+     "Telegram/web-бот",
+     "AI-ответы",
+     "Промпт",
+     "Память",
+     "База знаний",
+     "Заявки",
+     "CRM/таблица",
+     "Уведомления",
+     "Follow-up",
+     "Документация"
+    ],
+    "deliverablesEn": [
+     "Telegram/web bot",
+     "AI replies",
+     "Prompt",
+     "Memory",
+     "Knowledge base",
+     "Leads",
+     "CRM/sheet",
+     "Notifications",
+     "Follow-up",
+     "Documentation"
+    ],
+    "criteria": [
+     "Коммерческий бот готов к демо"
+    ],
+    "criteriaEn": [
+     "Commercial bot ready to demo"
+    ],
+    "capstone": true,
+    "title": "Commercial AI Chatbot",
+    "titleEn": "Commercial AI Chatbot",
+    "defense": [
+     "Кому нужен бот",
+     "Какую задачу решает",
+     "Путь пользователя",
+     "Где сохраняются данные",
+     "Как использует AI",
+     "Как бизнес получает результат"
+    ],
+    "defenseEn": [
+     "Who needs the bot",
+     "Problem solved",
+     "User journey",
+     "Where data is stored",
+     "How AI is used",
+     "Business outcome"
+    ]
+   }
+  },
+  "ai-voice-developer": {
+   "1": {
+    "tasks": [
+     "Выбрать нишу и описать голосового агента"
+    ],
+    "tasksEn": [
+     "Pick a niche and describe the voice agent"
+    ],
+    "deliverables": [
+     "Ниша",
+     "Проблема бизнеса",
+     "Тип звонка",
+     "Задача агента",
+     "Данные",
+     "Результат после звонка"
+    ],
+    "deliverablesEn": [
+     "Niche",
+     "Business problem",
+     "Call type",
+     "Agent task",
+     "Data collected",
+     "Post-call outcome"
+    ],
+    "criteria": [
+     "Реальный бизнес-кейс",
+     "Конкретная задача",
+     "Понятная цель звонка",
+     "Результат можно передать в систему"
+    ],
+    "criteriaEn": [
+     "Real business case",
+     "Specific task",
+     "Clear call goal",
+     "Outcome can feed a system"
+    ]
+   },
+   "2": {
+    "tasks": [
+     "Создать voice personality: имя, стиль, тон, правила, приветствие, запрещённые и fallback-фразы"
+    ],
+    "tasksEn": [
+     "Create voice personality: name, style, tone, rules, greeting, banned and fallback phrases"
+    ],
+    "deliverables": [
+     "Документ voice personality"
+    ],
+    "deliverablesEn": [
+     "Voice personality document"
+    ],
+    "criteria": [
+     "Звучит естественно",
+     "Ответы короткие",
+     "Стиль подходит бизнесу",
+     "Правила для сложных ситуаций"
+    ],
+    "criteriaEn": [
+     "Sounds natural",
+     "Short replies",
+     "Style fits business",
+     "Rules for hard situations"
+    ]
+   },
+   "3": {
+    "tasks": [
+     "Создать полный сценарий звонка с fallback и передачей человеку"
+    ],
+    "tasksEn": [
+     "Create full call script with fallback and human handoff"
+    ],
+    "deliverables": [
+     "Сценарий с ветками",
+     "Обработка отказов"
+    ],
+    "deliverablesEn": [
+     "Script with branches",
+     "Objection handling"
+    ],
+    "criteria": [
+     "Логичный сценарий",
+     "Вопросы не перегружают",
+     "Есть обработка отказов",
+     "Корректное завершение"
+    ],
+    "criteriaEn": [
+     "Logical script",
+     "Questions not overwhelming",
+     "Objections handled",
+     "Clean call closing"
+    ]
+   },
+   "4": {
+    "tasks": [
+     "Собрать первого голосового агента с базовым сценарием и summary"
+    ],
+    "tasksEn": [
+     "Build first voice agent with basic scenario and summary"
+    ],
+    "deliverables": [
+     "Рабочий агент",
+     "Запись или transcript тестового разговора"
+    ],
+    "deliverablesEn": [
+     "Working agent",
+     "Recording or test transcript"
+    ],
+    "criteria": [
+     "Проходит базовый сценарий",
+     "Не отвечает слишком длинно",
+     "Собирает данные",
+     "Summary соответствует разговору"
+    ],
+    "criteriaEn": [
+     "Passes basic scenario",
+     "Not too verbose",
+     "Collects data",
+     "Summary matches conversation"
+    ]
+   },
+   "5": {
+    "tasks": [
+     "Подключить номер или тестовый звонок"
+    ],
+    "tasksEn": [
+     "Connect phone number or test call environment"
+    ],
+    "deliverables": [
+     "Тестовый звонок",
+     "Transcript или summary",
+     "Сохранённый результат"
+    ],
+    "deliverablesEn": [
+     "Test call",
+     "Transcript or summary",
+     "Saved outcome"
+    ],
+    "criteria": [
+     "Звонок проходит успешно",
+     "Агент отвечает",
+     "Данные доступны после звонка",
+     "Transcript/summary сохраняется"
+    ],
+    "criteriaEn": [
+     "Call succeeds",
+     "Agent responds",
+     "Post-call data available",
+     "Transcript/summary saved"
+    ]
+   },
+   "6": {
+    "tasks": [
+     "Связать voice agent с n8n: webhook, summary, таблица, уведомление, follow-up"
+    ],
+    "tasksEn": [
+     "Connect voice agent to n8n: webhook, summary, sheet, notification, follow-up"
+    ],
+    "deliverables": [
+     "n8n workflow",
+     "Пример данных после звонка"
+    ],
+    "deliverablesEn": [
+     "n8n workflow",
+     "Sample post-call data"
+    ],
+    "criteria": [
+     "Данные не теряются",
+     "n8n получает webhook",
+     "Результат сохраняется",
+     "Уведомления работают"
+    ],
+    "criteriaEn": [
+     "Data not lost",
+     "n8n receives webhook",
+     "Result saved",
+     "Notifications work"
+    ]
+   },
+   "7": {
+    "tasks": [
+     "Упаковать voice agent как услугу: ниша, проблема, решение, цена, demo"
+    ],
+    "tasksEn": [
+     "Package voice agent as a service: niche, problem, solution, price, demo"
+    ],
+    "deliverables": [
+     "One-page offer",
+     "Demo-сценарий"
+    ],
+    "deliverablesEn": [
+     "One-page offer",
+     "Demo scenario"
+    ],
+    "criteria": [
+     "Услуга понятна бизнесу",
+     "Описана польза",
+     "Есть цена и demo",
+     "Можно отправить клиенту"
+    ],
+    "criteriaEn": [
+     "Service clear to business",
+     "Benefit described",
+     "Price and demo included",
+     "Sendable to client"
+    ]
+   },
+   "8": {
+    "tasks": [],
+    "tasksEn": [],
+    "deliverables": [
+     "Voice personality",
+     "Сценарий",
+     "Рабочий agent",
+     "Телефония/тест",
+     "Summary",
+     "CRM/таблица",
+     "Уведомления",
+     "Follow-up",
+     "Коммерческое описание"
+    ],
+    "deliverablesEn": [
+     "Voice personality",
+     "Script",
+     "Working agent",
+     "Telephony/test",
+     "Summary",
+     "CRM/sheet",
+     "Notifications",
+     "Follow-up",
+     "Commercial description"
+    ],
+    "criteria": [
+     "Voice employee готов к демо и продаже"
+    ],
+    "criteriaEn": [
+     "Voice employee ready to demo and sell"
+    ],
+    "capstone": true,
+    "title": "AI Voice Employee",
+    "titleEn": "AI Voice Employee",
+    "defense": [
+     "Как проходит звонок",
+     "Какие данные собирает",
+     "Куда передаются",
+     "Какую задачу решает",
+     "Как продавать клиенту"
+    ],
+    "defenseEn": [
+     "How the call flows",
+     "Data collected",
+     "Where it goes",
+     "Business task solved",
+     "How to sell to clients"
+    ]
+   }
+  },
+  "ai-agent-architect": {
+   "1": {
+    "tasks": [
+     "Создать концепцию AI-агента: роль, цель, задачи, вход/выход, автономность, ограничения, риски"
+    ],
+    "tasksEn": [
+     "Create AI agent concept: role, goal, tasks, I/O, autonomy, constraints, risks"
+    ],
+    "deliverables": [
+     "Документ концепции агента"
+    ],
+    "deliverablesEn": [
+     "Agent concept document"
+    ],
+    "criteria": [
+     "Агент выполняет задачу, а не просто отвечает",
+     "Понятная цель",
+     "Есть ограничения",
+     "Понятно, где полезен"
+    ],
+    "criteriaEn": [
+     "Agent executes tasks, not just replies",
+     "Clear goal",
+     "Constraints defined",
+     "Use case is clear"
+    ]
+   },
+   "2": {
+    "tasks": [
+     "Создать агента с одним внешним действием (таблица, Telegram, email, API, статус заявки)"
+    ],
+    "tasksEn": [
+     "Build agent with one external action (sheet, Telegram, email, API, lead status)"
+    ],
+    "deliverables": [
+     "Агент с tool/action",
+     "Лог результата действия"
+    ],
+    "deliverablesEn": [
+     "Agent with tool/action",
+     "Action result log"
+    ],
+    "criteria": [
+     "Выполняет реальное действие",
+     "Действие ограничено",
+     "Есть лог",
+     "Понимание human approval"
+    ],
+    "criteriaEn": [
+     "Performs real action",
+     "Action is bounded",
+     "Log exists",
+     "Understands human approval"
+    ]
+   },
+   "3": {
+    "tasks": [
+     "Добавить память: профиль, история задач, сохранение результата, прошлый контекст"
+    ],
+    "tasksEn": [
+     "Add memory: profile, task history, saved results, past context"
+    ],
+    "deliverables": [
+     "Хранилище памяти",
+     "Пример персонализированного ответа"
+    ],
+    "deliverablesEn": [
+     "Memory storage",
+     "Personalized reply example"
+    ],
+    "criteria": [
+     "Помнит важные данные",
+     "Не путает пользователей",
+     "Использует память в действиях",
+     "Память не перегружена"
+    ],
+    "criteriaEn": [
+     "Remembers key data",
+     "Doesn’t mix users",
+     "Uses memory in actions",
+     "Memory not cluttered"
+    ]
+   },
+   "4": {
+    "tasks": [
+     "Создать агента с базой знаний и ограничением «не выдумывать»"
+    ],
+    "tasksEn": [
+     "Build agent with knowledge base and “don’t hallucinate” grounding"
+    ],
+    "deliverables": [
+     "Документы/FAQ",
+     "Примеры ответов по источникам",
+     "Fallback сценарий"
+    ],
+    "deliverablesEn": [
+     "Docs/FAQ",
+     "Source-grounded answer samples",
+     "Fallback scenario"
+    ],
+    "criteria": [
+     "Ответы по материалам",
+     "KB структурирована",
+     "Точные ответы",
+     "Сценарий для неизвестных вопросов"
+    ],
+    "criteriaEn": [
+     "Answers from materials",
+     "Structured KB",
+     "Accurate answers",
+     "Unknown-question scenario"
+    ]
+   },
+   "5": {
+    "tasks": [
+     "Спроектировать multi-agent систему: orchestrator + 2–4 агента"
+    ],
+    "tasksEn": [
+     "Design multi-agent system: orchestrator + 2–4 agents"
+    ],
+    "deliverables": [
+     "Схема ролей",
+     "Схема передачи задач",
+     "Финальный output"
+    ],
+    "deliverablesEn": [
+     "Role diagram",
+     "Task handoff diagram",
+     "Final output"
+    ],
+    "criteria": [
+     "Роли не дублируются",
+     "Есть главный агент",
+     "Понятны зоны ответственности",
+     "Один итоговый output"
+    ],
+    "criteriaEn": [
+     "Roles don’t overlap",
+     "Main agent exists",
+     "Responsibilities clear",
+     "Single final output"
+    ]
+   },
+   "6": {
+    "tasks": [
+     "Агент выполняет задачу по шагам с planning prompt и human approval"
+    ],
+    "tasksEn": [
+     "Agent executes task step-by-step with planning prompt and human approval"
+    ],
+    "deliverables": [
+     "Planning prompt",
+     "Список шагов",
+     "Пример выполнения",
+     "Точки approval"
+    ],
+    "deliverablesEn": [
+     "Planning prompt",
+     "Step list",
+     "Execution example",
+     "Approval checkpoints"
+    ],
+    "criteria": [
+     "Не действует хаотично",
+     "Понятный план",
+     "Есть контроль",
+     "Важные действия с подтверждением"
+    ],
+    "criteriaEn": [
+     "Not chaotic",
+     "Clear plan",
+     "Control exists",
+     "Critical actions need approval"
+    ]
+   },
+   "7": {
+    "tasks": [
+     "Описать архитектуру агентной системы для бизнеса"
+    ],
+    "tasksEn": [
+     "Document agent system architecture for business"
+    ],
+    "deliverables": [
+     "Проблема",
+     "Роли агентов",
+     "Tools, память, KB",
+     "Интеграции",
+     "Риски",
+     "Схема",
+     "Ожидаемый результат"
+    ],
+    "deliverablesEn": [
+     "Problem",
+     "Agent roles",
+     "Tools, memory, KB",
+     "Integrations",
+     "Risks",
+     "Diagram",
+     "Expected outcome"
+    ],
+    "criteria": [
+     "Решает реальную задачу",
+     "Архитектура понятна",
+     "Есть ограничения безопасности",
+     "Польза объяснима бизнесу"
+    ],
+    "criteriaEn": [
+     "Solves real problem",
+     "Architecture is clear",
+     "Security constraints",
+     "Business value explainable"
+    ]
+   },
+   "8": {
+    "tasks": [],
+    "tasksEn": [],
+    "deliverables": [
+     "Orchestrator",
+     "2–4 агента",
+     "Tools/actions",
+     "Память",
+     "KB",
+     "Workflow",
+     "Human approval",
+     "Логи",
+     "Документация",
+     "Demo"
+    ],
+    "deliverablesEn": [
+     "Orchestrator",
+     "2–4 agents",
+     "Tools/actions",
+     "Memory",
+     "KB",
+     "Workflow",
+     "Human approval",
+     "Logs",
+     "Documentation",
+     "Demo"
+    ],
+    "criteria": [
+     "Агентный отдел работает и задокументирован"
+    ],
+    "criteriaEn": [
+     "Agent department works and is documented"
+    ],
+    "capstone": true,
+    "title": "AI Agent Department",
+    "titleEn": "AI Agent Department",
+    "defense": [
+     "Как агенты взаимодействуют",
+     "Какую задачу выполняет система",
+     "Какие tools",
+     "Где память",
+     "Как контролируются действия",
+     "Бизнес-результат"
+    ],
+    "defenseEn": [
+     "How agents interact",
+     "System task",
+     "Tools used",
+     "Where memory lives",
+     "Action control",
+     "Business outcome"
+    ]
+   }
+  },
+  "ai-agency-builder": {
+   "1": {
+    "tasks": [
+     "Выбрать нишу: 10 болей клиентов, 5 AI-решений, 20 потенциальных клиентов, обоснование выбора"
+    ],
+    "tasksEn": [
+     "Pick niche: 10 client pains, 5 AI solutions, 20 prospects, rationale"
+    ],
+    "deliverables": [
+     "Документ выбора ниши",
+     "Список 20 клиентов"
+    ],
+    "deliverablesEn": [
+     "Niche selection doc",
+     "List of 20 prospects"
+    ],
+    "criteria": [
+     "Ниша не слишком широкая",
+     "Боли реальные",
+     "AI-решения связаны с болью",
+     "Есть первые клиенты"
+    ],
+    "criteriaEn": [
+     "Niche not too broad",
+     "Pains are real",
+     "AI solutions match pains",
+     "Prospects listed"
+    ]
+   },
+   "2": {
+    "tasks": [
+     "Создать продуктовую линейку: entry, core, premium, monthly support"
+    ],
+    "tasksEn": [
+     "Create product line: entry, core, premium, monthly support"
+    ],
+    "deliverables": [
+     "3 уровня услуг",
+     "Цены и сроки",
+     "Описание результата"
+    ],
+    "deliverablesEn": [
+     "3 service tiers",
+     "Prices and timelines",
+     "Outcome descriptions"
+    ],
+    "criteria": [
+     "Услуги понятны бизнесу",
+     "Понятно, за что платят",
+     "Минимум 3 уровня",
+     "Есть поддержка/подписка"
+    ],
+    "criteriaEn": [
+     "Services clear to business",
+     "Payment value clear",
+     "At least 3 tiers",
+     "Support/subscription included"
+    ]
+   },
+   "3": {
+    "tasks": [
+     "Создать коммерческое предложение и краткую презентацию"
+    ],
+    "tasksEn": [
+     "Create commercial proposal and short service deck"
+    ],
+    "deliverables": [
+     "КП: заголовок, боль, решение, состав, сроки, цена, следующий шаг",
+     "Презентация услуги"
+    ],
+    "deliverablesEn": [
+     "Proposal: headline, pain, solution, scope, timeline, price, next step",
+     "Service deck"
+    ],
+    "criteria": [
+     "КП не перегружено",
+     "Польза без жаргона",
+     "Конкретный следующий шаг",
+     "Можно отправить клиенту"
+    ],
+    "criteriaEn": [
+     "Proposal not overloaded",
+     "Value without jargon",
+     "Clear next step",
+     "Sendable to client"
+    ]
+   },
+   "4": {
+    "tasks": [
+     "Создать систему поиска клиентов: 50 лидов с персонализацией и follow-up"
+    ],
+    "tasksEn": [
+     "Build client acquisition system: 50 leads with personalization and follow-up"
+    ],
+    "deliverables": [
+     "Таблица 50 лидов",
+     "3 шаблона сообщений",
+     "2 follow-up",
+     "План daily outreach"
+    ],
+    "deliverablesEn": [
+     "50-lead sheet",
+     "3 message templates",
+     "2 follow-ups",
+     "Daily outreach plan"
+    ],
+    "criteria": [
+     "Лиды реальные",
+     "Сообщения персонализированы",
+     "Есть статусы",
+     "Есть план outreach"
+    ],
+    "criteriaEn": [
+     "Leads are real",
+     "Messages personalized",
+     "Statuses tracked",
+     "Outreach plan exists"
+    ]
+   },
+   "5": {
+    "tasks": [
+     "Создать sales kit: скрипт звонка, 10 вопросов, 10 возражений, follow-up, презентация"
+    ],
+    "tasksEn": [
+     "Build sales kit: call script, 10 questions, 10 objections, follow-up, deck"
+    ],
+    "deliverables": [
+     "Sales kit документ"
+    ],
+    "deliverablesEn": [
+     "Sales kit document"
+    ],
+    "criteria": [
+     "Вопросы выявляют боль",
+     "Ответы на возражения уверенные",
+     "Follow-up не давит",
+     "Может объяснить цену"
+    ],
+    "criteriaEn": [
+     "Questions surface pain",
+     "Objection replies confident",
+     "Follow-up not pushy",
+     "Can explain price"
+    ]
+   },
+   "6": {
+    "tasks": [
+     "Создать delivery system: onboarding, ТЗ, этапы, QA, передача проекта"
+    ],
+    "tasksEn": [
+     "Build delivery system: onboarding, brief, phases, QA, handoff"
+    ],
+    "deliverables": [
+     "Onboarding-анкета",
+     "Checklist доступов",
+     "Шаблон ТЗ",
+     "Этапы",
+     "QA checklist",
+     "Handoff template"
+    ],
+    "deliverablesEn": [
+     "Onboarding form",
+     "Access checklist",
+     "Brief template",
+     "Phases",
+     "QA checklist",
+     "Handoff template"
+    ],
+    "criteria": [
+     "Процесс понятен клиенту",
+     "Контроль ожиданий",
+     "Критерии готовности",
+     "Передача без хаоса"
+    ],
+    "criteriaEn": [
+     "Process clear to client",
+     "Expectations managed",
+     "Done criteria",
+     "Handoff without chaos"
+    ]
+   },
+   "7": {
+    "tasks": [
+     "Создать операционную систему: процессы, шаблоны, retainer, кейсы, отзывы, портфолио"
+    ],
+    "tasksEn": [
+     "Build operations: processes, templates, retainer, cases, reviews, portfolio"
+    ],
+    "deliverables": [
+     "Список процессов",
+     "Retainer-предложение",
+     "Шаблон кейса и отзыва",
+     "Структура портфолио"
+    ],
+    "deliverablesEn": [
+     "Process list",
+     "Retainer offer",
+     "Case and review templates",
+     "Portfolio structure"
+    ],
+    "criteria": [
+     "Повторяемые процессы",
+     "Поддержка как услуга",
+     "Кейсы после проектов",
+     "Не зависит от хаоса"
+    ],
+    "criteriaEn": [
+     "Repeatable processes",
+     "Support as a service",
+     "Cases after projects",
+     "Not dependent on chaos"
+    ]
+   },
+   "8": {
+    "tasks": [],
+    "tasksEn": [],
+    "deliverables": [
+     "Ниша",
+     "Позиционирование",
+     "Линейка",
+     "Оффер",
+     "КП",
+     "Презентация",
+     "50 лидов",
+     "Outreach",
+     "Sales kit",
+     "Delivery",
+     "Retainer",
+     "План 30 дней"
+    ],
+    "deliverablesEn": [
+     "Niche",
+     "Positioning",
+     "Product line",
+     "Offer",
+     "Proposal",
+     "Deck",
+     "50 leads",
+     "Outreach",
+     "Sales kit",
+     "Delivery",
+     "Retainer",
+     "30-day plan"
+    ],
+    "criteria": [
+     "Агентство готово к запуску"
+    ],
+    "criteriaEn": [
+     "Agency ready to launch"
+    ],
+    "capstone": true,
+    "title": "AI Agency Launch Kit",
+    "titleEn": "AI Agency Launch Kit",
+    "defense": [
+     "Ниша",
+     "Услуги",
+     "Кому продаёт",
+     "Как ищет клиентов",
+     "Как продаёт",
+     "Как выполняет",
+     "Повторная выручка"
+    ],
+    "defenseEn": [
+     "Niche",
+     "Services",
+     "Target clients",
+     "Acquisition",
+     "Sales process",
+     "Delivery",
+     "Recurring revenue"
+    ]
+   }
+  }
+ }
+}

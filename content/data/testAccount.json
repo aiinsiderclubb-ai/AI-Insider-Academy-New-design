@@ -1,0 +1,19 @@
+{
+ "TEST_ACCOUNT_EMAIL": "test@ai-insider.academy",
+ "TEST_ACCOUNT_NAME": "Test User (All Access)",
+ "TEST_ACCOUNT_PASSWORD": "TestAll2026!",
+ "TEST_ACCOUNT_PURCHASE_IDS": [
+  "ai-start",
+  "ai-for-productivity",
+  "first-automation-n8n",
+  "ai-insider-accelerator",
+  "ai-productivity-master",
+  "ai-content-creator",
+  "ai-automation-engineer",
+  "ai-agent-engineer",
+  "ai-business-builder",
+  "voice-agents",
+  "ai-for-developers",
+  "ai-insider-club"
+ ]
+}

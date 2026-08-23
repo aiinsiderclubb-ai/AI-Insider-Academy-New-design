@@ -1,0 +1,23 @@
+{
+ "CONVERSATIONAL_COURSE_ID": "ai-conversational-systems",
+ "LEGACY_COURSE_ALIASES": {
+  "ai-chatbot-developer": "ai-conversational-systems",
+  "ai-voice-developer": "ai-conversational-systems",
+  "ai-user-pro": "ai-productivity-master",
+  "no-code-automation": "ai-automation-engineer",
+  "ai-agent-architect": "ai-agent-engineer",
+  "ai-agency-builder": "ai-business-builder"
+ },
+ "LEGACY_PACK_REDIRECTS": {
+  "ai-builder-pack": "ai-freelancer-pack",
+  "ai-business-launch-pack": "ai-business-pack"
+ },
+ "LEGACY_SLUG_REDIRECTS": {
+  "ai-chatbot-developer": "ai-conversational-systems",
+  "ai-voice-developer": "ai-conversational-systems",
+  "ai-user-pro": "ai-productivity-master",
+  "no-code-automation": "ai-automation-engineer",
+  "ai-agent-architect": "ai-agent-engineer",
+  "ai-agency-builder": "ai-business-builder"
+ }
+}

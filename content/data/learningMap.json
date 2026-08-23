@@ -1,0 +1,61 @@
+{
+ "ACADEMY_PRINCIPLES": {
+  "ru": "Все программы — записанные видеоуроки. Учитесь в своём темпе, без привязки к расписанию. Масштаб на сотни и тысячи учеников.",
+  "en": "All programs are pre-recorded video lessons. Learn at your own pace — built to scale to thousands of students."
+ },
+ "LEARNING_STAGES": [
+  {
+   "id": "stage-1",
+   "order": 1,
+   "title": "Этап 1. Бесплатное знакомство",
+   "titleEn": "Stage 1. Free introduction",
+   "subtitle": "7 дней · записанные уроки · без расписания",
+   "subtitleEn": "7 days · recorded · self-paced",
+   "accent": "#8da783",
+   "courseIds": [
+    "ai-start",
+    "ai-for-productivity",
+    "first-automation-n8n"
+   ]
+  },
+  {
+   "id": "stage-2",
+   "order": 2,
+   "title": "Этап 2. Бесплатная отборочная программа",
+   "titleEn": "Stage 2. Free selection program",
+   "subtitle": "1 месяц · видео + ДЗ + финальный проект",
+   "subtitleEn": "1 month · video + homework + capstone",
+   "accent": "#a855f7",
+   "courseIds": [
+    "ai-insider-accelerator"
+   ]
+  },
+  {
+   "id": "stage-3",
+   "order": 3,
+   "title": "Этап 3. Основная программа обучения",
+   "titleEn": "Stage 3. Core programs",
+   "subtitle": "Профессиональные треки · от 29€",
+   "subtitleEn": "Professional tracks · from €29",
+   "accent": "#6366f1",
+   "courseIds": [
+    "ai-productivity-master",
+    "ai-content-creator",
+    "ai-automation-engineer",
+    "ai-agent-engineer",
+    "ai-business-builder"
+   ]
+  }
+ ],
+ "STAGE_BY_COURSE": {
+  "ai-start": "stage-1",
+  "ai-for-productivity": "stage-1",
+  "first-automation-n8n": "stage-1",
+  "ai-insider-accelerator": "stage-2",
+  "ai-productivity-master": "stage-3",
+  "ai-content-creator": "stage-3",
+  "ai-automation-engineer": "stage-3",
+  "ai-agent-engineer": "stage-3",
+  "ai-business-builder": "stage-3"
+ }
+}

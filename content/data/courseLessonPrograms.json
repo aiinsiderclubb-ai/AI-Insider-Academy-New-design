@@ -1,0 +1,1565 @@
+{
+ "LESSON_PROGRAMS": {
+  "ai-start": {
+   "duration": {
+    "ru": "10–20 мин",
+    "en": "10–20 min"
+   },
+   "countLabel": {
+    "ru": "7 уроков (10–20 минут)",
+    "en": "7 lessons (10–20 min)"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Что такое AI и почему он меняет мир",
+     "titleEn": "What AI is and why it changes the world",
+     "descRu": "Изучаем основы искусственного интеллекта, возможности и реальные кейсы.",
+     "descEn": "AI fundamentals, capabilities and real-world use cases."
+    },
+    {
+     "num": 2,
+     "titleRu": "Знакомство с ChatGPT",
+     "titleEn": "Getting started with ChatGPT",
+     "descRu": "Создание первых запросов и работа с AI.",
+     "descEn": "Writing your first prompts and working with AI."
+    },
+    {
+     "num": 3,
+     "titleRu": "Claude, Gemini и Perplexity",
+     "titleEn": "Claude, Gemini and Perplexity",
+     "descRu": "Обзор лучших AI-инструментов 2026 года.",
+     "descEn": "Overview of the best AI tools in 2026."
+    },
+    {
+     "num": 4,
+     "titleRu": "Как правильно общаться с AI",
+     "titleEn": "How to communicate with AI effectively",
+     "descRu": "Основы Prompt Engineering.",
+     "descEn": "Prompt Engineering fundamentals."
+    },
+    {
+     "num": 5,
+     "titleRu": "AI для работы и учебы",
+     "titleEn": "AI for work and study",
+     "descRu": "Практические сценарии использования.",
+     "descEn": "Practical use cases."
+    },
+    {
+     "num": 6,
+     "titleRu": "Как заработать на AI",
+     "titleEn": "How to earn with AI",
+     "descRu": "Популярные способы монетизации навыков.",
+     "descEn": "Popular ways to monetize AI skills."
+    },
+    {
+     "num": 7,
+     "titleRu": "План развития AI-специалиста",
+     "titleEn": "AI specialist development plan",
+     "descRu": "Построение личной дорожной карты обучения.",
+     "descEn": "Building your personal learning roadmap."
+    }
+   ]
+  },
+  "ai-for-productivity": {
+   "duration": {
+    "ru": "10–20 мин",
+    "en": "10–20 min"
+   },
+   "countLabel": {
+    "ru": "5 уроков (10–20 мин)",
+    "en": "5 lessons (10–20 мин)"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "AI как личный помощник",
+     "titleEn": "AI как личный помощник",
+     "descRu": "Практика: AI как личный помощник.",
+     "descEn": "Practice: AI как личный помощник."
+    },
+    {
+     "num": 2,
+     "titleRu": "AI для работы и бизнеса",
+     "titleEn": "AI для работы и бизнеса",
+     "descRu": "Практика: AI для работы и бизнеса.",
+     "descEn": "Practice: AI для работы и бизнеса."
+    },
+    {
+     "num": 3,
+     "titleRu": "AI для обучения",
+     "titleEn": "AI для обучения",
+     "descRu": "Практика: AI для обучения.",
+     "descEn": "Practice: AI для обучения."
+    },
+    {
+     "num": 4,
+     "titleRu": "Экономия времени с AI",
+     "titleEn": "Экономия времени с AI",
+     "descRu": "Практика: Экономия времени с AI.",
+     "descEn": "Practice: Экономия времени с AI."
+    },
+    {
+     "num": 5,
+     "titleRu": "Личная AI-система продуктивности",
+     "titleEn": "Личная AI-система продуктивности",
+     "descRu": "Практика: Личная AI-система продуктивности.",
+     "descEn": "Practice: Личная AI-система продуктивности."
+    }
+   ]
+  },
+  "first-automation-n8n": {
+   "duration": {
+    "ru": "10–20 мин",
+    "en": "10–20 min"
+   },
+   "countLabel": {
+    "ru": "5 уроков (10–20 минут)",
+    "en": "5 lessons (10–20 min)"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Что такое автоматизация",
+     "titleEn": "What automation is",
+     "descRu": "Логика работы автоматизаций.",
+     "descEn": "How automations work."
+    },
+    {
+     "num": 2,
+     "titleRu": "Интерфейс n8n",
+     "titleEn": "n8n interface",
+     "descRu": "Создание первого workflow.",
+     "descEn": "Building your first workflow."
+    },
+    {
+     "num": 3,
+     "titleRu": "Telegram + AI",
+     "titleEn": "Telegram + AI",
+     "descRu": "Создаем первого Telegram-бота.",
+     "descEn": "Building your first Telegram bot."
+    },
+    {
+     "num": 4,
+     "titleRu": "AI Agent в n8n",
+     "titleEn": "AI Agent in n8n",
+     "descRu": "Подключаем ChatGPT к автоматизации.",
+     "descEn": "Connecting ChatGPT to your automation."
+    },
+    {
+     "num": 5,
+     "titleRu": "Финальный проект",
+     "titleEn": "Capstone project",
+     "descRu": "Создаем полноценную автоматизацию.",
+     "descEn": "Building a complete automation."
+    }
+   ]
+  },
+  "ai-productivity-master": {
+   "duration": {
+    "ru": "25–40 мин",
+    "en": "25–40 min"
+   },
+   "countLabel": {
+    "ru": "15 уроков (25–40 мин)",
+    "en": "15 lessons (25–40 мин)"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Введение в AI Productivity",
+     "titleEn": "Введение в AI Productivity",
+     "descRu": "Практика: Введение в AI Productivity.",
+     "descEn": "Practice: Введение в AI Productivity."
+    },
+    {
+     "num": 2,
+     "titleRu": "ChatGPT для ежедневной работы",
+     "titleEn": "ChatGPT для ежедневной работы",
+     "descRu": "Практика: ChatGPT для ежедневной работы.",
+     "descEn": "Practice: ChatGPT для ежедневной работы."
+    },
+    {
+     "num": 3,
+     "titleRu": "Claude для глубокого анализа",
+     "titleEn": "Claude для глубокого анализа",
+     "descRu": "Практика: Claude для глубокого анализа.",
+     "descEn": "Practice: Claude для глубокого анализа."
+    },
+    {
+     "num": 4,
+     "titleRu": "Gemini и экосистема Google",
+     "titleEn": "Gemini и экосистема Google",
+     "descRu": "Практика: Gemini и экосистема Google.",
+     "descEn": "Practice: Gemini и экосистема Google."
+    },
+    {
+     "num": 5,
+     "titleRu": "Perplexity и поиск информации",
+     "titleEn": "Perplexity и поиск информации",
+     "descRu": "Практика: Perplexity и поиск информации.",
+     "descEn": "Practice: Perplexity и поиск информации."
+    },
+    {
+     "num": 6,
+     "titleRu": "Deep Research",
+     "titleEn": "Deep Research",
+     "descRu": "Практика: Deep Research.",
+     "descEn": "Practice: Deep Research."
+    },
+    {
+     "num": 7,
+     "titleRu": "Создание эффективных промптов",
+     "titleEn": "Создание эффективных промптов",
+     "descRu": "Практика: Создание эффективных промптов.",
+     "descEn": "Practice: Создание эффективных промптов."
+    },
+    {
+     "num": 8,
+     "titleRu": "AI для написания писем",
+     "titleEn": "AI для написания писем",
+     "descRu": "Практика: AI для написания писем.",
+     "descEn": "Practice: AI для написания писем."
+    },
+    {
+     "num": 9,
+     "titleRu": "AI для документов",
+     "titleEn": "AI для документов",
+     "descRu": "Практика: AI для документов.",
+     "descEn": "Practice: AI для документов."
+    },
+    {
+     "num": 10,
+     "titleRu": "AI для таблиц и данных",
+     "titleEn": "AI для таблиц и данных",
+     "descRu": "Практика: AI для таблиц и данных.",
+     "descEn": "Practice: AI для таблиц и данных."
+    },
+    {
+     "num": 11,
+     "titleRu": "AI для встреч и саммари",
+     "titleEn": "AI для встреч и саммари",
+     "descRu": "Практика: AI для встреч и саммари.",
+     "descEn": "Practice: AI для встреч и саммари."
+    },
+    {
+     "num": 12,
+     "titleRu": "AI для планирования",
+     "titleEn": "AI для планирования",
+     "descRu": "Практика: AI для планирования.",
+     "descEn": "Practice: AI для планирования."
+    },
+    {
+     "num": 13,
+     "titleRu": "AI для продаж",
+     "titleEn": "AI для продаж",
+     "descRu": "Практика: AI для продаж.",
+     "descEn": "Practice: AI для продаж."
+    },
+    {
+     "num": 14,
+     "titleRu": "Персональный AI стек",
+     "titleEn": "Персональный AI стек",
+     "descRu": "Практика: Персональный AI стек.",
+     "descEn": "Practice: Персональный AI стек."
+    },
+    {
+     "num": 15,
+     "titleRu": "Финальный проект",
+     "titleEn": "Финальный проект",
+     "descRu": "Практика: Финальный проект.",
+     "descEn": "Practice: Финальный проект."
+    }
+   ]
+  },
+  "ai-content-creator": {
+   "duration": {
+    "ru": "25–40 мин",
+    "en": "25–40 min"
+   },
+   "countLabel": {
+    "ru": "12 уроков (25–40 мин)",
+    "en": "12 lessons (25–40 мин)"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Современный AI контент",
+     "titleEn": "Современный AI контент",
+     "descRu": "Практика: Современный AI контент.",
+     "descEn": "Practice: Современный AI контент."
+    },
+    {
+     "num": 2,
+     "titleRu": "ChatGPT для контента",
+     "titleEn": "ChatGPT для контента",
+     "descRu": "Практика: ChatGPT для контента.",
+     "descEn": "Practice: ChatGPT для контента."
+    },
+    {
+     "num": 3,
+     "titleRu": "Контент-план через AI",
+     "titleEn": "Контент-план через AI",
+     "descRu": "Практика: Контент-план через AI.",
+     "descEn": "Practice: Контент-план через AI."
+    },
+    {
+     "num": 4,
+     "titleRu": "Canva AI",
+     "titleEn": "Canva AI",
+     "descRu": "Практика: Canva AI.",
+     "descEn": "Practice: Canva AI."
+    },
+    {
+     "num": 5,
+     "titleRu": "Midjourney",
+     "titleEn": "Midjourney",
+     "descRu": "Практика: Midjourney.",
+     "descEn": "Practice: Midjourney."
+    },
+    {
+     "num": 6,
+     "titleRu": "Flux",
+     "titleEn": "Flux",
+     "descRu": "Практика: Flux.",
+     "descEn": "Practice: Flux."
+    },
+    {
+     "num": 7,
+     "titleRu": "Runway",
+     "titleEn": "Runway",
+     "descRu": "Практика: Runway.",
+     "descEn": "Practice: Runway."
+    },
+    {
+     "num": 8,
+     "titleRu": "Kling",
+     "titleEn": "Kling",
+     "descRu": "Практика: Kling.",
+     "descEn": "Practice: Kling."
+    },
+    {
+     "num": 9,
+     "titleRu": "Veo",
+     "titleEn": "Veo",
+     "descRu": "Практика: Veo.",
+     "descEn": "Practice: Veo."
+    },
+    {
+     "num": 10,
+     "titleRu": "Shorts и Reels",
+     "titleEn": "Shorts и Reels",
+     "descRu": "Практика: Shorts и Reels.",
+     "descEn": "Practice: Shorts и Reels."
+    },
+    {
+     "num": 11,
+     "titleRu": "Автоматизация контента",
+     "titleEn": "Автоматизация контента",
+     "descRu": "Практика: Автоматизация контента.",
+     "descEn": "Practice: Автоматизация контента."
+    },
+    {
+     "num": 12,
+     "titleRu": "Финальный контент-конвейер",
+     "titleEn": "Финальный контент-конвейер",
+     "descRu": "Практика: Финальный контент-конвейер.",
+     "descEn": "Practice: Финальный контент-конвейер."
+    }
+   ]
+  },
+  "ai-automation-engineer": {
+   "duration": {
+    "ru": "40–50 мин",
+    "en": "40–50 min"
+   },
+   "countLabel": {
+    "ru": "22 уроков",
+    "en": "22 lessons"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Введение в автоматизацию",
+     "titleEn": "Введение в автоматизацию",
+     "descRu": "Практика: Введение в автоматизацию.",
+     "descEn": "Practice: Введение в автоматизацию."
+    },
+    {
+     "num": 2,
+     "titleRu": "Установка n8n",
+     "titleEn": "Установка n8n",
+     "descRu": "Практика: Установка n8n.",
+     "descEn": "Practice: Установка n8n."
+    },
+    {
+     "num": 3,
+     "titleRu": "Интерфейс n8n",
+     "titleEn": "Интерфейс n8n",
+     "descRu": "Практика: Интерфейс n8n.",
+     "descEn": "Practice: Интерфейс n8n."
+    },
+    {
+     "num": 4,
+     "titleRu": "Workflow логика",
+     "titleEn": "Workflow логика",
+     "descRu": "Практика: Workflow логика.",
+     "descEn": "Practice: Workflow логика."
+    },
+    {
+     "num": 5,
+     "titleRu": "Webhooks",
+     "titleEn": "Webhooks",
+     "descRu": "Практика: Webhooks.",
+     "descEn": "Practice: Webhooks."
+    },
+    {
+     "num": 6,
+     "titleRu": "API основы",
+     "titleEn": "API основы",
+     "descRu": "Практика: API основы.",
+     "descEn": "Practice: API основы."
+    },
+    {
+     "num": 7,
+     "titleRu": "Google Sheets",
+     "titleEn": "Google Sheets",
+     "descRu": "Практика: Google Sheets.",
+     "descEn": "Practice: Google Sheets."
+    },
+    {
+     "num": 8,
+     "titleRu": "Telegram Bot",
+     "titleEn": "Telegram Bot",
+     "descRu": "Практика: Telegram Bot.",
+     "descEn": "Practice: Telegram Bot."
+    },
+    {
+     "num": 9,
+     "titleRu": "Telegram AI Bot",
+     "titleEn": "Telegram AI Bot",
+     "descRu": "Практика: Telegram AI Bot.",
+     "descEn": "Practice: Telegram AI Bot."
+    },
+    {
+     "num": 10,
+     "titleRu": "WhatsApp Automation",
+     "titleEn": "WhatsApp Automation",
+     "descRu": "Практика: WhatsApp Automation.",
+     "descEn": "Practice: WhatsApp Automation."
+    },
+    {
+     "num": 11,
+     "titleRu": "Email Automation",
+     "titleEn": "Email Automation",
+     "descRu": "Практика: Email Automation.",
+     "descEn": "Practice: Email Automation."
+    },
+    {
+     "num": 12,
+     "titleRu": "CRM Integration",
+     "titleEn": "CRM Integration",
+     "descRu": "Практика: CRM Integration.",
+     "descEn": "Practice: CRM Integration."
+    },
+    {
+     "num": 13,
+     "titleRu": "Lead Qualification",
+     "titleEn": "Lead Qualification",
+     "descRu": "Практика: Lead Qualification.",
+     "descEn": "Practice: Lead Qualification."
+    },
+    {
+     "num": 14,
+     "titleRu": "AI Support Agent",
+     "titleEn": "AI Support Agent",
+     "descRu": "Практика: AI Support Agent.",
+     "descEn": "Practice: AI Support Agent."
+    },
+    {
+     "num": 15,
+     "titleRu": "Voice Agent основы",
+     "titleEn": "Voice Agent основы",
+     "descRu": "Практика: Voice Agent основы.",
+     "descEn": "Practice: Voice Agent основы."
+    },
+    {
+     "num": 16,
+     "titleRu": "ElevenLabs",
+     "titleEn": "ElevenLabs",
+     "descRu": "Практика: ElevenLabs.",
+     "descEn": "Practice: ElevenLabs."
+    },
+    {
+     "num": 17,
+     "titleRu": "Vapi",
+     "titleEn": "Vapi",
+     "descRu": "Практика: Vapi.",
+     "descEn": "Practice: Vapi."
+    },
+    {
+     "num": 18,
+     "titleRu": "Retell AI",
+     "titleEn": "Retell AI",
+     "descRu": "Практика: Retell AI.",
+     "descEn": "Practice: Retell AI."
+    },
+    {
+     "num": 19,
+     "titleRu": "Multi-Step Workflows",
+     "titleEn": "Multi-Step Workflows",
+     "descRu": "Практика: Multi-Step Workflows.",
+     "descEn": "Practice: Multi-Step Workflows."
+    },
+    {
+     "num": 20,
+     "titleRu": "Production Workflows",
+     "titleEn": "Production Workflows",
+     "descRu": "Практика: Production Workflows.",
+     "descEn": "Practice: Production Workflows."
+    },
+    {
+     "num": 21,
+     "titleRu": "Работа с клиентами",
+     "titleEn": "Работа с клиентами",
+     "descRu": "Практика: Работа с клиентами.",
+     "descEn": "Practice: Работа с клиентами."
+    },
+    {
+     "num": 22,
+     "titleRu": "Финальный проект",
+     "titleEn": "Финальный проект",
+     "descRu": "Практика: Финальный проект.",
+     "descEn": "Practice: Финальный проект."
+    }
+   ]
+  },
+  "ai-agent-engineer": {
+   "duration": {
+    "ru": "40–50 мин",
+    "en": "40–50 min"
+   },
+   "countLabel": {
+    "ru": "20 уроков",
+    "en": "20 lessons"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Введение в AI Agents",
+     "titleEn": "Введение в AI Agents",
+     "descRu": "Практика: Введение в AI Agents.",
+     "descEn": "Practice: Введение в AI Agents."
+    },
+    {
+     "num": 2,
+     "titleRu": "Архитектура агентов",
+     "titleEn": "Архитектура агентов",
+     "descRu": "Практика: Архитектура агентов.",
+     "descEn": "Practice: Архитектура агентов."
+    },
+    {
+     "num": 3,
+     "titleRu": "Tool Calling",
+     "titleEn": "Tool Calling",
+     "descRu": "Практика: Tool Calling.",
+     "descEn": "Practice: Tool Calling."
+    },
+    {
+     "num": 4,
+     "titleRu": "Function Calling",
+     "titleEn": "Function Calling",
+     "descRu": "Практика: Function Calling.",
+     "descEn": "Practice: Function Calling."
+    },
+    {
+     "num": 5,
+     "titleRu": "MCP основы",
+     "titleEn": "MCP основы",
+     "descRu": "Практика: MCP основы.",
+     "descEn": "Practice: MCP основы."
+    },
+    {
+     "num": 6,
+     "titleRu": "RAG основы",
+     "titleEn": "RAG основы",
+     "descRu": "Практика: RAG основы.",
+     "descEn": "Practice: RAG основы."
+    },
+    {
+     "num": 7,
+     "titleRu": "Embeddings",
+     "titleEn": "Embeddings",
+     "descRu": "Практика: Embeddings.",
+     "descEn": "Practice: Embeddings."
+    },
+    {
+     "num": 8,
+     "titleRu": "Vector Databases",
+     "titleEn": "Vector Databases",
+     "descRu": "Практика: Vector Databases.",
+     "descEn": "Practice: Vector Databases."
+    },
+    {
+     "num": 9,
+     "titleRu": "Pinecone",
+     "titleEn": "Pinecone",
+     "descRu": "Практика: Pinecone.",
+     "descEn": "Practice: Pinecone."
+    },
+    {
+     "num": 10,
+     "titleRu": "Supabase Vector",
+     "titleEn": "Supabase Vector",
+     "descRu": "Практика: Supabase Vector.",
+     "descEn": "Practice: Supabase Vector."
+    },
+    {
+     "num": 11,
+     "titleRu": "Knowledge Bases",
+     "titleEn": "Knowledge Bases",
+     "descRu": "Практика: Knowledge Bases.",
+     "descEn": "Practice: Knowledge Bases."
+    },
+    {
+     "num": 12,
+     "titleRu": "LangChain",
+     "titleEn": "LangChain",
+     "descRu": "Практика: LangChain.",
+     "descEn": "Practice: LangChain."
+    },
+    {
+     "num": 13,
+     "titleRu": "CrewAI",
+     "titleEn": "CrewAI",
+     "descRu": "Практика: CrewAI.",
+     "descEn": "Practice: CrewAI."
+    },
+    {
+     "num": 14,
+     "titleRu": "LangGraph",
+     "titleEn": "LangGraph",
+     "descRu": "Практика: LangGraph.",
+     "descEn": "Practice: LangGraph."
+    },
+    {
+     "num": 15,
+     "titleRu": "Multi-Agent Systems",
+     "titleEn": "Multi-Agent Systems",
+     "descRu": "Практика: Multi-Agent Systems.",
+     "descEn": "Practice: Multi-Agent Systems."
+    },
+    {
+     "num": 16,
+     "titleRu": "Memory Systems",
+     "titleEn": "Memory Systems",
+     "descRu": "Практика: Memory Systems.",
+     "descEn": "Practice: Memory Systems."
+    },
+    {
+     "num": 17,
+     "titleRu": "Agent Planning",
+     "titleEn": "Agent Planning",
+     "descRu": "Практика: Agent Planning.",
+     "descEn": "Practice: Agent Planning."
+    },
+    {
+     "num": 18,
+     "titleRu": "Production Deployment",
+     "titleEn": "Production Deployment",
+     "descRu": "Практика: Production Deployment.",
+     "descEn": "Practice: Production Deployment."
+    },
+    {
+     "num": 19,
+     "titleRu": "Monitoring",
+     "titleEn": "Monitoring",
+     "descRu": "Практика: Monitoring.",
+     "descEn": "Practice: Monitoring."
+    },
+    {
+     "num": 20,
+     "titleRu": "Финальный агент",
+     "titleEn": "Финальный агент",
+     "descRu": "Практика: Финальный агент.",
+     "descEn": "Practice: Финальный агент."
+    }
+   ]
+  },
+  "ai-business-builder": {
+   "duration": {
+    "ru": "40–50 мин",
+    "en": "40–50 min"
+   },
+   "countLabel": {
+    "ru": "20 уроков",
+    "en": "20 lessons"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Выбор ниши",
+     "titleEn": "Выбор ниши",
+     "descRu": "Практика: Выбор ниши.",
+     "descEn": "Practice: Выбор ниши."
+    },
+    {
+     "num": 2,
+     "titleRu": "AI рынок 2026",
+     "titleEn": "AI рынок 2026",
+     "descRu": "Практика: AI рынок 2026.",
+     "descEn": "Practice: AI рынок 2026."
+    },
+    {
+     "num": 3,
+     "titleRu": "Создание оффера",
+     "titleEn": "Создание оффера",
+     "descRu": "Практика: Создание оффера.",
+     "descEn": "Practice: Создание оффера."
+    },
+    {
+     "num": 4,
+     "titleRu": "Упаковка агентства",
+     "titleEn": "Упаковка агентства",
+     "descRu": "Практика: Упаковка агентства.",
+     "descEn": "Practice: Упаковка агентства."
+    },
+    {
+     "num": 5,
+     "titleRu": "Лендинг",
+     "titleEn": "Лендинг",
+     "descRu": "Практика: Лендинг.",
+     "descEn": "Practice: Лендинг."
+    },
+    {
+     "num": 6,
+     "titleRu": "Кейсы",
+     "titleEn": "Кейсы",
+     "descRu": "Практика: Кейсы.",
+     "descEn": "Practice: Кейсы."
+    },
+    {
+     "num": 7,
+     "titleRu": "Холодный аутрич",
+     "titleEn": "Холодный аутрич",
+     "descRu": "Практика: Холодный аутрич.",
+     "descEn": "Practice: Холодный аутрич."
+    },
+    {
+     "num": 8,
+     "titleRu": "LinkedIn Outreach",
+     "titleEn": "LinkedIn Outreach",
+     "descRu": "Практика: LinkedIn Outreach.",
+     "descEn": "Practice: LinkedIn Outreach."
+    },
+    {
+     "num": 9,
+     "titleRu": "Email Outreach",
+     "titleEn": "Email Outreach",
+     "descRu": "Практика: Email Outreach.",
+     "descEn": "Practice: Email Outreach."
+    },
+    {
+     "num": 10,
+     "titleRu": "Discovery Calls",
+     "titleEn": "Discovery Calls",
+     "descRu": "Практика: Discovery Calls.",
+     "descEn": "Practice: Discovery Calls."
+    },
+    {
+     "num": 11,
+     "titleRu": "Продажи",
+     "titleEn": "Продажи",
+     "descRu": "Практика: Продажи.",
+     "descEn": "Practice: Продажи."
+    },
+    {
+     "num": 12,
+     "titleRu": "Закрытие клиентов",
+     "titleEn": "Закрытие клиентов",
+     "descRu": "Практика: Закрытие клиентов.",
+     "descEn": "Practice: Закрытие клиентов."
+    },
+    {
+     "num": 13,
+     "titleRu": "Delivery",
+     "titleEn": "Delivery",
+     "descRu": "Практика: Delivery.",
+     "descEn": "Practice: Delivery."
+    },
+    {
+     "num": 14,
+     "titleRu": "Создание MVP",
+     "titleEn": "Создание MVP",
+     "descRu": "Практика: Создание MVP.",
+     "descEn": "Practice: Создание MVP."
+    },
+    {
+     "num": 15,
+     "titleRu": "Lovable",
+     "titleEn": "Lovable",
+     "descRu": "Практика: Lovable.",
+     "descEn": "Practice: Lovable."
+    },
+    {
+     "num": 16,
+     "titleRu": "Bolt",
+     "titleEn": "Bolt",
+     "descRu": "Практика: Bolt.",
+     "descEn": "Practice: Bolt."
+    },
+    {
+     "num": 17,
+     "titleRu": "Replit",
+     "titleEn": "Replit",
+     "descRu": "Практика: Replit.",
+     "descEn": "Practice: Replit."
+    },
+    {
+     "num": 18,
+     "titleRu": "Stripe",
+     "titleEn": "Stripe",
+     "descRu": "Практика: Stripe.",
+     "descEn": "Practice: Stripe."
+    },
+    {
+     "num": 19,
+     "titleRu": "Масштабирование",
+     "titleEn": "Масштабирование",
+     "descRu": "Практика: Масштабирование.",
+     "descEn": "Practice: Масштабирование."
+    },
+    {
+     "num": 20,
+     "titleRu": "Финальный запуск",
+     "titleEn": "Финальный запуск",
+     "descRu": "Практика: Финальный запуск.",
+     "descEn": "Practice: Финальный запуск."
+    }
+   ]
+  },
+  "ai-insider-accelerator": {
+   "duration": {
+    "ru": "30–45 мин",
+    "en": "30–45 min"
+   },
+   "countLabel": {
+    "ru": "12 уроков · intake",
+    "en": "12 lessons · intake"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Карта AI-индустрии 2026",
+     "titleEn": "AI industry map 2026",
+     "descRu": "Обзор рынка и ключевых направлений.",
+     "descEn": "Market overview and key tracks."
+    },
+    {
+     "num": 2,
+     "titleRu": "AI для контента и маркетинга",
+     "titleEn": "AI for content and marketing",
+     "descRu": "Как AI меняет контент и продвижение.",
+     "descEn": "How AI transforms content and marketing."
+    },
+    {
+     "num": 3,
+     "titleRu": "Автоматизации и n8n",
+     "titleEn": "Automations and n8n",
+     "descRu": "Логика workflow и первые сценарии.",
+     "descEn": "Workflow logic and first scenarios."
+    },
+    {
+     "num": 4,
+     "titleRu": "Чат-боты для бизнеса",
+     "titleEn": "Chatbots for business",
+     "descRu": "Где боты приносят деньги.",
+     "descEn": "Where bots drive revenue."
+    },
+    {
+     "num": 5,
+     "titleRu": "Голосовые AI-агенты",
+     "titleEn": "Voice AI agents",
+     "descRu": "Сценарии voice agents в продажах и поддержке.",
+     "descEn": "Voice agent use cases in sales and support."
+    },
+    {
+     "num": 6,
+     "titleRu": "AI-агенты и RAG",
+     "titleEn": "AI agents and RAG",
+     "descRu": "От чатбота к автономному агенту.",
+     "descEn": "From chatbot to autonomous agent."
+    },
+    {
+     "num": 7,
+     "titleRu": "Prompt Engineering Pro",
+     "titleEn": "Prompt Engineering Pro",
+     "descRu": "Профессиональные промпты под задачи.",
+     "descEn": "Professional prompts for real tasks."
+    },
+    {
+     "num": 8,
+     "titleRu": "AI для продаж и лидов",
+     "titleEn": "AI for sales and leads",
+     "descRu": "Автоматизация коммуникаций и CRM.",
+     "descEn": "Automating comms and CRM."
+    },
+    {
+     "num": 9,
+     "titleRu": "Монетизация AI-навыков",
+     "titleEn": "Monetizing AI skills",
+     "descRu": "Как зарабатывать на AI-услугах.",
+     "descEn": "How to earn from AI services."
+    },
+    {
+     "num": 10,
+     "titleRu": "Intake-тест и анкета",
+     "titleEn": "Intake test and application",
+     "descRu": "Диагностика уровня и целей.",
+     "descEn": "Level and goals assessment."
+    },
+    {
+     "num": 11,
+     "titleRu": "Выбор специализации",
+     "titleEn": "Choosing your track",
+     "descRu": "Подбор Pro-курса под вашу цель.",
+     "descEn": "Matching a Pro track to your goal."
+    },
+    {
+     "num": 12,
+     "titleRu": "Финальный проект",
+     "titleEn": "Capstone project",
+     "descRu": "Персональная AI-система для работы или бизнеса.",
+     "descEn": "Personal AI system for work or business."
+    }
+   ]
+  },
+  "ai-saas-builder": {
+   "duration": {
+    "ru": "30–45 мин",
+    "en": "30–45 min"
+   },
+   "countLabel": {
+    "ru": "12 уроков",
+    "en": "12 lessons"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Поиск SaaS-идеи с AI",
+     "titleEn": "Finding a SaaS idea with AI",
+     "descRu": "Генерация и первичная валидация идей.",
+     "descEn": "Idea generation and initial validation."
+    },
+    {
+     "num": 2,
+     "titleRu": "Анализ рынка и конкурентов",
+     "titleEn": "Market and competitor analysis",
+     "descRu": "Оценка спроса и конкурентной среды.",
+     "descEn": "Demand and competitive landscape."
+    },
+    {
+     "num": 3,
+     "titleRu": "Проектирование MVP",
+     "titleEn": "MVP design",
+     "descRu": "Scope, UX и ключевые функции продукта.",
+     "descEn": "Scope, UX and core product features."
+    },
+    {
+     "num": 4,
+     "titleRu": "Lovable и Bolt.new",
+     "titleEn": "Lovable and Bolt.new",
+     "descRu": "Быстрый no-code прототип интерфейса.",
+     "descEn": "Rapid no-code UI prototype."
+    },
+    {
+     "num": 5,
+     "titleRu": "Replit для SaaS",
+     "titleEn": "Replit for SaaS",
+     "descRu": "Сборка логики продукта без dev-команды.",
+     "descEn": "Building product logic without a dev team."
+    },
+    {
+     "num": 6,
+     "titleRu": "Supabase и база данных",
+     "titleEn": "Supabase and database",
+     "descRu": "Схема данных и хранение контента.",
+     "descEn": "Data schema and content storage."
+    },
+    {
+     "num": 7,
+     "titleRu": "Регистрация и auth",
+     "titleEn": "Registration and auth",
+     "descRu": "Пользователи, профили и доступ.",
+     "descEn": "Users, profiles and access."
+    },
+    {
+     "num": 8,
+     "titleRu": "Подключение AI API",
+     "titleEn": "Connecting AI API",
+     "descRu": "AI-функция внутри продукта.",
+     "descEn": "AI feature inside the product."
+    },
+    {
+     "num": 9,
+     "titleRu": "Stripe и подписки",
+     "titleEn": "Stripe and subscriptions",
+     "descRu": "Оплата, тарифы и webhooks.",
+     "descEn": "Payments, plans and webhooks."
+    },
+    {
+     "num": 10,
+     "titleRu": "UI/UX и onboarding",
+     "titleEn": "UI/UX and onboarding",
+     "descRu": "Путь пользователя и активация.",
+     "descEn": "User journey and activation."
+    },
+    {
+     "num": 11,
+     "titleRu": "Деплой в production",
+     "titleEn": "Deploy to production",
+     "descRu": "Публикация и мониторинг.",
+     "descEn": "Publishing and monitoring."
+    },
+    {
+     "num": 12,
+     "titleRu": "Финальный проект",
+     "titleEn": "Capstone project",
+     "descRu": "Запущенный AI SaaS с auth, оплатой и первыми пользователями.",
+     "descEn": "Launched AI SaaS with auth, billing and first users."
+    }
+   ]
+  },
+  "no-code-automation": {
+   "duration": {
+    "ru": "40–50 мин",
+    "en": "40–50 min"
+   },
+   "countLabel": {
+    "ru": "15 уроков",
+    "en": "15 lessons"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Что такое автоматизация и зачем она бизнесу",
+     "titleEn": "What automation is and why businesses need it",
+     "descRu": "Разбираем, какие процессы можно автоматизировать и где бизнес быстрее всего видит результат.",
+     "descEn": "Learn which processes can be automated and where businesses see value fastest."
+    },
+    {
+     "num": 2,
+     "titleRu": "Как разбирать бизнес-процесс на шаги",
+     "titleEn": "How to break a business process into steps",
+     "descRu": "Учимся раскладывать хаос клиента на понятные действия, условия, данные и результат.",
+     "descEn": "Turn a messy client process into clear actions, conditions, data and outcomes."
+    },
+    {
+     "num": 3,
+     "titleRu": "Выбор первого процесса для автоматизации",
+     "titleEn": "Choosing the first process to automate",
+     "descRu": "Определяем задачу с быстрым эффектом: без лишней сложности, но с реальной пользой.",
+     "descEn": "Choose a high-impact first automation without unnecessary complexity."
+    },
+    {
+     "num": 4,
+     "titleRu": "Интерфейс n8n и логика workflow",
+     "titleEn": "n8n interface and workflow logic",
+     "descRu": "Знакомимся с узлами, связями, триггерами и тем, как в n8n строится сценарий.",
+     "descEn": "Understand nodes, connections, triggers and how workflows are built in n8n."
+    },
+    {
+     "num": 5,
+     "titleRu": "Первая автоматизация: форма - таблица - Telegram",
+     "titleEn": "First automation: form - sheet - Telegram",
+     "descRu": "Собираем первый рабочий сценарий: заявка попадает в таблицу и приходит уведомление.",
+     "descEn": "Build a working flow that saves a lead to a sheet and sends a notification."
+    },
+    {
+     "num": 6,
+     "titleRu": "Данные, JSON и expressions в n8n",
+     "titleEn": "Data, JSON and expressions in n8n",
+     "descRu": "Понимаем, как передаются данные между шагами и как подставлять нужные значения.",
+     "descEn": "Learn how data moves between steps and how to insert dynamic values."
+    },
+    {
+     "num": 7,
+     "titleRu": "IF, фильтры и ветвления",
+     "titleEn": "IF, filters and branching",
+     "descRu": "Добавляем условия: разные действия для разных заявок, клиентов и ситуаций.",
+     "descEn": "Add conditional logic for different leads, customers and scenarios."
+    },
+    {
+     "num": 8,
+     "titleRu": "Очистка и форматирование данных",
+     "titleEn": "Cleaning and formatting data",
+     "descRu": "Приводим имена, телефоны, даты и сообщения к удобному виду для CRM и менеджеров.",
+     "descEn": "Clean names, phone numbers, dates and messages for CRM and team workflows."
+    },
+    {
+     "num": 9,
+     "titleRu": "API простыми словами и HTTP Request",
+     "titleEn": "APIs and HTTP Request in simple terms",
+     "descRu": "Разбираем, как сервисы общаются между собой и как подключать их через HTTP Request.",
+     "descEn": "Understand how services communicate and how to connect them with HTTP Request."
+    },
+    {
+     "num": 10,
+     "titleRu": "Интеграция внешнего сервиса через API",
+     "titleEn": "Integrating an external service via API",
+     "descRu": "Подключаем сторонний инструмент и учимся читать документацию без страха.",
+     "descEn": "Connect an external tool and learn how to read API docs confidently."
+    },
+    {
+     "num": 11,
+     "titleRu": "AI внутри workflow: summary и классификация",
+     "titleEn": "AI inside a workflow: summaries and classification",
+     "descRu": "Добавляем AI-узел, который суммирует заявки, определяет тип обращения и помогает команде.",
+     "descEn": "Add AI that summarizes requests, classifies intent and supports the team."
+    },
+    {
+     "num": 12,
+     "titleRu": "AI-квалификация заявок",
+     "titleEn": "AI lead qualification",
+     "descRu": "Настраиваем оценку лидов: приоритет, потребность, бюджет и следующий шаг.",
+     "descEn": "Set up lead scoring by priority, need, budget and recommended next step."
+    },
+    {
+     "num": 13,
+     "titleRu": "Автоматизация продаж, маркетинга и поддержки",
+     "titleEn": "Automating sales, marketing and support",
+     "descRu": "Собираем практические сценарии для обработки лидов, follow-up и клиентских запросов.",
+     "descEn": "Build practical flows for lead handling, follow-up and customer requests."
+    },
+    {
+     "num": 14,
+     "titleRu": "Надежность: ошибки, fallback и логи",
+     "titleEn": "Reliability: errors, fallback and logs",
+     "descRu": "Делаем автоматизацию устойчивой: обработка ошибок, резервные сценарии и контроль логов.",
+     "descEn": "Make automations reliable with error handling, fallback paths and log checks."
+    },
+    {
+     "num": 15,
+     "titleRu": "Финальный проект: Business Automation System",
+     "titleEn": "Final project: Business Automation System",
+     "descRu": "Собираем законченную систему автоматизации для реального бизнес-процесса.",
+     "descEn": "Build a complete automation system for a real business process."
+    }
+   ]
+  },
+  "ai-agent-architect": {
+   "duration": {
+    "ru": "40–50 мин",
+    "en": "40–50 min"
+   },
+   "countLabel": {
+    "ru": "21 урок",
+    "en": "21 lessons"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Чем AI-агент отличается от чатбота",
+     "titleEn": "How an AI agent differs from a chatbot",
+     "descRu": "Понимаем разницу между ответами, действиями, инструментами и автономностью.",
+     "descEn": "Understand the difference between replies, actions, tools and autonomy."
+    },
+    {
+     "num": 2,
+     "titleRu": "Цикл агента: goal - plan - action - result",
+     "titleEn": "Agent loop: goal - plan - action - result",
+     "descRu": "Разбираем базовый цикл, по которому агент ставит цель, планирует и действует.",
+     "descEn": "Explore the core loop where an agent sets a goal, plans and acts."
+    },
+    {
+     "num": 3,
+     "titleRu": "Концепция первого AI-агента",
+     "titleEn": "First AI agent concept",
+     "descRu": "Выбираем задачу, роль, границы и ожидаемый результат первого агента.",
+     "descEn": "Choose the task, role, boundaries and expected result for the first agent."
+    },
+    {
+     "num": 4,
+     "titleRu": "Tools и Actions: как агент начинает действовать",
+     "titleEn": "Tools and Actions: how an agent starts acting",
+     "descRu": "Подключаем действия, чтобы агент не только отвечал, но и выполнял задачи.",
+     "descEn": "Connect actions so the agent can do tasks, not just answer."
+    },
+    {
+     "num": 5,
+     "titleRu": "Подключение внешних действий через n8n",
+     "titleEn": "Connecting external actions through n8n",
+     "descRu": "Связываем агента с workflow, API и бизнес-сервисами через n8n.",
+     "descEn": "Connect the agent with workflows, APIs and business services through n8n."
+    },
+    {
+     "num": 6,
+     "titleRu": "Безопасность tools и human approval",
+     "titleEn": "Tool safety and human approval",
+     "descRu": "Настраиваем ограничения, подтверждения и контроль действий перед выполнением.",
+     "descEn": "Set limits, confirmations and control before actions are executed."
+    },
+    {
+     "num": 7,
+     "titleRu": "Виды памяти AI-агента",
+     "titleEn": "Types of AI agent memory",
+     "descRu": "Разбираем краткосрочную, долгосрочную и проектную память агента.",
+     "descEn": "Learn short-term, long-term and project memory for agents."
+    },
+    {
+     "num": 8,
+     "titleRu": "Создание user profile и task history",
+     "titleEn": "Creating user profile and task history",
+     "descRu": "Сохраняем профиль пользователя и историю задач для персонального контекста.",
+     "descEn": "Store user profile and task history for personal context."
+    },
+    {
+     "num": 9,
+     "titleRu": "Контекст проекта и история действий",
+     "titleEn": "Project context and action history",
+     "descRu": "Учимся давать агенту контекст проекта, решения и выполненные шаги.",
+     "descEn": "Provide project context, decisions and completed steps to the agent."
+    },
+    {
+     "num": 10,
+     "titleRu": "Knowledge Base для AI-агента",
+     "titleEn": "Knowledge Base for an AI agent",
+     "descRu": "Готовим базу знаний, чтобы агент работал с фактами и внутренними документами.",
+     "descEn": "Prepare a knowledge base so the agent works with facts and internal docs."
+    },
+    {
+     "num": 11,
+     "titleRu": "Агент, который отвечает по базе знаний",
+     "titleEn": "Agent that answers from a knowledge base",
+     "descRu": "Собираем агента-консультанта, который ищет ответ в документах и объясняет его.",
+     "descEn": "Build a consultant agent that finds answers in documents and explains them."
+    },
+    {
+     "num": 12,
+     "titleRu": "Корпоративный AI-ассистент",
+     "titleEn": "Corporate AI assistant",
+     "descRu": "Проектируем ассистента для команды: задачи, документы, процессы и доступы.",
+     "descEn": "Design a team assistant for tasks, documents, processes and access."
+    },
+    {
+     "num": 13,
+     "titleRu": "Что такое multi-agent система",
+     "titleEn": "What a multi-agent system is",
+     "descRu": "Понимаем, когда нужен не один агент, а команда агентов с разными ролями.",
+     "descEn": "Understand when a team of agents with different roles is needed."
+    },
+    {
+     "num": 14,
+     "titleRu": "Проектирование команды агентов",
+     "titleEn": "Designing an agent team",
+     "descRu": "Распределяем роли: менеджер, аналитик, исполнитель, проверяющий и координатор.",
+     "descEn": "Split roles between manager, analyst, executor, reviewer and coordinator."
+    },
+    {
+     "num": 15,
+     "titleRu": "Сборка простой multi-agent системы",
+     "titleEn": "Building a simple multi-agent system",
+     "descRu": "Создаем первую систему, где несколько агентов совместно решают одну задачу.",
+     "descEn": "Build a first system where several agents solve one task together."
+    },
+    {
+     "num": 16,
+     "titleRu": "Planning prompt и планирование задач",
+     "titleEn": "Planning prompt and task planning",
+     "descRu": "Пишем промпт планировщика, который разбивает большую задачу на понятные шаги.",
+     "descEn": "Write a planner prompt that breaks a large task into clear steps."
+    },
+    {
+     "num": 17,
+     "titleRu": "Пошаговое выполнение задач агентом",
+     "titleEn": "Step-by-step task execution by an agent",
+     "descRu": "Настраиваем выполнение плана: шаги, проверки, результаты и переходы.",
+     "descEn": "Set up plan execution with steps, checks, outputs and transitions."
+    },
+    {
+     "num": 18,
+     "titleRu": "Контроль автономности и approval flow",
+     "titleEn": "Autonomy control and approval flow",
+     "descRu": "Определяем, что агент может делать сам, а где требуется подтверждение человека.",
+     "descEn": "Define what the agent can do alone and where human approval is required."
+    },
+    {
+     "num": 19,
+     "titleRu": "Agent System для бизнеса",
+     "titleEn": "Agent System for business",
+     "descRu": "Упаковываем агентную систему под реальную бизнес-задачу и измеримый результат.",
+     "descEn": "Package an agent system for a real business task and measurable outcome."
+    },
+    {
+     "num": 20,
+     "titleRu": "Архитектура и документация agent system",
+     "titleEn": "Agent system architecture and documentation",
+     "descRu": "Описываем схему, роли, данные, инструменты и правила поддержки системы.",
+     "descEn": "Document the architecture, roles, data, tools and maintenance rules."
+    },
+    {
+     "num": 21,
+     "titleRu": "Финальный проект: AI Agent Department",
+     "titleEn": "Final project: AI Agent Department",
+     "descRu": "Собираем отдел AI-агентов, который принимает задачи и выполняет их по процессу.",
+     "descEn": "Build an AI agent department that accepts tasks and executes them by process."
+    }
+   ]
+  },
+  "ai-agency-builder": {
+   "duration": {
+    "ru": "40–50 мин",
+    "en": "40–50 min"
+   },
+   "countLabel": {
+    "ru": "21 урок",
+    "en": "21 lessons"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Какие AI-услуги можно продавать бизнесу",
+     "titleEn": "Which AI services businesses buy",
+     "descRu": "Разбираем востребованные AI-услуги: автоматизации, боты, контент, агенты и консалтинг.",
+     "descEn": "Explore in-demand AI services: automations, bots, content, agents and consulting."
+    },
+    {
+     "num": 2,
+     "titleRu": "Выбор ниши для AI-агентства",
+     "titleEn": "Choosing a niche for an AI agency",
+     "descRu": "Находим сегмент клиентов, где есть боль, бюджет и повторяемый спрос.",
+     "descEn": "Find a customer segment with pain, budget and repeatable demand."
+    },
+    {
+     "num": 3,
+     "titleRu": "Анализ боли клиента и AI-решения",
+     "titleEn": "Client pain analysis and AI solution",
+     "descRu": "Учимся переводить проблему клиента в конкретное AI-решение с понятной выгодой.",
+     "descEn": "Translate a client problem into a concrete AI solution with clear value."
+    },
+    {
+     "num": 4,
+     "titleRu": "Превращение навыка в услугу",
+     "titleEn": "Turning a skill into a service",
+     "descRu": "Упаковываем технический навык в результат, который клиент готов купить.",
+     "descEn": "Package a technical skill into an outcome a client is ready to buy."
+    },
+    {
+     "num": 5,
+     "titleRu": "Продуктовая линейка AI-агентства",
+     "titleEn": "AI agency service product line",
+     "descRu": "Создаем набор услуг: быстрый старт, основной продукт и долгосрочное сопровождение.",
+     "descEn": "Create service tiers: quick start, core product and long-term support."
+    },
+    {
+     "num": 6,
+     "titleRu": "Ценообразование AI-услуг",
+     "titleEn": "Pricing AI services",
+     "descRu": "Считаем цену через ценность, сложность, сроки и поддержку после запуска.",
+     "descEn": "Price services through value, complexity, timeline and post-launch support."
+    },
+    {
+     "num": 7,
+     "titleRu": "Сильный AI-оффер",
+     "titleEn": "Strong AI offer",
+     "descRu": "Формулируем оффер, который ясно показывает результат, срок и выгоду для бизнеса.",
+     "descEn": "Create an offer that clearly shows outcome, timeline and business value."
+    },
+    {
+     "num": 8,
+     "titleRu": "One-page proposal",
+     "titleEn": "One-page proposal",
+     "descRu": "Собираем короткое предложение для клиента: проблема, решение, этапы, цена и следующий шаг.",
+     "descEn": "Build a concise proposal: problem, solution, stages, price and next step."
+    },
+    {
+     "num": 9,
+     "titleRu": "Мини-презентация услуги",
+     "titleEn": "Mini service presentation",
+     "descRu": "Готовим презентацию, которая объясняет услугу без перегруза и технического шума.",
+     "descEn": "Prepare a presentation that explains the service without technical overload."
+    },
+    {
+     "num": 10,
+     "titleRu": "Где искать первых клиентов",
+     "titleEn": "Where to find first clients",
+     "descRu": "Выбираем каналы: личная сеть, LinkedIn, Telegram, локальный бизнес и партнерства.",
+     "descEn": "Choose channels: network, LinkedIn, Telegram, local business and partnerships."
+    },
+    {
+     "num": 11,
+     "titleRu": "Персонализированный outreach",
+     "titleEn": "Personalized outreach",
+     "descRu": "Пишем сообщения, которые цепляют конкретной болью клиента и не выглядят спамом.",
+     "descEn": "Write messages tied to a specific client pain, not generic spam."
+    },
+    {
+     "num": 12,
+     "titleRu": "Система лидогенерации",
+     "titleEn": "Lead generation system",
+     "descRu": "Строим регулярный процесс поиска, контакта, follow-up и учета лидов.",
+     "descEn": "Build a repeatable process for search, contact, follow-up and lead tracking."
+    },
+    {
+     "num": 13,
+     "titleRu": "Discovery call",
+     "titleEn": "Discovery call",
+     "descRu": "Проводим диагностический звонок: вопросы, выявление боли, критерии успеха и бюджет.",
+     "descEn": "Run a discovery call with questions, pain, success criteria and budget."
+    },
+    {
+     "num": 14,
+     "titleRu": "Презентация решения клиенту",
+     "titleEn": "Presenting the solution to a client",
+     "descRu": "Показываем решение через бизнес-результат, демо, этапы внедрения и риски.",
+     "descEn": "Present through business outcome, demo, implementation stages and risks."
+    },
+    {
+     "num": 15,
+     "titleRu": "Возражения и закрытие сделки",
+     "titleEn": "Objections and closing the deal",
+     "descRu": "Отрабатываем сомнения клиента по цене, срокам, доверию и внедрению.",
+     "descEn": "Handle objections around price, timeline, trust and implementation."
+    },
+    {
+     "num": 16,
+     "titleRu": "Onboarding клиента",
+     "titleEn": "Client onboarding",
+     "descRu": "Запускаем проект: доступы, вводная встреча, ожидания, сроки и коммуникация.",
+     "descEn": "Start the project with access, kickoff, expectations, timeline and communication."
+    },
+    {
+     "num": 17,
+     "titleRu": "Техническое задание и этапы проекта",
+     "titleEn": "Technical brief and project stages",
+     "descRu": "Фиксируем требования, сценарии, интеграции и план работ без лишней бюрократии.",
+     "descEn": "Define requirements, scenarios, integrations and work plan without bureaucracy."
+    },
+    {
+     "num": 18,
+     "titleRu": "Передача проекта клиенту",
+     "titleEn": "Project handoff to the client",
+     "descRu": "Передаем результат: инструкция, доступы, обучение команды и правила поддержки.",
+     "descEn": "Hand off the result with instructions, access, team training and support rules."
+    },
+    {
+     "num": 19,
+     "titleRu": "Процессы агентства и retainer",
+     "titleEn": "Agency processes and retainer",
+     "descRu": "Настраиваем повторяемую работу, поддержку клиентов и ежемесячные пакеты сопровождения.",
+     "descEn": "Set repeatable delivery, client support and monthly retainer packages."
+    },
+    {
+     "num": 20,
+     "titleRu": "Кейсы, отзывы и портфолио",
+     "titleEn": "Cases, testimonials and portfolio",
+     "descRu": "Оформляем результаты проектов так, чтобы они продавали следующие услуги.",
+     "descEn": "Turn project results into assets that sell the next services."
+    },
+    {
+     "num": 21,
+     "titleRu": "Финальный проект: AI Agency Launch Kit",
+     "titleEn": "Final project: AI Agency Launch Kit",
+     "descRu": "Собираем полный пакет запуска агентства: ниша, оффер, презентация, outreach и процесс продаж.",
+     "descEn": "Build a full agency launch kit: niche, offer, deck, outreach and sales process."
+    }
+   ]
+  },
+  "ai-conversational-systems": {
+   "duration": {
+    "ru": "30–45 мин",
+    "en": "30–45 min"
+   },
+   "countLabel": {
+    "ru": "12 уроков",
+    "en": "12 lessons"
+   },
+   "lessons": [
+    {
+     "num": 1,
+     "titleRu": "Что такое AI-чатбот и где он нужен бизнесу",
+     "titleEn": "What an AI chatbot is and where business needs it",
+     "descRu": "Разбираем роли чатботов в продажах, поддержке, обучении и обработке заявок.",
+     "descEn": "Explore chatbot roles in sales, support, education and lead handling."
+    },
+    {
+     "num": 2,
+     "titleRu": "Концепция коммерческого чатбота",
+     "titleEn": "Commercial chatbot concept",
+     "descRu": "Формулируем задачу бота, аудиторию, ценность и результат для бизнеса.",
+     "descEn": "Define the bot goal, audience, business value and expected result."
+    },
+    {
+     "num": 3,
+     "titleRu": "Подключение Telegram к n8n",
+     "titleEn": "Connecting Telegram to n8n",
+     "descRu": "Связываем Telegram с workflow и принимаем первые сообщения пользователей.",
+     "descEn": "Connect Telegram to a workflow and receive the first user messages."
+    },
+    {
+     "num": 4,
+     "titleRu": "Подключение AI к Telegram-боту",
+     "titleEn": "Connecting AI to a Telegram bot",
+     "descRu": "Встраиваем AI-модель в диалог, чтобы бот отвечал живо и по задаче.",
+     "descEn": "Add an AI model so the bot responds naturally and on task."
+    },
+    {
+     "num": 5,
+     "titleRu": "База знаний: FAQ и документы",
+     "titleEn": "Knowledge base: FAQ and documents",
+     "descRu": "Готовим материалы, по которым бот сможет отвечать без выдумывания фактов.",
+     "descEn": "Prepare source materials so the bot answers without inventing facts."
+    },
+    {
+     "num": 6,
+     "titleRu": "Финальный проект: Commercial AI Chatbot",
+     "titleEn": "Final project: Commercial AI Chatbot",
+     "descRu": "Собираем коммерческого AI-бота с логикой, AI, базой знаний и заявками.",
+     "descEn": "Build a commercial AI bot with logic, AI, knowledge base and lead capture."
+    },
+    {
+     "num": 7,
+     "titleRu": "Что такое голосовой AI-агент",
+     "titleEn": "What a voice AI agent is",
+     "descRu": "Разбираем, как голосовой агент общается, понимает задачу и помогает бизнесу.",
+     "descEn": "Learn how a voice agent talks, understands tasks and helps businesses."
+    },
+    {
+     "num": 8,
+     "titleRu": "Концепция голосового агента",
+     "titleEn": "Voice agent concept",
+     "descRu": "Определяем роль агента, цель звонка, аудиторию и критерии успешного диалога.",
+     "descEn": "Define the agent role, call goal, audience and success criteria."
+    },
+    {
+     "num": 9,
+     "titleRu": "Промпт для голосового агента",
+     "titleEn": "Prompt for a voice agent",
+     "descRu": "Пишем промпт, который удерживает сценарий, контекст и правильный стиль речи.",
+     "descEn": "Write a prompt that keeps the scenario, context and speaking style on track."
+    },
+    {
+     "num": 10,
+     "titleRu": "Создание первого voice agent",
+     "titleEn": "Creating the first voice agent",
+     "descRu": "Собираем рабочего голосового агента и запускаем первые тестовые диалоги.",
+     "descEn": "Build a working voice agent and run the first test conversations."
+    },
+    {
+     "num": 11,
+     "titleRu": "Телефония и подключение номера",
+     "titleEn": "Telephony and phone number setup",
+     "descRu": "Подключаем номер, проверяем входящие и исходящие звонки в реальной среде.",
+     "descEn": "Connect a phone number and test inbound and outbound calls."
+    },
+    {
+     "num": 12,
+     "titleRu": "Финальный проект: AI Voice Employee",
+     "titleEn": "Final project: AI Voice Employee",
+     "descRu": "Собираем голосового AI-сотрудника для продаж, записи или поддержки клиентов.",
+     "descEn": "Build a voice AI employee for sales, booking or customer support."
+    }
+   ]
+  }
+ }
+}

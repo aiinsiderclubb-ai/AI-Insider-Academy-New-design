@@ -1,0 +1,32 @@
+{
+ "ACADEMY_COURSES": "https://myinsideracademy.com/courses",
+ "ACADEMY_LOGIN": "https://myinsideracademy.com/login",
+ "ACADEMY_REGISTER": "https://myinsideracademy.com/register",
+ "ACADEMY_URL": "https://myinsideracademy.com",
+ "CONTACT_EMAIL": "hello@aiinsider.com",
+ "MAIN_SITE_COMMUNITY": "https://insiderai.it.com/community",
+ "MAIN_SITE_COURSES": "https://insiderai.it.com/courses",
+ "MAIN_SITE_URL": "https://insiderai.it.com",
+ "PLATFORM_BRIDGE": {
+  "ru": {
+   "title": "AI Insider — одна экосистема",
+   "text": "На сайте insiderai.it.com — программы Chat-Bot, Voice Agent и VIP-менторство. На Academy — видеоуроки, домашние задания, сертификаты и личный кабинет. Оплата на любом ресурсе открывает доступ к обучению здесь.",
+   "siteLabel": "Сайт AI Insider",
+   "coursesLabel": "Курсы на сайте",
+   "academyLabel": "Каталог Academy",
+   "managerLabel": "Менеджер @vladyslavarcher"
+  },
+  "en": {
+   "title": "AI Insider — one ecosystem",
+   "text": "insiderai.it.com showcases Chat-Bot, Voice Agent and VIP mentorship tracks. Academy is where you watch lessons, submit homework, earn certificates and track progress. Purchase on either site unlocks learning here.",
+   "siteLabel": "AI Insider website",
+   "coursesLabel": "Courses on website",
+   "academyLabel": "Academy catalog",
+   "managerLabel": "Manager @vladyslavarcher"
+  }
+ },
+ "TELEGRAM_COMMUNITY": "https://t.me/+gu0HQTZLad9lOWE0",
+ "TELEGRAM_GIVEAWAY_CLAUDE": "https://t.me/+ECZbsUy0bD03NGFk",
+ "TELEGRAM_MANAGER": "https://t.me/vladyslavarcher",
+ "TELEGRAM_NOTIFY_BOT": "https://t.me/InsiderAcademyNotifyBot"
+}

@@ -1,0 +1,83 @@
+{
+ "AI_INSIDER_CLUB": {
+  "id": "ai-insider-club",
+  "slug": "club",
+  "priceEur": 59,
+  "nameRu": "AI Insider Club",
+  "nameEn": "AI Insider Club",
+  "taglineRu": "Productivity, контент и бесплатные программы в подписке",
+  "taglineEn": "Productivity, content and free programs in one subscription",
+  "descRu": "Club открывает AI Productivity Master, AI Content Creator и все бесплатные курсы. Automation, Agent и Business Builder — в Pro или пакетах.",
+  "descEn": "Club unlocks AI Productivity Master, AI Content Creator and all free courses. Automation, Agent and Business Builder are in Pro or packs.",
+  "includesRu": [
+   "AI Productivity Master",
+   "AI Content Creator",
+   "Все бесплатные программы",
+   "Новые уроки каждый месяц",
+   "Закрытый Telegram",
+   "Prompt Library",
+   "Не входят: Automation Engineer, Agent Engineer, Business Builder"
+  ],
+  "includesEn": [
+   "AI Productivity Master",
+   "AI Content Creator",
+   "All free programs",
+   "New lessons every month",
+   "Private Telegram",
+   "Prompt Library",
+   "Not included: Automation, Agent and Business Builder"
+  ],
+  "rulesRu": [
+   "59 €/месяц — Productivity Master, Content Creator и бесплатные программы",
+   "Новые уроки каждый месяц, закрытый Telegram, Prompt Library",
+   "Automation Engineer, Agent Engineer и Business Builder — только Pro или пакет",
+   "Только асинхронный формат: видео, текст, файлы, ДЗ"
+  ],
+  "rulesEn": [
+   "€59/month — Productivity Master, Content Creator and free programs",
+   "New lessons monthly, private Telegram, Prompt Library",
+   "Automation, Agent and Business Builder — Pro or packs only",
+   "Async only: video, text, files, homework"
+  ]
+ },
+ "AI_INSIDER_PRO": {
+  "id": "ai-insider-pro",
+  "slug": "pro",
+  "priceEur": 99,
+  "nameRu": "AI Insider Pro",
+  "nameEn": "AI Insider Pro"
+ },
+ "ALL_MEMBERSHIP_IDS": [
+  "ai-insider-club",
+  "ai-insider-club-annual",
+  "ai-insider-pro",
+  "ai-insider-pro-annual"
+ ],
+ "CLUB_INCLUDED_COURSE_IDS": [
+  "ai-start",
+  "ai-for-productivity",
+  "first-automation-n8n",
+  "ai-productivity-master",
+  "ai-content-creator"
+ ],
+ "CLUB_MEMBERSHIP_IDS": [
+  "ai-insider-club",
+  "ai-insider-club-annual"
+ ],
+ "CLUB_PAID_COURSE_IDS": [
+  "ai-productivity-master",
+  "ai-content-creator",
+  "ai-automation-engineer",
+  "ai-agent-engineer",
+  "ai-business-builder"
+ ],
+ "PRO_MEMBERSHIP_IDS": [
+  "ai-insider-pro",
+  "ai-insider-pro-annual"
+ ],
+ "PRO_ONLY_COURSE_IDS": [
+  "ai-automation-engineer",
+  "ai-agent-engineer",
+  "ai-business-builder"
+ ]
+}

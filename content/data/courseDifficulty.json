@@ -1,0 +1,51 @@
+{
+ "COURSE_STATUS": {
+  "PUBLISHED": "published",
+  "IN_DEVELOPMENT": "in-development"
+ },
+ "DIFFICULTY": {
+  "1": {
+   "stars": 1,
+   "ru": "Лёгкий",
+   "en": "Easy"
+  },
+  "2": {
+   "stars": 2,
+   "ru": "Средний",
+   "en": "Medium"
+  },
+  "3": {
+   "stars": 3,
+   "ru": "Тяжёлый",
+   "en": "Hard"
+  }
+ },
+ "DIFFICULTY_FILTERS": [
+  {
+   "id": "all",
+   "ru": "Любая сложность",
+   "en": "Any level"
+  },
+  {
+   "id": "free",
+   "ru": "Бесплатные",
+   "en": "Free"
+  },
+  {
+   "id": "1",
+   "ru": "★ Лёгкие",
+   "en": "★ Easy"
+  },
+  {
+   "id": "2",
+   "ru": "★★ Средние",
+   "en": "★★ Medium"
+  },
+  {
+   "id": "3",
+   "ru": "★★★ Тяжёлые",
+   "en": "★★★ Hard"
+  }
+ ],
+ "MENTOR_SURCHARGE_EUR": 130
+}

@@ -5,12 +5,11 @@ import { Badge } from "@/components/primitives/badge";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
 import { getStudioDashboard, queueCounts, revenueSeries, visitSeries } from "@/lib/api/studio";
-import { formatDate, formatNumber, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
+import { formatDate, formatNumber, formatPrice, path, type Locale } from "@/lib/i18n";
 
 export default async function StudioPulsePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params;
   const locale = raw as Locale;
-  const d = getDictionary(locale);
 
   const [dashboard, courses] = await Promise.all([getStudioDashboard(), getCourses(locale)]);
   if (!dashboard) return null;

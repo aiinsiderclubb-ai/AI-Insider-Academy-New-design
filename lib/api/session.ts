@@ -35,16 +35,6 @@ export interface MeResponse {
   prelaunch: boolean;
 }
 
-const EMPTY: MeResponse = {
-  user: { id: 0, email: "", name: "", personalId: "", emailVerified: false },
-  purchases: [],
-  progress: {},
-  discountPercent: 0,
-  streak: { current: 0, best: 0 },
-  achievements: [],
-  prelaunch: false,
-};
-
 /**
  * One session probe per request. The old app fired `/api/me` twice and
  * `/api/health` five times on every navigation; React's `cache` collapses

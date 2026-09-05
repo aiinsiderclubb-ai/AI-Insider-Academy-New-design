@@ -22,7 +22,6 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { Badge } from "@/components/primitives/badge";
 import { Button, ButtonLink } from "@/components/primitives/button";
 import { Field, Textarea } from "@/components/primitives/field";
 import { Modal } from "@/components/primitives/overlay";
@@ -110,6 +109,8 @@ export function StudyRoom({
 
   const [notes, setNotes] = React.useState<StudyNote[]>([]);
   const [draft, setDraft] = React.useState("");
+  /* A note is worth its timestamp; without the element there is nothing to read. */
+  const videoRef = React.useRef<HTMLVideoElement>(null);
 
   React.useEffect(() => {
     try {
@@ -132,7 +133,12 @@ export function StudyRoom({
   const addNote = () => {
     if (!draft.trim()) return;
     persistNotes([
-      { id: `n-${Date.now()}`, seconds: current.index * 0, text: draft.trim(), createdAt: new Date().toISOString() },
+      {
+        id: `n-${Date.now()}`,
+        seconds: Math.floor(videoRef.current?.currentTime ?? 0),
+        text: draft.trim(),
+        createdAt: new Date().toISOString(),
+      },
       ...notes,
     ]);
     setDraft("");
@@ -360,6 +366,7 @@ export function StudyRoom({
                 <div className="overflow-hidden rounded-xl border border-line bg-black">
                   {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                   <video
+                    ref={videoRef}
                     key={current.videoUrl}
                     src={current.videoUrl}
                     controls

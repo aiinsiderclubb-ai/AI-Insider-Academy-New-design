@@ -52,7 +52,7 @@ export function Reveal({
       style: {
         "--reveal-delay": `${delay}ms`,
         "--reveal-y": `${distance}px`,
-        ...(props.style ?? {}),
+        ...props.style,
       } as React.CSSProperties,
       className: cn(className),
       ...props,

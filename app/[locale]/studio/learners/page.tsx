@@ -3,7 +3,7 @@ import { Cell, DataTable, Panel, Row, StatTile } from "@/components/studio/tiles
 import { Badge } from "@/components/primitives/badge";
 import { pick } from "@/content/locale";
 import { getStudioDashboard } from "@/lib/api/studio";
-import { formatDate, formatNumber, getDictionary, type Locale } from "@/lib/i18n";
+import { formatDate, formatNumber, type Locale } from "@/lib/i18n";
 
 export default async function StudioLearnersPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params;

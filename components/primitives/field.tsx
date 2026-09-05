@@ -180,10 +180,16 @@ export function Switch({
           {description && <span className="mt-0.5 block text-[12.5px] leading-snug text-muted">{description}</span>}
         </label>
       )}
+      {/*
+        Every call site is controlled, so the switch role states its value
+        outright instead of leaning on the native checkbox mapping. Declared
+        before the spread, a caller can still override it.
+      */}
       <input
         id={props.id ?? id}
         type="checkbox"
         role="switch"
+        aria-checked={props.checked}
         {...props}
         className={cn(
           "relative h-6 w-10 shrink-0 cursor-pointer appearance-none rounded-full border border-line-2 bg-surface-3 transition-colors",

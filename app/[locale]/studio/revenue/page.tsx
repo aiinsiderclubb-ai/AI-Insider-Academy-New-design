@@ -3,7 +3,7 @@ import { Bars, RankedBars } from "@/components/studio/charts";
 import { Cell, DataTable, Panel, Row, StatTile } from "@/components/studio/tiles";
 import { pick } from "@/content/locale";
 import { getStudioDashboard, revenueSeries } from "@/lib/api/studio";
-import { formatDate, formatNumber, formatPrice, getDictionary, type Locale } from "@/lib/i18n";
+import { formatDate, formatNumber, formatPrice, type Locale } from "@/lib/i18n";
 
 export default async function StudioRevenuePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params;

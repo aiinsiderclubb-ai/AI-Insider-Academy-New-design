@@ -4,7 +4,7 @@ import { ArrowUpRight, Languages, Newspaper } from "lucide-react";
 import { Badge, ChipLink } from "@/components/primitives/badge";
 import { Breadcrumbs } from "@/components/primitives/navigation";
 import { Container, SectionHead } from "@/components/primitives/surface";
-import { Reveal, RevealGroup } from "@/components/motion/reveal";
+import { Reveal } from "@/components/motion/reveal";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { pick } from "@/content/locale";
 import { getBlogPosts, getOtherLanguagePosts } from "@/lib/api/public";

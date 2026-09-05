@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
-import { Badge } from "@/components/primitives/badge";
+import { Badge, Dot } from "@/components/primitives/badge";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container, SectionHead } from "@/components/primitives/surface";
-import { Rating } from "@/components/primitives/display";
+import { AnimatedNumber, Rating } from "@/components/primitives/display";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
-import { Spotlight } from "@/components/motion/pointer";
+import { Magnetic, Spotlight } from "@/components/motion/pointer";
 import { learningStages } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import type { Course } from "@/lib/api/catalog";
@@ -269,52 +269,186 @@ export function Reviews({ locale, d, reviews }: { locale: Locale; d: Dictionary;
 
 /* ================================= closing ================================= */
 
-export function Closing({ locale, d }: { locale: Locale; d: Dictionary }) {
+export interface ClosingStats {
+  courses: number;
+  lessons: number;
+  products: number;
+}
+
+/**
+ * Splits a sentence once around the phrase that carries the marker.
+ *
+ * The highlight is a translated string rather than markup in the dictionary,
+ * so a translator can move it to whichever word carries the promise in their
+ * language. If the phrase is missing the sentence still renders — unmarked,
+ * never broken.
+ */
+function splitOnMark(sentence: string, mark: string): [string, string, string] {
+  const at = mark ? sentence.indexOf(mark) : -1;
+  if (at < 0) return [sentence, "", ""];
+  return [sentence.slice(0, at), mark, sentence.slice(at + mark.length)];
+}
+
+/**
+ * The closing frame.
+ *
+ * The last thing on the page has to feel like the front of a building, not a
+ * footer: a dark panel with its own hairline strip, the promise set large with
+ * the marker on the word that carries it, the offer stated as a pass beside
+ * it, and the numbers the page has been proving all the way down counted out
+ * along the bottom. The photograph is pushed right back — it is the ground the
+ * ember sits on, not the subject.
+ */
+export function Closing({
+  locale,
+  d,
+  stats,
+}: {
+  locale: Locale;
+  d: Dictionary;
+  stats: ClosingStats;
+}) {
+  const [before, mark, after] = splitOnMark(d.home.ctaBody, d.home.ctaMark);
+
+  const points = [d.home.ctaPoint1, d.home.ctaPoint2, d.home.ctaPoint3];
+
+  const ledger = [
+    { value: stats.courses, suffix: "", label: d.home.statsCourses },
+    { value: stats.lessons, suffix: "+", label: d.home.statsLessons },
+    { value: stats.products, suffix: "", label: d.home.statsProducts },
+    { value: 3, suffix: "", label: d.home.statsLangs },
+  ];
+
   return (
     <Container size="wide" className="pt-20 pb-24 sm:pt-28 sm:pb-32">
       <Reveal>
-        <div className="on-dark relative isolate overflow-hidden rounded-3xl bg-ground">
+        <Spotlight className="on-dark relative isolate overflow-hidden rounded-3xl border border-line-2 bg-ground shadow-lg">
+          {/* ------------------------------- ground ------------------------------- */}
           <Image
             src="/design/mentor-lesson-poster.webp"
             alt=""
             fill
             sizes="(max-width: 1024px) 100vw, 1400px"
-            className="object-cover saturate-[0.4] brightness-[0.55]"
+            className="object-cover opacity-30 saturate-[0.35]"
           />
           <div
             aria-hidden
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(180deg, rgb(10 9 8 / 0.72) 0%, rgb(10 9 8 / 0.82) 100%), radial-gradient(40rem 24rem at 50% 118%, color-mix(in oklab, #ff7a1a 26%, transparent), transparent 70%)",
+                "linear-gradient(180deg, rgb(10 9 8 / 0.9) 0%, rgb(10 9 8 / 0.78) 45%, rgb(10 9 8 / 0.94) 100%)",
             }}
           />
+          {/* The ember. It drifts, so the panel is never quite the same twice. */}
+          <div
+            aria-hidden
+            className="animate-drift absolute -inset-x-32 -bottom-56 h-[42rem]"
+            style={{
+              background:
+                "radial-gradient(38rem 22rem at 22% 100%, color-mix(in oklab, #ff7a1a 34%, transparent), transparent 68%), radial-gradient(30rem 18rem at 82% 8%, color-mix(in oklab, #ff7a1a 16%, transparent), transparent 70%)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="hairline-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(70%_60%_at_50%_40%,black,transparent)]"
+          />
+          {/* A scan line crossing the panel — the one moving part. */}
+          <span
+            aria-hidden
+            className="animate-sweep absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,transparent,color-mix(in_oklab,var(--accent)_9%,transparent),transparent)]"
+          />
 
-          <div className="relative mx-auto max-w-2xl px-6 py-20 text-center sm:px-10 sm:py-28">
-            <p className="eyebrow text-ink-3">{d.home.ctaTitle}</p>
-            <h2 className="mt-6 text-[clamp(2rem,4.8vw,3.5rem)] leading-[0.98] tracking-[-0.045em] text-ink">
-              {d.home.ctaBody}
-            </h2>
-            <div className="mt-10 flex flex-wrap justify-center gap-3">
-              <ButtonLink href={path("/register", locale)} size="lg" className="group">
-                {d.home.ctaButton}
-                <ArrowRight
-                  className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
-                  aria-hidden
-                />
-              </ButtonLink>
-              <ButtonLink
-                href={path("/plans", locale)}
-                variant="secondary"
-                size="lg"
-                className="border-line-3 bg-[color-mix(in_oklab,var(--surface)_55%,transparent)] backdrop-blur-md"
-              >
-                {d.plans.compare}
-              </ButtonLink>
-            </div>
-            <p className="mt-7 font-mono text-2xs tracking-[0.18em] text-faint uppercase">RU · UA · EN</p>
+          {/* ------------------------------- top strip ---------------------------- */}
+          <div className="relative flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-line px-6 py-4 sm:px-10">
+            <p className="eyebrow flex items-center gap-2.5 text-ink-2">
+              <Dot pulse />
+              {d.home.ctaTitle}
+            </p>
+            <p className="font-mono text-2xs tracking-[0.22em] text-muted uppercase">RU · UA · EN</p>
           </div>
-        </div>
+
+          {/* --------------------------------- body ------------------------------- */}
+          <div className="relative grid gap-12 px-6 py-14 sm:px-10 sm:py-20 lg:grid-cols-[1.4fr_1fr] lg:items-start lg:gap-16">
+            <div>
+              <h2 className="max-w-[16ch] text-[clamp(2.1rem,5.2vw,4rem)] leading-[1.06] tracking-[-0.045em] text-ink">
+                {before}
+                {mark && <span className="mark">{mark}</span>}
+                {after}
+              </h2>
+
+              <p className="mt-8 max-w-lg text-[15.5px] leading-relaxed text-ink-2">{d.home.ctaNote}</p>
+
+              <div className="mt-9 flex flex-wrap items-center gap-3">
+                <Magnetic>
+                  <ButtonLink href={path("/register", locale)} size="lg" className="group">
+                    {d.home.ctaButton}
+                    <ArrowRight
+                      className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                      aria-hidden
+                    />
+                  </ButtonLink>
+                </Magnetic>
+                <ButtonLink
+                  href={path("/plans", locale)}
+                  variant="secondary"
+                  size="lg"
+                  className="border-line-3 bg-[color-mix(in_oklab,var(--surface)_55%,transparent)] backdrop-blur-md"
+                >
+                  {d.plans.compare}
+                </ButtonLink>
+              </div>
+            </div>
+
+            {/* the pass — what a free account actually opens */}
+            <div className="relative rounded-2xl border border-line-2 bg-[color-mix(in_oklab,var(--surface)_62%,transparent)] p-6 shadow-pop backdrop-blur-xl sm:p-7">
+              <span
+                aria-hidden
+                className="absolute -top-px left-7 h-px w-24 bg-[linear-gradient(90deg,transparent,var(--accent),transparent)]"
+              />
+              <div className="flex items-baseline justify-between gap-4">
+                <p className="eyebrow text-accent-ink">{d.home.ctaPanelTitle}</p>
+                <span className="numeral text-[13px] tabular-nums">00</span>
+              </div>
+
+              <ul className="mt-5 flex flex-col gap-3 border-t border-line pt-5">
+                {points.map((point) => (
+                  <li key={point} className="flex gap-3 text-[14px] leading-snug text-ink-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+
+              <p className="mt-6 border-t border-line pt-5 text-[12.5px] leading-relaxed text-muted">
+                {d.home.ctaPanelNote}
+              </p>
+            </div>
+          </div>
+
+          {/* -------------------------------- ledger ------------------------------ */}
+          <dl className="relative grid grid-cols-2 border-t border-line sm:grid-cols-4">
+            {ledger.map((figure, index) => (
+              <div
+                key={figure.label}
+                className={cn(
+                  "border-line px-6 py-6 sm:px-8",
+                  index % 2 === 1 && "border-l",
+                  index > 1 && "border-t sm:border-t-0",
+                  "sm:border-l sm:first:border-l-0",
+                )}
+              >
+                <dt className="sr-only">{figure.label}</dt>
+                <dd>
+                  <span className="block font-display text-[clamp(1.5rem,2.8vw,2.25rem)] leading-none font-extrabold tracking-tight text-ink">
+                    <AnimatedNumber value={figure.value} duration={900 + index * 120} />
+                    {figure.suffix}
+                  </span>
+                  <span className="mt-2 block text-[12.5px] leading-snug text-muted">{figure.label}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Spotlight>
       </Reveal>
     </Container>
   );

@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { api, ApiError } from "@/lib/api/http";
 import { clearAdminToken, clearSessionToken, writeAdminToken, writeSessionToken } from "./cookies";
+import { safeNext } from "./redirects";
 import type { ApiUser } from "@/lib/api/types";
 import { defaultLocale, isLocale, type Locale } from "@/lib/i18n/config";
 
@@ -37,7 +38,7 @@ export async function signIn(_prev: AuthResult | null, formData: FormData): Prom
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   const locale = localeOf(formData.get("locale"));
-  const next = String(formData.get("next") ?? "") || `/${locale}/app`;
+  const next = safeNext(formData.get("next"), locale);
 
   try {
     const result = await api<{ token: string; user: ApiUser }>("/auth/login", {

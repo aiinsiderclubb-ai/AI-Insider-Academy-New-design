@@ -6,7 +6,7 @@ import { BadgeCheck, Check, Clock, FileArchive, ListChecks, Package, Wallet } fr
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/navigation";
 import { Container, SectionHead } from "@/components/primitives/surface";
-import { Reveal, RevealGroup } from "@/components/motion/reveal";
+import { Reveal } from "@/components/motion/reveal";
 import { Rating } from "@/components/primitives/display";
 import { Note } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
@@ -91,7 +91,6 @@ export default async function ProductPage({
               </h1>
               <WishlistButton
                 id={product.id}
-                locale={locale}
                 labels={{ add: d.store.wishlist, added: d.store.inWishlist }}
                 className="mt-1.5 shrink-0"
               />

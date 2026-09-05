@@ -60,6 +60,7 @@ export function buildNav(d: Dictionary, locale: Locale): NavSection[] {
             { label: d.store.bestSellers, href: p("/store?sort=rating") },
             { label: d.nav.vault, href: p("/store?collection=vault") },
             { label: d.nav.creators, href: p("/store/creators") },
+            { label: d.nav.tools, href: p("/store/tools"), note: d.tools.subtitle },
           ],
         },
       ],

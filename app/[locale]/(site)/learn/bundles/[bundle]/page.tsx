@@ -5,7 +5,7 @@ import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs } from "@/components/primitives/navigation";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container, SectionHead } from "@/components/primitives/surface";
-import { Reveal, RevealGroup } from "@/components/motion/reveal";
+import { Reveal } from "@/components/motion/reveal";
 import { CourseCard } from "@/components/catalog/course-card";
 import { bundleById, courseBundles } from "@/content/catalog";
 import { pick } from "@/content/locale";

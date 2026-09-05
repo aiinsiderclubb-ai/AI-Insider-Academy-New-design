@@ -6,7 +6,7 @@ import { Badge } from "@/components/primitives/badge";
 import { ButtonLink } from "@/components/primitives/button";
 import { Segmented } from "@/components/primitives/field";
 import type { Billing, ComparisonRow, MembershipPlan, Tier } from "@/content/plans";
-import { formatPrice, path, type Dictionary, type Locale } from "@/lib/i18n";
+import { formatPrice, path, plural, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export function PlansBoard({
@@ -47,6 +47,9 @@ export function PlansBoard({
           const monthlyEquivalent = plan.billing === "annual" ? Math.round(plan.priceEur / 12) : plan.priceEur;
           const reference = monthly.find((item) => item.tier === plan.tier);
           const saved = plan.billing === "annual" && reference ? reference.priceEur * 12 - plan.priceEur : 0;
+          // Whole months the yearly price gives away, stated per tier: the
+          // badge above the grid can only promise the best case ("up to 6").
+          const freeMonths = plan.billing === "annual" ? (monthsFreeByTier[plan.tier] ?? 0) : 0;
 
           // Some plans encode exclusions inside the includes list; split them
           // out so a missing feature never renders behind a green tick.
@@ -98,9 +101,21 @@ export function PlansBoard({
               </div>
 
               {plan.billing === "annual" && (
-                <p className="mt-2 text-[13px] text-ink-3">
-                  ≈ {formatPrice(monthlyEquivalent, locale)} {d.common.perMonth}
-                  {saved > 0 && <span className="ml-2 text-success">−{formatPrice(saved, locale)}</span>}
+                <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-ink-3">
+                  <span>
+                    ≈ {formatPrice(monthlyEquivalent, locale)} {d.common.perMonth}
+                  </span>
+                  {saved > 0 && <span className="text-success">−{formatPrice(saved, locale)}</span>}
+                  {freeMonths > 0 && (
+                    <Badge tone="success">
+                      {freeMonths}{" "}
+                      {plural(freeMonths, locale, [
+                        d.plans.monthsFree_1,
+                        d.plans.monthsFree_2,
+                        d.plans.monthsFree_5,
+                      ])}
+                    </Badge>
+                  )}
                 </p>
               )}
 

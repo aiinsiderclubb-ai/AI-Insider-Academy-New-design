@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_rethrow } from "next/navigation";
 import { readAdminToken, readSessionToken } from "@/lib/auth/cookies";
 
 export const API_ORIGIN = process.env.API_ORIGIN ?? "http://localhost:3001";
@@ -100,12 +101,46 @@ async function safeJson(response: Response): Promise<unknown> {
   }
 }
 
-/** Never let one slow or broken panel take the whole page down. */
+/**
+ * Never let one slow or broken panel take the whole page down.
+ *
+ * The fallback is returned, but the failure is not swallowed: a degraded panel
+ * looks exactly like an empty one on screen, so without this line a dead
+ * backend reaches production as "the dashboard is blank" and nothing else.
+ *
+ * A missing session is not a failure — `soft` requests answer `null` for
+ * 401/403/404 by design, and those never reach the catch.
+ */
 export async function tryApi<T>(path: string, options: Options = {}, fallback: T): Promise<T> {
   try {
     const value = await api<T>(path, options);
     return value ?? fallback;
-  } catch {
+  } catch (error) {
+    // `notFound()`, `redirect()` and the request-time bailout that `cookies()`
+    // throws while a route is being probed for static rendering are all
+    // control flow, not failures. Swallowing them here would strand a route
+    // on fallback data and print a scary line for a healthy build.
+    unstable_rethrow(error);
+    reportApiFailure(path, options, error);
     return fallback;
   }
+}
+
+/**
+ * Where a swallowed failure goes.
+ *
+ * `console.error` on the server is picked up by every host's log drain, which
+ * is the point — one line, one path, one reason. Swap the body for the
+ * project's error reporter when there is one; the call sites do not change.
+ */
+function reportApiFailure(path: string, options: Options, error: unknown): void {
+  const method = options.method ?? "GET";
+  const detail =
+    error instanceof ApiError
+      ? `${error.status || "network"} ${error.code}: ${error.message}`
+      : error instanceof Error
+        ? error.message
+        : String(error);
+
+  console.error(`[api] ${method} ${path} failed, serving fallback — ${detail}`);
 }

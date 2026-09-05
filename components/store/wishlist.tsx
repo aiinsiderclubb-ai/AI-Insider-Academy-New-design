@@ -68,12 +68,11 @@ export function useWishlist() {
 
 export function WishlistButton({
   id,
-  locale,
   labels,
   className,
 }: {
   id: string;
-  locale: Locale;
+  /** Already localised by the caller — the button holds no copy of its own. */
   labels: { add: string; added: string };
   className?: string;
 }) {

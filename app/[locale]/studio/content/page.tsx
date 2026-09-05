@@ -7,7 +7,7 @@ import { pick } from "@/content/locale";
 import { legalEntity, legalIsDraft, legalValue } from "@/content/site";
 import { getAllBlogPosts, getCalendar } from "@/lib/api/public";
 import { getStudioDashboard } from "@/lib/api/studio";
-import { formatDate, formatNumber, getDictionary, type Locale } from "@/lib/i18n";
+import { formatDate, formatNumber, type Locale } from "@/lib/i18n";
 
 export default async function StudioContentPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params;

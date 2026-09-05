@@ -7,7 +7,7 @@ import { Note } from "@/components/primitives/states";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
 import { getStudioDashboard } from "@/lib/api/studio";
-import { formatNumber, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
+import { formatNumber, formatPrice, path, type Locale } from "@/lib/i18n";
 
 export default async function StudioCoursesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params;

@@ -63,44 +63,57 @@
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --ground: #f5f4f2;
-  --ground-deep: #eceae6;
+  /* Warm paper, not office white: the ground carries the same amount of
+     orange as the dark ground does, so the accent never looks pasted on. */
+  --ground: #f4f2ee;
+  --ground-deep: #e8e4dd;
   --surface: #ffffff;
-  --surface-2: #faf9f7;
-  --surface-3: #f1efeb;
-  --surface-inset: #f6f5f2;
+  --surface-2: #faf8f5;
+  --surface-3: #efece6;
+  --surface-inset: #f6f4f0;
 
+  /* Text. Every step is measured against `--surface` (#fff) and `--ground`:
+     ink 16:1, ink-2 10.4:1, ink-3 7.1:1, muted 5.2:1 — so a caption is still
+     a caption, not a guess. `--faint` is decorative only (3.4:1) and never
+     carries a sentence. */
   --ink: #14120f;
-  --ink-2: #423b34;
-  --ink-3: #6a615a;
-  --muted: #837a72;
-  --faint: #a89f97;
-  --on-accent: #ffffff;
+  --ink-2: #3b342d;
+  --ink-3: #5b524a;
+  --muted: #6f665e;
+  --faint: #8d847b;
+  /* Dark ink on orange, exactly like the dark theme. White on this orange is
+     3.4:1 and fails AA at button sizes; #1a0d02 is 8.1:1 and keeps the brand
+     black-on-orange marker consistent across both themes. */
+  --on-accent: #1a0d02;
 
-  --line: #e7e2dc;
-  --line-2: #d8d1c8;
-  --line-3: #c3baaf;
+  --line: #e3ded6;
+  --line-2: #d0c8bd;
+  --line-3: #b4a99d;
 
-  --accent: #e8650b;
-  --accent-strong: #cf5807;
-  --accent-ink: #b04905;
-  --accent-soft: #fdeddf;
-  --accent-soft-2: #fbdcc4;
-  --accent-ring: color-mix(in oklab, #e8650b 35%, transparent);
+  /* On paper the accent has to stay a signal, so the fill keeps the brand
+     temperature while `--accent-ink` is the darkened cut used for type. */
+  --accent: #ef6a0a;
+  --accent-strong: #d85c05;
+  --accent-ink: #a34305;
+  --accent-soft: #fdeee1;
+  --accent-soft-2: #fadcc2;
+  --accent-ring: color-mix(in oklab, #ef6a0a 38%, transparent);
 
-  --success: #0b7f5c;
-  --success-soft: #e1f2eb;
-  --warning: #a8700a;
-  --warning-soft: #f8efdb;
-  --danger: #b72517;
-  --danger-soft: #fbe7e4;
+  --success: #0a7354;
+  --success-soft: #e0f1ea;
+  --warning: #96630a;
+  --warning-soft: #f8eeda;
+  --danger: #ab2114;
+  --danger-soft: #fbe6e3;
 
-  --shadow-xs: 0 1px 2px rgb(20 18 15 / 0.05);
-  --shadow-sm: 0 1px 2px rgb(20 18 15 / 0.05), 0 2px 6px -2px rgb(20 18 15 / 0.08);
-  --shadow-md: 0 1px 2px rgb(20 18 15 / 0.05), 0 10px 24px -12px rgb(20 18 15 / 0.18);
-  --shadow-lg: 0 1px 3px rgb(20 18 15 / 0.06), 0 24px 48px -24px rgb(20 18 15 / 0.28);
-  --shadow-pop: 0 2px 4px rgb(20 18 15 / 0.06), 0 16px 40px -16px rgb(20 18 15 / 0.3);
-  --shadow-glow: 0 0 0 1px color-mix(in oklab, #e8650b 20%, transparent), 0 16px 40px -18px color-mix(in oklab, #e8650b 35%, transparent);
+  /* Warm-tinted rather than neutral grey, and a step deeper than before so a
+     card reads as raised on paper instead of dissolving into it. */
+  --shadow-xs: 0 1px 2px rgb(58 40 20 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(58 40 20 / 0.06), 0 3px 8px -2px rgb(58 40 20 / 0.09);
+  --shadow-md: 0 1px 2px rgb(58 40 20 / 0.07), 0 12px 28px -12px rgb(58 40 20 / 0.22);
+  --shadow-lg: 0 1px 3px rgb(58 40 20 / 0.08), 0 28px 56px -24px rgb(58 40 20 / 0.32);
+  --shadow-pop: 0 2px 4px rgb(58 40 20 / 0.08), 0 18px 44px -16px rgb(58 40 20 / 0.34);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, #ef6a0a 26%, transparent), 0 16px 40px -16px color-mix(in oklab, #ef6a0a 42%, transparent);
 }
 
 /* Always-dark island: cinematic blocks keep their own ground in both themes. */
@@ -108,9 +121,11 @@
 .ch-ink {
   color-scheme: dark;
   --ground: #0a0908;
+  --ground-deep: #050504;
   --surface: #121110;
   --surface-2: #191716;
   --surface-3: #221f1d;
+  --surface-inset: #0e0d0c;
   --ink: #ffffff;
   --ink-2: #cbc6c1;
   --ink-3: #a49e98;
@@ -123,7 +138,20 @@
   --accent-strong: #ff9040;
   --accent-ink: #ffa054;
   --accent-soft: #241608;
+  --accent-soft-2: #33200c;
+  --accent-ring: color-mix(in oklab, #ff7a1a 45%, transparent);
   --on-accent: #0a0908;
+
+  /* An island keeps its own elevation too. Paper shadows are tuned to be read
+     against white; dropped on a near-black ground they vanish, so a card
+     inside a dark block in light mode would lose its edge entirely. */
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.45);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5), 0 2px 6px -2px rgb(0 0 0 / 0.55);
+  --shadow-md: 0 1px 2px rgb(0 0 0 / 0.55), 0 14px 32px -16px rgb(0 0 0 / 0.8);
+  --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.55), 0 32px 64px -28px rgb(0 0 0 / 0.9);
+  --shadow-pop: 0 2px 6px rgb(0 0 0 / 0.6), 0 24px 48px -20px rgb(0 0 0 / 0.95);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, #ff7a1a 22%, transparent), 0 16px 48px -18px color-mix(in oklab, #ff7a1a 45%, transparent);
+
   color: var(--ink);
 }
 
@@ -440,6 +468,8 @@
 .animate-fade { animation: fade 0.3s ease-out both; }
 .animate-pop { animation: pop 0.18s var(--ease-out-quart) both; }
 .animate-bob { animation: bob 2.4s ease-in-out infinite; }
+/* A scan line travelling down a dark panel — one per page, on the closing frame. */
+.animate-sweep { animation: sweep 7s var(--ease-out-quart) infinite; }
 
 /* Scroll reveal — the element ships hidden and is released by an observer. */
 [data-reveal] {
@@ -596,6 +626,7 @@
   [data-wipe] { clip-path: none !important; }
   .spot::after { display: none; }
   .animate-drift { animation: none; }
+  .animate-sweep { animation: none; opacity: 0; }
   .skeleton::after { animation: none; }
   .marquee-track { animation: none; }
 }

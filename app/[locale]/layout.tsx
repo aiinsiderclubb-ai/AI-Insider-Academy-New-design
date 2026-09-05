@@ -54,22 +54,29 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * One colour, not a media-query pair: the product ignores the OS preference
+ * and opens dark for everyone, so a `prefers-color-scheme: light` entry would
+ * paint the browser chrome cream around a near-black page. The bootstrap below
+ * rewrites this tag when the visitor has chosen light.
+ */
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f4f2" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0908" },
-  ],
+  themeColor: "#0a0908",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
 };
 
 /**
- * Applies the stored theme before first paint. The product is dark by default,
- * so this exists to stop a *light*-mode visitor seeing a dark flash. It has to
- * run before hydration, hence the inline script.
+ * Runs before first paint, hence inline:
+ *
+ * 1. drops `no-js`, which is what keeps scroll-reveal elements visible when
+ *    scripting never arrives — without it a failed hydration leaves the page
+ *    blank at `opacity: 0`;
+ * 2. applies the stored theme, so a light-mode visitor never sees a dark
+ *    flash, and moves the `theme-color` tag with it.
  */
-const themeBootstrap = `(function(){try{var t=localStorage.getItem("aia-theme");if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t)}}catch(e){}})()`;
+const themeBootstrap = `(function(){var d=document.documentElement;d.classList.remove("no-js");try{var t=localStorage.getItem("aia-theme");if(t==="dark"||t==="light"){d.setAttribute("data-theme",t);if(t==="light"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content","#f4f2ee")}}}catch(e){}})()`;
 
 export default async function LocaleLayout({
   children,
@@ -86,8 +93,12 @@ export default async function LocaleLayout({
   return (
     <html
       lang={htmlLang[locale]}
+      /* Tells the router to opt out of the smooth scroll during a route
+         change; without it Next warns and every navigation animates the jump
+         back to the top. */
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+      className={`no-js ${display.variable} ${sans.variable} ${mono.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />

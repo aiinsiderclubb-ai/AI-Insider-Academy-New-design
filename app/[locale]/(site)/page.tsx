@@ -190,7 +190,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <Reviews locale={locale} d={d} reviews={reviews} />
 
       <div id="finish" />
-      <Closing locale={locale} d={d} />
+      <Closing
+        locale={locale}
+        d={d}
+        stats={{ courses: courses.length, lessons: totalLessons, products: catalog.products.length }}
+      />
     </>
   );
 }

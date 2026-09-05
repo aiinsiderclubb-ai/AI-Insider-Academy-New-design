@@ -8,7 +8,7 @@ import { pick } from "@/content/locale";
 import { creatorList, revenueShare } from "@/content/site";
 import { getStoreCatalog } from "@/lib/api/store";
 import { getFeatureFlags } from "@/lib/api/public";
-import { formatNumber, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
+import { formatNumber, formatPrice, path, type Locale } from "@/lib/i18n";
 
 export default async function StudioStorePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params;

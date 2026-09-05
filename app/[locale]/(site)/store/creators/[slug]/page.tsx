@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { BadgeCheck, CalendarDays, Package, TrendingUp } from "lucide-react";
 import { Breadcrumbs } from "@/components/primitives/navigation";
 import { Container, SectionHead } from "@/components/primitives/surface";
-import { Reveal, RevealGroup } from "@/components/motion/reveal";
+import { Reveal } from "@/components/motion/reveal";
 import { EmptyState } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
 import { creatorList } from "@/content/site";

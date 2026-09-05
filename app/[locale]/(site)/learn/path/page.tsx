@@ -4,7 +4,7 @@ import { ArrowRight, Check, Lock } from "lucide-react";
 import { Badge, Stat } from "@/components/primitives/badge";
 import { Breadcrumbs } from "@/components/primitives/navigation";
 import { ButtonLink } from "@/components/primitives/button";
-import { Container, SectionHead } from "@/components/primitives/surface";
+import { Container } from "@/components/primitives/surface";
 import { Progress } from "@/components/primitives/display";
 import { Note } from "@/components/primitives/states";
 import { academyPrinciples, learningStages } from "@/content/catalog";

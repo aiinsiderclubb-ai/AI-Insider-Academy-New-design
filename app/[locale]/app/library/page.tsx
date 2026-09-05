@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Download, FileArchive, FolderOpen, Heart, Package } from "lucide-react";
 import { AppPage } from "@/components/app/page-header";
-import { Badge } from "@/components/primitives/badge";
 import { ButtonLink } from "@/components/primitives/button";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { WishlistPanel } from "@/components/store/wishlist";

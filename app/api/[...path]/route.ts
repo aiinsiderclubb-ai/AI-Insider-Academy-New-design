@@ -1,10 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { ADMIN_COOKIE, SESSION_COOKIE } from "@/lib/auth/cookies";
+import { scopeFor } from "@/lib/auth/scopes";
 
 const API_ORIGIN = process.env.API_ORIGIN ?? "http://localhost:3001";
-
-/** Paths that need the admin token rather than the visitor's. */
-const ADMIN_PREFIXES = ["admin/", "governance/", "n8n/"];
 
 /**
  * Same-origin proxy to the Express API.
@@ -23,9 +21,13 @@ async function forward(request: NextRequest, segments: string[]) {
   if (contentType) headers.set("content-type", contentType);
   headers.set("accept", request.headers.get("accept") ?? "application/json");
 
-  const useAdmin = ADMIN_PREFIXES.some((prefix) => path.startsWith(prefix));
-  const token = request.cookies.get(useAdmin ? ADMIN_COOKIE : SESSION_COOKIE)?.value;
-  if (token) headers.set("authorization", `Bearer ${token}`);
+  // `scopeFor` decides which credential this path may carry — and withholds
+  // both when the path looks privileged but is not a known admin router.
+  const scope = scopeFor(path);
+  if (scope !== "none") {
+    const token = request.cookies.get(scope === "admin" ? ADMIN_COOKIE : SESSION_COOKIE)?.value;
+    if (token) headers.set("authorization", `Bearer ${token}`);
+  }
 
   const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) headers.set("x-forwarded-for", forwardedFor);

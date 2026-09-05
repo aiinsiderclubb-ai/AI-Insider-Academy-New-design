@@ -77,7 +77,6 @@ export function ProductCard({
 
         <WishlistButton
           id={product.id}
-          locale={locale}
           labels={{ add: d.store.wishlist, added: d.store.inWishlist }}
           className="absolute right-3 bottom-3"
         />

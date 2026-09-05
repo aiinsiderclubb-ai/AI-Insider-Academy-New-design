@@ -6,6 +6,14 @@ import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "aia-theme";
 
+/** Keeps the browser chrome on the same ground as the page. */
+const CHROME = { light: "#f4f2ee", dark: "#0a0908" };
+
+function paintChrome(light: boolean) {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  meta?.setAttribute("content", light ? CHROME.light : CHROME.dark);
+}
+
 /**
  * Two states, not three.
  *
@@ -24,7 +32,11 @@ export function ThemeToggle({
   const [light, setLight] = React.useState(false);
 
   React.useEffect(() => {
-    setLight(document.documentElement.getAttribute("data-theme") === "light");
+    const stored = document.documentElement.getAttribute("data-theme") === "light";
+    setLight(stored);
+    // The bootstrap runs before Next has necessarily emitted its own
+    // `theme-color`, so the tag is re-synced once the tree is mounted.
+    paintChrome(stored);
   }, []);
 
   const toggle = () => {
@@ -38,6 +50,7 @@ export function ThemeToggle({
       root.removeAttribute("data-theme");
       localStorage.removeItem(STORAGE_KEY);
     }
+    paintChrome(next);
   };
 
   return (

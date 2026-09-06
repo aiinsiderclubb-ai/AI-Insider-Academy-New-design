@@ -94,7 +94,7 @@ export default async function StudioGrowthPage({ params }: { params: Promise<{ l
 
         <Panel title={pick(locale, "Кто приводит людей", "Who brings people in")}>
           {topReferrers.length ? (
-            <RankedBars rows={topReferrers} format={(value) => formatNumber(value, locale)} />
+            <RankedBars rows={topReferrers} locale={locale} format="number" />
           ) : (
             <p className="text-[13px] text-muted">{pick(locale, "Рефералов пока нет", "No referrals yet")}</p>
           )}

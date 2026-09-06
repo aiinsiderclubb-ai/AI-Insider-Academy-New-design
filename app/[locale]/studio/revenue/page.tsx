@@ -52,7 +52,8 @@ export default async function StudioRevenuePage({ params }: { params: Promise<{ 
           points={series}
           height={160}
           label={pick(locale, "Выручка по дням", "Daily revenue")}
-          format={(value) => formatPrice(Math.round(value), locale)}
+          locale={locale}
+          format="price"
         />
       </Panel>
 
@@ -86,7 +87,7 @@ export default async function StudioRevenuePage({ params }: { params: Promise<{ 
         <div className="flex flex-col gap-3">
           <Panel title={pick(locale, "Топ программ", "Top programmes")}>
             {topCourses.length ? (
-              <RankedBars rows={topCourses} format={(value) => formatPrice(value, locale)} />
+              <RankedBars rows={topCourses} locale={locale} format="price" />
             ) : (
               <p className="text-[13px] text-muted">{pick(locale, "Данных нет", "No data")}</p>
             )}

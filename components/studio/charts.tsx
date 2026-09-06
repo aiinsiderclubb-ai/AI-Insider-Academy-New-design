@@ -1,11 +1,19 @@
 "use client";
 
 import * as React from "react";
+import { formatNumber, formatPrice } from "@/lib/i18n";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 export interface Point {
   date: string;
   value: number;
+}
+
+export type ChartFormat = "number" | "price";
+
+function chartValue(value: number, locale: Locale, format: ChartFormat) {
+  return format === "price" ? formatPrice(Math.round(value), locale) : formatNumber(Math.round(value), locale);
 }
 
 function niceMax(value: number) {
@@ -38,13 +46,15 @@ function useHover(points: Point[], width: number, padding: number) {
 export function Sparkline({
   points,
   height = 120,
-  format = (value: number) => String(Math.round(value)),
+  format = "number",
+  locale = defaultLocale,
   label,
   className,
 }: {
   points: Point[];
   height?: number;
-  format?: (value: number) => string;
+  format?: ChartFormat;
+  locale?: Locale;
   label: string;
   className?: string;
 }) {
@@ -134,7 +144,7 @@ export function Sparkline({
           style={{ left: `${((padding + (index ?? 0) * step) / width) * 100}%`, transform: "translateX(-50%)" }}
         >
           <p className="font-mono text-[11px] text-muted">{active.date}</p>
-          <p className="font-mono text-[13px] font-medium tabular-nums text-ink">{format(active.value)}</p>
+          <p className="font-mono text-[13px] font-medium tabular-nums text-ink">{chartValue(active.value, locale, format)}</p>
         </div>
       )}
     </div>
@@ -146,13 +156,15 @@ export function Sparkline({
 export function Bars({
   points,
   height = 140,
-  format = (value: number) => String(Math.round(value)),
+  format = "number",
+  locale = defaultLocale,
   label,
   className,
 }: {
   points: Point[];
   height?: number;
-  format?: (value: number) => string;
+  format?: ChartFormat;
+  locale?: Locale;
   label: string;
   className?: string;
 }) {
@@ -196,7 +208,7 @@ export function Bars({
           style={{ left: `${((hover + 0.5) / points.length) * 100}%`, transform: "translateX(-50%)" }}
         >
           <p className="font-mono text-[11px] text-muted">{points[hover].date}</p>
-          <p className="font-mono text-[13px] font-medium tabular-nums text-ink">{format(points[hover].value)}</p>
+          <p className="font-mono text-[13px] font-medium tabular-nums text-ink">{chartValue(points[hover].value, locale, format)}</p>
         </div>
       )}
     </div>
@@ -208,11 +220,13 @@ export function Bars({
 /** Horizontal magnitude comparison — the honest form for "top N by count". */
 export function RankedBars({
   rows,
-  format = (value: number) => String(value),
+  format = "number",
+  locale = defaultLocale,
   className,
 }: {
   rows: { label: string; value: number }[];
-  format?: (value: number) => string;
+  format?: ChartFormat;
+  locale?: Locale;
   className?: string;
 }) {
   if (!rows.length) return null;
@@ -231,7 +245,7 @@ export function RankedBars({
               />
             </span>
           </span>
-          <span className="font-mono text-[12.5px] tabular-nums text-ink-2">{format(row.value)}</span>
+          <span className="font-mono text-[12.5px] tabular-nums text-ink-2">{chartValue(row.value, locale, format)}</span>
         </li>
       ))}
     </ul>

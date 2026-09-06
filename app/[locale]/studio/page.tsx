@@ -106,7 +106,8 @@ export default async function StudioPulsePage({ params }: { params: Promise<{ lo
           <Sparkline
             points={visits}
             label={pick(locale, "Визиты по дням", "Daily visits")}
-            format={(value) => formatNumber(Math.round(value), locale)}
+            locale={locale}
+            format="number"
           />
         </Panel>
 
@@ -117,7 +118,8 @@ export default async function StudioPulsePage({ params }: { params: Promise<{ lo
           <Bars
             points={revenue}
             label={pick(locale, "Выручка по дням", "Daily revenue")}
-            format={(value) => formatPrice(Math.round(value), locale)}
+            locale={locale}
+            format="price"
           />
         </Panel>
       </section>
@@ -153,7 +155,7 @@ export default async function StudioPulsePage({ params }: { params: Promise<{ lo
         <div className="flex flex-col gap-3">
           <Panel title={pick(locale, "Клики по курсам", "Course clicks")}>
             {topCourses.length ? (
-              <RankedBars rows={topCourses} format={(value) => formatNumber(value, locale)} />
+              <RankedBars rows={topCourses} locale={locale} format="number" />
             ) : (
               <p className="text-[13px] text-muted">{pick(locale, "Данных пока нет", "No data yet")}</p>
             )}

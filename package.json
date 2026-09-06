@@ -2,11 +2,14 @@
   "name": "ai-insider-academy",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack -p 4000",
     "build": "next build",
-    "start": "next start -p 4000",
+    "start": "next start -p ${PORT:-4000}",
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "lint:fix": "oxlint --fix",

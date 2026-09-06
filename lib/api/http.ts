@@ -1,8 +1,16 @@
 import "server-only";
 import { unstable_rethrow } from "next/navigation";
 import { readAdminToken, readSessionToken } from "@/lib/auth/cookies";
+import { resolveApiOrigin } from "./origin";
 
-export const API_ORIGIN = process.env.API_ORIGIN ?? "http://localhost:3001";
+export const API_ORIGIN = resolveApiOrigin();
+
+/**
+ * A backend that accepts the connection and then says nothing would otherwise
+ * hang a request — or a prerender — forever. Long enough for a slow query,
+ * short enough that a build cannot stall on it.
+ */
+const TIMEOUT_MS = 15_000;
 
 export class ApiError extends Error {
   constructor(
@@ -71,6 +79,7 @@ export async function api<T>(path: string, options: Options = {}): Promise<T> {
       method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
       ...cache,
     });
   } catch {

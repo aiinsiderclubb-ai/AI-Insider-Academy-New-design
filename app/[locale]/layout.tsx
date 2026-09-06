@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { Geologica, Golos_Text, JetBrains_Mono } from "next/font/google";
 import { getDictionary, htmlLang, isLocale, locales } from "@/lib/i18n";
+import { resolveSiteUrl } from "@/lib/api/origin";
 import { ToastProvider } from "@/components/primitives/toast";
 import "../globals.css";
 
@@ -40,7 +41,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const d = getDictionary(locale);
   return {
-    metadataBase: new URL(process.env.SITE_URL ?? "https://myinsideracademy.com"),
+    metadataBase: new URL(resolveSiteUrl()),
     title: { default: `${d.brand.name} ${d.brand.sub}`, template: `%s · ${d.brand.name} ${d.brand.sub}` },
     description: d.home.heroBody,
     alternates: {

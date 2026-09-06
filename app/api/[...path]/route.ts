@@ -1,8 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { ADMIN_COOKIE, SESSION_COOKIE } from "@/lib/auth/cookies";
 import { scopeFor } from "@/lib/auth/scopes";
+import { resolveApiOrigin } from "@/lib/api/origin";
 
-const API_ORIGIN = process.env.API_ORIGIN ?? "http://localhost:3001";
+const API_ORIGIN = resolveApiOrigin();
 
 /**
  * Same-origin proxy to the Express API.

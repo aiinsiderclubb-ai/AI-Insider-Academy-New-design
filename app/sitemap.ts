@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { locales, defaultLocale, type Locale } from "@/lib/i18n/config";
+import { resolveSiteUrl } from "@/lib/api/origin";
 import { legalSlugs } from "@/content/legal";
 import { courseBundles } from "@/content/catalog";
 import { giveawayList } from "@/content/community";
@@ -8,7 +9,7 @@ import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
 import { getAllBlogPosts } from "@/lib/api/public";
 
-const SITE = (process.env.SITE_URL ?? "https://myinsideracademy.com").replace(/\/$/, "");
+const SITE = resolveSiteUrl();
 
 /** Every public route, in every locale, with hreflang alternates. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

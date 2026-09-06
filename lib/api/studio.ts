@@ -125,6 +125,35 @@ export const getDataHealth = cache(async () =>
   tryApi<Record<string, unknown>>("/admin/data-health", { admin: true, soft: true }, {}),
 );
 
+export interface EmailTemplateInfo {
+  id: string;
+  kind: "marketing" | "transactional" | string;
+  name: { ru: string; ukr?: string; en: string };
+}
+
+export interface EmailQueueRow {
+  id: string;
+  email: string;
+  template: string;
+  status: string;
+  send_after?: string;
+  sent_at?: string | null;
+  error?: string | null;
+  created_at?: string;
+}
+
+export interface EmailOverview {
+  enabled: boolean;
+  counts: { pending: number; sent: number; failed: number; skipped: number; unsubscribed: number };
+  byTemplate: { template: string; status: string; c: number }[];
+  recent: EmailQueueRow[];
+  templates: EmailTemplateInfo[];
+}
+
+export const getEmailOverview = cache(async () =>
+  tryApi<EmailOverview | null>("/admin/email/overview", { admin: true, soft: true }, null),
+);
+
 export const getCreatorPayouts = cache(async () =>
   tryApi<{ payouts?: unknown[] } | unknown[]>("/admin/creator-payouts", { admin: true, soft: true }, []),
 );

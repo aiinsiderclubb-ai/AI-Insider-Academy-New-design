@@ -62,7 +62,7 @@ export async function signUp(_prev: AuthResult | null, formData: FormData): Prom
   const locale = localeOf(formData.get("locale"));
 
   try {
-    await api("/auth/register", { method: "POST", body: { email, password, name } });
+    await api("/auth/register", { method: "POST", body: { email, password, name, locale } });
   } catch (error) {
     return { ...describe(error), email };
   }

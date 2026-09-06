@@ -56,6 +56,7 @@ export default async function StudioLayout({
       title: pick(locale, "Операции", "Operations"),
       items: [
         { id: "growth", label: pick(locale, "Рост", "Growth"), href: p("/studio/growth") },
+        { id: "mail", label: pick(locale, "Письма", "Mail"), href: p("/studio/mail") },
         { id: "ops", label: pick(locale, "Инфраструктура", "Infrastructure"), href: p("/studio/ops") },
       ],
     },

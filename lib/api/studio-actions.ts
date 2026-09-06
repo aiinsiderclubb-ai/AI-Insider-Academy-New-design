@@ -155,3 +155,31 @@ export async function publishGiveaway(locale: string, slug: string): Promise<Act
     return fail(error);
   }
 }
+
+/* ---------------------------------- mail ---------------------------------- */
+
+export async function previewEmailTemplate(template: string, locale: string) {
+  try {
+    const qs = new URLSearchParams({ template, locale }).toString();
+    return await api<{ subject: string; html: string; marketing?: boolean }>(
+      `/admin/email/preview?${qs}`,
+      { admin: true },
+    );
+  } catch (error) {
+    return { subject: "", html: "", error: fail(error).message };
+  }
+}
+
+export async function sendStudioTestEmail(
+  locale: string,
+  email: string,
+  template: string,
+): Promise<ActionResult> {
+  try {
+    await api("/admin/email/test", { admin: true, method: "POST", body: { email, template, locale } });
+    refresh(locale);
+    return { ok: true };
+  } catch (error) {
+    return fail(error);
+  }
+}

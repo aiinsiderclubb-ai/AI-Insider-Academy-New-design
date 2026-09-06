@@ -10,6 +10,7 @@ import {
   FileText,
   Inbox,
   LogOut,
+  Mail,
   Menu,
   Package,
   ShieldCheck,
@@ -33,6 +34,7 @@ const ICONS: Record<string, React.ElementType> = {
   courses: BookOpen,
   store: Package,
   growth: Sparkles,
+  mail: Mail,
   content: FileText,
   ops: ShieldCheck,
 };

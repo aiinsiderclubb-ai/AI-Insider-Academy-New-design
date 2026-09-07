@@ -4,7 +4,7 @@ import { Accordion, AccordionItem, Breadcrumbs } from "@/components/primitives/n
 import { Badge } from "@/components/primitives/badge";
 import { Container, SectionHead } from "@/components/primitives/surface";
 import { GiveawayPanel } from "@/components/community/giveaway-panel";
-import { giveawayBySlug, giveawayList } from "@/content/community";
+import { giveawayBySlug, giveawayIsOpen, giveawayList } from "@/content/community";
 import { pick } from "@/content/locale";
 import { links } from "@/content/site";
 import { getGiveaway } from "@/lib/api/public";
@@ -46,6 +46,8 @@ export default async function GiveawayPage({
   const faq = pick(locale, giveaway.faqRu ?? [], giveaway.faqEn ?? []);
   const base = process.env.SITE_URL ?? links.academy;
   const shareUrl = `${base.replace(/\/$/, "")}/${locale}/community/giveaways/${giveaway.slug}`;
+  const endsAt = live?.endsAt ?? giveaway.endsAt;
+  const open = giveawayIsOpen(live?.status ?? giveaway.status, endsAt);
 
   return (
     <>
@@ -62,7 +64,9 @@ export default async function GiveawayPage({
       <Container size="wide" className="pt-7 pb-14">
         <div className="grid gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,1fr)_360px]">
           <div className="min-w-0">
-            <Badge tone="accent">{pick(locale, giveaway.tagRu, giveaway.tagEn)}</Badge>
+            <Badge tone={open ? "accent" : "neutral"}>
+              {open ? pick(locale, giveaway.tagRu, giveaway.tagEn) : pick(locale, "Завершён", "Finished")}
+            </Badge>
 
             <h1 className="mt-5 text-[clamp(2.1rem,5vw,3.5rem)] leading-[0.99] tracking-[-0.04em]">
               {pick(locale, giveaway.headlineRu, giveaway.headlineEn)}
@@ -96,7 +100,7 @@ export default async function GiveawayPage({
               </div>
               <div className="bg-surface p-4">
                 <dt className="eyebrow">{pick(locale, "Итоги", "Draw")}</dt>
-                <dd className="mt-2 text-[14px] font-medium text-ink">{formatDate(giveaway.endsAt, locale)}</dd>
+                <dd className="mt-2 text-[14px] font-medium text-ink">{formatDate(endsAt, locale)}</dd>
               </div>
             </dl>
 
@@ -144,8 +148,8 @@ export default async function GiveawayPage({
                 referralCount: live?.referralCount ?? 0,
                 chances: live?.chances ?? 0,
                 participantCount: live?.participantCount ?? 0,
-                endsAt: live?.endsAt ?? giveaway.endsAt,
-                status: (live?.status ?? giveaway.status) as "active" | "finished" | "draft",
+                endsAt,
+                status: open ? "active" : "finished",
                 telegramInviteUrl: giveaway.telegramInviteUrl || links.telegramCommunity,
               }}
             />

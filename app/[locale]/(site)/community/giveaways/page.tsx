@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/primitives/navigation";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container } from "@/components/primitives/surface";
 import { EmptyState } from "@/components/primitives/states";
-import { giveawayList } from "@/content/community";
+import { giveawayIsOpen, giveawayList } from "@/content/community";
 import { pick } from "@/content/locale";
 import { getGiveaways } from "@/lib/api/public";
 import { formatDate, getDictionary, path, type Locale } from "@/lib/i18n";
@@ -47,7 +47,7 @@ export default async function GiveawaysPage({ params }: { params: Promise<{ loca
           <ul className="grid gap-4 lg:grid-cols-2">
             {giveawayList.map((giveaway) => {
               const state = liveBySlug.get(giveaway.slug);
-              const active = (state?.status ?? giveaway.status) === "active";
+              const active = giveawayIsOpen(state?.status ?? giveaway.status, state?.endsAt ?? giveaway.endsAt);
               return (
                 <li key={giveaway.id}>
                   <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-line-2 hover:shadow-md">

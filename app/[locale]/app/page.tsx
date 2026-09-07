@@ -67,7 +67,9 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
   const nextLesson = current?.course.lessons[nextLessonIndex];
   const currentImage = current ? courseCover(current.course.image, current.course.slug) : null;
 
-  const activeGiveaway = giveaways.find((giveaway) => giveaway.status === "active");
+  const activeGiveaway = giveaways.find((giveaway) =>
+    giveaway.status === "active" && new Date(giveaway.endsAt).getTime() > Date.now(),
+  );
   const unread = notifications.filter((notification) => !notification.read);
 
   const recommended = catalog.products

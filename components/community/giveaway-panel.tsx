@@ -6,7 +6,7 @@ import { Check, Clock, Copy, Send, Ticket, Users } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Button, ButtonLink } from "@/components/primitives/button";
 import { useToast } from "@/components/primitives/toast";
-import { chanceValues } from "@/content/community";
+import { chanceValues, giveawayIsOpen } from "@/content/community";
 import { pick } from "@/content/locale";
 import type { Dictionary } from "@/lib/i18n";
 import { path, type Locale } from "@/lib/i18n/config";
@@ -63,6 +63,7 @@ export function GiveawayPanel({
   const router = useRouter();
   const { push } = useToast();
   const countdown = useCountdown(state.endsAt);
+  const closed = !giveawayIsOpen(state.status, state.endsAt) || countdown.over;
   const [busy, setBusy] = React.useState<string | null>(null);
 
   async function call(action: "enter" | "share" | "verify-telegram") {
@@ -94,7 +95,7 @@ export function GiveawayPanel({
       title: pick(locale, "Базовое участие", "Base entry"),
       note: pick(locale, "Один шанс за регистрацию в розыгрыше", "One chance for entering"),
       done: state.entered,
-      action: !state.entered && signedIn ? { label: d.community.enterGiveaway, run: () => call("enter") } : null,
+      action: !closed && !state.entered && signedIn ? { label: d.community.enterGiveaway, run: () => call("enter") } : null,
     },
     {
       id: "telegram",
@@ -102,7 +103,7 @@ export function GiveawayPanel({
       title: pick(locale, "Telegram-канал", "Telegram channel"),
       note: pick(locale, "Подписка на канал AI Insider", "Subscribe to the AI Insider channel"),
       done: state.channelSubscribed,
-      action: state.entered
+      action: !closed && state.entered
         ? { label: pick(locale, "Проверить подписку", "Check subscription"), run: () => call("verify-telegram") }
         : null,
     },
@@ -124,7 +125,7 @@ export function GiveawayPanel({
       note: pick(locale, "Отправьте ссылку в соцсети или чат", "Post the link to a chat or feed"),
       done: state.shared,
       action:
-        state.entered && !state.shared
+        !closed && state.entered && !state.shared
           ? {
               label: d.common.share,
               run: async () => {
@@ -142,7 +143,7 @@ export function GiveawayPanel({
       {/* --------------------------------- status -------------------------------- */}
       <div className="rounded-lg border border-line bg-surface p-5 shadow-sm">
         <div className="flex items-center justify-between gap-3">
-          <p className="eyebrow">{state.status === "finished" ? pick(locale, "Итоги", "Results") : pick(locale, "До итогов", "Until the draw")}</p>
+          <p className="eyebrow">{closed ? pick(locale, "Итоги", "Results") : pick(locale, "До итогов", "Until the draw")}</p>
           {state.entered && (
             <Badge tone="success">
               <Check className="h-3 w-3" aria-hidden />
@@ -183,7 +184,11 @@ export function GiveawayPanel({
           )}
         </dl>
 
-        {!signedIn ? (
+        {closed ? (
+          <p className="mt-5 rounded-md border border-line bg-surface-2 px-4 py-3 text-center text-[13.5px] leading-relaxed text-ink-2">
+            {pick(locale, "Розыгрыш завершён. Новые заявки не принимаем.", "This giveaway has ended. New entries are closed.")}
+          </p>
+        ) : !signedIn ? (
           <ButtonLink href={path(`/register?next=/community/giveaways/${state.slug}`, locale)} size="lg" className="mt-5" full>
             {d.community.enterGiveaway}
           </ButtonLink>
@@ -209,7 +214,9 @@ export function GiveawayPanel({
 
         <p className="mt-3 flex items-center justify-center gap-1.5 text-[12px] text-muted">
           <Clock className="h-3.5 w-3.5" aria-hidden />
-          {pick(locale, "Участие бесплатное", "Free to enter")}
+          {closed
+            ? pick(locale, "Приём заявок закрыт", "Entry is closed")
+            : pick(locale, "Участие бесплатное", "Free to enter")}
         </p>
       </div>
 
@@ -252,7 +259,7 @@ export function GiveawayPanel({
           ))}
         </ul>
 
-        {!state.telegramConnected && (
+        {!state.telegramConnected && !closed && (
           <ButtonLink
             href={state.telegramInviteUrl}
             target="_blank"

@@ -45,6 +45,12 @@ export function giveawayBySlug(slug: string) {
   return giveawayList.find((giveaway) => giveaway.slug === slug);
 }
 
+export function giveawayIsOpen(status: string, endsAt: string, now = Date.now()) {
+  if (status !== "active") return false;
+  const end = new Date(endsAt).getTime();
+  return Number.isFinite(end) && end > now;
+}
+
 /** Ways to earn extra entries, and how many each is worth. */
 export const chanceValues = {
   base: chances.CHANCE_BASE as number,

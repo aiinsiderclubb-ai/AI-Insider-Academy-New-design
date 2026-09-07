@@ -405,7 +405,7 @@ export const en: Dictionary = {
       "Use the same email in Tribute as on Academy — otherwise access will not open automatically.",
     waiverRequired: "Confirm immediate access and the 14-day waiver to pay.",
     successTitle: "Payment received",
-    successBody: "Access is already open — you can start now.",
+    successBody: "Access is open. Sign in to Academy with the same email you paid with.",
     goToCourse: "Open the course",
     goToLibrary: "Open your library",
     failedTitle: "Payment did not go through",

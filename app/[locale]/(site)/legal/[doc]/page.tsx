@@ -41,6 +41,7 @@ export default async function LegalPage({
 
   const requisites: { label: string; value: string | null }[] = [
     { label: pick(locale, "Продавец", "Seller"), value: legalValue(legalEntity.legalName) },
+    { label: pick(locale, "Страна", "Country"), value: legalValue(legalEntity.registrationCountry) },
     { label: pick(locale, "Регистрация", "Registration"), value: legalValue(legalEntity.registrationNumber) },
     { label: pick(locale, "Налоговый номер", "Tax ID"), value: legalValue(legalEntity.taxId) },
     { label: pick(locale, "Адрес", "Address"), value: legalValue(legalEntity.address) },

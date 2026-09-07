@@ -18,6 +18,7 @@ const legacyRedirects: Record<string, string> = {
   "/oferta": "/legal/offer",
   "/privacy": "/legal/privacy",
   "/refund": "/legal/refund",
+  "/impressum": "/legal/impressum",
   "/giveaway-rules": "/legal/giveaway-rules",
   "/admin": "/studio",
 };

@@ -81,6 +81,7 @@ describe("legacy routes", () => {
   it("redirects them under an existing locale prefix too", () => {
     expect(redirect(proxy(request("/en/cabinet")))).toEqual({ to: "/en/app", status: 308 });
     expect(redirect(proxy(request("/ukr/oferta")))?.to).toBe("/ukr/legal/offer");
+    expect(redirect(proxy(request("/en/impressum")))?.to).toBe("/en/legal/impressum");
   });
 
   it("keeps the query string on a legacy redirect", () => {

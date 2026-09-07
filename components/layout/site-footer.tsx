@@ -40,6 +40,7 @@ export function SiteFooter({ locale, d }: { locale: Locale; d: Dictionary }) {
       title: d.footer.legal,
       links: [
         { label: d.footer.offer, href: p("/legal/offer") },
+        { label: d.footer.impressum, href: p("/legal/impressum") },
         { label: d.footer.privacy, href: p("/legal/privacy") },
         { label: d.footer.refund, href: p("/legal/refund") },
         { label: d.footer.giveawayRules, href: p("/legal/giveaway-rules") },

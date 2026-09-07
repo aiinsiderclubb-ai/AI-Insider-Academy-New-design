@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, CreditCard, Landmark, Loader2, Send, TestTube2 } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
@@ -8,7 +9,7 @@ import { Button } from "@/components/primitives/button";
 import { Field, Input } from "@/components/primitives/field";
 import { useToast } from "@/components/primitives/toast";
 import type { ProviderId } from "@/lib/api/checkout";
-import { formatPrice, type Dictionary, type Locale } from "@/lib/i18n";
+import { formatPrice, path, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export interface CheckoutTier {
@@ -69,6 +70,7 @@ export function CheckoutForm({
   >({ status: "idle" });
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [digitalWaiver, setDigitalWaiver] = React.useState(false);
 
   const tier = tiers.find((item) => item.id === tierId) ?? tiers[0];
   const base = tier?.priceEur ?? 0;
@@ -107,6 +109,11 @@ export function CheckoutForm({
     if (!tier || !provider) return;
     if (!signedIn) {
       router.push(`/${locale}/login?next=${encodeURIComponent(successHref)}`);
+      return;
+    }
+
+    if (!digitalWaiver) {
+      setError(d.checkout.waiverRequired);
       return;
     }
 
@@ -288,7 +295,26 @@ export function CheckoutForm({
         </p>
       )}
 
-      <Button onClick={pay} size="lg" full className="mt-5" loading={submitting} disabled={!provider || !tier}>
+      <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-md border border-line bg-surface-2 p-3.5 text-[12.5px] leading-relaxed text-ink-2">
+        <input
+          type="checkbox"
+          className="mt-0.5"
+          checked={digitalWaiver}
+          onChange={(event) => setDigitalWaiver(event.target.checked)}
+        />
+        <span>{d.checkout.digitalWaiver}</span>
+      </label>
+
+      <p className="mt-3 text-[12.5px] leading-relaxed text-ink-3">{d.checkout.emailMatch}</p>
+
+      <Button
+        onClick={pay}
+        size="lg"
+        full
+        className="mt-5"
+        loading={submitting}
+        disabled={!provider || !tier || !digitalWaiver}
+      >
         {submitting ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
@@ -299,7 +325,17 @@ export function CheckoutForm({
         )}
       </Button>
 
-      <p className="mt-3 text-center text-[12px] leading-relaxed text-muted">{d.checkout.terms}</p>
+      <p className="mt-3 text-center text-[12px] leading-relaxed text-muted">
+        {d.checkout.termsLead}{" "}
+        <Link href={path("/legal/offer", locale)} className="underline underline-offset-2 hover:text-ink">
+          {d.checkout.termsOffer}
+        </Link>{" "}
+        {d.checkout.termsAnd}{" "}
+        <Link href={path("/legal/refund", locale)} className="underline underline-offset-2 hover:text-ink">
+          {d.checkout.termsRefund}
+        </Link>
+        .
+      </p>
     </div>
   );
 }

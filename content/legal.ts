@@ -18,6 +18,7 @@ const DOCS = {
   offer: { data: legal.offer, meta: legal.offerMeta },
   privacy: { data: legal.privacy, meta: legal.privacyMeta },
   refund: { data: legal.refund, meta: legal.refundMeta },
+  impressum: { data: legal.impressum, meta: legal.impressumMeta },
   "giveaway-rules": { data: legal.giveawayRules, meta: legal.giveawayRulesMeta },
 } as const;
 

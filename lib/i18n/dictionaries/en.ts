@@ -395,6 +395,15 @@ export const en: Dictionary = {
     securePayment: "Secure payment",
     instantAccess: "Access opens immediately",
     terms: "By paying you accept the public offer and the refund policy",
+    termsOffer: "public offer",
+    termsRefund: "refund policy",
+    termsLead: "By paying you accept the",
+    termsAnd: "and the",
+    digitalWaiver:
+      "I want access immediately. I understand I lose the 14-day right of withdrawal once the course unlocks in my account.",
+    emailMatch:
+      "Use the same email in Tribute as on Academy — otherwise access will not open automatically.",
+    waiverRequired: "Confirm immediate access and the 14-day waiver to pay.",
     successTitle: "Payment received",
     successBody: "Access is already open — you can start now.",
     goToCourse: "Open the course",
@@ -432,6 +441,7 @@ export const en: Dictionary = {
     offer: "Public offer",
     privacy: "Privacy policy",
     refund: "Refund policy",
+    impressum: "Impressum",
     giveawayRules: "Giveaway rules",
     contacts: "Contacts",
     manager: "Manager",

@@ -52,6 +52,9 @@ export async function generateMetadata({
       type: "website",
       locale: htmlLang[locale as never] ?? "ru",
     },
+    verification: {
+      google: "XKA9nH6bLwQq4epuO6-0W4rFpvpS5RMrmFVrQ1nIxbw",
+    },
   };
 }
 

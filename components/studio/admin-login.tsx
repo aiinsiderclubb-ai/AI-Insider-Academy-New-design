@@ -52,7 +52,7 @@ export function AdminLogin({
               className="flex gap-2 rounded-md border border-danger/30 bg-danger-soft px-3.5 py-3 text-[13px] leading-snug text-ink-2"
             >
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
-              {state.message === "network" ? d.errors.network : pick(locale, "Неверный пароль", "Wrong password")}
+              {adminLoginError(state, locale, d)}
             </p>
           )}
 
@@ -68,4 +68,26 @@ export function AdminLogin({
       </div>
     </div>
   );
+}
+
+/**
+ * One message per cause, because each asks for a different next step.
+ *
+ * The API allows five attempts per fifteen minutes, and it counts them against
+ * the address it sees — which, for a login made from this site's server, is
+ * shared by everyone signing in. "Wrong password" on a 429 is actively
+ * harmful: the correct password gets retyped, rejected again, and the window
+ * keeps resetting.
+ */
+function adminLoginError(state: AuthResult, locale: Locale, d: Dictionary): string {
+  if (state.message === "network") return d.errors.network;
+  if (state.status === 429) {
+    return pick(
+      locale,
+      "Слишком много попыток. Подождите 15 минут — до этого не сработает даже верный пароль.",
+      "Too many attempts. Wait 15 minutes — until then even the right password will be refused.",
+    );
+  }
+  if (state.status === 401) return pick(locale, "Неверный пароль", "Wrong password");
+  return d.errors.generic;
 }

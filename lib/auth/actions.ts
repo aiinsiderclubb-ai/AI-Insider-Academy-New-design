@@ -14,6 +14,12 @@ export interface AuthResult {
   /** The account exists but the address has not been confirmed yet. */
   requiresVerification?: boolean;
   email?: string;
+  /**
+   * HTTP status from the API, when there was one. A form that collapses every
+   * failure into "wrong password" sends someone who is merely rate-limited
+   * off to retype a correct password — which only extends the lockout.
+   */
+  status?: number;
 }
 
 function localeOf(value: FormDataEntryValue | null): Locale {
@@ -27,6 +33,7 @@ function describe(error: unknown): AuthResult {
       ok: false,
       message: error.messageRu ?? error.message,
       requiresVerification: error.status === 403,
+      status: error.status,
     };
   }
   return { ok: false, message: "network" };

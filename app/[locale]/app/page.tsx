@@ -19,6 +19,7 @@ import { Progress, ProgressRing } from "@/components/primitives/display";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
 import { courseCover } from "@/content/covers";
+import { giveawayIsOpen } from "@/content/community";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
@@ -67,9 +68,7 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
   const nextLesson = current?.course.lessons[nextLessonIndex];
   const currentImage = current ? courseCover(current.course.image, current.course.slug) : null;
 
-  const activeGiveaway = giveaways.find((giveaway) =>
-    giveaway.status === "active" && new Date(giveaway.endsAt).getTime() > Date.now(),
-  );
+  const activeGiveaway = giveaways.find((giveaway) => giveawayIsOpen(giveaway.status, giveaway.endsAt));
   const unread = notifications.filter((notification) => !notification.read);
 
   const recommended = catalog.products

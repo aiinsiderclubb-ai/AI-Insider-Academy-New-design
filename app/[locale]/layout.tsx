@@ -1,32 +1,47 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
-import { Geologica, Golos_Text, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { getDictionary, htmlLang, isLocale, locales } from "@/lib/i18n";
 import { resolveSiteUrl } from "@/lib/api/origin";
 import { ToastProvider } from "@/components/primitives/toast";
 import "../globals.css";
 
+/*
+ * Fonts live in the repository, not on Google's servers.
+ *
+ * `next/font/google` downloads the faces while the site is being built, so a
+ * moment of Google Fonts not answering fails the whole deploy — which is how
+ * production once sat on an 18-day-old build for nine hours. These files are
+ * the same families from the google/fonts repository (OFL, licences beside
+ * them in app/fonts), cut to what the site uses: the weight range each face
+ * is set in, Latin + Latin Extended + Cyrillic (Ukrainian included), and the
+ * arrows the UI draws. One variable file per family.
+ */
+
 /** Display face — industrial grotesque with a first-class Cyrillic cut. */
-const display = Geologica({
-  subsets: ["latin", "latin-ext", "cyrillic"],
-  weight: ["600", "700", "800"],
+const display = localFont({
+  src: "../fonts/geologica.woff2",
+  weight: "600 800",
   variable: "--font-display-face",
   display: "swap",
 });
 
 /** Interface face — designed for Cyrillic first, excellent at 13–17px. */
-const sans = Golos_Text({
-  subsets: ["latin", "latin-ext", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
+const sans = localFont({
+  src: "../fonts/golos-text.woff2",
+  weight: "400 700",
   variable: "--font-sans-face",
   display: "swap",
 });
 
-const mono = JetBrains_Mono({
-  subsets: ["latin", "latin-ext", "cyrillic"],
-  weight: ["400", "500"],
+const mono = localFont({
+  src: "../fonts/jetbrains-mono.woff2",
+  weight: "400 500",
   variable: "--font-mono-face",
   display: "swap",
+  // Fallback metrics are derived from Arial by default, which is the wrong
+  // shape for a monospace face; let the stack's own monospace stand in.
+  adjustFontFallback: false,
 });
 
 export function generateStaticParams() {

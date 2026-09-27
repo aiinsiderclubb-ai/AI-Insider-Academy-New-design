@@ -4,8 +4,7 @@ import { Breadcrumbs } from "@/components/primitives/navigation";
 import { Container } from "@/components/primitives/surface";
 import { NewTopicForm } from "@/components/community/new-topic-form";
 import { pick } from "@/content/locale";
-import { getForumCategories } from "@/lib/api/public";
-import { getSession } from "@/lib/api/session";
+import { getForumAccess, getForumCategories } from "@/lib/api/public";
 import { getDictionary, path, type Locale } from "@/lib/i18n";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -15,8 +14,13 @@ export default async function NewTopicPage({ params }: { params: Promise<{ local
   const locale = raw as Locale;
   const d = getDictionary(locale);
 
-  const user = await getSession();
-  if (!user) redirect(path("/login?next=" + encodeURIComponent(path("/community/forum/new", locale)), locale));
+  const access = await getForumAccess();
+  if (access === "guest") {
+    redirect(path("/login?next=" + encodeURIComponent(path("/community/forum/new", locale)), locale));
+  }
+  // Signed in without a purchase: the index explains what opens the forum,
+  // which is more use than a form whose submit would only be refused.
+  if (access === "outsider") redirect(path("/community/forum", locale));
 
   const categories = await getForumCategories(locale);
 

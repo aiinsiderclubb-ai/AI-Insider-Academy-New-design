@@ -163,19 +163,46 @@ export const getForumCategories = cache(async (locale: Locale) => {
   }));
 });
 
+/**
+ * Where a visitor stands with the community.
+ *
+ * - `guest` — not signed in, or the session has lapsed;
+ * - `outsider` — signed in but has not bought anything yet;
+ * - `member` — has bought something, and can read and write.
+ *
+ * The API is the authority: it knows every purchase path, including the ones
+ * the client never sees, so the pages ask rather than guess from the cart.
+ */
+export type ForumAccess = "guest" | "outsider" | "member";
+
+export const getForumAccess = cache(async (): Promise<ForumAccess> => {
+  const payload = await tryApi<{ member?: boolean } | null>("/forum/access", { auth: true, soft: true }, null);
+  if (!payload) return "guest";
+  return payload.member ? "member" : "outsider";
+});
+
 export async function getForumTopics(categoryId?: string) {
   const query = categoryId && categoryId !== "all" ? `?category=${encodeURIComponent(categoryId)}` : "";
-  const payload = await tryApi<{ topics?: ApiForumTopic[]; total?: number }>(`/forum/topics${query}`, { revalidate: 30 }, {});
-  return { topics: payload.topics ?? [], total: payload.total ?? payload.topics?.length ?? 0 };
-}
-
-export async function getForumTopic(slug: string) {
-  return tryApi<{ topic: ApiForumTopic; posts: ApiForumPost[] } | null>(
-    `/forum/topics/${encodeURIComponent(slug)}`,
-    { revalidate: 15 },
+  const payload = await tryApi<{ topics?: ApiForumTopic[]; total?: number } | null>(
+    `/forum/topics${query}`,
+    { auth: true, soft: true },
     null,
   );
+  return { topics: payload?.topics ?? [], total: payload?.total ?? payload?.topics?.length ?? 0 };
 }
+
+/**
+ * Cached per request: the topic page reads it for its metadata and again for
+ * its body, and every read counts as a view — without `cache` each visit
+ * would be recorded twice.
+ */
+export const getForumTopic = cache(async (slug: string) => {
+  return tryApi<{ topic: ApiForumTopic; posts: ApiForumPost[] } | null>(
+    `/forum/topics/${encodeURIComponent(slug)}`,
+    { auth: true, soft: true },
+    null,
+  );
+});
 
 /* -------------------------------- giveaways -------------------------------- */
 

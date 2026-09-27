@@ -42,12 +42,13 @@ export function NewTopicForm({
       };
       if (!response.ok) throw new Error(payload.errorRu ?? payload.error ?? "");
       push({ tone: "success", title: pick(locale, "Вопрос опубликован", "Question posted") });
+      // No `router.refresh()` after this: the push already renders the new
+      // topic fresh, and a second render would be counted as a second view.
       router.push(
         payload.topic?.slug
           ? path(`/community/forum/${encodeURIComponent(payload.topic.slug)}`, locale)
           : path("/community/forum", locale),
       );
-      router.refresh();
     } catch (error) {
       push({ tone: "warning", title: (error as Error).message || d.errors.generic });
     } finally {

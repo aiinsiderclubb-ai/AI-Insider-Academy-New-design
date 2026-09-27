@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { ADMIN_COOKIE, SESSION_COOKIE } from "@/lib/auth/cookies";
 import { scopeFor } from "@/lib/auth/scopes";
 import { resolveApiOrigin } from "@/lib/api/origin";
+import { clientIpFrom, webProxyHeaders } from "@/lib/api/client-ip";
 
 const API_ORIGIN = resolveApiOrigin();
 
@@ -30,8 +31,12 @@ async function forward(request: NextRequest, segments: string[]) {
     if (token) headers.set("authorization", `Bearer ${token}`);
   }
 
-  const forwardedFor = request.headers.get("x-forwarded-for");
-  if (forwardedFor) headers.set("x-forwarded-for", forwardedFor);
+  // The visitor's address, vouched for with the shared secret. A plain
+  // x-forwarded-for would be ignored: the API trusts one proxy hop, and the
+  // host appends this server's own address after anything sent here.
+  for (const [name, value] of Object.entries(webProxyHeaders(clientIpFrom(request.headers)))) {
+    headers.set(name, value);
+  }
 
   const method = request.method;
   const body = method === "GET" || method === "HEAD" ? undefined : await request.text();

@@ -1,6 +1,8 @@
 import "server-only";
+import { headers as requestHeaders } from "next/headers";
 import { unstable_rethrow } from "next/navigation";
 import { readAdminToken, readSessionToken } from "@/lib/auth/cookies";
+import { clientIpFrom, webProxyHeaders } from "./client-ip";
 import { resolveApiOrigin } from "./origin";
 
 export const API_ORIGIN = resolveApiOrigin();
@@ -68,6 +70,14 @@ export async function api<T>(path: string, options: Options = {}): Promise<T> {
     headers.authorization = `Bearer ${token}`;
   }
 
+  // A call made on behalf of one visitor carries that visitor's address, so the
+  // API's limits land on them and not on this server. Only these calls: a
+  // public read is cached and made once per revalidation for everyone, and
+  // asking for request headers there would turn a static page dynamic.
+  if (auth || admin || method !== "GET") {
+    Object.assign(headers, webProxyHeaders(await visitorIp()));
+  }
+
   const cache =
     revalidate === false || auth || admin || method !== "GET"
       ? { cache: "no-store" as const }
@@ -98,6 +108,16 @@ export async function api<T>(path: string, options: Options = {}): Promise<T> {
 
   if (response.status === 204) return undefined as T;
   return (await safeJson(response)) as T;
+}
+
+async function visitorIp(): Promise<string | null> {
+  try {
+    return clientIpFrom(await requestHeaders());
+  } catch (error) {
+    // Outside a request there is no visitor; a Next bailout must still escape.
+    unstable_rethrow(error);
+    return null;
+  }
 }
 
 async function safeJson(response: Response): Promise<unknown> {

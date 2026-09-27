@@ -273,7 +273,7 @@ function SecurityPanel({ d }: { d: Dictionary }) {
 
 /* -------------------------------- telegram -------------------------------- */
 
-function TelegramPanel({
+export function TelegramPanel({
   d,
   telegram,
   personalId,

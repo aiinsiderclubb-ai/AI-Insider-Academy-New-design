@@ -240,6 +240,8 @@ export interface ApiUser {
   personalId: string;
   emailVerified: boolean;
   role?: string;
+  /** Club / Pro while it lasts. `renewing` turns false once it is cancelled. */
+  membership?: { tier: "club" | "pro"; expiresAt: string; renewing: boolean } | null;
   avatarUrl?: string | null;
   streakCount?: number;
   telegramConnected?: boolean;

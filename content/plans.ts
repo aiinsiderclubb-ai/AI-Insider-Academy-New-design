@@ -90,3 +90,32 @@ export const comparison: ComparisonRow[] = [
   { ru: "Ежемесячные разборы кейсов", en: "Monthly case teardowns", club: false, pro: true },
   { ru: "Премиальные кейсы и ресурсы для AI-бизнеса", en: "Premium cases and AI business resources", club: false, pro: true },
 ];
+
+/* --------------------------------- checkout -------------------------------- */
+
+/**
+ * Where each plan is paid for.
+ *
+ * Tribute sells Club and Pro as subscriptions to the closed Telegram channel,
+ * so these are links to those subscriptions — one per tier and billing period.
+ * An empty link means that plan is not on sale yet, and its checkout page says
+ * so instead of sending people nowhere.
+ */
+export const tributeCheckoutLinks: Record<Tier, Record<Billing, string>> = {
+  club: { monthly: "", annual: "" },
+  pro: { monthly: "", annual: "" },
+};
+
+/** Only Telegram and Tribute hosts: a typo must not send a buyer elsewhere. */
+const TRIBUTE_LINK = /^https:\/\/(t\.me|tribute\.tg|web\.tribute\.tg)\//;
+
+export function tributeLinkFor(tier: Tier, billing: Billing): string | null {
+  const url = tributeCheckoutLinks[tier]?.[billing]?.trim();
+  return url && TRIBUTE_LINK.test(url) ? url : null;
+}
+
+export function isTier(value: string): value is Tier {
+  return value === "club" || value === "pro";
+}
+
+export const TIER_RANK: Record<Tier, number> = { club: 1, pro: 2 };

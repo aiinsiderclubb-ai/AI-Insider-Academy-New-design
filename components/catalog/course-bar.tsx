@@ -30,6 +30,13 @@ export function CourseBar({
 }) {
   const [shown, setShown] = React.useState(false);
 
+  // Tells the assistant launcher to sit above the bar while it is up.
+  React.useEffect(() => {
+    const root = document.documentElement;
+    root.toggleAttribute("data-bottom-bar", shown);
+    return () => root.removeAttribute("data-bottom-bar");
+  }, [shown]);
+
   React.useEffect(() => {
     let atAccess = false;
 

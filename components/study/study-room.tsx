@@ -28,6 +28,7 @@ import { Modal } from "@/components/primitives/overlay";
 import { Progress } from "@/components/primitives/display";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { useToast } from "@/components/primitives/toast";
+import { LessonAssistant } from "@/components/assistant/lesson-assistant";
 import type { Dictionary } from "@/lib/i18n";
 import { path, type Locale } from "@/lib/i18n/config";
 import { cn, timecode } from "@/lib/utils";
@@ -523,7 +524,12 @@ export function StudyRoom({
 
         {/* ------------------------------- panel -------------------------------- */}
         {panel && (
-          <aside className="hidden w-80 shrink-0 flex-col border-l border-line bg-surface-2 xl:flex">
+          <aside
+            className={cn(
+              "hidden shrink-0 flex-col border-l border-line bg-surface-2 xl:flex",
+              panel === "assistant" ? "w-96" : "w-80",
+            )}
+          >
             <div className="flex h-12 items-center justify-between border-b border-line px-4">
               <p className="text-[13.5px] font-semibold text-ink">
                 {panel === "notes" ? d.study.notes : panel === "assistant" ? d.study.assistant : d.study.resources}
@@ -538,7 +544,8 @@ export function StudyRoom({
               </button>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto p-4">
+            {/* The assistant scrolls its own conversation and keeps the box pinned. */}
+            <div className={cn("min-h-0 flex-1", panel === "assistant" ? "flex flex-col" : "overflow-y-auto p-4")}>
               {panel === "notes" && (
                 <div className="flex flex-col gap-4">
                   <div>
@@ -576,7 +583,9 @@ export function StudyRoom({
                 </div>
               )}
 
-              {panel === "assistant" && <Assistant d={d} lessonTitle={current.title} courseTitle={course.title} />}
+              {panel === "assistant" && (
+                <LessonAssistant key={current.id} d={d} locale={locale} courseId={course.id} lessonId={current.id} />
+              )}
             </div>
           </aside>
         )}
@@ -711,90 +720,5 @@ function HomeworkForm({
         {d.study.submitHomework}
       </Button>
     </form>
-  );
-}
-
-/* ================================ assistant ================================ */
-
-function Assistant({ d, lessonTitle, courseTitle }: { d: Dictionary; lessonTitle: string; courseTitle: string }) {
-  const [messages, setMessages] = React.useState<{ role: "user" | "assistant"; content: string }[]>([]);
-  const [input, setInput] = React.useState("");
-  const [thinking, setThinking] = React.useState(false);
-
-  async function send(event: React.FormEvent) {
-    event.preventDefault();
-    const question = input.trim();
-    if (!question) return;
-
-    const history = [...messages, { role: "user" as const, content: question }];
-    setMessages(history);
-    setInput("");
-    setThinking(true);
-
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content: `Ты — наставник курса «${courseTitle}». Отвечай коротко и по делу. Текущий урок: «${lessonTitle}».`,
-            },
-            ...history,
-          ],
-        }),
-      });
-      const payload = (await response.json().catch(() => ({}))) as { content?: string; reply?: string; error?: string };
-      const reply = payload.content ?? payload.reply;
-      setMessages([...history, { role: "assistant", content: reply || d.errors.generic }]);
-    } catch {
-      setMessages([...history, { role: "assistant", content: d.errors.network }]);
-    } finally {
-      setThinking(false);
-    }
-  }
-
-  return (
-    <div className="flex h-full flex-col gap-3">
-      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
-        {messages.length === 0 && (
-          <p className="text-[12.5px] leading-relaxed text-muted">
-            {d.study.assistant} · {lessonTitle}
-          </p>
-        )}
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={cn(
-              "rounded-lg px-3 py-2.5 text-[13px] leading-relaxed",
-              message.role === "user" ? "bg-accent-soft text-ink" : "border border-line bg-surface text-ink-2",
-            )}
-          >
-            {message.content}
-          </div>
-        ))}
-        {thinking && <div className="skeleton h-16 rounded-lg" />}
-      </div>
-
-      <form onSubmit={send} className="shrink-0">
-        <Textarea
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault();
-              void send(event as unknown as React.FormEvent);
-            }
-          }}
-          rows={2}
-          placeholder={d.community.askQuestion}
-          aria-label={d.community.askQuestion}
-        />
-        <Button type="submit" size="sm" className="mt-2" loading={thinking} disabled={!input.trim()} full>
-          {d.community.askQuestion}
-        </Button>
-      </form>
-    </div>
   );
 }

@@ -146,7 +146,7 @@ export function Journey({
         role="status"
         aria-live="polite"
         className={cn(
-          "pointer-events-none fixed right-4 bottom-4 z-40 hidden transition-[opacity,transform] duration-300 ease-[var(--ease-out-quart)] sm:block",
+          "pointer-events-none fixed bottom-4 left-4 z-40 hidden transition-[opacity,transform] duration-300 ease-[var(--ease-out-quart)] sm:block",
           visible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0",
         )}
       >

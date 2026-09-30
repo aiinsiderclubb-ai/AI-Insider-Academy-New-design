@@ -1,10 +1,12 @@
 import { SiteChrome } from "@/components/layout/site-chrome";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { AssistantWidget } from "@/components/assistant/assistant-widget";
 import { buildNav } from "@/components/layout/nav-model";
 import type { SearchEntry } from "@/components/layout/command-search";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
 import { getSession } from "@/lib/api/session";
+import { getAssistantOnline } from "@/lib/api/public";
 import { getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
 
 export default async function SiteLayout({
@@ -18,7 +20,12 @@ export default async function SiteLayout({
   const locale = raw as Locale;
   const d = getDictionary(locale);
 
-  const [courses, catalog, user] = await Promise.all([getCourses(locale), getStoreCatalog(locale), getSession()]);
+  const [courses, catalog, user, assistantOnline] = await Promise.all([
+    getCourses(locale),
+    getStoreCatalog(locale),
+    getSession(),
+    getAssistantOnline(),
+  ]);
 
   const searchEntries: SearchEntry[] = [
     ...courses.map((course) => ({
@@ -73,6 +80,7 @@ export default async function SiteLayout({
         {children}
       </main>
       <SiteFooter locale={locale} d={d} />
+      {assistantOnline && <AssistantWidget locale={locale} d={d} userName={user?.name} />}
     </div>
   );
 }

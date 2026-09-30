@@ -25,6 +25,17 @@ export const getFeatureFlags = cache(async (): Promise<ApiFeatureFlags> => {
   );
 });
 
+/* -------------------------------- assistant -------------------------------- */
+
+/**
+ * Whether the API has a model to answer with. Without one every message would
+ * come back "offline", so the launcher is not shown at all until it has.
+ */
+export const getAssistantOnline = cache(async (): Promise<boolean> => {
+  const status = await tryApi<{ online?: boolean }>("/assistant/status", { revalidate: 300 }, {});
+  return status.online === true;
+});
+
 /* -------------------------------- reviews --------------------------------- */
 
 export interface Review {

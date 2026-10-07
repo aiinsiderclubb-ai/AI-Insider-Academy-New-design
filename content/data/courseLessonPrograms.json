@@ -110,48 +110,34 @@
   },
   "first-automation-n8n": {
    "duration": {
-    "ru": "10–20 мин",
-    "en": "10–20 min"
+    "ru": "20+ мин",
+    "en": "20+ min"
    },
    "countLabel": {
-    "ru": "5 уроков (10–20 минут)",
-    "en": "5 lessons (10–20 min)"
+    "ru": "3 урока (20+ минут)",
+    "en": "3 lessons (20+ min)"
    },
    "lessons": [
     {
      "num": 1,
-     "titleRu": "Что такое автоматизация",
-     "titleEn": "What automation is",
-     "descRu": "Логика работы автоматизаций.",
-     "descEn": "How automations work."
+     "titleRu": "Какой процесс автоматизировать первым",
+     "titleEn": "Which process to automate first",
+     "descRu": "Как выбрать подходящую задачу, посчитать потерю времени и понять, где автоматизация реально даст пользу.",
+     "descEn": "How to pick the right task, count the time it costs you and see where automation actually pays off."
     },
     {
      "num": 2,
-     "titleRu": "Интерфейс n8n",
-     "titleEn": "n8n interface",
-     "descRu": "Создание первого workflow.",
-     "descEn": "Building your first workflow."
+     "titleRu": "Собираем первую AI-автоматизацию",
+     "titleEn": "Building your first AI automation",
+     "descRu": "Форма → n8n → AI → Google Sheets → Telegram, плюс проверка данных, намеренная ошибка и базовая отладка.",
+     "descEn": "Form → n8n → AI → Google Sheets → Telegram, plus data validation, a deliberate error and basic debugging."
     },
     {
      "num": 3,
-     "titleRu": "Telegram + AI",
-     "titleEn": "Telegram + AI",
-     "descRu": "Создаем первого Telegram-бота.",
-     "descEn": "Building your first Telegram bot."
-    },
-    {
-     "num": 4,
-     "titleRu": "AI Agent в n8n",
-     "titleEn": "AI Agent in n8n",
-     "descRu": "Подключаем ChatGPT к автоматизации.",
-     "descEn": "Connecting ChatGPT to your automation."
-    },
-    {
-     "num": 5,
-     "titleRu": "Финальный проект",
-     "titleEn": "Capstone project",
-     "descRu": "Создаем полноценную автоматизацию.",
-     "descEn": "Building a complete automation."
+     "titleRu": "От первой автоматизации к реальному проекту",
+     "titleEn": "From first automation to a real project",
+     "descRu": "Как превратить учебный workflow в бизнес-систему: первые клиенты, demo, выход на decision makers и что нужно для production.",
+     "descEn": "Turning the training workflow into a business system: first clients, demos, reaching decision makers and what production needs."
     }
    ]
   },

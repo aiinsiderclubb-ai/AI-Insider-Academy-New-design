@@ -113,6 +113,22 @@ export function StudyRoom({
   /* A note is worth its timestamp; without the element there is nothing to read. */
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
+  /*
+   * Lesson URLs are signed and expire. Someone who pauses a lesson over lunch
+   * comes back to a link the storage now refuses, which the element reports as
+   * a plain load error — so one failure asks the server for a fresh page, and
+   * with it a fresh signature. Capped at a single attempt per lesson: a film
+   * that is genuinely missing would otherwise refresh forever, since every
+   * retry mints a new URL and fails the same way.
+   */
+  const videoRetriedFor = React.useRef<string | null>(null);
+
+  const recoverVideo = () => {
+    if (videoRetriedFor.current === current.id) return;
+    videoRetriedFor.current = current.id;
+    router.refresh();
+  };
+
   React.useEffect(() => {
     try {
       const stored = localStorage.getItem(NOTES_KEY(course.id));
@@ -365,12 +381,24 @@ export function StudyRoom({
             {current.unlocked ? (
               current.videoUrl ? (
                 <div className="overflow-hidden rounded-xl border border-line bg-black">
+                  {/*
+                   * `nodownload` drops the download item from the native control
+                   * menu, and blocking the context menu removes "Save video as".
+                   * Both only cover the obvious routes: the file URL is still in
+                   * the DOM and in the network panel, so keeping a lesson off
+                   * other people's drives depends on the URL itself being
+                   * short-lived (signed, per-request) rather than on this markup.
+                   */}
                   {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                   <video
                     ref={videoRef}
                     key={current.videoUrl}
                     src={current.videoUrl}
                     controls
+                    controlsList="nodownload"
+                    disablePictureInPicture
+                    onContextMenu={(event) => event.preventDefault()}
+                    onError={recoverVideo}
                     playsInline
                     preload="metadata"
                     className="aspect-video w-full"

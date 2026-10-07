@@ -6,6 +6,7 @@ import { pick } from "@/content/locale";
 import { getCourse } from "@/lib/api/catalog";
 import { canOpenLesson, getAccess, getMe } from "@/lib/api/session";
 import { getDictionary, path, type Locale } from "@/lib/i18n";
+import { lessonVideoUrl } from "@/lib/video/r2";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -30,15 +31,26 @@ export default async function StudyPage({
 
   const access = await getAccess();
 
-  const lessons: StudyLesson[] = course.lessons.map((lesson) => ({
-    index: lesson.index,
-    id: lesson.id,
-    title: lesson.title,
-    description: lesson.description,
-    duration: lesson.duration,
-    videoUrl: lesson.videoUrl,
-    unlocked: canOpenLesson(access, course, lesson.index),
-  }));
+  /*
+   * A locked lesson's film is withheld here rather than in the player. The
+   * client receives every lesson in the rail, so handing it the URL and relying
+   * on `unlocked` to decide what to render would ship a working link for
+   * content the learner has not paid for — visible to anyone who opens the page
+   * source. Locked lessons therefore carry no URL at all, and open ones carry a
+   * freshly signed, expiring one.
+   */
+  const lessons: StudyLesson[] = course.lessons.map((lesson) => {
+    const unlocked = canOpenLesson(access, course, lesson.index);
+    return {
+      index: lesson.index,
+      id: lesson.id,
+      title: lesson.title,
+      description: lesson.description,
+      duration: lesson.duration,
+      videoUrl: unlocked ? lessonVideoUrl(lesson.videoUrl) : null,
+      unlocked,
+    };
+  });
 
   const current = lessons[index];
 

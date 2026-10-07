@@ -13,6 +13,15 @@ export default defineConfig({
     include: ["tests/**/*.test.ts"],
   },
   resolve: {
-    alias: { "@": path.dirname(new URL(import.meta.url).pathname) },
+    alias: {
+      "@": path.dirname(new URL(import.meta.url).pathname),
+      /*
+       * `server-only` throws the moment it is imported outside a React Server
+       * Component, which would put every module carrying that guard out of
+       * reach of a test. The stub disarms it here only — the real package is
+       * what `next build` resolves, so the guard still holds where it matters.
+       */
+      "server-only": path.join(path.dirname(new URL(import.meta.url).pathname), "tests/stubs/server-only.ts"),
+    },
   },
 });

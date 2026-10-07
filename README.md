@@ -26,6 +26,10 @@ cd ~/Desktop/Insider_academy/Insider_academy && npm run dev:server
 | ------------- | ----------------------- | ---------------------------------------- |
 | `API_ORIGIN`  | `http://localhost:3001` | Адрес Express API                        |
 | `SITE_URL`    | продакшн-домен          | Канонические ссылки, sitemap, реферальные |
+| `R2_*`        | пусто                   | Cloudflare R2 с видео уроков — см. `.env.example` |
+
+Без `R2_*` урок, у которого в контенте лежит ключ объекта, показывает заглушку
+«видео скоро». Ролики по пути `/videos/…` работают без всякой настройки.
 
 Прочие команды: `npm run build`, `npm start`, `npm run typecheck`.
 

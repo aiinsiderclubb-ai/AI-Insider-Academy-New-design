@@ -6,7 +6,8 @@ const LOCALE_COOKIE = "aia-locale";
 /** Old routes that people already have bookmarked or indexed. */
 const legacyRedirects: Record<string, string> = {
   "/courses": "/learn",
-  "/learning-map": "/learn/path",
+  "/learning-map": "/learn",
+  "/learn/path": "/learn",
   "/marketplace": "/store",
   "/memberships": "/plans",
   "/events": "/community/events",

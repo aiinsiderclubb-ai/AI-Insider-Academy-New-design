@@ -169,9 +169,6 @@ export function OnboardingWizard({
             {d.nav.dashboard}
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
           </ButtonLink>
-          <ButtonLink href={path("/learn/path", locale)} variant="secondary" size="lg">
-            {d.nav.path}
-          </ButtonLink>
         </div>
       </div>
     );

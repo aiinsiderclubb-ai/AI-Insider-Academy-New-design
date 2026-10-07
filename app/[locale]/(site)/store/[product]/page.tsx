@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BadgeCheck, Check, Clock, FileArchive, ListChecks, Package, Wallet } from "lucide-react";
+import { BadgeCheck, Check, Clock, Download, FileArchive, ListChecks, Package, Wallet } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/navigation";
 import { Container, SectionHead } from "@/components/primitives/surface";
@@ -13,6 +13,7 @@ import { ProductCard } from "@/components/store/product-card";
 import { FreePreview, LicensePicker } from "@/components/store/license-picker";
 import { WishlistButton } from "@/components/store/wishlist";
 import { cover } from "@/content/covers";
+import { downloadablesFor } from "@/content/downloadables";
 import { pick } from "@/content/locale";
 import { tierDiscount } from "@/content/store";
 import { getProduct } from "@/lib/api/store";
@@ -54,6 +55,7 @@ export default async function ProductPage({
   const discount = access.tier === "pro" ? tierDiscount.pro : access.tier === "club" ? tierDiscount.club : undefined;
 
   const image = product.cover.image ?? cover("marketplace", product.slug);
+  const downloads = downloadablesFor(product.slug);
 
   const setupSteps = [
     pick(locale, "Оплатите продукт", "Pay for the product"),
@@ -180,6 +182,31 @@ export default async function ProductPage({
                 </ul>
               </section>
             )}
+
+            <section className="mt-10">
+              <h2 className="flex items-center gap-2 text-[19px]">
+                <Download className="h-4.5 w-4.5 text-accent" aria-hidden />
+                {pick(locale, "Файлы для скачивания", "Files to download")}
+              </h2>
+              <ul className="mt-4 flex flex-col gap-px overflow-hidden rounded-lg border border-line bg-line">
+                {downloads.map((item) => (
+                  <li key={item.filename} className="flex items-center justify-between gap-4 bg-surface px-4 py-3.5">
+                    <div className="min-w-0">
+                      <p className="truncate text-[14px] font-medium text-ink">{pick(locale, item.labelRu, item.labelEn)}</p>
+                      <p className="mt-0.5 font-mono text-[12px] text-muted">{item.filename}</p>
+                    </div>
+                    <a
+                      href={`/downloads/${product.slug}/${item.filename}`}
+                      download={item.filename}
+                      className="inline-flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-line-2 bg-surface px-4 text-[13px] font-medium text-ink shadow-xs transition-colors hover:border-line-3 hover:bg-surface-2"
+                    >
+                      <Download className="h-3.5 w-3.5" aria-hidden />
+                      {d.common.download}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
             {/* -------------------------------- setup ---------------------------- */}
             <section className="mt-10">

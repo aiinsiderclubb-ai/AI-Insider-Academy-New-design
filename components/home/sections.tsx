@@ -7,11 +7,10 @@ import { Container, SectionHead } from "@/components/primitives/surface";
 import { AnimatedNumber, Rating } from "@/components/primitives/display";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { Magnetic, Spotlight } from "@/components/motion/pointer";
-import { learningStages } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import type { Course } from "@/lib/api/catalog";
 import type { Review } from "@/lib/api/public";
-import { formatPrice, path, plural, type Dictionary, type Locale } from "@/lib/i18n";
+import { path, plural, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 /* ============================== four entrances ============================= */
@@ -136,82 +135,6 @@ export function Access({ d, options }: { d: Dictionary; options: AccessOption[] 
         </RevealGroup>
       </Container>
     </section>
-  );
-}
-
-/* =================================== path ================================== */
-
-export function LearningPath({ locale, d, courses }: { locale: Locale; d: Dictionary; courses: Course[] }) {
-  return (
-    <Spotlight as="section" className="chapter ch-ink relative isolate overflow-hidden">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(48rem 30rem at 92% 0%, color-mix(in oklab, #ff7a1a 12%, transparent), transparent 64%)",
-        }}
-      />
-      <Container size="wide" className="relative">
-        <Reveal>
-          <SectionHead
-            eyebrow={d.nav.path}
-            title={d.learn.subtitle}
-            body={pick(
-              locale,
-              "Три этапа: бесплатное знакомство, отборочная программа и профессиональные треки.",
-              "Three stages: a free introduction, an intake programme and the professional tracks.",
-            )}
-            action={
-              <ButtonLink href={path("/learn/path", locale)} variant="ghost" size="sm">
-                {d.common.showAll}
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </ButtonLink>
-            }
-          />
-        </Reveal>
-
-        <RevealGroup step={90} as="ol" itemAs="li" className="grid gap-4 md:grid-cols-3">
-          {learningStages.map((stage) => {
-            const stageCourses = courses.filter((course) => stage.courseIds.includes(course.id));
-            return (
-              <div
-                key={stage.id}
-                className="relative flex h-full flex-col rounded-2xl border border-line bg-surface p-6 shadow-xs transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-md"
-              >
-                <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-[12px] tracking-[0.14em] text-accent">
-                    {String(stage.order).padStart(2, "0")}
-                  </span>
-                  <span className="h-px flex-1 bg-line" aria-hidden />
-                </div>
-
-                <h3 className="mt-4 text-[18px] leading-tight">{pick(locale, stage.title, stage.titleEn)}</h3>
-                <p className="mt-2 text-[13px] leading-relaxed text-muted">
-                  {pick(locale, stage.subtitle, stage.subtitleEn)}
-                </p>
-
-                <ul className="mt-5 flex flex-col gap-1.5 border-t border-line pt-4">
-                  {stageCourses.map((course) => (
-                    <li key={course.id}>
-                      <Link
-                        href={path(`/learn/${course.slug}`, locale)}
-                        className="flex items-center justify-between gap-3 rounded-md py-1.5 text-[13.5px] text-ink-2 transition-colors hover:text-accent-ink"
-                      >
-                        <span className="truncate">{course.title}</span>
-                        <span className="shrink-0 font-mono text-[12px] tabular-nums text-faint">
-                          {course.isFree ? d.common.free : formatPrice(course.priceEur, locale)}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </RevealGroup>
-      </Container>
-    </Spotlight>
   );
 }
 

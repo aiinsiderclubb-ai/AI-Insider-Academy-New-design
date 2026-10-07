@@ -52,13 +52,6 @@ export default async function SiteLayout({
       href: path("/plans", locale),
     },
     {
-      id: "page-path",
-      kind: "page" as const,
-      title: d.nav.path,
-      note: d.learn.subtitle,
-      href: path("/learn/path", locale),
-    },
-    {
       id: "page-forum",
       kind: "page" as const,
       title: d.nav.forum,

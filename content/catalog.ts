@@ -2,8 +2,6 @@ import packs from "./data/coursePacks.json";
 import packDetails from "./data/coursePackDetails.json";
 import vault from "./data/vaultProducts.json";
 import vaultDetails from "./data/vaultDetails.json";
-import map from "./data/learningMap.json";
-import paths from "./data/learningPaths.json";
 import programs from "./data/courseLessonPrograms.json";
 import homework from "./data/courseHomework.json";
 import landing from "./data/courseLanding.json";
@@ -88,26 +86,6 @@ export const vaultHub = vault.VAULT_HUB as unknown as {
   benefitsEn: string[];
 };
 export const vaultProductDetails = vaultDetails as Record<string, unknown>;
-
-/* ------------------------------- learning path ----------------------------- */
-
-export interface LearningStage {
-  id: string;
-  order: number;
-  title: string;
-  titleEn: string;
-  subtitle: string;
-  subtitleEn: string;
-  accent: string;
-  courseIds: string[];
-  note?: string;
-  noteEn?: string;
-}
-
-export const learningStages = map.LEARNING_STAGES as unknown as LearningStage[];
-export const stageByCourse = map.STAGE_BY_COURSE as Record<string, string>;
-export const academyPrinciples = map.ACADEMY_PRINCIPLES as { ru: string; en: string };
-export const learningPaths = paths as Record<string, unknown>;
 
 /* ------------------------------ lesson programs ---------------------------- */
 

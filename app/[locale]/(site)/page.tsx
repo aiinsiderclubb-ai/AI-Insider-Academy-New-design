@@ -3,7 +3,7 @@ import { Hero } from "@/components/home/hero";
 import { Journey } from "@/components/motion/journey";
 import { Marquee } from "@/components/motion/marquee";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
-import { Access, Closing, Entrances, LearningPath, Reviews, type AccessOption } from "@/components/home/sections";
+import { Access, Closing, Entrances, Reviews, type AccessOption } from "@/components/home/sections";
 import { CourseCard } from "@/components/catalog/course-card";
 import { ProductCard } from "@/components/store/product-card";
 import { ButtonLink } from "@/components/primitives/button";
@@ -182,9 +182,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <div id="access" />
       <Access d={d} options={accessOptions} />
-
-      <div id="path" />
-      <LearningPath locale={locale} d={d} courses={courses} />
 
       <div id="voices" />
       <Reviews locale={locale} d={d} reviews={reviews} />

@@ -13,7 +13,6 @@ export function SiteFooter({ locale, d }: { locale: Locale; d: Dictionary }) {
       title: d.footer.learning,
       links: [
         { label: d.nav.catalog, href: p("/learn") },
-        { label: d.nav.path, href: p("/learn/path") },
         { label: d.nav.bundles, href: p("/learn?tab=bundles") },
         { label: d.nav.plans, href: p("/plans") },
       ],

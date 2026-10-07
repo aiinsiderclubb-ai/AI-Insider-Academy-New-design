@@ -1,4 +1,5 @@
 import "server-only";
+import extras from "@/content/data/marketplaceExtras.json";
 import { categoryById, fallbackProducts, storeCategories } from "@/content/store";
 import { creatorById, revenueShare } from "@/content/site";
 import { pick, suffixed, suffixedList } from "@/content/locale";
@@ -137,7 +138,9 @@ export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
 
   // The API does not serve ratings yet; the migrated catalogue does.
   const localById = new Map(fallbackProducts.map((product) => [product.id, product]));
-  const source = raw.products?.length ? raw.products : fallbackProducts;
+  const base = raw.products?.length ? raw.products : fallbackProducts;
+  const seen = new Set(base.map((product) => product.id));
+  const source = [...base, ...(extras as ApiProduct[]).filter((product) => !seen.has(product.id))];
   const products = source
     .map((product) => {
       const local = localById.get(product.id);

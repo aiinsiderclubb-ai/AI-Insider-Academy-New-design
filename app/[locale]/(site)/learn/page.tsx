@@ -10,9 +10,11 @@ import { Container, SectionHead } from "@/components/primitives/surface";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { Stat } from "@/components/primitives/badge";
 import { courseBundles, vaultBundle, vaultHub, vaultProducts } from "@/content/catalog";
+import seedReviews from "@/content/data/seedReviews.json";
 import { pick } from "@/content/locale";
 import { difficultyFilters } from "@/content/site";
 import { getCourses, groupCourses, type Course } from "@/lib/api/catalog";
+import { getReviews } from "@/lib/api/public";
 import { formatPrice, getDictionary, path, resultCount, type Locale } from "@/lib/i18n";
 
 export const revalidate = 300;
@@ -23,7 +25,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { title: d.learn.title, description: d.learn.body };
 }
 
-type Search = { tab?: string; track?: string; level?: string };
+type Search = { tab?: string; track?: string; level?: string; sort?: string };
+
+const SORTS = ["price", "name", "difficulty", "rating"] as const;
+type SortKey = (typeof SORTS)[number];
 
 const TABS = ["all", "paid", "free", "bundles", "vault", "intake"] as const;
 type Tab = (typeof TABS)[number];
@@ -40,10 +45,12 @@ export default async function LearnPage({
   const query = await searchParams;
   const d = getDictionary(locale);
 
-  const courses = await getCourses(locale);
+  const [courses, reviews] = await Promise.all([getCourses(locale), getReviews(locale)]);
   const groups = groupCourses(courses);
+  const ratingOf = courseRating(reviews.length ? reviews : seedReviews.SEED_REVIEWS);
 
   const tab: Tab = (TABS as readonly string[]).includes(query.tab ?? "") ? (query.tab as Tab) : "all";
+  const sort: SortKey | null = (SORTS as readonly string[]).includes(query.sort ?? "") ? (query.sort as SortKey) : null;
 
   const tracks = Array.from(new Set(courses.map((course) => course.categoryLabel)));
 
@@ -95,8 +102,10 @@ export default async function LearnPage({
   const intake = groups.intake.filter(matchesFilters);
   const soon = groups.soon.filter(matchesFilters);
 
-  const visibleCount =
-    tab === "paid" ? paid.length : tab === "free" ? free.length : tab === "intake" ? intake.length : paid.length + free.length + intake.length;
+  const shelf =
+    tab === "paid" ? paid : tab === "free" ? free : tab === "intake" ? intake : [...paid, ...free, ...intake, ...soon];
+  const ordered = sortCourses(shelf, sort, locale, ratingOf);
+  const visibleCount = sort ? ordered.length : tab === "paid" ? paid.length : tab === "free" ? free.length : tab === "intake" ? intake.length : paid.length + free.length + intake.length;
 
   return (
     <>
@@ -125,16 +134,57 @@ export default async function LearnPage({
       </Container>
 
       <Container size="wide" className="pb-10">
-        <div className="rounded-2xl border border-line bg-surface p-5 shadow-xs">
-          <FilterBar groups={filterGroups} resetLabel={d.common.clearFilters} />
+        <div className="rounded-2xl border border-line bg-surface p-4 shadow-xs">
+          <FilterBar
+            groups={filterGroups}
+            resetLabel={d.common.clearFilters}
+            filterLabel={d.common.filters}
+            featuredLabel={d.learn.filterMain}
+            featured={[
+              { key: "tab", value: "paid", label: d.learn.tabPaid, count: groups.paid.length },
+              { key: "tab", value: "free", label: d.learn.tabFree, count: groups.free.length },
+            ]}
+            sort={{
+              label: d.common.sortBy,
+              defaultLabel: d.learn.sortDefault,
+              options: [
+                { value: "price", label: d.learn.sortPrice },
+                { value: "name", label: d.learn.sortName },
+                { value: "difficulty", label: d.learn.sortDifficulty },
+                { value: "rating", label: d.learn.sortRating },
+              ],
+            }}
+          />
         </div>
         {showCourses && (
           <p className="mt-4 text-[13px] text-muted tabular-nums">{resultCount(visibleCount, locale, d)}</p>
         )}
       </Container>
 
+      {showCourses && sort && (
+        <Container size="wide" className="pb-16">
+          {ordered.length ? (
+            <RevealGroup step={60} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {ordered.map((course, index) => (
+                <CourseCard key={course.id} course={course} locale={locale} d={d} priority={index < 3} />
+              ))}
+            </RevealGroup>
+          ) : (
+            <EmptyState
+              title={d.store.emptyTitle}
+              body={d.store.emptyBody}
+              action={
+                <ButtonLink href={path("/learn", locale)} size="sm">
+                  {d.common.clearFilters}
+                </ButtonLink>
+              }
+            />
+          )}
+        </Container>
+      )}
+
       {/* ------------------------------- paid ------------------------------- */}
-      {(tab === "all" || tab === "paid") && (
+      {!sort && (tab === "all" || tab === "paid") && (
         <Container size="wide" className="pb-16">
           <Reveal>
             <SectionHead
@@ -166,7 +216,7 @@ export default async function LearnPage({
       )}
 
       {/* ------------------------------- free ------------------------------- */}
-      {(tab === "all" || tab === "free") && free.length > 0 && (
+      {!sort && (tab === "all" || tab === "free") && free.length > 0 && (
         <Container size="wide" className="pb-16">
           <Reveal>
             <SectionHead
@@ -189,7 +239,7 @@ export default async function LearnPage({
       )}
 
       {/* ------------------------------ intake ------------------------------ */}
-      {(tab === "all" || tab === "intake") && intake.length > 0 && (
+      {!sort && (tab === "all" || tab === "intake") && intake.length > 0 && (
         <Container size="wide" className="pb-16">
           <Reveal>
             <SectionHead
@@ -278,7 +328,7 @@ export default async function LearnPage({
       )}
 
       {/* -------------------------------- soon ------------------------------ */}
-      {tab === "all" && soon.length > 0 && (
+      {!sort && tab === "all" && soon.length > 0 && (
         <Container size="wide" className="pb-20">
           <Reveal>
             <SectionHead
@@ -302,4 +352,39 @@ export default async function LearnPage({
       )}
     </>
   );
+}
+
+function courseRating(reviews: { courseId?: string; courseSlug?: string; rating: number }[]) {
+  const map = new Map<string, { sum: number; n: number }>();
+  for (const review of reviews) {
+    const keys = new Set([review.courseSlug, review.courseId].filter((key): key is string => Boolean(key)));
+    for (const key of keys) {
+      const bucket = map.get(key) ?? { sum: 0, n: 0 };
+      bucket.sum += Number(review.rating) || 0;
+      bucket.n += 1;
+      map.set(key, bucket);
+    }
+  }
+  return (course: Course) => {
+    const bucket = map.get(course.slug) ?? map.get(course.id);
+    return bucket && bucket.n ? bucket.sum / bucket.n : -1;
+  };
+}
+
+function sortCourses(list: Course[], sort: SortKey | null, locale: Locale, ratingOf: (course: Course) => number) {
+  if (!sort) return list;
+  return list
+    .map((course, index) => ({ course, index }))
+    .sort((a, b) => {
+      const diff =
+        sort === "price"
+          ? a.course.priceEur - b.course.priceEur
+          : sort === "name"
+            ? a.course.title.localeCompare(b.course.title, locale, { sensitivity: "base" })
+            : sort === "difficulty"
+              ? a.course.difficulty - b.course.difficulty
+              : ratingOf(b.course) - ratingOf(a.course);
+      return diff || a.index - b.index;
+    })
+    .map((item) => item.course);
 }

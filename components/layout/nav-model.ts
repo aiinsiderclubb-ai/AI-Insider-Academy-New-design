@@ -33,7 +33,6 @@ export function buildNav(d: Dictionary, locale: Locale): NavSection[] {
           title: d.learn.title,
           links: [
             { label: d.nav.catalog, href: p("/learn"), note: d.learn.body },
-            { label: d.nav.path, href: p("/learn/path"), note: d.plans.accessNote },
             { label: d.nav.bundles, href: p("/learn?tab=bundles"), note: d.learn.inBundles },
             { label: d.nav.accelerator, href: p("/learn/ai-insider-accelerator"), note: d.learn.apply },
           ],

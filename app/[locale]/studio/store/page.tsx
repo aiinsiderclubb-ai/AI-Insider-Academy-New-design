@@ -18,7 +18,6 @@ export default async function StudioStorePage({ params }: { params: Promise<{ lo
 
   const available = catalog.products.filter((product) => product.available);
   const rated = catalog.products.filter((product) => product.rating !== null);
-  const withoutCover = catalog.products.filter((product) => !product.cover.image);
 
   return (
     <StudioPage
@@ -71,10 +70,7 @@ export default async function StudioStorePage({ params }: { params: Promise<{ lo
           {catalog.products.map((product) => (
             <Row key={product.id}>
               <Cell strong>
-                <span className="flex flex-wrap items-center gap-2">
-                  {product.title}
-                  {!product.cover.image && <Badge tone="neutral">{pick(locale, "нет обложки", "no cover")}</Badge>}
-                </span>
+                {product.title}
               </Cell>
               <Cell>{product.categoryLabel}</Cell>
               <Cell align="right" mono>
@@ -130,8 +126,8 @@ export default async function StudioStorePage({ params }: { params: Promise<{ lo
         <Panel title={pick(locale, "Здоровье витрины", "Storefront health")}>
           <ul className="flex flex-col gap-2.5 text-[13.5px]">
             <li className="flex items-center justify-between gap-3">
-              <span className="text-ink-2">{pick(locale, "Товары без обложки", "Products without a cover")}</span>
-              <Badge tone={withoutCover.length ? "warning" : "success"}>{withoutCover.length}</Badge>
+              <span className="text-ink-2">{pick(locale, "Обложка с названием", "Cover shows the title")}</span>
+              <Badge tone="success">{formatNumber(catalog.products.length, locale)}</Badge>
             </li>
             <li className="flex items-center justify-between gap-3">
               <span className="text-ink-2">{pick(locale, "Товары без рейтинга", "Products without a rating")}</span>

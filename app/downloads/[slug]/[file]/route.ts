@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { downloadablesFor } from "@/content/downloadables";
+import { getProduct } from "@/lib/api/store";
+import { getAccess } from "@/lib/api/session";
 
 export async function GET(_request: Request, context: { params: Promise<{ slug: string; file: string }> }) {
   const { slug, file } = await context.params;
@@ -7,11 +9,19 @@ export async function GET(_request: Request, context: { params: Promise<{ slug: 
   const found = downloadablesFor(slug).find((item) => item.filename === name);
   if (!found) return new NextResponse("Not found", { status: 404 });
 
+  const [access, record] = await Promise.all([getAccess(), getProduct(slug, "ru")]);
+  if (!record || !access.productIds.has(record.product.id)) {
+    return NextResponse.json(
+      { error: "Purchase required" },
+      { status: 403, headers: { "Cache-Control": "private, no-store" } },
+    );
+  }
+
   return new NextResponse(found.body, {
     headers: {
       "Content-Type": `${found.mime}; charset=utf-8`,
       "Content-Disposition": `attachment; filename="${found.filename}"`,
-      "Cache-Control": "public, max-age=3600",
+      "Cache-Control": "private, no-store",
     },
   });
 }

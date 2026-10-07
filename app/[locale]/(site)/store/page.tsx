@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, Package, Sparkles, Wallet } from "lucide-react";
 import { Badge, Stat } from "@/components/primitives/badge";
@@ -9,8 +8,8 @@ import { Container, SectionHead } from "@/components/primitives/surface";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { EmptyState } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
+import { ProductCover } from "@/components/store/product-cover";
 import { StoreFacets, StoreSearch, StoreSort } from "@/components/store/store-controls";
-import { cover } from "@/content/covers";
 import { pick } from "@/content/locale";
 import { revenueShare } from "@/content/site";
 import { tierDiscount } from "@/content/store";
@@ -74,7 +73,6 @@ export default async function StorePage({
   const filtered = Boolean(query.q || query.category || query.price || query.rating || query.badge);
 
   const drop = catalog.products.find((item) => item.available && item.badges.includes("trending")) ?? catalog.products[0];
-  const dropImage = drop ? (drop.cover.image ?? cover("marketplace", drop.slug)) : null;
 
   const newArrivals = catalog.products.filter((item) => item.badges.includes("new")).slice(0, 4);
   const topRated = [...catalog.products]
@@ -122,12 +120,8 @@ export default async function StorePage({
       {showShelves && drop && (
         <Container size="wide" className="pb-14">
           <Reveal className="grid overflow-hidden rounded-3xl border border-line bg-surface shadow-xs lg:grid-cols-[1.05fr_1fr]">
-            <div className="relative aspect-[16/10] lg:aspect-auto">
-              {dropImage ? (
-                <Image src={dropImage} alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-              ) : (
-                <div className="absolute inset-0" style={{ background: drop.cover.gradient ?? "var(--surface-3)" }} />
-              )}
+            <div className="relative aspect-[16/10] lg:aspect-auto lg:min-h-72">
+              <ProductCover product={drop} variant="hero" />
             </div>
             <div className="flex flex-col justify-center gap-5 border-t border-line p-7 sm:p-10 lg:border-t-0 lg:border-l">
               <div className="flex flex-wrap items-center gap-2">

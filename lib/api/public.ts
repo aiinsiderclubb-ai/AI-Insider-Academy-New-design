@@ -32,7 +32,7 @@ export const getFeatureFlags = cache(async (): Promise<ApiFeatureFlags> => {
  * come back "offline", so the launcher is not shown at all until it has.
  */
 export const getAssistantOnline = cache(async (): Promise<boolean> => {
-  const status = await tryApi<{ online?: boolean }>("/assistant/status", { revalidate: 300 }, {});
+  const status = await tryApi<{ online?: boolean }>("/assistant/status", { revalidate: 300, soft: true }, {});
   return status.online === true;
 });
 

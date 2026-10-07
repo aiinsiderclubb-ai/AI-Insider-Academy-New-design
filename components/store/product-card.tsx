@@ -1,10 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Rating } from "@/components/primitives/display";
+import { ProductCover } from "@/components/store/product-cover";
 import { WishlistButton } from "@/components/store/wishlist";
-import { cover } from "@/content/covers";
 import type { Product } from "@/lib/api/store";
 import { formatPrice, path, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -14,20 +13,6 @@ const BADGE_LABELS: Record<string, keyof Dictionary["badges"]> = {
   new: "new",
   bestseller: "hit",
 };
-
-/** Generated artwork for the handful of items that ship without a cover. */
-function GeneratedCover({ product }: { product: Product }) {
-  return (
-    <div
-      className="absolute inset-0 grid place-items-center"
-      style={{ background: product.cover.gradient ?? "var(--surface-3)" }}
-    >
-      <span className="text-4xl drop-shadow-sm" aria-hidden>
-        {product.cover.icon ?? "◍"}
-      </span>
-    </div>
-  );
-}
 
 export function ProductCard({
   product,
@@ -40,7 +25,6 @@ export function ProductCard({
   d: Dictionary;
   compact?: boolean;
 }) {
-  const image = product.cover.image ?? cover("marketplace", product.slug);
   const href = path(`/store/${product.slug}`, locale);
   const badge = product.badges.find((value) => BADGE_LABELS[value]);
 
@@ -53,20 +37,11 @@ export function ProductCard({
       )}
     >
       <div className={cn("relative overflow-hidden border-b border-line bg-surface-3", compact ? "aspect-[2/1]" : "aspect-[16/10]")}>
-        {image ? (
-          <Image
-            src={image}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 25vw"
-            className={cn(
-              "object-cover transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.04]",
-              !product.available && "opacity-60 saturate-50",
-            )}
-          />
-        ) : (
-          <GeneratedCover product={product} />
-        )}
+        <ProductCover
+          product={product}
+          variant={compact ? "compact" : "card"}
+          className={cn(!product.available && "opacity-60")}
+        />
 
         <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
           <Badge className="border border-line/60 bg-[color-mix(in_oklab,var(--surface)_82%,transparent)] text-ink-2 backdrop-blur-sm">

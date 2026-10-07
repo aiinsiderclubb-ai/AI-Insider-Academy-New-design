@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Check, ShieldCheck, Zap } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
@@ -7,7 +6,7 @@ import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/n
 import { Container } from "@/components/primitives/surface";
 import { Note } from "@/components/primitives/states";
 import { CheckoutForm, type CheckoutTier } from "@/components/checkout/checkout-form";
-import { cover } from "@/content/covers";
+import { ProductCover } from "@/components/store/product-cover";
 import { pick } from "@/content/locale";
 import { legalIsDraft } from "@/content/site";
 import { getProduct } from "@/lib/api/store";
@@ -58,8 +57,6 @@ export default async function BuyProductPage({
     demo: { name: "Demo", note: pick(locale, "Тестовая оплата", "Test payment") },
   };
 
-  const image = product.cover.image ?? cover("marketplace", product.slug);
-
   return (
     <Container size="wide" className="pt-8 pb-20">
       <Breadcrumbs
@@ -77,11 +74,9 @@ export default async function BuyProductPage({
           <h1 className="mt-4 text-[clamp(1.9rem,4.2vw,3rem)] leading-[1] tracking-[-0.04em]">{product.title}</h1>
           <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-2">{product.summary}</p>
 
-          {image && (
-            <div className="relative mt-7 aspect-[16/9] overflow-hidden rounded-lg border border-line bg-surface-3">
-              <Image src={image} alt="" fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
-            </div>
-          )}
+          <div className="relative mt-7 aspect-[16/9] overflow-hidden rounded-lg border border-line bg-ground">
+            <ProductCover product={product} variant="hero" />
+          </div>
 
           {product.included.length > 0 && (
             <section className="mt-8">

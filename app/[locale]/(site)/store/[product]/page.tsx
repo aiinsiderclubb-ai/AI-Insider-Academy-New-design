@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BadgeCheck, Check, Clock, Download, FileArchive, ListChecks, Package, Wallet } from "lucide-react";
+import { BadgeCheck, Check, Clock, Download, FileArchive, ListChecks, Lock, Package, Wallet } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/navigation";
 import { Container, SectionHead } from "@/components/primitives/surface";
@@ -12,8 +11,8 @@ import { Note } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
 import { FreePreview, LicensePicker } from "@/components/store/license-picker";
 import { WishlistButton } from "@/components/store/wishlist";
-import { cover } from "@/content/covers";
 import { downloadablesFor } from "@/content/downloadables";
+import { ProductCover } from "@/components/store/product-cover";
 import { pick } from "@/content/locale";
 import { tierDiscount } from "@/content/store";
 import { getProduct } from "@/lib/api/store";
@@ -54,7 +53,6 @@ export default async function ProductPage({
   const owned = access.productIds.has(product.id);
   const discount = access.tier === "pro" ? tierDiscount.pro : access.tier === "club" ? tierDiscount.club : undefined;
 
-  const image = product.cover.image ?? cover("marketplace", product.slug);
   const downloads = downloadablesFor(product.slug);
 
   const setupSteps = [
@@ -105,18 +103,8 @@ export default async function ProductPage({
               </div>
             )}
 
-            <div className="relative mt-7 aspect-[16/9] overflow-hidden rounded-lg border border-line bg-surface-3">
-              {image ? (
-                <Image src={image} alt="" fill priority sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
-              ) : (
-                <div
-                  className="absolute inset-0 grid place-items-center text-6xl"
-                  style={{ background: product.cover.gradient ?? "var(--surface-3)" }}
-                  aria-hidden
-                >
-                  {product.cover.icon ?? "◍"}
-                </div>
-              )}
+            <div className="relative mt-7 aspect-[16/9] overflow-hidden rounded-lg border border-line bg-ground">
+              <ProductCover product={product} variant="hero" />
             </div>
 
             {/* -------------------------- outcome strip -------------------------- */}
@@ -195,14 +183,20 @@ export default async function ProductPage({
                       <p className="truncate text-[14px] font-medium text-ink">{pick(locale, item.labelRu, item.labelEn)}</p>
                       <p className="mt-0.5 font-mono text-[12px] text-muted">{item.filename}</p>
                     </div>
-                    <a
-                      href={`/downloads/${product.slug}/${item.filename}`}
-                      download={item.filename}
-                      className="inline-flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-line-2 bg-surface px-4 text-[13px] font-medium text-ink shadow-xs transition-colors hover:border-line-3 hover:bg-surface-2"
-                    >
-                      <Download className="h-3.5 w-3.5" aria-hidden />
-                      {d.common.download}
-                    </a>
+                    {owned ? (
+                      <a
+                        href={`/downloads/${product.slug}/${item.filename}`}
+                        className="inline-flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-line-2 bg-surface px-4 text-[13px] font-medium text-ink shadow-xs transition-colors hover:border-line-3 hover:bg-surface-2"
+                      >
+                        <Download className="h-3.5 w-3.5" aria-hidden />
+                        {d.common.download}
+                      </a>
+                    ) : (
+                      <span className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-line px-4 text-[13px] text-muted">
+                        <Lock className="h-3.5 w-3.5" aria-hidden />
+                        {pick(locale, "После покупки", "After purchase")}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>

@@ -296,6 +296,7 @@ export const ukr: Dictionary = {
     homeworkResult: "Що має бути в результаті",
     homeworkCriteria: "Критерії перевірки",
     homeworkPending: "На перевірці",
+    homeworkSelfCheck: "Це завдання для самостійної практики — здавати його не потрібно. Звірте результат із критеріями вище.",
     homeworkAccepted: "Прийнято",
     homeworkRework: "На доопрацювання",
     videoSoon: "Відео незабаром",

@@ -296,6 +296,7 @@ export const en: Dictionary = {
     homeworkResult: "What the result should contain",
     homeworkCriteria: "How it is reviewed",
     homeworkPending: "In review",
+    homeworkSelfCheck: "This assignment is for your own practice — there is nothing to hand in. Check your result against the criteria above.",
     homeworkAccepted: "Accepted",
     homeworkRework: "Needs rework",
     videoSoon: "Video coming soon",

@@ -298,6 +298,7 @@ export const ru = {
     homeworkResult: "Что должно быть в результате",
     homeworkCriteria: "Критерии проверки",
     homeworkPending: "На проверке",
+    homeworkSelfCheck: "Это задание для самостоятельной практики — сдавать его не нужно. Сверьте результат с критериями выше.",
     homeworkAccepted: "Принято",
     homeworkRework: "На доработку",
     videoSoon: "Видео скоро",

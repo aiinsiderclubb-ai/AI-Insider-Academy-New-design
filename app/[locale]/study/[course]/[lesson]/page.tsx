@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { StudyRoom, type StudyHomework, type StudyLesson } from "@/components/study/study-room";
-import { defaultHomework } from "@/content/catalog";
+import { defaultHomework, lessonHomework, type HomeworkSpec } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import { getCourse } from "@/lib/api/catalog";
 import { canOpenLesson, getAccess, getMe } from "@/lib/api/session";
@@ -54,13 +54,24 @@ export default async function StudyPage({
 
   const current = lessons[index];
 
-  const homework: StudyHomework | null =
-    course.hasHomework && index > 0
-      ? {
-          task: pick(locale, defaultHomework.tasks, defaultHomework.tasksEn),
-          deliverable: pick(locale, defaultHomework.deliverables, defaultHomework.deliverablesEn),
-          criteria: pick(locale, defaultHomework.criteria, defaultHomework.criteriaEn),
-        }
+  const localised = (spec: HomeworkSpec, selfCheck: boolean): StudyHomework => ({
+    tasks: pick(locale, spec.tasks, spec.tasksEn),
+    deliverables: pick(locale, spec.deliverables, spec.deliverablesEn),
+    criteria: pick(locale, spec.criteria, spec.criteriaEn),
+    selfCheck,
+  });
+
+  /*
+   * An assignment written for this lesson wins, and is practice: the learner
+   * checks it against the criteria and nothing is sent in. Otherwise a reviewed
+   * course falls back to the shared wording from its second lesson on — the
+   * first is the free sample and has never carried one.
+   */
+  const own = lessonHomework(course.id, current.id);
+  const homework: StudyHomework | null = own
+    ? localised(own, true)
+    : course.hasHomework && index > 0
+      ? localised(defaultHomework, false)
       : null;
 
   return (

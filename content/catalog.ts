@@ -138,16 +138,31 @@ export function toModules<T>(lessons: T[], size = 5): T[][] {
 
 /* --------------------------------- homework -------------------------------- */
 
+/** Each part is a list of points, in Russian and English. */
 export interface HomeworkSpec {
-  tasks: string;
-  tasksEn: string;
-  deliverables: string;
-  deliverablesEn: string;
-  criteria: string;
-  criteriaEn: string;
+  tasks: string[];
+  tasksEn: string[];
+  deliverables: string[];
+  deliverablesEn: string[];
+  criteria: string[];
+  criteriaEn: string[];
 }
 
-export const defaultHomework = homework.DEFAULT_LESSON_HOMEWORK as unknown as HomeworkSpec;
+export const defaultHomework = homework.DEFAULT_LESSON_HOMEWORK as HomeworkSpec;
+
+const homeworkByLesson = homework.HOMEWORK_BY_LESSON as Record<string, Record<string, HomeworkSpec>>;
+
+/**
+ * The assignment written for one particular lesson, if it has one.
+ *
+ * Keyed by lesson id rather than by position, so reordering a course cannot
+ * hand a lesson its neighbour's assignment. These are practice assignments a
+ * learner checks against the criteria themselves — nothing is submitted — which
+ * is how a free course can carry homework without promising a curator's review.
+ */
+export function lessonHomework(courseId: string, lessonId: string): HomeworkSpec | null {
+  return homeworkByLesson[courseId]?.[lessonId] ?? null;
+}
 export const homeworkByCourse = homework.HOMEWORK_BY_COURSE as Record<string, unknown>;
 export const gradingStandard = homework.ACADEMY_GRADING_STANDARD as unknown as Record<
   "ru" | "en",

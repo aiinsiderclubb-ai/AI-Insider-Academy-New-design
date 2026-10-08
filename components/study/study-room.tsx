@@ -44,9 +44,11 @@ export interface StudyLesson {
 }
 
 export interface StudyHomework {
-  task: string;
-  deliverable: string;
-  criteria: string;
+  tasks: string[];
+  deliverables: string[];
+  criteria: string[];
+  /** Practice the learner checks themselves: no submission form, no review. */
+  selfCheck: boolean;
 }
 
 export interface StudyNote {
@@ -91,6 +93,9 @@ export function StudyRoom({
   const [shortcutsOpen, setShortcutsOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [saving, setSaving] = React.useState(false);
+
+  /* The tab is remembered between lessons; one that this lesson lacks falls back. */
+  const activeTab: Tab = tab === "homework" && !homework ? "lesson" : tab;
 
   const isDone = done.includes(current.index);
   const percent = Math.round((new Set(done).size / Math.max(1, course.lessonCount)) * 100);
@@ -459,7 +464,9 @@ export function StudyRoom({
                 {(
                   [
                     ["lesson", d.study.aboutLesson],
-                    ["homework", d.learn.homework],
+                    // A lesson without an assignment has no tab for one. It used to
+                    // open on an empty frame saying the lesson was still in edit.
+                    ...(homework ? [["homework", d.learn.homework]] : []),
                     ["discussion", d.study.discussion],
                   ] as [Tab, string][]
                 ).map(([value, label]) => (
@@ -467,11 +474,11 @@ export function StudyRoom({
                     key={value}
                     role="tab"
                     type="button"
-                    aria-selected={tab === value}
+                    aria-selected={activeTab === value}
                     onClick={() => setTab(value)}
                     className={cn(
                       "-mb-px border-b-2 px-3.5 pb-3 text-[14px] font-medium transition-colors",
-                      tab === value ? "border-accent text-ink" : "border-transparent text-muted hover:text-ink-2",
+                      activeTab === value ? "border-accent text-ink" : "border-transparent text-muted hover:text-ink-2",
                     )}
                   >
                     {label}
@@ -481,41 +488,53 @@ export function StudyRoom({
             </div>
 
             <div className="py-7">
-              {tab === "lesson" && (
+              {activeTab === "lesson" && (
                 <div className="prose-body text-[15px]">
                   <p>{current.description || d.study.videoSoonBody}</p>
                 </div>
               )}
 
-              {tab === "homework" &&
-                (homework ? (
-                  <div className="flex flex-col gap-4">
-                    {[
-                      { label: d.study.homeworkTask, value: homework.task },
-                      { label: d.study.homeworkResult, value: homework.deliverable },
-                      { label: d.study.homeworkCriteria, value: homework.criteria },
-                    ].map((block) => (
-                      <div key={block.label} className="rounded-lg border border-line bg-surface p-5">
-                        <p className="eyebrow">{block.label}</p>
-                        <p className="mt-2.5 text-[14.5px] leading-relaxed text-ink-2">{block.value}</p>
-                      </div>
-                    ))}
+              {activeTab === "homework" && homework && (
+                <div className="flex flex-col gap-4">
+                  {[
+                    { label: d.study.homeworkTask, points: homework.tasks, numbered: true },
+                    { label: d.study.homeworkResult, points: homework.deliverables, numbered: false },
+                    { label: d.study.homeworkCriteria, points: homework.criteria, numbered: false },
+                  ].map((block) => (
+                    <div key={block.label} className="rounded-lg border border-line bg-surface p-5">
+                      <p className="eyebrow">{block.label}</p>
+                      {block.points.length === 1 ? (
+                        <p className="mt-2.5 text-[14.5px] leading-relaxed text-ink-2">{block.points[0]}</p>
+                      ) : (
+                        <ol className="mt-3 flex flex-col gap-2.5">
+                          {block.points.map((point, position) => (
+                            <li key={point} className="flex gap-3 text-[14.5px] leading-relaxed text-ink-2">
+                              {block.numbered ? (
+                                <span className="numeral w-5 shrink-0 pt-px text-[12px]" aria-hidden>
+                                  {String(position + 1).padStart(2, "0")}
+                                </span>
+                              ) : (
+                                <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden />
+                              )}
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                    </div>
+                  ))}
 
-                    {canSubmitHomework ? (
-                      <HomeworkForm course={course} lesson={current} d={d} />
-                    ) : (
-                      <Note tone="warning">{d.study.lockedBody}</Note>
-                    )}
-                  </div>
-                ) : (
-                  <EmptyState
-                    compact
-                    title={d.learn.homework}
-                    body={d.study.videoSoonBody}
-                  />
-                ))}
+                  {homework.selfCheck ? (
+                    <Note>{d.study.homeworkSelfCheck}</Note>
+                  ) : canSubmitHomework ? (
+                    <HomeworkForm course={course} lesson={current} d={d} />
+                  ) : (
+                    <Note tone="warning">{d.study.lockedBody}</Note>
+                  )}
+                </div>
+              )}
 
-              {tab === "discussion" && (
+              {activeTab === "discussion" && (
                 <EmptyState
                   compact
                   icon={<MessageSquare className="h-5 w-5" aria-hidden />}

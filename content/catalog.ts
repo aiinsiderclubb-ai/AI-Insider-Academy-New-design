@@ -109,15 +109,29 @@ export function programFor(courseId: string): LessonProgram | undefined {
   return lessonPrograms[courseId];
 }
 
+/** A module shorter than this is not a module, it is what was left over. */
+const SMALLEST_MODULE = 3;
+
 /**
  * The catalogue has no module metadata, so lessons are grouped in fives — the
  * same rhythm the curriculum was written in. Grouping happens here rather than
  * in a component so every surface splits a course identically.
+ *
+ * A remainder of one or two lessons joins the module before it instead of
+ * standing alone. Cut strictly in fives, a seven-lesson course opened on
+ * "Module 1 · 5 lessons" under a heading that said seven, with a two-lesson
+ * "Module 2" beneath it — a split that describes the arithmetic, not the course.
  */
 export function toModules<T>(lessons: T[], size = 5): T[][] {
   const modules: T[][] = [];
   for (let index = 0; index < lessons.length; index += size) {
     modules.push(lessons.slice(index, index + size));
+  }
+
+  const last = modules.at(-1);
+  if (modules.length > 1 && last && last.length < SMALLEST_MODULE) {
+    modules.pop();
+    modules.at(-1)?.push(...last);
   }
   return modules;
 }

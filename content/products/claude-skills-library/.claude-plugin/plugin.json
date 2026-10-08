@@ -1,0 +1,21 @@
+{
+ "name": "insider-business-skills",
+ "displayName": "Insider Business Skills",
+ "version": "1.0.0",
+ "description": "Eleven skills for selling, delivering and marketing services: offers, outreach, call debriefs, proposals, content repurposing, short video scripts, page audits for search and AI answers, competitor research, n8n workflow review, client reports and brand voice. Nine of them run bundled Python checks.",
+ "author": {
+  "name": "AI Insider Academy",
+  "url": "https://myinsideracademy.com"
+ },
+ "homepage": "https://myinsideracademy.com",
+ "license": "LicenseRef-Proprietary",
+ "keywords": [
+  "sales",
+  "marketing",
+  "outreach",
+  "proposal",
+  "seo",
+  "n8n",
+  "content"
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "INSTALL.md",
+   "labelRu": "Установка: Claude Code, Cowork, Codex",
+   "labelEn": "Install: Claude Code, Cowork, Codex"
+  },
+  {
+   "file": "SKILLS.md",
+   "labelRu": "Каталог скиллов с примерами запросов",
+   "labelEn": "Skill catalogue with example requests"
+  }
+ ],
+ "bundle": [
+  ".claude-plugin",
+  "skills"
+ ]
+}

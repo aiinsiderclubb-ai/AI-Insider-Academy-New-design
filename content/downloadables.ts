@@ -4,6 +4,7 @@
  * a buyer can open immediately from the product page.
  */
 
+import productBundles from "./data/productBundles.json";
 import productFiles from "./data/productFiles.json";
 
 export interface DownloadFile {
@@ -486,6 +487,26 @@ add("mcp-google-calendar", mcpPack("Календарь", [
  * below are only what remains for listings whose product is not written yet.
  */
 const WRITTEN = productFiles as Record<string, DownloadFile[]>;
+
+const BUNDLES = productBundles as Record<string, { path: string; body: string }[]>;
+
+/**
+ * Files that exist only inside the archive, at their own paths: the folder
+ * tree of a plugin or an agent kit. Offering forty of them as separate
+ * downloads would bury the three documents a buyer should read first.
+ */
+export function bundledFor(slug: string): { path: string; body: string }[] {
+  return BUNDLES[slug] ?? [];
+}
+
+/** Everything the archive holds: the listed documents, then the bundled tree. */
+export function archiveEntries(slug: string): { name: string; data: Uint8Array }[] {
+  const encoder = new TextEncoder();
+  return [
+    ...downloadablesFor(slug).map((item) => ({ name: `${slug}/${item.filename}`, data: fileBytes(item) })),
+    ...bundledFor(slug).map((item) => ({ name: `${slug}/${item.path}`, data: encoder.encode(item.body) })),
+  ];
+}
 
 /** Name of the archive that carries every file of a product. */
 export function archiveName(slug: string): string {

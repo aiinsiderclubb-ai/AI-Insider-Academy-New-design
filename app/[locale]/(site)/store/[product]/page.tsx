@@ -11,7 +11,7 @@ import { Note } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
 import { FreePreview, LicensePicker } from "@/components/store/license-picker";
 import { WishlistButton } from "@/components/store/wishlist";
-import { archiveName, downloadablesFor } from "@/content/downloadables";
+import { archiveName, bundledFor, downloadablesFor } from "@/content/downloadables";
 import { ProductCover } from "@/components/store/product-cover";
 import { pick } from "@/content/locale";
 import { tierDiscount } from "@/content/store";
@@ -54,6 +54,8 @@ export default async function ProductPage({
   const discount = access.tier === "pro" ? tierDiscount.pro : access.tier === "club" ? tierDiscount.club : undefined;
 
   const downloads = downloadablesFor(product.slug);
+  const bundled = bundledFor(product.slug);
+  const bundledFolders = [...new Set(bundled.map((item) => `${item.path.split("/")[0]}/`))];
 
   const setupSteps = [
     pick(locale, "Оплатите продукт", "Pay for the product"),
@@ -177,7 +179,7 @@ export default async function ProductPage({
                   <Download className="h-4.5 w-4.5 text-accent" aria-hidden />
                   {pick(locale, "Файлы для скачивания", "Files to download")}
                 </h2>
-                {owned && downloads.length > 1 && (
+                {owned && (downloads.length > 1 || bundled.length > 0) && (
                   <a
                     href={`/downloads/${product.slug}/${archiveName(product.slug)}`}
                     className="inline-flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full bg-accent px-5 text-[13px] font-medium text-on-accent shadow-xs transition-colors hover:bg-accent-strong"
@@ -211,6 +213,17 @@ export default async function ProductPage({
                   </li>
                 ))}
               </ul>
+              {bundled.length > 0 && (
+                <p className="mt-3 text-[13px] leading-relaxed text-ink-3">
+                  {pick(
+                    locale,
+                    `В архиве ещё ${bundled.length} файлов в папках `,
+                    `The archive holds ${bundled.length} more files in `,
+                  )}
+                  <span className="font-mono text-[12px] text-ink-2">{bundledFolders.join(", ")}</span>
+                  {pick(locale, " — они скачиваются только целиком.", " — these come only as a whole.")}
+                </p>
+              )}
             </section>
 
             {/* -------------------------------- setup ---------------------------- */}

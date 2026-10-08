@@ -7,4 +7,11 @@ export interface PackedFile {
 }
 
 export function packProducts(): Record<string, PackedFile[]>;
-export function serialise(packs: Record<string, PackedFile[]>): string;
+export function serialise(packs: Record<string, unknown>): string;
+
+export interface BundledFile {
+  path: string;
+  body: string;
+}
+
+export function packBundles(): Record<string, BundledFile[]>;

@@ -1,0 +1,15 @@
+{
+ "name": "ai-insider-academy",
+ "description": "Skills from AI Insider Academy for selling, delivering and marketing services.",
+ "owner": {
+  "name": "AI Insider Academy",
+  "url": "https://myinsideracademy.com"
+ },
+ "plugins": [
+  {
+   "name": "insider-business-skills",
+   "source": "./",
+   "description": "Eleven business skills with bundled Python checks."
+  }
+ ]
+}

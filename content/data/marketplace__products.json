@@ -2286,7 +2286,8 @@
   {
    "fileTypes": [
     "ZIP",
-    "JSON"
+    "MD",
+    "PY"
    ],
    "faqRu": [
     {
@@ -2336,10 +2337,10 @@
    "videoPreview": null,
    "freePreview": {
     "type": "prompt",
-    "titleRu": "Бесплатный Skill: weekly report",
-    "titleEn": "Free Skill: weekly report",
-    "contentRu": "Skill: weekly-ops-report\nКогда пользователь просит «недельный отчёт»:\n1) Собери метрики из CRM (MCP) за 7 дней\n2) Выдели 3 инсайта и 1 риск\n3) Дай 3 действия на следующую неделю\nФормат: TL;DR → цифры → инсайты → план",
-    "contentEn": "Skill: weekly-ops-report\nWhen user asks for a weekly report:\n1) Pull CRM metrics (MCP) for last 7 days\n2) Extract 3 insights and 1 risk\n3) Propose 3 actions for next week\nFormat: TL;DR → numbers → insights → plan"
+    "titleRu": "Фрагмент скилла: отчёт клиенту",
+    "titleEn": "Skill excerpt: client report",
+    "contentRu": "Скилл: weekly-client-report\n\n1. Посчитай изменения скриптом:\n   python3 scripts/metrics_delta.py metrics.csv\n2. Выбери два-три показателя, важных читателю.\n3. Объясни причины — только названные пользователем.\n   Не знаешь причину — напиши «причина не установлена».\n4. Напиши отчёт на одну страницу. Плохие новости — в начале.\n5. Сверь каждое число в тексте с таблицей скрипта.",
+    "contentEn": "Skill: weekly-client-report\n\n1. Compute the changes with the script:\n   python3 scripts/metrics_delta.py metrics.csv\n2. Pick the two or three metrics the reader cares about.\n3. Explain causes — only those the user named.\n   Unknown cause: write \"cause not established\".\n4. Write a one-page report. Bad news goes first.\n5. Check every number in the text against the script's table."
    },
    "coverImage": null,
    "id": "mp-mcp-claude-skills",
@@ -2348,21 +2349,27 @@
    "productType": "agent-pack",
    "titleRu": "Claude Skills Library",
    "titleEn": "Claude Skills Library",
-   "shortRu": "Библиотека готовых Skills под бизнес-задачи: отчёты, лидогенерация, контент. Работает поверх твоих MCP.",
-   "shortEn": "Ready Skills for business tasks: reports, lead gen, content. Works on top of your MCP stack.",
+   "shortRu": "11 скиллов для Claude Code, Cowork и Codex: оффер, аутрич, разбор звонка, предложение, контент, аудит страницы, проверка n8n, отчёт клиенту. Девять из них проверяют свою работу скриптами.",
+   "shortEn": "11 skills for Claude Code, Cowork and Codex: offer, outreach, call debrief, proposal, content, page audit, n8n review, client report. Nine check their own work with scripts. Files are in Russian.",
    "priceEur": 39,
    "coverGradient": "linear-gradient(135deg, #d97757, #8b5cf6)",
    "coverIcon": "🧠",
    "creatorId": "creator-insider",
    "includedRu": [
-    "Skills: отчёты, лиды, контент",
-    "Шаблоны под Claude",
-    "Связка с MCP-серверами"
+    "11 скиллов в формате Agent Skills",
+    "9 скриптов на Python без зависимостей",
+    "Плагин: установка двумя командами",
+    "Справочные материалы и шаблоны внутри скиллов",
+    "Каталог с примерами запросов",
+    "Инструкция для Claude Code, Cowork и Codex"
    ],
    "includedEn": [
-    "Skills: reports, leads, content",
-    "Claude templates",
-    "MCP integration notes"
+    "11 skills in the Agent Skills format",
+    "9 dependency-free Python scripts",
+    "A plugin that installs with two commands",
+    "Reference material and templates inside the skills",
+    "Catalogue with example requests",
+    "Install guide for Claude Code, Cowork and Codex"
    ]
   },
   {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { archiveName, downloadablesFor, fileBytes } from "@/content/downloadables";
+import { archiveEntries, archiveName, downloadablesFor, fileBytes } from "@/content/downloadables";
 import { getProduct } from "@/lib/api/store";
 import { getAccess } from "@/lib/api/session";
 import { zip } from "@/lib/zip";
@@ -21,7 +21,7 @@ export async function GET(_request: Request, context: { params: Promise<{ slug: 
   }
 
   if (!found) {
-    const archive = zip(files.map((item) => ({ name: `${slug}/${item.filename}`, data: fileBytes(item) })));
+    const archive = zip(archiveEntries(slug));
     return new NextResponse(new Uint8Array(archive), {
       headers: {
         "Content-Type": "application/zip",

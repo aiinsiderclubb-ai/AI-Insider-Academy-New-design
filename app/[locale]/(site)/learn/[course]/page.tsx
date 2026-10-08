@@ -19,7 +19,7 @@ import { Curriculum } from "@/components/catalog/curriculum";
 import { DifficultyLadder } from "@/components/catalog/difficulty";
 import { BundleCard } from "@/components/catalog/bundle-card";
 import { CourseCard } from "@/components/catalog/course-card";
-import { bundlesWithCourse, courseFaq, gradingStandard, instructor, profileFor } from "@/content/catalog";
+import { bundlesWithCourse, courseFaq, gradingStandard, instructorFor, profileFor } from "@/content/catalog";
 import { courseCover, courseTrailer } from "@/content/covers";
 import { pick } from "@/content/locale";
 import { getCourse, getCourses } from "@/lib/api/catalog";
@@ -82,6 +82,7 @@ export default async function CoursePage({
   const owned = access.courseIds.has(course.id);
   const soon = course.status === "in-development";
   const prerequisites = (pick(locale, profile?.prerequisites, profile?.prerequisitesEn) ?? []) as string[];
+  const instructor = instructorFor(course.id);
   const highlights = (pick(locale, instructor.highlightsRu, instructor.highlights) ?? []) as string[];
 
   const related = allCourses

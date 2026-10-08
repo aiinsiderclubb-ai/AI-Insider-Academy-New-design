@@ -154,6 +154,16 @@
   "siteUrl": "https://insiderai.it.com/courses",
   "telegram": "https://t.me/vladyslavarcher"
  },
+ "INSTRUCTORS_BY_COURSE": {
+  "ai-for-productivity": {
+   "name": "Yuliia",
+   "nameRu": "Yuliia",
+   "role": "Co-owner, AI Insider and AI Insider Academy · course mentor",
+   "roleRu": "Совладелица AI Insider и AI Insider Academy · ментор курса",
+   "bio": "Yuliia is a co-owner of AI Insider and AI Insider Academy and the mentor of this course. An experienced programmer, she has worked with automation for more than two years. To her, AI is a working tool first and an impressive technology second — so the course holds only the scenarios that take routine out of an ordinary working day.",
+   "bioRu": "Yuliia — совладелица AI Insider и AI Insider Academy и ментор этого курса. Опытный программист, больше двух лет работает с автоматизациями. Для неё AI — в первую очередь рабочий инструмент, а не эффектная технология, поэтому в курсе только те сценарии, которые убирают рутину из обычного рабочего дня."
+  }
+ },
  "SOCIAL_PROOF": {
   "courses": 9,
   "lessons": "60+",

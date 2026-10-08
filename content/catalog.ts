@@ -181,7 +181,7 @@ export interface FaqEntry {
 
 export const courseFaq = landing.COURSE_FAQ as unknown as FaqEntry[];
 export const buyFaq = landing.BUY_FAQ as unknown as FaqEntry[];
-export const instructor = landing.INSTRUCTOR as unknown as {
+export interface Instructor {
   name: string;
   nameRu: string;
   role: string;
@@ -190,7 +190,20 @@ export const instructor = landing.INSTRUCTOR as unknown as {
   bioRu: string;
   highlights?: string[];
   highlightsRu?: string[];
-};
+}
+
+export const instructor = landing.INSTRUCTOR as unknown as Instructor;
+
+const instructorsByCourse = landing.INSTRUCTORS_BY_COURSE as unknown as Record<string, Instructor>;
+
+/**
+ * Who teaches a course. Most are taught by the founder, so that is the default;
+ * a course recorded by someone else names them here — otherwise its page
+ * introduces a person the learner then never sees in the videos.
+ */
+export function instructorFor(courseId: string): Instructor {
+  return instructorsByCourse[courseId] ?? instructor;
+}
 export const socialProof = landing.SOCIAL_PROOF as unknown as {
   courses: number;
   lessons: string;

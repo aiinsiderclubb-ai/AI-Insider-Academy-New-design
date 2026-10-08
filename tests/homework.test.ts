@@ -44,3 +44,13 @@ describe("lessonHomework", () => {
     expect(lessonHomework("no-such-course", "fn1")).toBeNull();
   });
 });
+
+describe("instructorFor", () => {
+  it("names the person who actually recorded the course", async () => {
+    const { instructor, instructorFor } = await import("@/content/catalog");
+    expect(instructorFor("ai-for-productivity").name).toBe("Yuliia");
+    // Everything without an entry of its own is taught by the founder.
+    expect(instructorFor("first-automation-n8n")).toBe(instructor);
+    expect(instructorFor("no-such-course")).toBe(instructor);
+  });
+});

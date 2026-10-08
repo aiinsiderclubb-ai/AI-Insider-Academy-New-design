@@ -1,0 +1,39 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "call-script.md",
+   "labelRu": "Сценарий звонка",
+   "labelEn": "Call script"
+  },
+  {
+   "file": "question-bank.md",
+   "labelRu": "Банк вопросов — 60 шт.",
+   "labelEn": "Question bank — 60"
+  },
+  {
+   "file": "objections.md",
+   "labelRu": "Возражения и ответы",
+   "labelEn": "Objections"
+  },
+  {
+   "file": "follow-up-emails.md",
+   "labelRu": "Письма после звонка",
+   "labelEn": "Follow-up emails"
+  },
+  {
+   "file": "call-notes.csv",
+   "labelRu": "Бланк заметок с расчётом",
+   "labelEn": "Call notes sheet"
+  },
+  {
+   "file": "qualification-scorecard.csv",
+   "labelRu": "Оценка клиента",
+   "labelEn": "Qualification scorecard"
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "calendar-365.csv",
+   "labelRu": "Календарь — 365 идей",
+   "labelEn": "Calendar — 365 ideas"
+  },
+  {
+   "file": "calendar-365.md",
+   "labelRu": "Календарь для чтения",
+   "labelEn": "Calendar to read"
+  },
+  {
+   "file": "how-to-use.md",
+   "labelRu": "Как пользоваться",
+   "labelEn": "How to use"
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "hooks.md",
+   "labelRu": "Хуки — 240 шт.",
+   "labelEn": "Hooks — 240"
+  },
+  {
+   "file": "hooks.csv",
+   "labelRu": "Хуки таблицей",
+   "labelEn": "Hooks as a table"
+  },
+  {
+   "file": "how-to-use.md",
+   "labelRu": "Как пользоваться",
+   "labelEn": "How to use"
+  }
+ ]
+}

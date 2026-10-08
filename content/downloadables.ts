@@ -4,6 +4,8 @@
  * a buyer can open immediately from the product page.
  */
 
+import productFiles from "./data/productFiles.json";
+
 export interface DownloadFile {
   filename: string;
   labelRu: string;
@@ -477,7 +479,31 @@ add("mcp-google-calendar", mcpPack("Календарь", [
   { name: "calendar", does: "показывать свободные слоты и создавать событие после подтверждения" },
 ]));
 
+/**
+ * The real product, where one has been written: the files under
+ * `content/products/<slug>/`, packed by `scripts/pack-products.mjs`. A product
+ * that has them delivers those and nothing else — the short starter files
+ * below are only what remains for listings whose product is not written yet.
+ */
+const WRITTEN = productFiles as Record<string, DownloadFile[]>;
+
+/** Name of the archive that carries every file of a product. */
+export function archiveName(slug: string): string {
+  return `${slug}.zip`;
+}
+
+/**
+ * The bytes a buyer receives. Spreadsheets get a byte-order mark: without it
+ * Excel reads a UTF-8 CSV as a legacy code page and Cyrillic turns to noise.
+ */
+export function fileBytes(item: DownloadFile): Uint8Array {
+  const text = item.mime === "text/csv" ? `\uFEFF${item.body}` : item.body;
+  return new TextEncoder().encode(text);
+}
+
 export function downloadablesFor(slug: string): DownloadFile[] {
+  const written = WRITTEN[slug];
+  if (written?.length) return written;
   return PACKS[slug] ?? [
     file("Материалы", "Materials", "pack.md", "text/markdown", [
       ["Состав", "Инструкция, пример и чеклист запуска. Секретов и клиентских данных в файле нет."],

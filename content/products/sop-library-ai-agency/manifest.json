@@ -1,0 +1,44 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "01-sales.md",
+   "labelRu": "Продажи — 4 SOP",
+   "labelEn": "Sales — 4 SOPs"
+  },
+  {
+   "file": "02-onboarding.md",
+   "labelRu": "Старт работы с клиентом — 4 SOP",
+   "labelEn": "Onboarding — 4 SOPs"
+  },
+  {
+   "file": "03-delivery.md",
+   "labelRu": "Сборка и запуск — 5 SOP",
+   "labelEn": "Delivery — 5 SOPs"
+  },
+  {
+   "file": "04-support.md",
+   "labelRu": "Поддержка — 4 SOP",
+   "labelEn": "Support — 4 SOPs"
+  },
+  {
+   "file": "05-operations.md",
+   "labelRu": "Операционная работа агентства — 4 SOP",
+   "labelEn": "Operations — 4 SOPs"
+  },
+  {
+   "file": "sop-template.md",
+   "labelRu": "Шаблон SOP",
+   "labelEn": "SOP template"
+  },
+  {
+   "file": "sop-index.csv",
+   "labelRu": "Реестр процедур",
+   "labelEn": "SOP index"
+  }
+ ]
+}

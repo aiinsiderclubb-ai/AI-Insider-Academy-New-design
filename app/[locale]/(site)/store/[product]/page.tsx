@@ -11,7 +11,7 @@ import { Note } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
 import { FreePreview, LicensePicker } from "@/components/store/license-picker";
 import { WishlistButton } from "@/components/store/wishlist";
-import { downloadablesFor } from "@/content/downloadables";
+import { archiveName, downloadablesFor } from "@/content/downloadables";
 import { ProductCover } from "@/components/store/product-cover";
 import { pick } from "@/content/locale";
 import { tierDiscount } from "@/content/store";
@@ -172,10 +172,21 @@ export default async function ProductPage({
             )}
 
             <section className="mt-10">
-              <h2 className="flex items-center gap-2 text-[19px]">
-                <Download className="h-4.5 w-4.5 text-accent" aria-hidden />
-                {pick(locale, "Файлы для скачивания", "Files to download")}
-              </h2>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="flex items-center gap-2 text-[19px]">
+                  <Download className="h-4.5 w-4.5 text-accent" aria-hidden />
+                  {pick(locale, "Файлы для скачивания", "Files to download")}
+                </h2>
+                {owned && downloads.length > 1 && (
+                  <a
+                    href={`/downloads/${product.slug}/${archiveName(product.slug)}`}
+                    className="inline-flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full bg-accent px-5 text-[13px] font-medium text-on-accent shadow-xs transition-colors hover:bg-accent-strong"
+                  >
+                    <FileArchive className="h-3.5 w-3.5" aria-hidden />
+                    {pick(locale, "Скачать всё архивом", "Download all as ZIP")}
+                  </a>
+                )}
+              </div>
               <ul className="mt-4 flex flex-col gap-px overflow-hidden rounded-lg border border-line bg-line">
                 {downloads.map((item) => (
                   <li key={item.filename} className="flex items-center justify-between gap-4 bg-surface px-4 py-3.5">

@@ -1,0 +1,39 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "cold-emails.md",
+   "labelRu": "Холодные письма — 12 шт.",
+   "labelEn": "Cold emails — 12"
+  },
+  {
+   "file": "linkedin.md",
+   "labelRu": "LinkedIn — 20 шаблонов",
+   "labelEn": "LinkedIn — 20 templates"
+  },
+  {
+   "file": "direct-messages.md",
+   "labelRu": "Мессенджеры — 17 сообщений",
+   "labelEn": "Direct messages — 17"
+  },
+  {
+   "file": "sequence-21-days.md",
+   "labelRu": "Последовательность на 21 день",
+   "labelEn": "21-day sequence"
+  },
+  {
+   "file": "first-lines.md",
+   "labelRu": "Первая строка — 30 заготовок",
+   "labelEn": "First lines — 30"
+  },
+  {
+   "file": "outreach-tracker.csv",
+   "labelRu": "Таблица учёта",
+   "labelEn": "Outreach tracker"
+  }
+ ]
+}

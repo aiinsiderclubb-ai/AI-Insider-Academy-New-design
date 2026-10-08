@@ -1,0 +1,29 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "structures.md",
+   "labelRu": "Структуры — 10 шт.",
+   "labelEn": "Structures — 10"
+  },
+  {
+   "file": "scripts.md",
+   "labelRu": "Сценарии — 40 шт.",
+   "labelEn": "Scripts — 40"
+  },
+  {
+   "file": "scripts.csv",
+   "labelRu": "План съёмок",
+   "labelEn": "Shooting plan"
+  },
+  {
+   "file": "shooting-checklist.md",
+   "labelRu": "Чеклист съёмки и монтажа",
+   "labelEn": "Shooting checklist"
+  }
+ ]
+}

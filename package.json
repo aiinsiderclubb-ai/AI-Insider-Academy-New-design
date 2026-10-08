@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "lint:fix": "oxlint --fix",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "pack:products": "node scripts/pack-products.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

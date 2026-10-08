@@ -1,0 +1,44 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "governance-framework.md",
+   "labelRu": "Модель управления агентами",
+   "labelEn": "Governance framework"
+  },
+  {
+   "file": "security-checklist.md",
+   "labelRu": "Чеклист безопасности — 48 пункта",
+   "labelEn": "Security checklist — 48 items"
+  },
+  {
+   "file": "policy-templates.md",
+   "labelRu": "Шаблоны политик — 3 шт.",
+   "labelEn": "Policy templates — 3"
+  },
+  {
+   "file": "audit-report-template.md",
+   "labelRu": "Шаблон отчёта",
+   "labelEn": "Audit report template"
+  },
+  {
+   "file": "agent-register.csv",
+   "labelRu": "Реестр агентов",
+   "labelEn": "Agent register"
+  },
+  {
+   "file": "risk-assessment.csv",
+   "labelRu": "Оценка рисков",
+   "labelEn": "Risk assessment"
+  },
+  {
+   "file": "roi-calculator.csv",
+   "labelRu": "Калькулятор окупаемости",
+   "labelEn": "ROI calculator"
+  }
+ ]
+}

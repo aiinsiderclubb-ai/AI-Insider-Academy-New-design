@@ -1,0 +1,64 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "00-system.md",
+   "labelRu": "Как устроена система",
+   "labelEn": "How the system works"
+  },
+  {
+   "file": "01-business-audit.md",
+   "labelRu": "AI-аудит бизнеса",
+   "labelEn": "Business audit"
+  },
+  {
+   "file": "02-offer-builder.md",
+   "labelRu": "Конструктор оффера",
+   "labelEn": "Offer builder"
+  },
+  {
+   "file": "03-proposal-one-page.md",
+   "labelRu": "Предложение на одну страницу",
+   "labelEn": "One-page proposal"
+  },
+  {
+   "file": "04-service-agreement.md",
+   "labelRu": "Шаблон договора",
+   "labelEn": "Service agreement template"
+  },
+  {
+   "file": "05-onboarding-checklist.md",
+   "labelRu": "Старт работы с клиентом",
+   "labelEn": "Onboarding checklist"
+  },
+  {
+   "file": "06-delivery-plan.md",
+   "labelRu": "План внедрения",
+   "labelEn": "Delivery plan"
+  },
+  {
+   "file": "07-retainer-90-days.md",
+   "labelRu": "Поддержка: 90 дней",
+   "labelEn": "90-day retainer"
+  },
+  {
+   "file": "audit-process-map.csv",
+   "labelRu": "Карта процессов",
+   "labelEn": "Process map"
+  },
+  {
+   "file": "pricing-roi-calculator.csv",
+   "labelRu": "Калькулятор цены и окупаемости",
+   "labelEn": "Pricing & ROI calculator"
+  },
+  {
+   "file": "pipeline-tracker.csv",
+   "labelRu": "Воронка сделок",
+   "labelEn": "Pipeline tracker"
+  }
+ ]
+}

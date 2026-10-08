@@ -1,0 +1,34 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "proposal-template.md",
+   "labelRu": "Шаблон предложения",
+   "labelEn": "Proposal template"
+  },
+  {
+   "file": "pricing-guide.md",
+   "labelRu": "Руководство по ценам",
+   "labelEn": "Pricing guide"
+  },
+  {
+   "file": "scope-of-work.md",
+   "labelRu": "Описание работ",
+   "labelEn": "Scope of work"
+  },
+  {
+   "file": "change-request.md",
+   "labelRu": "Запрос на изменение",
+   "labelEn": "Change request"
+  },
+  {
+   "file": "pricing-calculator.csv",
+   "labelRu": "Калькулятор цены и окупаемости",
+   "labelEn": "Pricing & ROI calculator"
+  }
+ ]
+}

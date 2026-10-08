@@ -1,0 +1,19 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "prompts.md",
+   "labelRu": "Промпты — 50 шт.",
+   "labelEn": "Prompts — 50"
+  },
+  {
+   "file": "prompts.json",
+   "labelRu": "Промпты в JSON",
+   "labelEn": "Prompts as JSON"
+  }
+ ]
+}

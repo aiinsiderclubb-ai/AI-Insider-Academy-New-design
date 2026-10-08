@@ -1,0 +1,49 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "service-overview.md",
+   "labelRu": "Описание услуги",
+   "labelEn": "Service overview"
+  },
+  {
+   "file": "workflow.md",
+   "labelRu": "Порядок работы",
+   "labelEn": "Workflow"
+  },
+  {
+   "file": "prompt-chain.json",
+   "labelRu": "Цепочка промптов — 7 шагов",
+   "labelEn": "Prompt chain — 7 steps"
+  },
+  {
+   "file": "client-intake.md",
+   "labelRu": "Анкета клиента",
+   "labelEn": "Client intake"
+  },
+  {
+   "file": "approval-flow.md",
+   "labelRu": "Порядок согласования",
+   "labelEn": "Approval flow"
+  },
+  {
+   "file": "quality-checklist.md",
+   "labelRu": "Проверка качества",
+   "labelEn": "Quality checklist"
+  },
+  {
+   "file": "pricing-sheet.csv",
+   "labelRu": "Пакеты и цены",
+   "labelEn": "Pricing sheet"
+  },
+  {
+   "file": "production-tracker.csv",
+   "labelRu": "Таблица производства",
+   "labelEn": "Production tracker"
+  }
+ ]
+}

@@ -1,0 +1,124 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "how-to-open.md",
+   "labelRu": "Как открыть макеты",
+   "labelEn": "How to open"
+  },
+  {
+   "file": "layout-guide.md",
+   "labelRu": "Руководство по макетам",
+   "labelEn": "Layout guide"
+  },
+  {
+   "file": "palettes-and-fonts.md",
+   "labelRu": "Палитры и шрифты",
+   "labelEn": "Palettes and fonts"
+  },
+  {
+   "file": "post-01-cover.svg",
+   "labelRu": "Пост: обложка",
+   "labelEn": "Post: cover"
+  },
+  {
+   "file": "post-02-list.svg",
+   "labelRu": "Пост: список из трёх",
+   "labelEn": "Post: list of three"
+  },
+  {
+   "file": "post-03-quote.svg",
+   "labelRu": "Пост: цитата",
+   "labelEn": "Post: quote"
+  },
+  {
+   "file": "post-04-before-after.svg",
+   "labelRu": "Пост: до и после",
+   "labelEn": "Post: before and after"
+  },
+  {
+   "file": "post-05-carousel-step.svg",
+   "labelRu": "Карусель: шаг",
+   "labelEn": "Carousel: step"
+  },
+  {
+   "file": "post-06-cta.svg",
+   "labelRu": "Пост: призыв",
+   "labelEn": "Post: call to action"
+  },
+  {
+   "file": "post-07-stat.svg",
+   "labelRu": "Пост: цифра",
+   "labelEn": "Post: big number"
+  },
+  {
+   "file": "post-08-checklist.svg",
+   "labelRu": "Пост: чеклист",
+   "labelEn": "Post: checklist"
+  },
+  {
+   "file": "story-01-announce.svg",
+   "labelRu": "Сторис: анонс",
+   "labelEn": "Story: announcement"
+  },
+  {
+   "file": "story-02-poll.svg",
+   "labelRu": "Сторис: вопрос или опрос",
+   "labelEn": "Story: question or poll"
+  },
+  {
+   "file": "story-03-tip.svg",
+   "labelRu": "Сторис: совет",
+   "labelEn": "Story: tip"
+  },
+  {
+   "file": "story-04-quote.svg",
+   "labelRu": "Сторис: цитата",
+   "labelEn": "Story: quote"
+  },
+  {
+   "file": "story-05-testimonial.svg",
+   "labelRu": "Сторис: отзыв",
+   "labelEn": "Story: testimonial"
+  },
+  {
+   "file": "story-06-link.svg",
+   "labelRu": "Сторис: ссылка",
+   "labelEn": "Story: link"
+  },
+  {
+   "file": "thumb-01-text-photo.svg",
+   "labelRu": "Обложка: текст и фото",
+   "labelEn": "Thumbnail: text and photo"
+  },
+  {
+   "file": "thumb-02-number.svg",
+   "labelRu": "Обложка: число",
+   "labelEn": "Thumbnail: number"
+  },
+  {
+   "file": "thumb-03-versus.svg",
+   "labelRu": "Обложка: сравнение",
+   "labelEn": "Thumbnail: versus"
+  },
+  {
+   "file": "thumb-04-frame.svg",
+   "labelRu": "Обложка: рамка и метка",
+   "labelEn": "Thumbnail: frame and tag"
+  },
+  {
+   "file": "thumb-05-before-after.svg",
+   "labelRu": "Обложка: до и после",
+   "labelEn": "Thumbnail: before and after"
+  },
+  {
+   "file": "thumb-06-tutorial.svg",
+   "labelRu": "Обложка: инструкция",
+   "labelEn": "Thumbnail: tutorial"
+  }
+ ]
+}

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { StudyRoom, type StudyHomework, type StudyLesson } from "@/components/study/study-room";
-import { defaultHomework, lessonHomework, type HomeworkSpec } from "@/content/catalog";
+import type { StudyMaterial } from "@/components/study/lesson-materials";
+import { defaultHomework, lessonHomework, lessonMaterials, type HomeworkSpec } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import { getCourse } from "@/lib/api/catalog";
 import { canOpenLesson, getAccess, getMe } from "@/lib/api/session";
@@ -74,6 +75,18 @@ export default async function StudyPage({
       ? localised(defaultHomework, false)
       : null;
 
+  /* Each entry is narrowed to the one shape its kind needs, in the learner's language. */
+  const materials: StudyMaterial[] = lessonMaterials(course.id, current.id).flatMap((item): StudyMaterial[] => {
+    const title = pick(locale, item.title, item.titleEn);
+    const note = pick(locale, item.note, item.noteEn);
+    if (item.kind === "copy" && item.text) {
+      return [{ kind: "copy", title, note, text: pick(locale, item.text, item.textEn ?? item.text), code: Boolean(item.code) }];
+    }
+    if (item.kind === "file" && item.href) return [{ kind: "file", title, note, href: item.href }];
+    if (item.kind === "link" && item.url) return [{ kind: "link", title, note, url: item.url }];
+    return [];
+  });
+
   return (
     <StudyRoom
       locale={locale}
@@ -82,6 +95,7 @@ export default async function StudyPage({
       lessons={lessons}
       current={current}
       homework={homework}
+      materials={materials}
       watched={access.progress[course.id]?.watched ?? []}
       canSubmitHomework={current.unlocked && !access.prelaunch}
     />

@@ -4,6 +4,7 @@ import vault from "./data/vaultProducts.json";
 import vaultDetails from "./data/vaultDetails.json";
 import programs from "./data/courseLessonPrograms.json";
 import homework from "./data/courseHomework.json";
+import materials from "./data/lessonMaterials.json";
 import landing from "./data/courseLanding.json";
 import profiles from "./data/courseProfiles.json";
 
@@ -223,4 +224,34 @@ const courseProfiles = profiles.COURSE_PROFILES as unknown as Record<string, Cou
 
 export function profileFor(courseId: string): CourseProfile | undefined {
   return courseProfiles[courseId];
+}
+
+/* -------------------------------- materials -------------------------------- */
+
+/**
+ * Something a lesson leaves with the learner: a prompt or snippet to copy, a
+ * file to download, or a link to a tool the lesson uses.
+ */
+export interface LessonMaterial {
+  kind: "copy" | "file" | "link";
+  title: string;
+  titleEn: string;
+  note: string;
+  noteEn: string;
+  /** `copy`: what lands on the clipboard. */
+  text?: string;
+  textEn?: string;
+  /** `copy`: source code, shown without wrapping. */
+  code?: boolean;
+  /** `file`: a path under /public. */
+  href?: string;
+  /** `link`: where it goes. */
+  url?: string;
+}
+
+const materialsByLesson = materials.MATERIALS_BY_LESSON as Record<string, Record<string, LessonMaterial[]>>;
+
+/** Materials for one lesson, in the order they should be shown. Keyed by ids, like homework. */
+export function lessonMaterials(courseId: string, lessonId: string): LessonMaterial[] {
+  return materialsByLesson[courseId]?.[lessonId] ?? [];
 }

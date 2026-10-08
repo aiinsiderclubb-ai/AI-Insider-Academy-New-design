@@ -29,6 +29,7 @@ import { Progress } from "@/components/primitives/display";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { useToast } from "@/components/primitives/toast";
 import { LessonAssistant } from "@/components/assistant/lesson-assistant";
+import { LessonMaterials, type StudyMaterial } from "@/components/study/lesson-materials";
 import type { Dictionary } from "@/lib/i18n";
 import { path, type Locale } from "@/lib/i18n/config";
 import { cn, timecode } from "@/lib/utils";
@@ -59,7 +60,7 @@ export interface StudyNote {
 }
 
 type Panel = "notes" | "assistant" | "resources" | null;
-type Tab = "lesson" | "homework" | "discussion";
+type Tab = "lesson" | "homework" | "materials" | "discussion";
 
 const NOTES_KEY = (courseId: string) => `aia-notes:${courseId}`;
 
@@ -70,6 +71,7 @@ export function StudyRoom({
   lessons,
   current,
   homework,
+  materials,
   watched,
   canSubmitHomework,
 }: {
@@ -79,6 +81,7 @@ export function StudyRoom({
   lessons: StudyLesson[];
   current: StudyLesson;
   homework: StudyHomework | null;
+  materials: StudyMaterial[];
   watched: number[];
   canSubmitHomework: boolean;
 }) {
@@ -95,7 +98,8 @@ export function StudyRoom({
   const [saving, setSaving] = React.useState(false);
 
   /* The tab is remembered between lessons; one that this lesson lacks falls back. */
-  const activeTab: Tab = tab === "homework" && !homework ? "lesson" : tab;
+  const activeTab: Tab =
+    (tab === "homework" && !homework) || (tab === "materials" && materials.length === 0) ? "lesson" : tab;
 
   const isDone = done.includes(current.index);
   const percent = Math.round((new Set(done).size / Math.max(1, course.lessonCount)) * 100);
@@ -467,6 +471,7 @@ export function StudyRoom({
                     // A lesson without an assignment has no tab for one. It used to
                     // open on an empty frame saying the lesson was still in edit.
                     ...(homework ? [["homework", d.learn.homework]] : []),
+                    ...(materials.length > 0 ? [["materials", d.study.resources]] : []),
                     ["discussion", d.study.discussion],
                   ] as [Tab, string][]
                 ).map(([value, label]) => (
@@ -533,6 +538,8 @@ export function StudyRoom({
                   )}
                 </div>
               )}
+
+              {activeTab === "materials" && <LessonMaterials items={materials} d={d} />}
 
               {activeTab === "discussion" && (
                 <EmptyState

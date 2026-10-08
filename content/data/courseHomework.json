@@ -1908,110 +1908,114 @@
   "first-automation-n8n": {
    "fn1": {
     "tasks": [
-     "Выпишите 5 повторяющихся задач из своей работы или бизнеса",
-     "Для каждой укажите, сколько раз в неделю она повторяется и сколько минут занимает",
-     "Посчитайте потери времени в месяц и выберите одну задачу для автоматизации",
-     "Опишите выбранный процесс по шагам: что его запускает, какие данные нужны, что получается на выходе"
+     "Выпишите три повторяющихся процесса из своей работы или повседневной жизни — чем скучнее, тем лучше",
+     "Для каждого запишите, сколько минут занимает одна операция и как часто она происходит",
+     "Посчитайте, сколько часов в месяц уходит на каждый процесс — по формуле из урока или в таблице из материалов",
+     "Выберите один процесс, который хотите автоматизировать первым. Один, не пять и не десять"
     ],
     "tasksEn": [
-     "List 5 recurring tasks from your work or business",
-     "For each one, note how many times a week it repeats and how many minutes it takes",
-     "Work out the time lost per month and pick one task to automate",
-     "Describe the chosen process step by step: what starts it, what data it needs, what comes out"
+     "Write down three recurring processes from your work or everyday life — the more boring, the better",
+     "For each, note how many minutes one run takes and how often it happens",
+     "Work out how many hours a month each process takes — with the formula from the lesson or in the spreadsheet from the materials",
+     "Pick the one process you want to automate first. One, not five and not ten"
     ],
     "deliverables": [
-     "Таблица из 5 задач: частота, время на один раз, потери в месяц",
-     "Одна выбранная задача и 2–3 предложения, почему именно она",
-     "Схема процесса: триггер → шаги → результат, текстом или картинкой"
+     "Три процесса с цифрами: минуты на операцию, частота, часы в месяц",
+     "Один выбранный процесс",
+     "Его описание по схеме из урока: триггер → данные → действия → результат"
     ],
     "deliverablesEn": [
-     "A table of 5 tasks: frequency, time per run, time lost per month",
-     "The one task you picked and 2–3 sentences on why",
-     "A process outline: trigger → steps → result, as text or a picture"
+     "Three processes with numbers: minutes per run, frequency, hours per month",
+     "The one process you picked",
+     "Its outline in the lesson's terms: trigger → data → actions → result"
     ],
     "criteria": [
-     "Потери времени посчитаны в часах, а не словами «много» и «мало»",
-     "Выбранный процесс повторяется регулярно и идёт по понятным правилам",
-     "По схеме видно, откуда приходят данные и куда уходит результат"
+     "Время посчитано в часах в месяц, а не словами «много» и «мало»",
+     "Выбранный процесс проходит три проверки из урока: повторяется регулярно, однотипный, ошибка в нём чего-то стоит",
+     "Понятно, какое событие запускает процесс и что должно получиться в конце"
     ],
     "criteriaEn": [
-     "Time lost is counted in hours, not described as \"a lot\" or \"a little\"",
-     "The chosen process repeats regularly and follows clear rules",
-     "The outline shows where the data comes from and where the result goes"
+     "Time is counted in hours per month, not described as \"a lot\" or \"a little\"",
+     "The chosen process passes the lesson's three checks: it repeats regularly, it is uniform, a mistake in it costs something",
+     "It is clear which event starts the process and what should come out at the end"
     ]
    },
    "fn2": {
     "tasks": [
-     "Соберите workflow из урока: форма → n8n → AI → Google Sheets → Telegram",
-     "Добавьте проверку входящих данных: пустые поля и некорректный контакт",
-     "Отправьте три тестовые заявки, одну из них — намеренно с ошибкой",
-     "Найдите упавший запуск в Executions и разберите, на каком узле и почему он остановился"
+     "Запустите workflow из урока у себя: Webhook → AI Agent → Code → Google Sheets → Telegram",
+     "Подключите свою таблицу и своего Telegram-бота",
+     "Отправьте через систему минимум пять разных заявок: обычный вопрос, горячую заявку, очень короткое сообщение, заявку без части данных и что-нибудь похожее на спам",
+     "Специально сломайте формат: попросите AI ответить обычным текстом, найдите упавший запуск в Executions и верните всё в рабочее состояние",
+     "Подумайте, какие поля были бы полезны именно для вашего процесса"
     ],
     "tasksEn": [
-     "Build the workflow from the lesson: form → n8n → AI → Google Sheets → Telegram",
-     "Add validation for incoming data: empty fields and a malformed contact",
-     "Send three test submissions, one of them broken on purpose",
-     "Find the failed run in Executions and work out which node stopped it and why"
+     "Run the workflow from the lesson yourself: Webhook → AI Agent → Code → Google Sheets → Telegram",
+     "Connect your own spreadsheet and your own Telegram bot",
+     "Send at least five different requests through it: a plain question, a hot lead, a very short message, a request with some data missing and something that looks like spam",
+     "Break the format on purpose: ask the AI to answer in plain text, find the failed run in Executions and put everything back in working order",
+     "Think about which fields would be useful for your own process"
     ],
     "deliverables": [
-     "Скриншот workflow целиком",
-     "Скриншот таблицы Google Sheets с тестовыми строками",
-     "Скриншот уведомления в Telegram",
-     "Скриншот запуска с ошибкой и 2–3 предложения: в чём была причина и как вы её исправили"
+     "Работающий workflow из пяти узлов в вашем n8n",
+     "Таблица, в которой пять тестовых заявок лежат отдельными строками с категорией, приоритетом и резюме",
+     "Уведомления о них в вашем Telegram",
+     "Один запуск с ошибкой в истории и понимание, на каком узле и почему он остановился"
     ],
     "deliverablesEn": [
-     "A screenshot of the whole workflow",
-     "A screenshot of the Google Sheets table with the test rows",
-     "A screenshot of the Telegram notification",
-     "A screenshot of the failed run and 2–3 sentences: what caused it and how you fixed it"
+     "A working five-node workflow in your n8n",
+     "A sheet where five test requests sit in separate rows with a category, a priority and a summary",
+     "Their notifications in your Telegram",
+     "One failed run in the history, and knowing which node stopped it and why"
     ],
     "criteria": [
      "Заявка проходит путь от формы до Telegram без ручных действий",
-     "Некорректные данные не попадают в таблицу как обычная заявка",
-     "Причина ошибки названа конкретно: узел и поле",
-     "На скриншотах не видно токенов и ключей доступа"
+     "Разные заявки получают разные категорию и приоритет, а не одно и то же",
+     "При неправильном ответе AI в таблицу не попадает строка с пустыми полями — workflow останавливается на Code node",
+     "Токены и ключи нигде не опубликованы: ни на скриншотах, ни в экспортированном workflow"
     ],
     "criteriaEn": [
-     "A submission travels from the form to Telegram with no manual steps",
-     "Bad data does not land in the sheet as a normal submission",
-     "The cause of the error is named precisely: the node and the field",
-     "No tokens or access keys are visible in the screenshots"
+     "A request travels from the form to Telegram with no manual steps",
+     "Different requests get different categories and priorities, not the same one every time",
+     "When the AI answers wrongly, no row with empty fields reaches the sheet — the workflow stops at the Code node",
+     "Tokens and keys are published nowhere: not in screenshots, not in an exported workflow"
     ]
    },
    "fn3": {
     "tasks": [
-     "Опишите одной фразой, какому бизнесу и какую задачу решает ваш workflow — без технических слов",
-     "Составьте список из 10 компаний или людей, кому это может быть нужно, и укажите, кто там принимает решение",
-     "Запишите demo на 2–3 минуты: проблема → как это работает → результат",
-     "Перечислите, что нужно добавить, чтобы запустить это у клиента в production"
+     "Откройте workflow ещё раз и измените хотя бы три вещи: добавьте категорию заявок, поменяйте критерии приоритета, добавьте поле бюджета или сделайте так, чтобы заявки с HIGH выглядели иначе",
+     "Выберите нишу и соберите список из 10 небольших компаний, которые получают заявки через сайт, Instagram или мессенджеры",
+     "Для одной компании найдите человека, который принимает решение, и адаптируйте демо под её бизнес",
+     "Запишите видео на две минуты и напишите короткое персональное сообщение — без продажи, по образцу из урока"
     ],
     "tasksEn": [
-     "Say in one sentence which business your workflow helps and with what — no technical words",
-     "List 10 companies or people who could need it and name who makes the decision there",
-     "Record a 2–3 minute demo: the problem → how it works → the result",
-     "List what has to be added before this can run for a client in production"
+     "Open the workflow again and change at least three things: add a request category, change the priority criteria, add a budget field or make HIGH requests look different",
+     "Choose a niche and gather a list of 10 small companies that take enquiries through a website, Instagram or messengers",
+     "For one of them, find the person who makes the decision and adapt the demo to that business",
+     "Record a two-minute video and write a short personal message — no selling, on the pattern from the lesson"
     ],
     "deliverables": [
-     "Оффер одной фразой",
-     "Список из 10 потенциальных клиентов с ролью того, кто принимает решение",
-     "Ссылка на demo-видео или файл",
-     "Чек-лист доработок для production: обработка ошибок, логи, доступы, уведомления о сбоях"
+     "Изменённый workflow, который по-прежнему проходит от заявки до уведомления",
+     "Список из 10 компаний с пометкой, почему каждая подходит",
+     "Демо под одну компанию: её название, реалистичные тестовые заявки, свои категории",
+     "Видео на две минуты и текст первого сообщения"
     ],
     "deliverablesEn": [
-     "Your offer in one sentence",
-     "A list of 10 prospects with the role of the decision maker",
-     "A link to the demo video, or the file",
-     "A production checklist: error handling, logs, access, failure alerts"
+     "A changed workflow that still runs from request to notification",
+     "A list of 10 companies with a note on why each one fits",
+     "A demo for one company: its name, realistic test requests, its own categories",
+     "A two-minute video and the text of the first message"
     ],
     "criteria": [
-     "Оффер говорит о результате для бизнеса — время, деньги, заявки, — а не о технологии",
-     "В demo виден работающий workflow, а не слайды",
-     "В чек-листе не меньше четырёх конкретных пунктов"
+     "После изменений workflow работает; если ломался — вы нашли, где данные были правильными в последний раз",
+     "Сообщение говорит о результате для бизнеса, а не об n8n и AI",
+     "В видео виден работающий процесс на примере этой компании, а не слайды",
+     "Это адресное обращение к подходящей компании, а не рассылка всем подряд"
     ],
     "criteriaEn": [
-     "The offer is about a business result — time, money, leads — not about the technology",
-     "The demo shows the workflow running, not slides",
-     "The checklist has at least four concrete items"
+     "The workflow runs after your changes; if it broke, you found where the data was last correct",
+     "The message is about a result for the business, not about n8n and AI",
+     "The video shows the process working on this company's example, not slides",
+     "It is a targeted approach to a company that fits, not a mailing to everyone"
     ]
    }
   }

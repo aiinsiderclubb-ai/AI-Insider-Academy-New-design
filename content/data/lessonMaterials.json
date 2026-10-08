@@ -1,0 +1,250 @@
+{
+ "MATERIALS_BY_LESSON": {
+  "first-automation-n8n": {
+   "fn1": [
+    {
+     "kind": "file",
+     "title": "Таблица для подсчёта рутины",
+     "titleEn": "Routine calculator spreadsheet",
+     "note": "Та самая таблица из урока: впишите три процесса — часы и потери в месяц посчитаются сами. Открывается в Excel, Numbers и Google Sheets.",
+     "noteEn": "The table from the lesson: enter three processes and the hours and monthly cost fill in on their own. Opens in Excel, Numbers and Google Sheets.",
+     "href": "/materials/first-automation-n8n/routine-calculator.xlsx"
+    },
+    {
+     "kind": "copy",
+     "title": "Формула: сколько стоит рутина",
+     "titleEn": "The formula: what routine costs",
+     "note": "Пример из урока — 5 минут на заявку, 30 заявок в неделю, час сотрудника 40 €.",
+     "noteEn": "The example from the lesson — 5 minutes per lead, 30 leads a week, €40 per staff hour.",
+     "text": "Минут на одну операцию × операций в неделю × 4 ÷ 60 = часов в месяц\nЧасов в месяц × стоимость часа = потери в месяц\n\nПример: 5 × 30 × 4 ÷ 60 = 10 часов в месяц\n10 × 40 € = 400 € в месяц",
+     "textEn": "Minutes per run × runs per week × 4 ÷ 60 = hours per month\nHours per month × hourly cost = lost per month\n\nExample: 5 × 30 × 4 ÷ 60 = 10 hours a month\n10 × €40 = €400 a month"
+    },
+    {
+     "kind": "copy",
+     "title": "Шпаргалка: что автоматизировать первым",
+     "titleEn": "Cheat sheet: what to automate first",
+     "note": "Три признака хорошего первого процесса и три типа задач, с которых начинать не стоит.",
+     "noteEn": "Three signs of a good first process and three kinds of task not to start with.",
+     "text": "Хороший кандидат:\n1. Процесс регулярно повторяется — каждый день, каждую неделю, с каждым новым клиентом.\n2. Процесс однотипный — большую часть времени вы делаете одни и те же действия.\n3. Ошибка или забывчивость чего-то стоит — теряются деньги, время или клиент.\n\nНе стоит начинать с этого:\n1. Задача случается раз в несколько месяцев.\n2. Почти каждый раз нужно сложное человеческое решение.\n3. Процесс завязан на закрытую или старую систему без нормальных интеграций.\n\nЛюбая автоматизация: триггер → данные → действия → результат.",
+     "textEn": "A good candidate:\n1. The process repeats regularly — every day, every week, with every new client.\n2. The process is uniform — most of the time you perform the same actions.\n3. A mistake or a lapse costs something — money, time or a client.\n\nNot where to start:\n1. The task happens once every few months.\n2. Almost every run needs a hard human decision.\n3. The process depends on a closed or old system with no proper integrations.\n\nEvery automation: trigger → data → actions → result."
+    },
+    {
+     "kind": "link",
+     "title": "n8n",
+     "titleEn": "n8n",
+     "note": "Заведите аккаунт до второго урока — в нём мы сразу открываем пустой workflow.",
+     "noteEn": "Create an account before lesson two — it opens straight on an empty workflow.",
+     "url": "https://n8n.io"
+    }
+   ],
+   "fn2": [
+    {
+     "kind": "copy",
+     "title": "Промпт для AI Agent: классификация заявки",
+     "titleEn": "Prompt for the AI Agent: classifying a lead",
+     "note": "Вставляется в поле Prompt (User Message). Возвращает JSON с тремя полями, которые дальше проверяет Code node. Выражение в фигурных скобках подставляет текст заявки из Webhook.",
+     "noteEn": "Goes into the Prompt (User Message) field. Returns JSON with the three fields the Code node checks next. The expression in curly braces inserts the request text from the Webhook.",
+     "text": "Ты — AI-классификатор входящих заявок потенциальных клиентов.\n\nПроанализируй ТОЛЬКО заявку ниже.\n\nТекст заявки:\n{{ $json.query.message }}\n\nОпредели:\n- category — одна из: Sales, Support, Partnership, Other\n- priority — одно из: LOW, MEDIUM, HIGH\n- summary — краткое резюме заявки в одном предложении\n\nНе объясняй свои рассуждения.\nНе давай рекомендации.\nНе описывай правила классификации.\nНе добавляй дополнительный текст.\nВерни исключительно JSON в формате:\n{\"category\": \"...\", \"priority\": \"...\", \"summary\": \"...\"}",
+     "textEn": "You are an AI classifier of incoming leads.\n\nAnalyse ONLY the request below.\n\nRequest text:\n{{ $json.query.message }}\n\nDetermine:\n- category — one of: Sales, Support, Partnership, Other\n- priority — one of: LOW, MEDIUM, HIGH\n- summary — a one-sentence summary of the request\n\nDo not explain your reasoning.\nDo not give recommendations.\nDo not describe the classification rules.\nDo not add any other text.\nReturn JSON only, in this format:\n{\"category\": \"...\", \"priority\": \"...\", \"summary\": \"...\"}"
+    },
+    {
+     "kind": "copy",
+     "title": "Простой промпт, с которого начинаем в уроке",
+     "titleEn": "The simple prompt the lesson starts with",
+     "note": "Первая версия из видео. Работает, но формат ответа каждый раз может отличаться — поэтому дальше мы переходим на JSON.",
+     "noteEn": "The first version from the video. It works, but the shape of the answer can differ each time — which is why the lesson moves on to JSON.",
+     "text": "Ты анализируешь входящие заявки потенциальных клиентов.\nОпредели категорию обращения.\nОпредели приоритет: LOW, MEDIUM или HIGH.\nСоздай краткое резюме заявки в одном предложении.\nВерни результат в структурированном виде.\nДополнительно можно определить категории.\nНапример:\nSales.\nSupport.\nPartnership.\nOther.",
+     "textEn": "You analyse incoming requests from potential clients.\nDetermine the category of the request.\nDetermine the priority: LOW, MEDIUM or HIGH.\nWrite a one-sentence summary of the request.\nReturn the result in a structured form.\nYou may also define the categories.\nFor example:\nSales.\nSupport.\nPartnership.\nOther."
+    },
+    {
+     "kind": "copy",
+     "title": "Код для Code node: проверка ответа AI",
+     "titleEn": "Code for the Code node: checking the AI's answer",
+     "note": "Режим Run Once for All Items, язык JavaScript. Останавливает workflow, если AI вернул не JSON или пропустил одно из трёх полей.",
+     "noteEn": "Mode: Run Once for All Items, language: JavaScript. Stops the workflow when the AI returns something other than JSON or leaves out one of the three fields.",
+     "text": "const raw = $json.output;\n\nlet data;\n\ntry {\n  data = JSON.parse(raw);\n} catch (error) {\n  throw new Error(\n    'AI вернул ответ не в формате JSON. Получено: ' + raw\n  );\n}\n\nif (!data.category) {\n  throw new Error('В ответе AI отсутствует поле category');\n}\n\nif (!data.priority) {\n  throw new Error('В ответе AI отсутствует поле priority');\n}\n\nif (!data.summary) {\n  throw new Error('В ответе AI отсутствует поле summary');\n}\n\nreturn [{ json: data }];",
+     "textEn": "const raw = $json.output;\n\nlet data;\n\ntry {\n  data = JSON.parse(raw);\n} catch (error) {\n  throw new Error(\n    'AI вернул ответ не в формате JSON. Получено: ' + raw\n  );\n}\n\nif (!data.category) {\n  throw new Error('В ответе AI отсутствует поле category');\n}\n\nif (!data.priority) {\n  throw new Error('В ответе AI отсутствует поле priority');\n}\n\nif (!data.summary) {\n  throw new Error('В ответе AI отсутствует поле summary');\n}\n\nreturn [{ json: data }];",
+     "code": true
+    },
+    {
+     "kind": "copy",
+     "title": "Заголовки таблицы Google Sheets",
+     "titleEn": "Google Sheets column headers",
+     "note": "Скопируйте и вставьте в первую строку таблицы — заголовки встанут по колонкам.",
+     "noteEn": "Copy and paste into the first row of the sheet — the headers land one per column.",
+     "text": "Дата\tИмя\tEmail\tТелефон\tСообщение\tКатегория\tПриоритет\tРезюме",
+     "textEn": "Date\tName\tEmail\tPhone\tMessage\tCategory\tPriority\tSummary"
+    },
+    {
+     "kind": "copy",
+     "title": "Текст уведомления в Telegram",
+     "titleEn": "Telegram notification text",
+     "note": "Для поля Text в узле Telegram. Имена узлов — как в уроке: Webhook и Code in JavaScript. Если поля вашей формы называются иначе, поменяйте name, phone, email и message.",
+     "noteEn": "For the Text field of the Telegram node. Node names are as in the lesson: Webhook and Code in JavaScript. If your form fields are named differently, change name, phone, email and message.",
+     "text": "🔔 Новая заявка\n\nИмя: {{ $('Webhook').item.json.query.name }}\nПриоритет: {{ $('Code in JavaScript').item.json.priority }}\nКатегория: {{ $('Code in JavaScript').item.json.category }}\nКонтакт: {{ $('Webhook').item.json.query.phone }} · {{ $('Webhook').item.json.query.email }}\n\n{{ $('Code in JavaScript').item.json.summary }}\n\nСообщение клиента:\n{{ $('Webhook').item.json.query.message }}",
+     "textEn": "🔔 New lead\n\nName: {{ $('Webhook').item.json.query.name }}\nPriority: {{ $('Code in JavaScript').item.json.priority }}\nCategory: {{ $('Code in JavaScript').item.json.category }}\nContact: {{ $('Webhook').item.json.query.phone }} · {{ $('Webhook').item.json.query.email }}\n\n{{ $('Code in JavaScript').item.json.summary }}\n\nClient's message:\n{{ $('Webhook').item.json.query.message }}"
+    },
+    {
+     "kind": "copy",
+     "title": "Тестовые заявки",
+     "titleEn": "Test submissions",
+     "note": "Пять разных сообщений, чтобы посмотреть, как AI их классифицирует: два из урока и три типа, которые в уроке советуем попробовать.",
+     "noteEn": "Five different messages to see how the AI classifies them: two from the lesson and three kinds the lesson suggests trying.",
+     "text": "1. Заявка из урока (агентство):\nПолучаем около 30 заявок в неделю из рекламы. Сейчас менеджер вручную переносит их в таблицу. Хотим автоматизировать обработку и быстрее отвечать горячим клиентам.\n\n2. Заявка из урока (стоматология):\nЗдравствуйте. Нужна автоматизация обработки заявок для стоматологии. Сейчас теряем обращения из Instagram и сайта. Хотели бы запустить систему в ближайшие две недели.\n\n3. Обычный вопрос:\nЗдравствуйте, просто хотел узнать стоимость.\n\n4. Очень короткое сообщение:\nПерезвоните\n\n5. Похоже на спам:\nПродвинем ваш сайт в топ за 3 дня, гарантия результата, пишите прямо сейчас!!!",
+     "textEn": "1. From the lesson (agency):\nWe get about 30 leads a week from ads. A manager copies them into a spreadsheet by hand. We want to automate the handling and reply to hot leads faster.\n\n2. From the lesson (dental clinic):\nHello. We need lead handling automated for a dental clinic. We are losing enquiries from Instagram and the website. We would like to launch within the next two weeks.\n\n3. A plain question:\nHello, I just wanted to know the price.\n\n4. A very short message:\nCall me back\n\n5. Looks like spam:\nWe will get your site to the top in 3 days, results guaranteed, write to us right now!!!"
+    },
+    {
+     "kind": "link",
+     "title": "n8n",
+     "titleEn": "n8n",
+     "note": "Здесь собираем workflow.",
+     "noteEn": "Where the workflow is built.",
+     "url": "https://n8n.io"
+    },
+    {
+     "kind": "link",
+     "title": "BotFather",
+     "titleEn": "BotFather",
+     "note": "Создать Telegram-бота и получить его токен.",
+     "noteEn": "Create a Telegram bot and get its token.",
+     "url": "https://t.me/BotFather"
+    },
+    {
+     "kind": "link",
+     "title": "Новая таблица Google Sheets",
+     "titleEn": "A new Google Sheets spreadsheet",
+     "note": "Открывает пустую таблицу в вашем аккаунте.",
+     "noteEn": "Opens an empty spreadsheet in your account.",
+     "url": "https://sheets.new"
+    },
+    {
+     "kind": "link",
+     "title": "OpenAI: API-ключи",
+     "titleEn": "OpenAI: API keys",
+     "note": "Ключ для узла OpenAI Chat Model.",
+     "noteEn": "The key for the OpenAI Chat Model node.",
+     "url": "https://platform.openai.com/api-keys"
+    },
+    {
+     "kind": "link",
+     "title": "Anthropic Console",
+     "titleEn": "Anthropic Console",
+     "note": "Если вместо OpenAI используете Claude.",
+     "noteEn": "If you use Claude instead of OpenAI.",
+     "url": "https://platform.claude.com/"
+    },
+    {
+     "kind": "link",
+     "title": "Документация n8n: Webhook",
+     "titleEn": "n8n docs: Webhook",
+     "note": "Тестовый и рабочий URL, методы, параметры.",
+     "noteEn": "Test and production URLs, methods, parameters.",
+     "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/"
+    },
+    {
+     "kind": "link",
+     "title": "Документация n8n: AI Agent",
+     "titleEn": "n8n docs: AI Agent",
+     "note": "Настройки узла и подключение модели.",
+     "noteEn": "Node settings and connecting a model.",
+     "url": "https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/"
+    },
+    {
+     "kind": "link",
+     "title": "Документация n8n: Code",
+     "titleEn": "n8n docs: Code",
+     "note": "Как писать JavaScript внутри workflow.",
+     "noteEn": "Writing JavaScript inside a workflow.",
+     "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.code/"
+    }
+   ],
+   "fn3": [
+    {
+     "kind": "copy",
+     "title": "Промпт для Claude: кому автоматизация нужна",
+     "titleEn": "Prompt for Claude: who needs the automation",
+     "note": "Дайте Claude список компаний, собранный через Apify или вручную из Google Maps, — он отберёт те, где есть проблема, которую вы умеете решать.",
+     "noteEn": "Give Claude a list of companies gathered with Apify or by hand from Google Maps — it picks out the ones with a problem you know how to solve.",
+     "text": "Я делаю для небольших бизнесов автоматизацию обработки заявок: заявка из формы или мессенджера автоматически попадает в одно место, AI определяет её категорию и приоритет, менеджер сразу получает уведомление.\n\nНиже список компаний с публичными данными: название, сайт, категория, рейтинг, количество отзывов, телефон, адрес, ссылки на соцсети.\n\nПроанализируй эти компании и найди те, где такая автоматизация потенциально может быть полезна. Обрати внимание на признаки: компания активно рекламируется, у неё несколько каналов связи, много отзывов, есть запись или заявка через сайт.\n\nДля каждой подходящей компании напиши:\n1. Почему она подходит — по каким признакам из данных.\n2. Какой процесс у неё, скорее всего, можно улучшить.\n3. Насколько ты уверен: высокая, средняя или низкая уверенность.\n\nНе придумывай факты, которых нет в данных. Если данных не хватает — так и скажи.\n\nСписок компаний:\n[вставьте список]",
+     "textEn": "I build lead-handling automation for small businesses: a request from a form or a messenger lands in one place automatically, AI works out its category and priority, and the manager is notified straight away.\n\nBelow is a list of companies with public data: name, website, category, rating, number of reviews, phone, address, links to social media.\n\nAnalyse these companies and find the ones where this automation could be useful. Look for signs such as: the company advertises actively, it has several contact channels, many reviews, booking or enquiry through its website.\n\nFor each company that fits, write:\n1. Why it fits — which signs in the data point to it.\n2. Which process of theirs could most likely be improved.\n3. How confident you are: high, medium or low.\n\nDo not invent facts that are not in the data. If the data is not enough, say so.\n\nList of companies:\n[paste the list]"
+    },
+    {
+     "kind": "copy",
+     "title": "Промпт для Claude: кто принимает решение",
+     "titleEn": "Prompt for Claude: who makes the decision",
+     "note": "Чтобы писать не на общий info@, а человеку, который отвечает за процесс.",
+     "noteEn": "So that you write to the person responsible for the process, not to a general info@ address.",
+     "text": "Проведи ресерч по компании и найди публично доступную информацию о человеке, который принимает решения по работе с заявками и клиентами.\n\nКомпания: [название]\nСайт: [адрес]\n\nГде смотреть: сайт компании и страница команды, LinkedIn, публичные соцсети, другие открытые источники.\n\nКого ищем: владелец бизнеса, CEO, Managing Director, Head of Marketing, Head of Sales, Operations Manager или другой человек, отвечающий за этот процесс.\n\nВерни:\n1. Имя и должность.\n2. Источник, где ты это нашёл — ссылкой.\n3. Публичный контакт или канал, через который уместно написать.\n4. Одно-два наблюдения о компании, на которые можно опереться в первом сообщении.\n\nИспользуй только открытую информацию. Если человека найти не удалось — так и напиши, не подставляй догадки.",
+     "textEn": "Research the company and find publicly available information about the person who makes decisions on handling leads and clients.\n\nCompany: [name]\nWebsite: [address]\n\nWhere to look: the company website and its team page, LinkedIn, public social media, other open sources.\n\nWho we are looking for: the business owner, CEO, Managing Director, Head of Marketing, Head of Sales, Operations Manager or whoever is responsible for this process.\n\nReturn:\n1. Name and role.\n2. The source where you found it — as a link.\n3. A public contact or channel where it is appropriate to write.\n4. One or two observations about the company to build the first message on.\n\nUse open information only. If you could not find the person, say so — do not fill the gap with guesses."
+    },
+    {
+     "kind": "copy",
+     "title": "Первое сообщение клиенту",
+     "titleEn": "The first message to a client",
+     "note": "Текст из урока. Мы ещё ничего не продаём — показываем конкретную проблему и конкретный результат. Замените детали на то, что вы увидели у этой компании.",
+     "noteEn": "The wording from the lesson. Nothing is being sold yet — it shows a specific problem and a specific result. Replace the details with what you saw at this company.",
+     "text": "Здравствуйте, [имя]! Посмотрел, как у вас устроена запись клиентов через сайт и Instagram.\n\nЯ сделал небольшой демо-процесс, который автоматически собирает заявки в одном месте, определяет приоритет через AI и сразу уведомляет менеджера.\n\nЕсли интересно, могу отправить короткое видео на две минуты.",
+     "textEn": "Hello, [name]! I had a look at how your clients book through the website and Instagram.\n\nI put together a small demo process that gathers enquiries in one place automatically, sets a priority with AI and notifies the manager straight away.\n\nIf that is of interest, I can send a short two-minute video."
+    },
+    {
+     "kind": "copy",
+     "title": "От демо к production: что добавить",
+     "titleEn": "From demo to production: what to add",
+     "note": "Схема и вопросы из урока — пройдитесь по ним, прежде чем запускать автоматизацию у реального клиента.",
+     "noteEn": "The outline and the questions from the lesson — go through them before the automation runs for a real client.",
+     "text": "Учебная схема: заявка → AI → Google Sheets → Telegram\n\nProduction-версия:\nзаявка → проверка данных → поиск дублей → AI-анализ → проверка результата AI → CRM → уведомления → логирование → обработка ошибок → повторная попытка\n\nВопросы, на которые нужен ответ до запуска у клиента:\n[ ] Что происходит, если клиент отправил форму дважды?\n[ ] Что, если указан неправильный email или нет телефона?\n[ ] Что, если AI вернул ответ не в том формате?\n[ ] Что, если AI временно недоступен или закончился лимит API?\n[ ] Что, если Google Sheets или CRM не отвечают — заявка исчезнет или обработается повторно?\n[ ] Кто узнает, если workflow остановился ночью?\n[ ] Где хранится информация, какие заявки обработаны успешно, а какие нет?\n[ ] Нужна ли ручная проверка, когда AI не уверен в результате?\n[ ] Разные ли маршруты у высокого приоритета, низкого и спама?",
+     "textEn": "The training version: request → AI → Google Sheets → Telegram\n\nThe production version:\nrequest → data validation → duplicate check → AI analysis → check of the AI result → CRM → notifications → logging → error handling → retry\n\nQuestions to answer before it runs for a client:\n[ ] What happens if a client submits the form twice?\n[ ] What if the email is wrong or the phone is missing?\n[ ] What if the AI answers in the wrong format?\n[ ] What if the AI is temporarily unavailable or the API limit has run out?\n[ ] What if Google Sheets or the CRM does not respond — is the request lost or retried?\n[ ] Who finds out if the workflow stops at night?\n[ ] Where is it recorded which requests were handled and which were not?\n[ ] Is a manual check needed when the AI is unsure of its result?\n[ ] Do high priority, low priority and spam take different routes?"
+    },
+    {
+     "kind": "copy",
+     "title": "Вопросы для оценки стоимости",
+     "titleEn": "Questions for pricing the work",
+     "note": "Два внешне похожих workflow могут стоить по-разному — вот от чего это зависит.",
+     "noteEn": "Two workflows that look alike can cost very different amounts — this is what it depends on.",
+     "text": "Стоимость зависит от проблемы, а не от количества блоков. Перед тем как назвать цену, выясните:\n\n- Сколько времени компания сейчас теряет на этом процессе?\n- Сколько людей в нём участвует?\n- Сколько может стоить ошибка?\n- Сколько систем нужно подключить? Есть ли CRM и API?\n- Нужно ли обрабатывать персональные данные?\n- Нужны ли логи и повторные попытки?\n- Нужно ли потом поддерживать систему?",
+     "textEn": "The price depends on the problem, not on the number of nodes. Before you quote, find out:\n\n- How much time does the company lose on this process today?\n- How many people take part in it?\n- What can a mistake cost?\n- How many systems have to be connected? Is there a CRM, an API?\n- Does personal data have to be processed?\n- Are logs and retries needed?\n- Will the system need support afterwards?"
+    },
+    {
+     "kind": "link",
+     "title": "Claude Code",
+     "titleEn": "Claude Code",
+     "note": "Для поиска и первичного анализа компаний.",
+     "noteEn": "For finding companies and a first analysis of them.",
+     "url": "https://claude.com/product/claude-code"
+    },
+    {
+     "kind": "link",
+     "title": "Apify",
+     "titleEn": "Apify",
+     "note": "Сбор публичных данных о компаниях из Google Maps, сайтов и каталогов.",
+     "noteEn": "Gathering public company data from Google Maps, websites and directories.",
+     "url": "https://apify.com"
+    },
+    {
+     "kind": "link",
+     "title": "Apify: Google Maps Scraper",
+     "titleEn": "Apify: Google Maps Scraper",
+     "note": "Готовый сборщик: название, сайт, рейтинг, отзывы, телефон, адрес.",
+     "noteEn": "A ready-made scraper: name, website, rating, reviews, phone, address.",
+     "url": "https://apify.com/compass/crawler-google-places"
+    },
+    {
+     "kind": "link",
+     "title": "Google Maps",
+     "titleEn": "Google Maps",
+     "note": "Вручную посмотреть компании в выбранной нише и городе.",
+     "noteEn": "Browse companies in your niche and city by hand.",
+     "url": "https://www.google.com/maps"
+    },
+    {
+     "kind": "link",
+     "title": "LinkedIn",
+     "titleEn": "LinkedIn",
+     "note": "Найти владельца или руководителя и написать ему напрямую.",
+     "noteEn": "Find the owner or a manager and write to them directly.",
+     "url": "https://www.linkedin.com"
+    }
+   ]
+  }
+ }
+}

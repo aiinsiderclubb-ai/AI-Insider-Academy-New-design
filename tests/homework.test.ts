@@ -7,19 +7,21 @@ import { lessonHomework } from "@/content/catalog";
  * drifts from the catalogue the tab simply disappears from the lesson — no
  * error anywhere — so the pairing is pinned against the course data itself.
  */
-describe("lessonHomework", () => {
-  const course = courses.courses.find((entry) => entry.id === "first-automation-n8n");
+const RECORDED = ["first-automation-n8n", "ai-for-productivity"];
 
-  it("has an assignment for every lesson of the free n8n course", () => {
+describe.each(RECORDED)("lessonHomework · %s", (courseId) => {
+  const course = courses.courses.find((entry) => entry.id === courseId);
+
+  it("has an assignment for every lesson", () => {
     expect(course?.lessons.length).toBe(3);
     for (const lesson of course?.lessons ?? []) {
-      expect(lessonHomework("first-automation-n8n", lesson.id), lesson.id).not.toBeNull();
+      expect(lessonHomework(courseId, lesson.id), lesson.id).not.toBeNull();
     }
   });
 
   it("carries each part in both languages, point for point", () => {
     for (const lesson of course?.lessons ?? []) {
-      const spec = lessonHomework("first-automation-n8n", lesson.id);
+      const spec = lessonHomework(courseId, lesson.id);
       if (!spec) continue;
       for (const [ru, en] of [
         [spec.tasks, spec.tasksEn],
@@ -33,6 +35,9 @@ describe("lessonHomework", () => {
     }
   });
 
+});
+
+describe("lessonHomework", () => {
   it("is absent where nothing was written, so the lesson shows no assignment tab", () => {
     expect(lessonHomework("first-automation-n8n", "fn9")).toBeNull();
     expect(lessonHomework("ai-start", "as1")).toBeNull();

@@ -63,59 +63,60 @@
   },
   "ai-for-productivity": {
    "duration": {
-    "ru": "10–20 мин",
-    "en": "10–20 min"
+    "ru": "13–21 мин",
+    "en": "13–21 min"
    },
    "countLabel": {
-    "ru": "5 уроков (10–20 мин)",
-    "en": "5 lessons (10–20 мин)"
+    "ru": "3 урока (13–21 минута)",
+    "en": "3 lessons (13–21 min)"
    },
    "lessons": [
     {
      "num": 1,
-     "titleRu": "AI как личный помощник",
-     "titleEn": "AI как личный помощник",
-     "descRu": "Практика: AI как личный помощник.",
-     "descEn": "Practice: AI как личный помощник."
+     "titleRu": "Что отдать AI первым: почта, документы, встречи",
+     "titleEn": "What to hand to AI first: email, documents, meetings",
+     "descRu": "Где в рабочем дне теряется время и с каких трёх типов задач стоит начинать, чтобы AI забирал рутину, а не добавлял новую.",
+     "descEn": "Where the working day loses time, and the three kinds of task to start with so that AI takes routine away instead of adding more.",
+     "videoUrl": "ai-for-productivity/ap1.mp4",
+     "duration": {
+      "ru": "13 мин",
+      "en": "13 min"
+     }
     },
     {
      "num": 2,
-     "titleRu": "AI для работы и бизнеса",
-     "titleEn": "AI для работы и бизнеса",
-     "descRu": "Практика: AI для работы и бизнеса.",
-     "descEn": "Practice: AI для работы и бизнеса."
+     "titleRu": "Три рабочих сценария: письмо, документ, встреча",
+     "titleEn": "Three working scenarios: an email, a document, a meeting",
+     "descRu": "Контекст → задача → формат: разбираем длинное письмо и готовим ответ, вытаскиваем нужное из документа и сравниваем версии, превращаем заметки встречи в протокол и follow-up.",
+     "descEn": "Context → task → format: unpack a long email and draft the reply, pull what matters out of a document and compare versions, turn meeting notes into minutes and a follow-up.",
+     "videoUrl": "ai-for-productivity/ap2.mp4",
+     "duration": {
+      "ru": "21 мин",
+      "en": "21 min"
+     }
     },
     {
      "num": 3,
-     "titleRu": "AI для обучения",
-     "titleEn": "AI для обучения",
-     "descRu": "Практика: AI для обучения.",
-     "descEn": "Practice: AI для обучения."
-    },
-    {
-     "num": 4,
-     "titleRu": "Экономия времени с AI",
-     "titleEn": "Экономия времени с AI",
-     "descRu": "Практика: Экономия времени с AI.",
-     "descEn": "Practice: Экономия времени с AI."
-    },
-    {
-     "num": 5,
-     "titleRu": "Личная AI-система продуктивности",
-     "titleEn": "Личная AI-система продуктивности",
-     "descRu": "Практика: Личная AI-система продуктивности.",
-     "descEn": "Practice: Личная AI-система продуктивности."
+     "titleRu": "Как посчитать и показать результат",
+     "titleEn": "How to measure the result and show it",
+     "descRu": "Время «до» и «после», таблица на неделю и слова, которыми об экономии говорят с руководителем и клиентом. И когда AI в задаче не нужен.",
+     "descEn": "Time before and after, a one-week table, and the words for telling a manager or a client what you saved. And when a task does not need AI at all.",
+     "videoUrl": "ai-for-productivity/ap3.mp4",
+     "duration": {
+      "ru": "14 мин",
+      "en": "14 min"
+     }
     }
    ]
   },
   "first-automation-n8n": {
    "duration": {
-    "ru": "20+ мин",
-    "en": "20+ min"
+    "ru": "13–24 мин",
+    "en": "13–24 min"
    },
    "countLabel": {
-    "ru": "3 урока (20+ минут)",
-    "en": "3 lessons (20+ min)"
+    "ru": "3 урока (13–24 минуты)",
+    "en": "3 lessons (13–24 min)"
    },
    "lessons": [
     {
@@ -123,21 +124,36 @@
      "titleRu": "Какой процесс автоматизировать первым",
      "titleEn": "Which process to automate first",
      "descRu": "Как выбрать подходящую задачу, посчитать потерю времени и понять, где автоматизация реально даст пользу.",
-     "descEn": "How to pick the right task, count the time it costs you and see where automation actually pays off."
+     "descEn": "How to pick the right task, count the time it costs you and see where automation actually pays off.",
+     "videoUrl": "first-automation-n8n/fn1.mp4",
+     "duration": {
+      "ru": "13 мин",
+      "en": "13 min"
+     }
     },
     {
      "num": 2,
      "titleRu": "Собираем первую AI-автоматизацию",
      "titleEn": "Building your first AI automation",
      "descRu": "Форма → n8n → AI → Google Sheets → Telegram, плюс проверка данных, намеренная ошибка и базовая отладка.",
-     "descEn": "Form → n8n → AI → Google Sheets → Telegram, plus data validation, a deliberate error and basic debugging."
+     "descEn": "Form → n8n → AI → Google Sheets → Telegram, plus data validation, a deliberate error and basic debugging.",
+     "videoUrl": "first-automation-n8n/fn2.mp4",
+     "duration": {
+      "ru": "24 мин",
+      "en": "24 min"
+     }
     },
     {
      "num": 3,
      "titleRu": "От первой автоматизации к реальному проекту",
      "titleEn": "From first automation to a real project",
      "descRu": "Как превратить учебный workflow в бизнес-систему: первые клиенты, demo, выход на decision makers и что нужно для production.",
-     "descEn": "Turning the training workflow into a business system: first clients, demos, reaching decision makers and what production needs."
+     "descEn": "Turning the training workflow into a business system: first clients, demos, reaching decision makers and what production needs.",
+     "videoUrl": "first-automation-n8n/fn3.mp4",
+     "duration": {
+      "ru": "21 мин",
+      "en": "21 min"
+     }
     }
    ]
   },

@@ -2018,6 +2018,110 @@
      "It is a targeted approach to a company that fits, not a mailing to everyone"
     ]
    }
+  },
+  "ai-for-productivity": {
+   "ap1": {
+    "tasks": [
+     "Вспомните свой последний обычный рабочий день: где вы больше всего читали, где писали и где восстанавливали контекст",
+     "Выберите одну реальную задачу — настоящее письмо, настоящий документ или настоящую встречу. Не придумывайте искусственный пример",
+     "Сформулируйте, какой результат вы хотели бы получать здесь быстрее"
+    ],
+    "tasksEn": [
+     "Think back to your last ordinary working day: where you read the most, wrote the most and had to get back into context",
+     "Pick one real task — an actual email, an actual document or an actual meeting. Do not make up an artificial example",
+     "Put into words which result you would like to get faster here"
+    ],
+    "deliverables": [
+     "Три ответа: где читаю, где пишу, где восстанавливаю контекст",
+     "Одна выбранная задача из вашей работы",
+     "Одна фраза: что именно должно получаться быстрее"
+    ],
+    "deliverablesEn": [
+     "Three answers: where I read, where I write, where I get back into context",
+     "One chosen task from your own work",
+     "One sentence: what exactly should come out faster"
+    ],
+    "criteria": [
+     "Задача настоящая и повторяется в вашей работе",
+     "Понятно, какую часть оставляете себе, а какую может подготовить AI",
+     "В публичные AI-сервисы не уходит конфиденциальная информация, если правила компании этого не позволяют"
+    ],
+    "criteriaEn": [
+     "The task is real and recurs in your work",
+     "It is clear which part you keep and which part AI can prepare",
+     "No confidential information goes into public AI services where company rules do not allow it"
+    ]
+   },
+   "ap2": {
+    "tasks": [
+     "Возьмите три реальных примера из своей работы: одно письмо, один документ и одну встречу. Обычные, не идеальные",
+     "Прогоните каждый через сценарий из урока — промпты лежат в материалах",
+     "После каждого запишите две цифры: сколько это заняло бы без AI и сколько заняло сейчас"
+    ],
+    "tasksEn": [
+     "Take three real examples from your work: one email, one document and one meeting. Ordinary ones, not ideal ones",
+     "Run each through the scenario from the lesson — the prompts are in the materials",
+     "After each, write down two numbers: how long it would have taken without AI and how long it took now"
+    ],
+    "deliverables": [
+     "Разбор письма и черновик ответа, который вы проверили перед отправкой",
+     "Структурированный анализ документа",
+     "Протокол встречи с решениями, задачами и ответственными",
+     "Три пары цифр «до → после»"
+    ],
+    "deliverablesEn": [
+     "An email breakdown and a draft reply you checked before sending",
+     "A structured analysis of a document",
+     "Meeting minutes with decisions, tasks and owners",
+     "Three before → after pairs of numbers"
+    ],
+    "criteria": [
+     "В каждом запросе есть контекст, задача и формат результата",
+     "Ответ на письмо написан в два этапа: сначала анализ, потом текст",
+     "В протоколе решения отделены от идей, а ответственные и сроки не выдуманы",
+     "Цифры записаны — они понадобятся в третьем уроке"
+    ],
+    "criteriaEn": [
+     "Every request has context, a task and a format",
+     "The reply was written in two steps: analysis first, wording second",
+     "In the minutes, decisions are separate from ideas and no owners or deadlines are invented",
+     "The numbers are written down — lesson three needs them"
+    ]
+   },
+   "ap3": {
+    "tasks": [
+     "Следующую неделю используйте в работе два сценария из курса — только два. Например, почту и встречи",
+     "Каждый раз примерно фиксируйте время: сколько заняло бы раньше и сколько заняло сейчас. Без секундомера",
+     "Через неделю сложите результат в таблице из материалов",
+     "Сформулируйте результат так, как рассказали бы руководителю или клиенту"
+    ],
+    "tasksEn": [
+     "For the next week, use two scenarios from the course in your work — only two. For example, email and meetings",
+     "Each time, roughly note the time: how long it would have taken before and how long it took now. No stopwatch",
+     "After a week, add up the result in the tracker from the materials",
+     "Word the result the way you would tell a manager or a client"
+    ],
+    "deliverables": [
+     "Заполненная таблица за неделю",
+     "Ваша цифра экономии — в минутах или часах",
+     "Две-три фразы на языке результата: процесс, «до», «после», куда ушло освободившееся время"
+    ],
+    "deliverablesEn": [
+     "A filled-in tracker for the week",
+     "Your own number for time saved — in minutes or hours",
+     "Two or three sentences in the language of results: the process, before, after, where the freed time went"
+    ],
+    "criteria": [
+     "Цифра ваша, из реальной недели, а не из рекламы",
+     "В формулировке есть процесс и время «до» и «после», а не «я использую AI»",
+     "Если сценарий не дал экономии, вы это честно отметили и вернули старый способ"
+    ],
+    "criteriaEn": [
+     "The number is yours, from a real week, not from an advert",
+     "The wording names the process and the before and after times, not \"I use AI\"",
+     "If a scenario saved nothing, you noted that honestly and went back to the old way"
+    ]
+   }
   }
  }
 }

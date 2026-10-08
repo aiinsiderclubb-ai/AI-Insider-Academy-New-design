@@ -82,7 +82,9 @@ export default async function StudyPage({
     if (item.kind === "copy" && item.text) {
       return [{ kind: "copy", title, note, text: pick(locale, item.text, item.textEn ?? item.text), code: Boolean(item.code) }];
     }
-    if (item.kind === "file" && item.href) return [{ kind: "file", title, note, href: item.href }];
+    if (item.kind === "file" && item.href) {
+      return [{ kind: "file", title, note, href: pick(locale, item.href, item.hrefEn ?? item.href) }];
+    }
     if (item.kind === "link" && item.url) return [{ kind: "link", title, note, url: item.url }];
     return [];
   });

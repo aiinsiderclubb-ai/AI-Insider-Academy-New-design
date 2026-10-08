@@ -10,15 +10,15 @@ import { lessonMaterials } from "@/content/catalog";
  * missing its text renders an empty box. These are the checks a build cannot
  * make for us.
  */
-describe("lessonMaterials", () => {
-  const course = courses.courses.find((entry) => entry.id === "first-automation-n8n");
+describe.each(["first-automation-n8n", "ai-for-productivity"])("lessonMaterials · %s", (courseId) => {
+  const course = courses.courses.find((entry) => entry.id === courseId);
   const all = (course?.lessons ?? []).flatMap((lesson) =>
-    lessonMaterials("first-automation-n8n", lesson.id).map((item) => ({ lesson: lesson.id, item })),
+    lessonMaterials(courseId, lesson.id).map((item) => ({ lesson: lesson.id, item })),
   );
 
-  it("gives every lesson of the free n8n course something to take away", () => {
+  it("gives every lesson something to take away", () => {
     for (const lesson of course?.lessons ?? []) {
-      expect(lessonMaterials("first-automation-n8n", lesson.id).length, lesson.id).toBeGreaterThan(0);
+      expect(lessonMaterials(courseId, lesson.id).length, lesson.id).toBeGreaterThan(0);
     }
   });
 
@@ -41,8 +41,10 @@ describe("lessonMaterials", () => {
     const files = all.filter((entry) => entry.item.kind === "file");
     expect(files.length).toBeGreaterThan(0);
     for (const { item } of files) {
-      expect(item.href?.startsWith("/"), item.title).toBe(true);
-      expect(existsSync(path.join(process.cwd(), "public", item.href ?? "")), item.href).toBe(true);
+      for (const href of [item.href, item.hrefEn ?? item.href]) {
+        expect(href?.startsWith("/"), item.title).toBe(true);
+        expect(existsSync(path.join(process.cwd(), "public", href ?? "")), href).toBe(true);
+      }
     }
   });
 
@@ -59,6 +61,9 @@ describe("lessonMaterials", () => {
     }
   });
 
+});
+
+describe("lessonMaterials", () => {
   it("is empty for a lesson that has none, so the tab stays hidden", () => {
     expect(lessonMaterials("ai-start", "as1")).toEqual([]);
     expect(lessonMaterials("first-automation-n8n", "fn9")).toEqual([]);

@@ -131,9 +131,19 @@ export function StudyRoom({
    * retry mints a new URL and fails the same way.
    */
   const videoRetriedFor = React.useRef<string | null>(null);
+  /*
+   * A second failure means the film is not there to be played — not uploaded
+   * yet, or the storage keys are wrong. A dead player with a crossed-out play
+   * button tells the learner nothing, so the lesson falls back to the same
+   * "video coming soon" frame a lesson without a film shows.
+   */
+  const [videoFailedFor, setVideoFailedFor] = React.useState<string | null>(null);
 
   const recoverVideo = () => {
-    if (videoRetriedFor.current === current.id) return;
+    if (videoRetriedFor.current === current.id) {
+      setVideoFailedFor(current.id);
+      return;
+    }
     videoRetriedFor.current = current.id;
     router.refresh();
   };
@@ -388,7 +398,7 @@ export function StudyRoom({
           <div className={cn("mx-auto w-full px-4 py-6 sm:px-8 sm:py-9", focus ? "max-w-3xl" : "max-w-4xl")}>
             {/* ------------------------------ player ------------------------------ */}
             {current.unlocked ? (
-              current.videoUrl ? (
+              current.videoUrl && videoFailedFor !== current.id ? (
                 <div className="overflow-hidden rounded-xl border border-line bg-black">
                   {/*
                    * `nodownload` drops the download item from the native control

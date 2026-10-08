@@ -243,8 +243,9 @@ export interface LessonMaterial {
   textEn?: string;
   /** `copy`: source code, shown without wrapping. */
   code?: boolean;
-  /** `file`: a path under /public. */
+  /** `file`: a path under /public, and the English edition when there is one. */
   href?: string;
+  hrefEn?: string;
   /** `link`: where it goes. */
   url?: string;
 }

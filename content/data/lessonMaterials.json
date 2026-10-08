@@ -245,6 +245,191 @@
      "url": "https://www.linkedin.com"
     }
    ]
+  },
+  "ai-for-productivity": {
+   "ap1": [
+    {
+     "kind": "copy",
+     "title": "Упражнение: где уходит ваше время",
+     "titleEn": "Exercise: where your time goes",
+     "note": "Вопросы из урока. Ответьте на них до второго урока и выберите одну реальную задачу.",
+     "noteEn": "The questions from the lesson. Answer them before lesson two and pick one real task.",
+     "text": "Вспомните свой последний обычный рабочий день и ответьте:\n\n1. Где я больше всего читал(а)?\n2. Где я больше всего писал(а)?\n3. Где я больше всего пытался(ась) восстановить контекст?\n\nДля каждой задачи спросите себя:\n- Какую часть этой работы действительно должен делать лично я?\n- Какую часть AI может подготовить за меня, чтобы мне осталось только то, где нужен человек?\n\nПримеры: прочитать 20 писем, разобраться в документе, подготовиться к звонку, написать follow-up после встречи, сделать резюме отчёта, ответить на несколько похожих вопросов.",
+     "textEn": "Think back to your last ordinary working day and answer:\n\n1. Where did I read the most?\n2. Where did I write the most?\n3. Where did I spend the most effort getting back into context?\n\nFor each task ask yourself:\n- Which part of this work really has to be done by me?\n- Which part can AI prepare for me, so that what is left is only where a person is needed?\n\nExamples: reading 20 emails, making sense of a document, preparing for a call, writing a follow-up after a meeting, summarising a report, answering several similar questions."
+    },
+    {
+     "kind": "copy",
+     "title": "Шпаргалка: три типа задач и три правила",
+     "titleEn": "Cheat sheet: three kinds of task and three rules",
+     "note": "Что AI берёт на себя в почте, документах и встречах — и где решение остаётся за вами.",
+     "noteEn": "What AI takes on in email, documents and meetings — and where the decision stays with you.",
+     "text": "Почта и сообщения\nПрочитать → понять, что от нас хотят → определить важность → сформулировать ответ → проверить тон → отправить.\nAI: превращает длинное письмо в три пункта (что произошло, что от меня требуется, к какому сроку) и готовит черновик ответа в нужном тоне.\n\nДокументы\nPDF, договор, предложение, отчёт, презентация.\nAI: краткое резюме, поиск нужных пунктов, сравнение двух версий, объяснение раздела простым языком.\n\nВстречи\nДо: кто этот человек, что обсуждали, что осталось открытым. После: что решили, кто за что отвечает, follow-up.\nAI: резюме, решения, список задач с ответственными и сроками, черновик follow-up, брифинг перед следующей встречей.\n\nТри правила курса:\n- AI делает 80% работы, оставшиеся 20% проверяете вы. Кнопка «Отправить» остаётся за человеком.\n- Просите не идеальный финальный результат, а первый хороший черновик.\n- Там, где ошибка стоит дорого — юридическое, финансовое, медицинское, — итог всегда сверяйте с исходным документом.",
+     "textEn": "Email and messages\nRead → understand what is wanted → judge the importance → word the reply → check the tone → send.\nAI: turns a long email into three points (what happened, what is required of me, by when) and drafts a reply in the right tone.\n\nDocuments\nA PDF, a contract, a proposal, a report, a presentation.\nAI: a short summary, finding the clauses you need, comparing two versions, explaining a section in plain language.\n\nMeetings\nBefore: who this person is, what was discussed, what was left open. After: what was decided, who owns what, the follow-up.\nAI: a summary, decisions, a task list with owners and deadlines, a follow-up draft, a briefing before the next meeting.\n\nThe course's three rules:\n- AI does 80% of the work and you check the remaining 20%. The Send button stays with a person.\n- Ask for a good first draft, not a perfect final result.\n- Where a mistake is expensive — legal, financial, medical — always check the outcome against the source document."
+    },
+    {
+     "kind": "link",
+     "title": "ChatGPT",
+     "titleEn": "ChatGPT",
+     "note": "Подойдёт для всех сценариев курса.",
+     "noteEn": "Works for every scenario in the course.",
+     "url": "https://chatgpt.com"
+    },
+    {
+     "kind": "link",
+     "title": "Claude",
+     "titleEn": "Claude",
+     "note": "Альтернатива: хорошо работает с длинными документами.",
+     "noteEn": "An alternative: handles long documents well.",
+     "url": "https://claude.ai"
+    }
+   ],
+   "ap2": [
+    {
+     "kind": "file",
+     "title": "Файл промптов",
+     "titleEn": "The prompt file",
+     "note": "Все девять промптов урока одним документом — тот самый файл, который остаётся у вас после курса. Открывается в Word, Pages и Google Docs.",
+     "noteEn": "All nine prompts from the lesson in one document — the file you keep after the course. Opens in Word, Pages and Google Docs.",
+     "href": "/materials/ai-for-productivity/prompts-ru.docx",
+     "hrefEn": "/materials/ai-for-productivity/prompts-en.docx"
+    },
+    {
+     "kind": "copy",
+     "title": "Конструкция запроса: контекст → задача → формат",
+     "titleEn": "The shape of a request: context → task → format",
+     "note": "Если запомнить из урока только одно — пусть будет это.",
+     "noteEn": "If you remember one thing from the lesson, let it be this.",
+     "text": "Хороший запрос к AI состоит из трёх частей:\n1. Контекст — кто вы и в какой ситуации находитесь.\n2. Задача — что именно нужно сделать.\n3. Формат результата — в каком виде вы хотите ответ.\n\nПример:\nЯ менеджер небольшого диджитал-агентства. Ниже письмо клиента по текущему проекту.\nСначала объясни мне, что клиент хочет и какие действия от меня требуются.\nПосле этого подготовь профессиональный, но дружелюбный ответ.\nНе добавляй информацию, которой нет в письме.\nОтвет — максимум 150 слов.",
+     "textEn": "A good request to AI has three parts:\n1. Context — who you are and what situation you are in.\n2. Task — what exactly needs to be done.\n3. Format — the shape you want the answer in.\n\nExample:\nI am a manager at a small digital agency. Below is a client's email about a current project.\nFirst explain to me what the client wants and what actions are required of me.\nThen draft a professional but friendly reply.\nDo not add information that is not in the email.\nThe reply — 150 words at most."
+    },
+    {
+     "kind": "copy",
+     "title": "Почта 1: разобрать длинное письмо",
+     "titleEn": "Email 1: unpack a long email",
+     "note": "Первый этап — аналитический. Ответ пока не просим.",
+     "noteEn": "Step one is analysis. No reply is asked for yet.",
+     "text": "Ниже письмо клиента. Сначала проанализируй его и верни мне:\n\n1. Краткое резюме в 2–3 предложениях.\n2. Что конкретно клиент хочет от меня.\n3. Какие действия я должна выполнить.\n4. Какие сроки или даты упоминаются.\n5. Какие вопросы остаются открытыми.\n6. Есть ли в письме что-то, что требует подтверждения с моей стороны.\n\nПока не составляй ответ клиенту.\n\nПисьмо:\n[вставьте текст письма]",
+     "textEn": "Below is a client's email. First analyse it and give me:\n\n1. A short summary in 2–3 sentences.\n2. What exactly the client wants from me.\n3. What actions I have to take.\n4. Which deadlines or dates are mentioned.\n5. Which questions remain open.\n6. Whether anything in the email needs a confirmation from me.\n\nDo not draft the reply to the client yet.\n\nEmail:\n[paste the email]"
+    },
+    {
+     "kind": "copy",
+     "title": "Почта 2: подготовить ответ",
+     "titleEn": "Email 2: draft the reply",
+     "note": "Второй этап. Список «что нужно сказать» замените своими решениями — это пример из урока.",
+     "noteEn": "Step two. Replace the \"what it has to say\" list with your own decisions — this is the lesson's example.",
+     "text": "Теперь подготовь ответ клиенту.\n\nТон — профессиональный, спокойный и дружелюбный.\n\nЧто нужно сказать:\n- подтвердить, что я получила информацию;\n- согласиться с первым и вторым пунктом;\n- по третьему пункту задать уточняющий вопрос;\n- подтвердить, что материалы будут готовы до пятницы.\n\nНе добавляй информацию, которой нет в переписке.\nИзбегай канцелярского языка. Ответ должен звучать естественно.\nМаксимум 150 слов.",
+     "textEn": "Now draft the reply to the client.\n\nTone — professional, calm and friendly.\n\nWhat it has to say:\n- confirm that I received the information;\n- agree with the first and second points;\n- ask a clarifying question about the third point;\n- confirm that the materials will be ready by Friday.\n\nDo not add information that is not in the correspondence.\nAvoid officialese. The reply should sound natural.\n150 words at most."
+    },
+    {
+     "kind": "copy",
+     "title": "Почта 3: восстановить длинную переписку",
+     "titleEn": "Email 3: reconstruct a long thread",
+     "note": "Когда вернулись к проекту через несколько дней, а в цепочке уже десять писем.",
+     "noteEn": "For when you return to a project after a few days and the thread is already ten emails long.",
+     "text": "Восстанови историю переписки ниже. Покажи:\n\n- что было согласовано;\n- какие вопросы закрыты;\n- какие вопросы ещё открыты;\n- какие обязательства есть с нашей стороны;\n- какие обязательства есть со стороны клиента.\n\nПереписка:\n[вставьте цепочку писем]",
+     "textEn": "Reconstruct the history of the correspondence below. Show:\n\n- what was agreed;\n- which questions are closed;\n- which questions are still open;\n- what we have committed to;\n- what the client has committed to.\n\nCorrespondence:\n[paste the email thread]"
+    },
+    {
+     "kind": "copy",
+     "title": "Документ 1: анализ под конкретное решение",
+     "titleEn": "Document 1: analysis for a specific decision",
+     "note": "Не «расскажи мне всё», а «помоги принять решение». Контекст в начале замените своим.",
+     "noteEn": "Not \"tell me everything\" but \"help me decide\". Replace the context at the top with your own.",
+     "text": "Проанализируй прикреплённый документ.\n\nКонтекст: я оцениваю коммерческое предложение и хочу понять, стоит ли продолжать обсуждение с этим поставщиком.\n\nНайди и структурируй:\n1. Общую стоимость.\n2. Что именно входит в стоимость.\n3. Что оплачивается отдельно.\n4. Сроки реализации.\n5. Условия оплаты.\n6. Условия расторжения.\n7. Ограничения.\n8. Обязательства с нашей стороны.\n9. Обязательства со стороны поставщика.\n10. Всё, что требует уточнения.\n\nДля каждого важного пункта укажи, где именно в документе находится эта информация.\nЕсли какой-то информации нет, напиши прямо: «В документе не указано».\nНе делай предположений вместо отсутствующих данных.",
+     "textEn": "Analyse the attached document.\n\nContext: I am assessing a commercial proposal and want to understand whether it is worth continuing the discussion with this supplier.\n\nFind and structure:\n1. The total cost.\n2. What exactly is included in the cost.\n3. What is paid for separately.\n4. The delivery timeline.\n5. Payment terms.\n6. Termination terms.\n7. Limitations.\n8. Obligations on our side.\n9. Obligations on the supplier's side.\n10. Everything that needs clarifying.\n\nFor every important point, say where exactly in the document the information is.\nIf some information is missing, say so directly: \"Not stated in the document\".\nDo not make assumptions in place of missing data."
+    },
+    {
+     "kind": "copy",
+     "title": "Документ 2: уточняющие вопросы",
+     "titleEn": "Document 2: follow-up questions",
+     "note": "Задаются в том же чате после первого анализа.",
+     "noteEn": "Asked in the same chat after the first analysis.",
+     "text": "После первого анализа новый большой промпт не нужен — задавайте уточняющие вопросы:\n\n- Какие расходы могут возникнуть помимо основной суммы?\n- Есть ли в документе что-то про автоматическое продление?\n- Какие обязательства возникают после подписания?\n- Что здесь сформулировано неоднозначно?\n- Составь пять вопросов, которые стоит задать поставщику перед подписанием.",
+     "textEn": "After the first analysis you do not need another long prompt — ask follow-up questions:\n\n- What costs could arise on top of the main amount?\n- Does the document say anything about automatic renewal?\n- What obligations arise after signing?\n- What here is worded ambiguously?\n- Write five questions worth asking the supplier before signing."
+    },
+    {
+     "kind": "copy",
+     "title": "Документ 3: сравнить две версии",
+     "titleEn": "Document 3: compare two versions",
+     "note": "Когда прислали «мы немного поправили условия», а там 25 страниц.",
+     "noteEn": "For when you are sent \"we adjusted the terms slightly\" and it is 25 pages.",
+     "text": "Сравни два прикреплённых документа. Первый — старая версия, второй — новая.\n\nПокажи только содержательные изменения. Игнорируй форматирование, переносы строк и незначительные стилистические правки.\n\nДля каждого изменения укажи:\n- что было в старой версии;\n- что стало в новой;\n- почему это изменение может быть важным;\n- какой раздел документа изменился.",
+     "textEn": "Compare the two attached documents. The first is the old version, the second is the new one.\n\nShow only changes of substance. Ignore formatting, line breaks and minor stylistic edits.\n\nFor each change, state:\n- what the old version said;\n- what the new version says;\n- why the change may matter;\n- which section of the document changed."
+    },
+    {
+     "kind": "copy",
+     "title": "Встреча 1: протокол",
+     "titleEn": "Meeting 1: minutes",
+     "note": "Превращает заметки или транскрипт в рабочий документ. Решения отделены от обсуждений, ответственные не выдумываются.",
+     "noteEn": "Turns notes or a transcript into a working document. Decisions are kept apart from discussion, and owners are not invented.",
+     "text": "Ниже заметки после рабочей встречи. Подготовь структурированный протокол.\n\nФормат:\n\nКраткое резюме. В 3–5 предложениях объясни, о чём была встреча и к чему пришли.\n\nРешения. Перечисли только те решения, которые действительно были приняты.\n\nОткрытые вопросы. Покажи вопросы, по которым решение пока не принято.\n\nAction items. Для каждой задачи укажи: что нужно сделать, кто отвечает, срок — если он упоминался.\nНе придумывай ответственных или сроки. Если информации нет, напиши «Не указано».\n\nСледующая встреча. Что стоит проверить или обсудить в следующий раз.\n\nЗаметки:\n[вставьте заметки или транскрипт]",
+     "textEn": "Below are notes from a work meeting. Prepare structured minutes.\n\nFormat:\n\nSummary. In 3–5 sentences, explain what the meeting was about and what it arrived at.\n\nDecisions. List only the decisions that were actually made.\n\nOpen questions. Show the questions on which no decision has been made yet.\n\nAction items. For each task state: what has to be done, who is responsible, the deadline — if one was mentioned.\nDo not invent owners or deadlines. If the information is missing, write \"Not stated\".\n\nNext meeting. What is worth checking or discussing next time.\n\nNotes:\n[paste the notes or transcript]"
+    },
+    {
+     "kind": "copy",
+     "title": "Встреча 2: follow-up письмо",
+     "titleEn": "Meeting 2: follow-up email",
+     "note": "Отправляется в том же чате сразу после протокола.",
+     "noteEn": "Sent in the same chat right after the minutes.",
+     "text": "На основе этого протокола подготовь короткое follow-up письмо участникам встречи.\n\nСтруктура:\n1. Короткая благодарность за встречу.\n2. Основные решения.\n3. Следующие шаги.\n4. Action items с ответственными и сроками.\n5. Открытые вопросы.\n6. В конце попроси участников сообщить, если я что-то упустила или поняла неправильно.\n\nТон: профессиональный, дружелюбный, без лишней формальности.\nСделай письмо коротким и легко читаемым.",
+     "textEn": "Based on these minutes, draft a short follow-up email to the meeting's participants.\n\nStructure:\n1. A brief thank-you for the meeting.\n2. The main decisions.\n3. Next steps.\n4. Action items with owners and deadlines.\n5. Open questions.\n6. At the end, ask the participants to tell me if I missed or misunderstood anything.\n\nTone: professional, friendly, without needless formality.\nKeep the email short and easy to read."
+    },
+    {
+     "kind": "copy",
+     "title": "Встреча 3: брифинг перед следующей встречей",
+     "titleEn": "Meeting 3: briefing before the next meeting",
+     "note": "За минуту возвращает в контекст вместо десяти минут поиска по заметкам.",
+     "noteEn": "Gets you back into context in a minute instead of ten minutes of searching your notes.",
+     "text": "У меня через 15 минут следующая встреча по этому проекту. На основе предыдущего протокола подготовь короткий брифинг.\n\nМне нужно:\n1. Что мы решили в прошлый раз.\n2. Какие задачи должны были быть выполнены.\n3. Кто за них отвечает.\n4. Какие сроки были установлены.\n5. Какие вопросы остались открыты.\n6. Что мне обязательно стоит проверить сегодня.\n7. Какие пять вопросов стоит задать на новой встрече.\n\nОтвет должен помещаться примерно на один экран.\n\nПредыдущий протокол:\n[вставьте протокол]",
+     "textEn": "My next meeting on this project is in 15 minutes. Based on the previous minutes, prepare a short briefing.\n\nI need:\n1. What we decided last time.\n2. Which tasks should have been done.\n3. Who is responsible for them.\n4. Which deadlines were set.\n5. Which questions remained open.\n6. What I must check today.\n7. Which five questions are worth asking at the new meeting.\n\nThe answer should fit on roughly one screen.\n\nPrevious minutes:\n[paste the minutes]"
+    },
+    {
+     "kind": "copy",
+     "title": "Как настроить шаблоны под себя",
+     "titleEn": "Making the templates your own",
+     "note": "Пять хороших сценариев, которыми вы пользуетесь каждую неделю, полезнее пятисот промптов из интернета.",
+     "noteEn": "Five good scenarios you use every week beat five hundred prompts from the internet.",
+     "text": "Допишите в шаблоны то, что важно именно вам. Примеры из урока:\n\nДля почты:\n- Я предпочитаю короткие письма.\n- Не используй фразы вроде «надеюсь, это письмо застало вас в добром здравии».\n- Если письмо приходит на немецком, отвечай на немецком.\n\nДля документов:\n- Я отвечаю за маркетинг, поэтому отдельно выделяй бюджет, сроки, deliverables и ограничения использования материалов.\n\nДля встреч:\n- Всегда отделяй решения от идей.\n- Action items показывай таблицей.\n- Если ответственный не определён, обязательно выделяй это отдельно.",
+     "textEn": "Add to the templates whatever matters to you in particular. Examples from the lesson:\n\nFor email:\n- I prefer short emails.\n- Do not use phrases like \"I hope this email finds you well\".\n- If an email arrives in German, reply in German.\n\nFor documents:\n- I am responsible for marketing, so single out the budget, deadlines, deliverables and restrictions on the use of materials.\n\nFor meetings:\n- Always separate decisions from ideas.\n- Show action items as a table.\n- If no owner is named, always flag that separately."
+    }
+   ],
+   "ap3": [
+    {
+     "kind": "file",
+     "title": "Таблица на неделю: до и после",
+     "titleEn": "One-week tracker: before and after",
+     "note": "Та самая простая таблица из урока: задача, сколько занимала раньше, сколько сейчас, что изменилось. Экономия и итог за неделю считаются сами.",
+     "noteEn": "The simple table from the lesson: the task, how long it used to take, how long it takes now, what changed. Savings and the weekly total fill in on their own.",
+     "href": "/materials/ai-for-productivity/week-tracker.xlsx"
+    },
+    {
+     "kind": "copy",
+     "title": "Как рассказать руководителю и клиенту",
+     "titleEn": "How to tell a manager and a client",
+     "note": "Формулировки из урока. Подставьте свои цифры из таблицы.",
+     "noteEn": "The wording from the lesson. Put in your own numbers from the tracker.",
+     "text": "Не «я теперь использую AI», а процесс и цифры:\n\n«Последние две недели я изменил(а) способ работы с длинными письмами и встречами.\nНа письма раньше в среднем уходило около 20 минут, сейчас около 7.\nПосле встреч было 20 минут дополнительной работы, сейчас около 5.\nВ сумме это освобождает примерно два с половиной часа в неделю.\nФинальные ответы и критичные данные я всё равно проверяю вручную.»\n\nИ куда ушло освободившееся время:\n- «Эти часы я теперь трачу на работу с клиентами.»\n- «Я перестал(а) откладывать аналитику на конец недели.»\n- «Теперь успеваю быстрее готовить предложения.»\n\nКлиенту — то же самое, языком результата:\n- «Раньше отчёт готовился 2 часа, теперь 40 минут.»\n- «Follow-up после встречи вы получали на следующий день, теперь через 10 минут.»",
+     "textEn": "Not \"I use AI now\", but a process and numbers:\n\n\"For the last two weeks I have changed how I handle long emails and meetings.\nEmails used to take about 20 minutes on average; now about 7.\nAfter meetings there were 20 minutes of extra work; now about 5.\nTogether that frees roughly two and a half hours a week.\nI still check final replies and critical data by hand.\"\n\nAnd where the freed time went:\n- \"I now spend those hours on work with clients.\"\n- \"I have stopped putting analytics off until the end of the week.\"\n- \"I now manage to prepare proposals faster.\"\n\nTo a client — the same, in the language of results:\n- \"The report used to take 2 hours; now it takes 40 minutes.\"\n- \"You used to get the follow-up the next day; now you get it in 10 minutes.\""
+    },
+    {
+     "kind": "copy",
+     "title": "Что говорить вместо «AI делает всё за меня»",
+     "titleEn": "What to say instead of \"AI does everything for me\"",
+     "note": "Звучит эффектно, но почти никогда не правда и создаёт плохие ожидания.",
+     "noteEn": "It sounds impressive, is almost never true, and sets the wrong expectations.",
+     "text": "Вместо «Теперь AI делает всё за меня» —\n\n- «AI делает первый анализ и готовит черновик. Финальное решение остаётся за мной.»\n- «AI убирает повторяющуюся часть процесса, а критичные данные я проверяю сам(а).»\n\nЗадача не в том, чтобы любой ценой убрать человека, а в том, чтобы убрать работу, где человеческое внимание тратится впустую.",
+     "textEn": "Instead of \"AI does everything for me now\" —\n\n- \"AI does the first analysis and prepares a draft. The final decision stays with me.\"\n- \"AI removes the repetitive part of the process, and I check the critical data myself.\"\n\nThe point is not to remove the person at any cost, but to remove the work where human attention is wasted."
+    },
+    {
+     "kind": "copy",
+     "title": "Что измерять кроме минут — и когда AI не нужен",
+     "titleEn": "What to measure besides minutes — and when AI is not needed",
+     "note": "Четыре вопроса из урока и проверка на обратный эффект.",
+     "noteEn": "Four questions from the lesson and a check for the opposite effect.",
+     "text": "Кроме минут, спросите себя:\n\n- Стало ли меньше повторной работы?\n- Стали ли быстрее ответы?\n- Стали ли реже теряться задачи?\n- Стало ли проще возвращаться в контекст через неделю?\n\nИногда 15 минут экономии не так ценны, как одна ошибка, которую вы перестали совершать.\n\nИ проверка наоборот: если раньше задача занимала 5 минут, а теперь 2 минуты уходит на промпт и 3 на исправление ответа — вы ничего не ускорили. Верните старый способ, это тоже хороший результат.",
+     "textEn": "Besides minutes, ask yourself:\n\n- Is there less rework?\n- Are replies going out faster?\n- Are tasks getting lost less often?\n- Is it easier to get back into context a week later?\n\nSometimes 15 minutes saved matter less than one mistake you no longer make.\n\nAnd the check in reverse: if a task used to take 5 minutes and now takes 2 minutes of prompting and 3 of fixing the answer, you have sped nothing up. Go back to the old way — that is a good result too."
+    }
+   ]
   }
  }
 }

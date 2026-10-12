@@ -1,0 +1,125 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "calendar_api_base": "https://www.googleapis.com/calendar/v3",
+  "calendar_id": "primary",
+  "staff_chat_id": "REPLACE_WITH_TELEGRAM_CHAT_ID",
+  "phone": {
+    "country_code": "380",
+    "national_prefix": "0"
+  },
+  "slot_step_min": 30,
+  "lead_time_min": 180,
+  "buffer_min": 0,
+  "booking_window_days": 30,
+  "offer_slots": 3,
+  "closed_dates": [],
+  "require_caller_match": true,
+  "callback_promise": "в течение рабочего дня",
+  "hours": {
+    "mon": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "tue": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "wed": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "thu": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "fri": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "sat": {
+      "open": "09:00",
+      "close": "15:00"
+    },
+    "sun": null
+  },
+  "cancel_min_hours": 4,
+  "late_cancel_note": "",
+  "address": "улица Промышленная, дом пять, въезд со двора",
+  "detail_fields": [
+    "car",
+    "problem"
+  ],
+  "detail_labels": {
+    "car": "Автомобиль",
+    "problem": "Со слов клиента"
+  },
+  "required_details": [
+    "car"
+  ],
+  "services": [
+    {
+      "id": "diagnostics",
+      "name": "Диагностика",
+      "duration_min": 60,
+      "price": "двадцать пять евро"
+    },
+    {
+      "id": "oil_change",
+      "name": "Замена масла и фильтра",
+      "duration_min": 30,
+      "price": "двадцать евро за работу"
+    },
+    {
+      "id": "tyre_fitting",
+      "name": "Шиномонтаж, четыре колеса",
+      "duration_min": 60,
+      "price": "от сорока евро"
+    },
+    {
+      "id": "brake_pads",
+      "name": "Замена тормозных колодок, одна ось",
+      "duration_min": 60,
+      "price": "от тридцати евро за работу"
+    },
+    {
+      "id": "alignment",
+      "name": "Развал-схождение",
+      "duration_min": 60,
+      "price": "от тридцати пяти евро",
+      "staff": [
+        "bay_1"
+      ]
+    },
+    {
+      "id": "maintenance",
+      "name": "Плановое техобслуживание",
+      "duration_min": 180,
+      "price": "по регламенту марки"
+    },
+    {
+      "id": "ac_service",
+      "name": "Заправка кондиционера",
+      "duration_min": 60,
+      "price": "от сорока пяти евро",
+      "staff": [
+        "bay_2"
+      ]
+    }
+  ],
+  "staff": [
+    {
+      "id": "bay_1",
+      "name": "первый пост"
+    },
+    {
+      "id": "bay_2",
+      "name": "второй пост"
+    },
+    {
+      "id": "bay_3",
+      "name": "третий пост"
+    }
+  ],
+  "_comment": "Скопируйте значения в узел Config воркфлоу Booking Tools. Поле _comment удалите."
+}

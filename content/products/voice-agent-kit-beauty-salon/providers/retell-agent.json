@@ -1,0 +1,23 @@
+{
+  "response_engine": {
+    "type": "retell-llm",
+    "llm_id": "REPLACE_WITH_LLM_ID"
+  },
+  "voice_id": "REPLACE_WITH_VOICE_ID",
+  "agent_name": "Voice receptionist for a beauty salon",
+  "language": "ru-RU",
+  "responsiveness": 0.9,
+  "interruption_sensitivity": 0.8,
+  "enable_backchannel": true,
+  "webhook_url": "https://REPLACE-N8N-HOST/webhook/voice-call-ended",
+  "boosted_keywords": [
+    "Анна",
+    "Ольга",
+    "Ирина",
+    "Екатерина"
+  ],
+  "end_call_after_silence_ms": 30000,
+  "max_call_duration_ms": 600000,
+  "data_storage_setting": "everything_except_pii",
+  "data_storage_retention_days": 30
+}

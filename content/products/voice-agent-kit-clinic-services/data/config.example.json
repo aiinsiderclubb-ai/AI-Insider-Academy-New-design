@@ -1,0 +1,141 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "calendar_api_base": "https://www.googleapis.com/calendar/v3",
+  "calendar_id": "primary",
+  "staff_chat_id": "REPLACE_WITH_TELEGRAM_CHAT_ID",
+  "phone": {
+    "country_code": "380",
+    "national_prefix": "0"
+  },
+  "slot_step_min": 15,
+  "lead_time_min": 60,
+  "buffer_min": 0,
+  "booking_window_days": 30,
+  "offer_slots": 3,
+  "closed_dates": [],
+  "require_caller_match": true,
+  "callback_promise": "в течение рабочего дня",
+  "hours": {
+    "mon": {
+      "open": "08:00",
+      "close": "20:00"
+    },
+    "tue": {
+      "open": "08:00",
+      "close": "20:00"
+    },
+    "wed": {
+      "open": "08:00",
+      "close": "20:00"
+    },
+    "thu": {
+      "open": "08:00",
+      "close": "20:00"
+    },
+    "fri": {
+      "open": "08:00",
+      "close": "20:00"
+    },
+    "sat": {
+      "open": "09:00",
+      "close": "14:00"
+    },
+    "sun": null
+  },
+  "cancel_min_hours": 3,
+  "late_cancel_note": "",
+  "address": "улица Примерная, дом один, второй этаж",
+  "detail_fields": [
+    "visit_type",
+    "patient_name"
+  ],
+  "detail_labels": {
+    "visit_type": "Приём",
+    "patient_name": "Пациент"
+  },
+  "required_details": [
+    "visit_type"
+  ],
+  "services": [
+    {
+      "id": "gp_first",
+      "name": "Приём терапевта",
+      "duration_min": 30,
+      "price": "сорок евро",
+      "staff": [
+        "dr_kovalenko",
+        "dr_bondar"
+      ]
+    },
+    {
+      "id": "gp_followup",
+      "name": "Повторный приём терапевта",
+      "duration_min": 15,
+      "price": "двадцать пять евро",
+      "staff": [
+        "dr_kovalenko",
+        "dr_bondar"
+      ]
+    },
+    {
+      "id": "dentist_check",
+      "name": "Осмотр стоматолога",
+      "duration_min": 30,
+      "price": "тридцать евро",
+      "staff": [
+        "dr_melnyk"
+      ]
+    },
+    {
+      "id": "dental_hygiene",
+      "name": "Профессиональная гигиена полости рта",
+      "duration_min": 60,
+      "price": "шестьдесят евро",
+      "staff": [
+        "dr_melnyk"
+      ]
+    },
+    {
+      "id": "ultrasound",
+      "name": "УЗИ",
+      "duration_min": 30,
+      "price": "от тридцати пяти евро",
+      "staff": [
+        "dr_shevchuk"
+      ]
+    },
+    {
+      "id": "lab",
+      "name": "Сдача анализов",
+      "duration_min": 15,
+      "price": "по прайсу",
+      "staff": [
+        "lab"
+      ]
+    }
+  ],
+  "staff": [
+    {
+      "id": "dr_kovalenko",
+      "name": "Коваленко"
+    },
+    {
+      "id": "dr_bondar",
+      "name": "Бондарь"
+    },
+    {
+      "id": "dr_melnyk",
+      "name": "Мельник"
+    },
+    {
+      "id": "dr_shevchuk",
+      "name": "Шевчук"
+    },
+    {
+      "id": "lab",
+      "name": "Процедурный кабинет"
+    }
+  ],
+  "_comment": "Скопируйте значения в узел Config воркфлоу Booking Tools. Поле _comment удалите."
+}

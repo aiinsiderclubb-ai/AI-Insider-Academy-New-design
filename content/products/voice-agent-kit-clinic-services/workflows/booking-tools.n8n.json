@@ -1,0 +1,527 @@
+{
+  "name": "Clinic Voice Agent — Booking Tools",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Clinic Voice Agent — инструменты записи\n\nПринимает вызовы инструментов от Vapi, Retell и ElevenLabs и работает с Google Календарём.\n\n**Настройте:**\n1. Узел **Config** — часы, услуги, специалисты.\n2. Учётные данные: секрет вебхука, Google Calendar, Telegram.\n3. Settings → Error Workflow → «Error Alert».\n\n**Владелец:** впишите имя · **Версия:** 2.0.0",
+        "width": 420,
+        "height": 300
+      },
+      "id": "67a88048-e76a-5e44-a868-328252ce0a85",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Как это работает\n\n**Parse Request** приводит запрос к одному виду и отсекает неполные.\n**Plan** решает, что прочитать из календаря.\n**Decide** считает свободные окна или готовит одно изменение.\n**Calendar Write** — единственный узел, который что-то меняет.\n\nЛогика проверена 20 сценариями — см. `tests/backend-scenarios.md`.",
+        "width": 460,
+        "height": 300
+      },
+      "id": "d00d5a99-6448-5304-8f5f-e64fceb5d2fc",
+      "name": "How it works",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Если календарь не ответил\n\nАгент получает `tool_unavailable` и не называет клиенту выдуманный результат. Администратору уходит сообщение в Telegram.",
+        "width": 420,
+        "height": 180
+      },
+      "id": "6fe01027-77fd-5e11-97f8-fadc513212fc",
+      "name": "Failure path",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        420,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice-tools",
+        "responseMode": "responseNode",
+        "options": {},
+        "authentication": "headerAuth"
+      },
+      "id": "19bc8588-c9b6-5fea-801f-e548ec422d58",
+      "name": "Voice Tool Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -720,
+        0
+      ],
+      "webhookId": "95e4f4cf-89a2-55e6-9995-718d4ea9e1c8",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Voice tools secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — the only node you edit. Business hours, services, staff and rules.\n// Everything below this node reads its settings from here.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"calendar_api_base\": \"https://www.googleapis.com/calendar/v3\",\n  \"calendar_id\": \"primary\",\n  \"staff_chat_id\": \"REPLACE_WITH_TELEGRAM_CHAT_ID\",\n  \"phone\": {\n    \"country_code\": \"380\",\n    \"national_prefix\": \"0\"\n  },\n  \"slot_step_min\": 15,\n  \"lead_time_min\": 60,\n  \"buffer_min\": 0,\n  \"booking_window_days\": 30,\n  \"offer_slots\": 3,\n  \"closed_dates\": [],\n  \"require_caller_match\": true,\n  \"callback_promise\": \"в течение рабочего дня\",\n  \"hours\": {\n    \"mon\": {\n      \"open\": \"08:00\",\n      \"close\": \"20:00\"\n    },\n    \"tue\": {\n      \"open\": \"08:00\",\n      \"close\": \"20:00\"\n    },\n    \"wed\": {\n      \"open\": \"08:00\",\n      \"close\": \"20:00\"\n    },\n    \"thu\": {\n      \"open\": \"08:00\",\n      \"close\": \"20:00\"\n    },\n    \"fri\": {\n      \"open\": \"08:00\",\n      \"close\": \"20:00\"\n    },\n    \"sat\": {\n      \"open\": \"09:00\",\n      \"close\": \"14:00\"\n    },\n    \"sun\": null\n  },\n  \"cancel_min_hours\": 3,\n  \"late_cancel_note\": \"\",\n  \"address\": \"улица Примерная, дом один, второй этаж\",\n  \"detail_fields\": [\n    \"visit_type\",\n    \"patient_name\"\n  ],\n  \"detail_labels\": {\n    \"visit_type\": \"Приём\",\n    \"patient_name\": \"Пациент\"\n  },\n  \"required_details\": [\n    \"visit_type\"\n  ],\n  \"services\": [\n    {\n      \"id\": \"gp_first\",\n      \"name\": \"Приём терапевта\",\n      \"duration_min\": 30,\n      \"price\": \"сорок евро\",\n      \"staff\": [\n        \"dr_kovalenko\",\n        \"dr_bondar\"\n      ]\n    },\n    {\n      \"id\": \"gp_followup\",\n      \"name\": \"Повторный приём терапевта\",\n      \"duration_min\": 15,\n      \"price\": \"двадцать пять евро\",\n      \"staff\": [\n        \"dr_kovalenko\",\n        \"dr_bondar\"\n      ]\n    },\n    {\n      \"id\": \"dentist_check\",\n      \"name\": \"Осмотр стоматолога\",\n      \"duration_min\": 30,\n      \"price\": \"тридцать евро\",\n      \"staff\": [\n        \"dr_melnyk\"\n      ]\n    },\n    {\n      \"id\": \"dental_hygiene\",\n      \"name\": \"Профессиональная гигиена полости рта\",\n      \"duration_min\": 60,\n      \"price\": \"шестьдесят евро\",\n      \"staff\": [\n        \"dr_melnyk\"\n      ]\n    },\n    {\n      \"id\": \"ultrasound\",\n      \"name\": \"УЗИ\",\n      \"duration_min\": 30,\n      \"price\": \"от тридцати пяти евро\",\n      \"staff\": [\n        \"dr_shevchuk\"\n      ]\n    },\n    {\n      \"id\": \"lab\",\n      \"name\": \"Сдача анализов\",\n      \"duration_min\": 15,\n      \"price\": \"по прайсу\",\n      \"staff\": [\n        \"lab\"\n      ]\n    }\n  ],\n  \"staff\": [\n    {\n      \"id\": \"dr_kovalenko\",\n      \"name\": \"Коваленко\"\n    },\n    {\n      \"id\": \"dr_bondar\",\n      \"name\": \"Бондарь\"\n    },\n    {\n      \"id\": \"dr_melnyk\",\n      \"name\": \"Мельник\"\n    },\n    {\n      \"id\": \"dr_shevchuk\",\n      \"name\": \"Шевчук\"\n    },\n    {\n      \"id\": \"lab\",\n      \"name\": \"Процедурный кабинет\"\n    }\n  ]\n} }];\n"
+      },
+      "id": "bbf5d318-7ce7-5a7f-9ad1-b9e0212718b8",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Request — turns the three providers' tool-call formats into one shape\n// and rejects anything the tools must never act on.\nconst cfg = $('Config').first().json;\nconst hook = $('Voice Tool Webhook').first().json;\nconst body = hook.body || {};\n\nlet provider = 'generic', callId = '', toolCallId = '', tool = '', args = {}, caller = '', extra = 0;\n\nif (body.message && body.message.type === 'tool-calls') {\n  provider = 'vapi';\n  const list = body.message.toolCallList || body.message.toolCalls || [];\n  const first = list[0] || {};\n  extra = Math.max(0, list.length - 1);\n  toolCallId = first.id || '';\n  tool = (first.function && first.function.name) || first.name || '';\n  args = (first.function && first.function.arguments) || first.arguments || {};\n  const call = body.message.call || {};\n  callId = call.id || '';\n  caller = (call.customer && call.customer.number) || '';\n} else if (body.name && body.args !== undefined) {\n  provider = 'retell';\n  tool = body.name;\n  args = body.args || {};\n  const call = body.call || {};\n  callId = call.call_id || '';\n  caller = call.direction === 'outbound' ? (call.to_number || '') : (call.from_number || '');\n} else {\n  // ElevenLabs and anything else: a flat JSON body that names the tool itself.\n  // The tool name may also come in the URL (?tool=check_availability), one URL per tool.\n  provider = body.provider || 'elevenlabs';\n  tool = body.tool || (hook.query && hook.query.tool) || '';\n  args = body.args || body;\n  callId = body.conversation_id || body.call_id || '';\n  caller = body.caller_number || '';\n}\n\nif (typeof args === 'string') {\n  try { args = JSON.parse(args); } catch (e) { args = {}; }\n}\nargs = Object.assign({}, args);\ndelete args.tool; delete args.provider; delete args.conversation_id; delete args.caller_number;\n\nconst digits = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Callers dictate numbers in the national form; bookings are stored in the international one.\nconst phoneRules = cfg.phone || {};\nconst phone = (value) => {\n  let d = digits(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (phoneRules.national_prefix && phoneRules.country_code && d.startsWith(phoneRules.national_prefix) && !d.startsWith(phoneRules.country_code)) {\n    d = phoneRules.country_code + d.slice(phoneRules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n};\nconst fail = (code, say) => ({ ok: false, error: code, say });\n\nconst REQUIRED = {\n  check_availability: ['service_id', 'date'],\n  create_booking: ['service_id', 'slot_start', 'customer_name', 'customer_phone'],\n  find_booking: ['customer_phone'],\n  reschedule_booking: ['booking_id', 'new_slot_start', 'customer_phone'],\n  cancel_booking: ['booking_id', 'customer_phone'],\n  request_callback: ['customer_name', 'customer_phone', 'topic'],\n};\n\nlet verdict = { ok: true };\nif (!REQUIRED[tool]) {\n  verdict = fail('unknown_tool', 'Этот запрос я выполнить не могу.');\n} else {\n  const missing = REQUIRED[tool].filter((key) => args[key] === undefined || args[key] === null || String(args[key]).trim() === '');\n  if (missing.length) verdict = fail('missing_fields', 'Не хватает данных: ' + missing.join(', ') + '. Уточните у клиента и повторите.');\n}\n\nif (verdict.ok && args.customer_phone !== undefined) {\n  const normal = phone(args.customer_phone);\n  if (!normal) verdict = fail('bad_phone', 'Номер телефона не распознан. Попросите продиктовать его ещё раз по цифрам.');\n  else args.customer_phone = normal;\n}\n\nconst service = (cfg.services || []).find((item) => item.id === args.service_id);\nif (verdict.ok && (tool === 'check_availability' || tool === 'create_booking') && !service) {\n  verdict = fail('unknown_service', 'Такой услуги нет в каталоге. Доступные: ' + (cfg.services || []).map((s) => s.id + ' — ' + s.name).join('; '));\n}\nif (verdict.ok && args.staff_id && !(cfg.staff || []).some((person) => person.id === args.staff_id)) {\n  verdict = fail('unknown_staff', 'Такого специалиста нет. Доступные: ' + (cfg.staff || []).map((s) => s.id + ' — ' + s.name).join('; '));\n}\n// Models miscount dates. They may pass a word instead and let the backend resolve it.\nif (verdict.ok && tool === 'check_availability') {\n  args.date = String(args.date).trim().toLowerCase();\n  if (!/^(\\d{4}-\\d{2}-\\d{2}|today|tomorrow|mon|tue|wed|thu|fri|sat|sun|\\+\\d{1,2})$/.test(args.date)) {\n    verdict = fail('bad_date', 'Дата: ГГГГ-ММ-ДД, today, tomorrow, день недели (mon…sun) или +N дней.');\n  }\n}\nfor (const key of ['slot_start', 'new_slot_start']) {\n  if (verdict.ok && args[key] !== undefined && !/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}/.test(String(args[key]))) {\n    verdict = fail('bad_slot', 'Время должно быть значением slot_start из результата check_availability.');\n  }\n}\nif (verdict.ok && tool === 'create_booking') {\n  if (args.consent !== true && args.consent !== 'true') {\n    verdict = fail('no_consent', 'Сначала повторите клиенту услугу, дату, время и цену и получите явное «да». Затем вызовите инструмент с consent: true.');\n  }\n  const missing = (cfg.required_details || []).filter((key) => !args[key] || String(args[key]).trim() === '');\n  if (verdict.ok && missing.length) verdict = fail('missing_details', 'Для записи нужно ещё: ' + missing.join(', ') + '.');\n}\n\n// A caller may only change a booking made from the number they are calling from.\nconst callerPhone = phone(caller);\nif (verdict.ok && cfg.require_caller_match && (tool === 'reschedule_booking' || tool === 'cancel_booking')) {\n  if (!callerPhone || callerPhone !== args.customer_phone) {\n    verdict = fail('caller_mismatch', 'Изменить запись можно только с номера, на который она оформлена. Предложите перезвонить с него или передайте администратору через request_callback.');\n  }\n}\n\nreturn [{ json: Object.assign({ provider, call_id: callId, tool_call_id: toolCallId, tool, args, caller: callerPhone, extra_calls: extra, service: service || null }, verdict) }];\n"
+      },
+      "id": "d18738a9-ed76-545e-8998-a1bb3af2a0b0",
+      "name": "Parse Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -280,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Plan — decides what has to be read from the calendar before the tool can answer.\nconst cfg = $('Config').first().json;\nconst req = $input.first().json;\n// ---- time helpers (business time zone, no libraries) ----\nconst TZ = cfg.timezone;\nconst MIN = 60000;\nconst pad = (n) => String(n).padStart(2, '0');\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nfunction offsetMin(utcMs) {\n  const parts = new Intl.DateTimeFormat('en-US', {\n    timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit', second: '2-digit',\n  }).formatToParts(new Date(utcMs));\n  const p = {};\n  for (const part of parts) p[part.type] = part.value;\n  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - utcMs) / MIN);\n}\nfunction localToUtc(y, mo, d, h, mi) {\n  const guess = Date.UTC(y, mo - 1, d, h, mi);\n  const first = guess - offsetMin(guess) * MIN;\n  return guess - offsetMin(first) * MIN; // second pass settles days when clocks change\n}\nfunction local(ms) {\n  const shifted = new Date(ms + offsetMin(ms) * MIN);\n  return {\n    y: shifted.getUTCFullYear(), mo: shifted.getUTCMonth() + 1, d: shifted.getUTCDate(),\n    h: shifted.getUTCHours(), mi: shifted.getUTCMinutes(), dow: shifted.getUTCDay(),\n  };\n}\nconst localIso = (ms) => { const t = local(ms); return `${t.y}-${pad(t.mo)}-${pad(t.d)}T${pad(t.h)}:${pad(t.mi)}`; };\nconst localDate = (ms) => localIso(ms).slice(0, 10);\nconst spoken = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction parseSlot(text) {\n  const s = String(text);\n  if (/[zZ]$|[+-]\\d{2}:?\\d{2}$/.test(s)) return Date.parse(s);\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})/.exec(s);\n  return m ? localToUtc(+m[1], +m[2], +m[3], +m[4], +m[5]) : NaN;\n}\nconst dayStart = (dateText) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); return localToUtc(+m[1], +m[2], +m[3], 0, 0); };\nconst eventsUrl = (query) => `${cfg.calendar_api_base}/calendars/${encodeURIComponent(cfg.calendar_id)}/events?` +\n  Object.keys(query).map((key) => `${key}=${encodeURIComponent(query[key])}`).join('&');\nconst done = (result) => [{ json: Object.assign({}, req, { needs_calendar: false, needs_notify: false, result }) }];\nconst read = (fromMs, toMs, extra) => [{ json: Object.assign({}, req, {\n  needs_calendar: true, needs_notify: false,\n  http: { method: 'GET', url: eventsUrl(Object.assign({\n    timeMin: new Date(fromMs).toISOString(), timeMax: new Date(toMs).toISOString(),\n    singleEvents: 'true', orderBy: 'startTime', maxResults: '2500',\n  }, extra || {})) },\n}) }];\n\nif (!req.ok) return done({ ok: false, error: req.error, say: req.say });\n\nconst now = nowMs();\nconst windowEnd = now + (cfg.booking_window_days || 30) * 24 * 60 * MIN;\nconst a = req.args;\n\nif (req.tool === 'request_callback') {\n  const lines = [\n    'Просят перезвонить', `Имя: ${a.customer_name}`, `Телефон: ${a.customer_phone}`, `Тема: ${a.topic}`,\n    a.urgency ? `Срочность: ${a.urgency}` : '', a.details ? `Детали: ${a.details}` : '', `Звонок: ${req.call_id || '—'}`,\n  ].filter(Boolean);\n  return [{ json: Object.assign({}, req, { needs_calendar: false, needs_notify: true, staff_message: lines.join('\\n'),\n    result: { ok: true, say: 'Передал администратору. Скажите клиенту, что ему перезвонят ' + (cfg.callback_promise || 'в рабочее время') + '.' } }) }];\n}\n\nif (req.tool === 'check_availability') {\n  const today = dayStart(localDate(now));\n  const DAY = 24 * 60 * MIN;\n  const names = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];\n  let resolved = a.date;\n  if (a.date === 'today') resolved = localDate(now);\n  else if (a.date === 'tomorrow') resolved = localDate(today + DAY + 12 * 60 * MIN);\n  else if (a.date[0] === '+') resolved = localDate(today + Number(a.date.slice(1)) * DAY + 12 * 60 * MIN);\n  else if (names.includes(a.date)) {\n    const ahead = (names.indexOf(a.date) - local(now).dow + 7) % 7;\n    resolved = localDate(today + ahead * DAY + 12 * 60 * MIN);\n  }\n  req.args = Object.assign({}, a, { date: resolved });\n  const start = dayStart(resolved);\n  if (start + 24 * 60 * MIN <= now) return done({ ok: false, error: 'date_in_past', say: 'Эта дата уже прошла. Сегодня ' + localDate(now) + '. Уточните дату.' });\n  if (start > windowEnd) return done({ ok: false, error: 'too_far', say: `Запись открыта на ${cfg.booking_window_days || 30} дней вперёд, до ${localDate(windowEnd)}.` });\n  return read(Math.max(start, now), Math.min(start + 8 * 24 * 60 * MIN, windowEnd + 24 * 60 * MIN));\n}\n\nif (req.tool === 'create_booking') {\n  const slot = parseSlot(a.slot_start);\n  if (isNaN(slot)) return done({ ok: false, error: 'bad_slot', say: 'Не понял время. Возьмите slot_start из результата check_availability.' });\n  if (slot > windowEnd) return done({ ok: false, error: 'too_far', say: `Запись открыта до ${localDate(windowEnd)}.` });\n  const start = dayStart(localDate(slot));\n  return read(start, start + 24 * 60 * MIN);\n}\n\nif (req.tool === 'find_booking') {\n  return read(now, windowEnd + 24 * 60 * MIN, { privateExtendedProperty: 'phone=' + a.customer_phone });\n}\n\n// reschedule_booking and cancel_booking need the booking itself and, for a move, the day it moves to.\nreturn read(now - 60 * MIN, windowEnd + 24 * 60 * MIN);\n"
+      },
+      "id": "a1872ca6-95aa-5d67-b51d-95dfa6776a72",
+      "name": "Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_calendar }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "191cf817-1c5b-5f2e-bf29-61da45e5a6f2",
+      "name": "Needs Calendar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        160,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 10000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleCalendarOAuth2Api"
+      },
+      "id": "ed48e99e-3753-591d-8976-d52eeb5cfb97",
+      "name": "Calendar Read",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        -100
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 500,
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Calendar"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Decide — reads the calendar answer and either answers the tool or prepares one write.\nconst cfg = $('Config').first().json;\nconst ctx = $('Plan').first().json;\nconst feed = $input.first().json || {};\n// ---- time helpers (business time zone, no libraries) ----\nconst TZ = cfg.timezone;\nconst MIN = 60000;\nconst pad = (n) => String(n).padStart(2, '0');\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nfunction offsetMin(utcMs) {\n  const parts = new Intl.DateTimeFormat('en-US', {\n    timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit', second: '2-digit',\n  }).formatToParts(new Date(utcMs));\n  const p = {};\n  for (const part of parts) p[part.type] = part.value;\n  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - utcMs) / MIN);\n}\nfunction localToUtc(y, mo, d, h, mi) {\n  const guess = Date.UTC(y, mo - 1, d, h, mi);\n  const first = guess - offsetMin(guess) * MIN;\n  return guess - offsetMin(first) * MIN; // second pass settles days when clocks change\n}\nfunction local(ms) {\n  const shifted = new Date(ms + offsetMin(ms) * MIN);\n  return {\n    y: shifted.getUTCFullYear(), mo: shifted.getUTCMonth() + 1, d: shifted.getUTCDate(),\n    h: shifted.getUTCHours(), mi: shifted.getUTCMinutes(), dow: shifted.getUTCDay(),\n  };\n}\nconst localIso = (ms) => { const t = local(ms); return `${t.y}-${pad(t.mo)}-${pad(t.d)}T${pad(t.h)}:${pad(t.mi)}`; };\nconst localDate = (ms) => localIso(ms).slice(0, 10);\nconst spoken = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction parseSlot(text) {\n  const s = String(text);\n  if (/[zZ]$|[+-]\\d{2}:?\\d{2}$/.test(s)) return Date.parse(s);\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})/.exec(s);\n  return m ? localToUtc(+m[1], +m[2], +m[3], +m[4], +m[5]) : NaN;\n}\nconst dayStart = (dateText) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); return localToUtc(+m[1], +m[2], +m[3], 0, 0); };\nconst eventsUrl = (query) => `${cfg.calendar_api_base}/calendars/${encodeURIComponent(cfg.calendar_id)}/events?` +\n  Object.keys(query).map((key) => `${key}=${encodeURIComponent(query[key])}`).join('&');\nconst a = ctx.args;\nconst now = nowMs();\nconst items = Array.isArray(feed.items) ? feed.items : [];\nconst priv = (event) => (event.extendedProperties && event.extendedProperties.private) || {};\nconst stamp = (edge, endOfDay) => {\n  if (edge && edge.dateTime) return Date.parse(edge.dateTime);\n  if (edge && edge.date) return dayStart(edge.date) + (endOfDay ? 0 : 0);\n  return NaN;\n};\nconst busy = items\n  .filter((event) => event.status !== 'cancelled' && event.transparency !== 'transparent')\n  .map((event) => ({ id: event.id, start: stamp(event.start), end: stamp(event.end), staff: priv(event).staff_id || null, phone: priv(event).phone || null, raw: event }))\n  .filter((event) => !isNaN(event.start) && !isNaN(event.end));\n\nconst done = (result) => [{ json: Object.assign({}, ctx, { needs_write: false, result }) }];\nconst write = (http, onSuccess, staffMessage) => [{ json: Object.assign({}, ctx, { needs_write: true, http, on_success: onSuccess, staff_message: staffMessage || '' }) }];\nconst buffer = (cfg.buffer_min || 0) * MIN;\nconst step = (cfg.slot_step_min || 30) * MIN;\nconst lead = (cfg.lead_time_min || 0) * MIN;\nconst staffName = (id) => { const person = (cfg.staff || []).find((p) => p.id === id); return person ? person.name : ''; };\nconst serviceOf = (id) => (cfg.services || []).find((s) => s.id === id);\n\nfunction qualified(service, wanted) {\n  let pool = (cfg.staff || []).map((person) => person.id);\n  if (service && Array.isArray(service.staff) && service.staff.length) pool = pool.filter((id) => service.staff.includes(id));\n  if (wanted) pool = pool.filter((id) => id === wanted);\n  return pool;\n}\nfunction freeStaff(start, end, service, wanted, ignoreId) {\n  const clash = busy.filter((event) => event.id !== ignoreId && event.start < end + buffer && event.end > start - buffer);\n  if (clash.some((event) => !event.staff)) return []; // an unassigned event (holiday, repair) blocks everyone\n  const taken = clash.map((event) => event.staff);\n  return qualified(service, wanted).filter((id) => !taken.includes(id));\n}\nfunction hoursFor(ms) {\n  const t = local(ms);\n  const date = `${t.y}-${pad(t.mo)}-${pad(t.d)}`;\n  if ((cfg.closed_dates || []).includes(date)) return null;\n  const day = (cfg.hours || {})[['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][t.dow]];\n  if (!day) return null;\n  const [oh, om] = day.open.split(':').map(Number);\n  const [ch, cm] = day.close.split(':').map(Number);\n  return { open: localToUtc(t.y, t.mo, t.d, oh, om), close: localToUtc(t.y, t.mo, t.d, ch, cm) };\n}\nfunction slotError(start, service, wanted, ignoreId) {\n  const length = service.duration_min * MIN;\n  const hours = hoursFor(start);\n  if (start < now + lead) return 'too_soon';\n  if (!hours || start < hours.open || start + length > hours.close) return 'outside_hours';\n  if ((start - hours.open) % step !== 0) return 'off_grid';\n  if (!freeStaff(start, start + length, service, wanted, ignoreId).length) return 'slot_taken';\n  return null;\n}\nfunction daySlots(day, service, wanted, part, ignoreId) {\n  const hours = hoursFor(day);\n  if (!hours) return [];\n  const found = [];\n  for (let start = hours.open; start + service.duration_min * MIN <= hours.close; start += step) {\n    const hour = local(start).h;\n    if (part === 'morning' && hour >= 12) continue;\n    if (part === 'afternoon' && (hour < 12 || hour >= 17)) continue;\n    if (part === 'evening' && hour < 17) continue;\n    if (slotError(start, service, wanted, ignoreId)) continue;\n    const staff = freeStaff(start, start + service.duration_min * MIN, service, wanted, ignoreId);\n    found.push({ slot_start: localIso(start), spoken: spoken(start), staff_id: staff[0], staff: staffName(staff[0]) });\n  }\n  return found;\n}\nfunction pick(slots, count) {\n  if (slots.length <= count) return slots;\n  const chosen = [];\n  for (let i = 0; i < count; i += 1) chosen.push(slots[Math.round(i * (slots.length - 1) / (count - 1))]);\n  return chosen;\n}\nfunction nearest(fromDay, service, wanted, part, ignoreId, days) {\n  for (let i = 0; i < days; i += 1) {\n    const slots = daySlots(fromDay + i * 24 * 60 * MIN + 12 * 60 * MIN, service, wanted, i === 0 ? part : 'any', ignoreId);\n    if (slots.length) return pick(slots, cfg.offer_slots || 3);\n  }\n  return [];\n}\nconst describe = (event) => {\n  const service = serviceOf(priv(event.raw).service_id);\n  return { booking_id: event.id, service: service ? service.name : (event.raw.summary || ''), service_id: priv(event.raw).service_id || '',\n    slot_start: localIso(event.start), spoken: spoken(event.start), staff: staffName(event.staff) };\n};\n\nif (ctx.tool === 'check_availability') {\n  const day = dayStart(a.date);\n  const part = ['morning', 'afternoon', 'evening'].includes(a.part_of_day) ? a.part_of_day : 'any';\n  const sameDay = pick(daySlots(day + 12 * 60 * MIN, ctx.service, a.staff_id, part), cfg.offer_slots || 3);\n  if (sameDay.length) {\n    return done({ ok: true, available: true, today: localDate(now), date: a.date, service: ctx.service.name, price: ctx.service.price, duration_min: ctx.service.duration_min, slots: sameDay,\n      say: 'Предложите клиенту эти варианты, не больше двух за раз. В create_booking передайте slot_start выбранного.' });\n  }\n  const other = nearest(day, ctx.service, a.staff_id, 'any', null, 8);\n  return done({ ok: true, available: false, today: localDate(now), date: a.date, service: ctx.service.name, slots: other,\n    say: other.length ? 'На запрошенное время мест нет. Предложите ближайшие варианты из slots.' : 'Свободных мест на ближайшую неделю нет. Предложите request_callback.' });\n}\n\nif (ctx.tool === 'create_booking') {\n  const start = parseSlot(a.slot_start);\n  // The id is derived from the call and the slot, so a retried request cannot book twice.\n  const key = [ctx.call_id || a.customer_phone, a.slot_start, a.service_id].join('|');\n  let h1 = 2166136261, h2 = 5381;\n  for (let i = 0; i < key.length; i += 1) { h1 = Math.imul(h1 ^ key.charCodeAt(i), 16777619) >>> 0; h2 = (Math.imul(h2, 33) ^ key.charCodeAt(key.length - 1 - i)) >>> 0; }\n  const id = 'b' + h1.toString(16).padStart(8, '0') + h2.toString(16).padStart(8, '0');\n  const already = busy.find((event) => event.id === id);\n  if (already) {\n    return done({ ok: true, booking_id: id, service: ctx.service.name, price: ctx.service.price, slot_start: localIso(already.start), spoken: spoken(already.start), staff: staffName(already.staff),\n      say: 'Эта запись уже создана. Подтвердите клиенту услугу, дату и время.' });\n  }\n  const problem = slotError(start, ctx.service, a.staff_id);\n  if (problem) {\n    const other = nearest(dayStart(localDate(start)), ctx.service, a.staff_id, 'any', null, 8);\n    const why = { too_soon: 'Это время слишком близко или уже прошло.', outside_hours: 'В это время мы не работаем.', off_grid: 'На это время записать нельзя.', slot_taken: 'Это время только что заняли.' }[problem];\n    return done({ ok: false, error: problem, slots: other, say: why + ' Извинитесь и предложите варианты из slots.' });\n  }\n  const end = start + ctx.service.duration_min * MIN;\n  const staffId = freeStaff(start, end, ctx.service, a.staff_id)[0];\n  const details = {};\n  for (const key of cfg.detail_fields || []) if (a[key]) details[key] = String(a[key]).slice(0, 300);\n  const lines = [`Клиент: ${a.customer_name}`, `Телефон: ${a.customer_phone}`, `Услуга: ${ctx.service.name}`, staffId ? `Специалист: ${staffName(staffId)}` : '']\n    .concat(Object.keys(details).map((k) => `${(cfg.detail_labels || {})[k] || k}: ${details[k]}`))\n    .concat(a.notes ? [`Комментарий: ${String(a.notes).slice(0, 300)}`] : [], ['Источник: голосовой агент']).filter(Boolean);\n  return write({ method: 'POST', url: `${cfg.calendar_api_base}/calendars/${encodeURIComponent(cfg.calendar_id)}/events`, body: {\n    id, summary: `${ctx.service.name} — ${a.customer_name}`, description: lines.join('\\n'),\n    start: { dateTime: new Date(start).toISOString(), timeZone: TZ }, end: { dateTime: new Date(end).toISOString(), timeZone: TZ },\n    extendedProperties: { private: Object.assign({ phone: a.customer_phone, service_id: a.service_id, staff_id: staffId || '', source: 'voice-agent', call_id: ctx.call_id || '' }, details) },\n  } }, { ok: true, booking_id: id, service: ctx.service.name, price: ctx.service.price, slot_start: localIso(start), spoken: spoken(start), staff: staffName(staffId),\n    say: 'Запись создана. Подтвердите клиенту услугу, дату и время' + (cfg.address ? ' и назовите адрес: ' + cfg.address : '') + '.' },\n  ['Новая запись', spoken(start)].concat(lines).join('\\n'));\n}\n\nif (ctx.tool === 'find_booking') {\n  const mine = busy.filter((event) => event.phone === a.customer_phone && event.end > now).slice(0, 5).map(describe);\n  return done({ ok: true, bookings: mine, say: mine.length ? 'Назовите клиенту найденные записи и уточните, о какой речь.' : 'На этот номер предстоящих записей нет. Уточните номер, на который записывались.' });\n}\n\nconst booking = busy.find((event) => event.id === a.booking_id);\nif (!booking || booking.phone !== a.customer_phone) {\n  return done({ ok: false, error: 'booking_not_found', say: 'Запись с таким номером на этот телефон не найдена. Вызовите find_booking и уточните.' });\n}\nconst eventUrl = `${cfg.calendar_api_base}/calendars/${encodeURIComponent(cfg.calendar_id)}/events/${encodeURIComponent(booking.id)}`;\nconst info = describe(booking);\nconst hoursLeft = (booking.start - now) / (60 * MIN);\n\nif (ctx.tool === 'cancel_booking') {\n  const late = cfg.cancel_min_hours && hoursLeft < cfg.cancel_min_hours;\n  return write({ method: 'PATCH', url: eventUrl, body: { status: 'cancelled' } },\n    { ok: true, cancelled: info, late_cancellation: Boolean(late), say: 'Запись отменена. Подтвердите это клиенту' + (late && cfg.late_cancel_note ? '. ' + cfg.late_cancel_note : '') + ' и предложите записаться на другое время.' },\n    ['Отмена записи', info.spoken, `Клиент: ${a.customer_phone}`, info.service, a.reason ? `Причина: ${a.reason}` : ''].filter(Boolean).join('\\n'));\n}\n\n// reschedule_booking\nconst service = serviceOf(info.service_id) || { duration_min: Math.round((booking.end - booking.start) / MIN), name: info.service };\nconst start = parseSlot(a.new_slot_start);\nconst wanted = a.staff_id || booking.staff || undefined;\nlet problem = isNaN(start) ? 'bad_slot' : slotError(start, service, wanted, booking.id);\nlet staffId = problem ? null : freeStaff(start, start + service.duration_min * MIN, service, wanted, booking.id)[0];\nif (problem === 'slot_taken' && wanted && !a.staff_id) {\n  // The same specialist is busy; another one may be free.\n  if (!slotError(start, service, undefined, booking.id)) { problem = null; staffId = freeStaff(start, start + service.duration_min * MIN, service, undefined, booking.id)[0]; }\n}\nif (problem) {\n  const other = isNaN(start) ? [] : nearest(dayStart(localDate(start)), service, undefined, 'any', booking.id, 8);\n  return done({ ok: false, error: problem, slots: other, say: 'На это время перенести нельзя. Предложите варианты из slots. Прежняя запись сохранена.' });\n}\nconst end = start + service.duration_min * MIN;\nreturn write({ method: 'PATCH', url: eventUrl, body: {\n  start: { dateTime: new Date(start).toISOString(), timeZone: TZ }, end: { dateTime: new Date(end).toISOString(), timeZone: TZ },\n  extendedProperties: { private: { staff_id: staffId || '' } },\n} }, { ok: true, booking_id: booking.id, service: service.name, slot_start: localIso(start), spoken: spoken(start), staff: staffName(staffId), previous: info.spoken,\n  say: 'Запись перенесена. Назовите клиенту новые дату и время.' },\n['Перенос записи', `Было: ${info.spoken}`, `Стало: ${spoken(start)}`, `Клиент: ${a.customer_phone}`, service.name].join('\\n'));\n"
+      },
+      "id": "7dd1fac7-ef0f-5bcd-8a7f-229ff86a1016",
+      "name": "Decide",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_write }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "fe6dc2d9-6203-57f8-ae1d-35183e4046cd",
+      "name": "Needs Write?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        820,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={{ $json.http.method }}",
+        "url": "={{ $json.http.url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "options": {
+          "timeout": 10000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleCalendarOAuth2Api"
+      },
+      "id": "6aa4be00-aad9-57e9-a77d-cae0197ebc93",
+      "name": "Calendar Write",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        -200
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 500,
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Calendar"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Finish — the calendar accepted the change; hand the prepared answer on.\nconst ctx = $('Decide').first().json;\nreturn [{ json: Object.assign({}, ctx, { result: ctx.on_success, needs_notify: Boolean(ctx.staff_message) }) }];\n"
+      },
+      "id": "7e0eb0a3-815d-576e-a486-cf8d532955d7",
+      "name": "Finish",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1260,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool Failed — the calendar did not answer or refused. Never invent a result.\nconst failure = $input.first().json || {};\nlet ctx = {};\ntry { ctx = $('Decide').first().json; } catch (e) { ctx = $('Plan').first().json; }\nconst text = JSON.stringify(failure.error || failure).slice(0, 600);\nconst status = Number((failure.error && (failure.error.httpCode || failure.error.status)) || failure.statusCode || 0);\n// A repeated create with the same id means the first attempt went through.\nif (ctx.tool === 'create_booking' && ctx.needs_write && (status === 409 || /\\b409\\b|already exists|duplicate/i.test(text))) {\n  return [{ json: Object.assign({}, ctx, { result: ctx.on_success, needs_notify: false }) }];\n}\nreturn [{ json: Object.assign({}, ctx, { needs_notify: true,\n  staff_message: ['Сбой инструмента голосового агента', `Инструмент: ${ctx.tool}`, `Звонок: ${ctx.call_id || '—'}`, text].join('\\n'),\n  result: { ok: false, error: 'tool_unavailable', say: 'Система записи сейчас недоступна. Извинитесь, не называйте результат, предложите оставить заявку через request_callback или перевести на администратора.' } }) }];\n"
+      },
+      "id": "26a6750f-aa8d-5f22-a9cb-e12ce8c7640c",
+      "name": "Tool Failed",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build Response — each provider expects its own envelope.\nconst item = $input.first().json;\nconst result = item.result || { ok: false, error: 'no_result', say: 'Не удалось выполнить запрос. Предложите перезвонить.' };\nlet response = result;\nif (item.provider === 'vapi') {\n  response = { results: [{ toolCallId: item.tool_call_id, result: JSON.stringify(result) }] };\n}\nreturn [{ json: { response } }];\n"
+      },
+      "id": "c544f14c-cbbc-5e8e-8657-a3581b0810ab",
+      "name": "Build Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {}
+      },
+      "id": "e3b1fbcb-897a-59eb-a00b-838a58543936",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1700,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_notify }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "14fa8e80-7aa9-52f7-8f9f-59776f16477d",
+      "name": "Notify Staff?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.staff_chat_id }}",
+        "text": "={{ $json.staff_message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "3aa0cc67-f81f-5ff6-8c2f-2471da67ba9d",
+      "name": "Notify Staff",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        260
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Voice Tool Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Parse Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Request": {
+      "main": [
+        [
+          {
+            "node": "Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan": {
+      "main": [
+        [
+          {
+            "node": "Needs Calendar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Calendar?": {
+      "main": [
+        [
+          {
+            "node": "Calendar Read",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Staff?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Read": {
+      "main": [
+        [
+          {
+            "node": "Decide",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decide": {
+      "main": [
+        [
+          {
+            "node": "Needs Write?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Write?": {
+      "main": [
+        [
+          {
+            "node": "Calendar Write",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Write": {
+      "main": [
+        [
+          {
+            "node": "Finish",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finish": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Staff?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool Failed": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Staff?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Response": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Staff?": {
+      "main": [
+        [
+          {
+            "node": "Notify Staff",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

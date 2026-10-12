@@ -1,0 +1,141 @@
+{
+  "name": "Beauty Salon Voice Agent — Call Summary",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Beauty Salon Voice Agent — сводка звонка\n\nПосле каждого звонка провайдер присылает отчёт. Воркфлоу отправляет администратору короткую сводку в Telegram.\n\nПодключите как `server.url` (Vapi), `webhook_url` (Retell) или post-call webhook (ElevenLabs).\n\nРасшифровка и запись сюда не пересылаются — только сводка.",
+        "width": 440,
+        "height": 260
+      },
+      "id": "be995787-e030-5858-8162-03773bac96c1",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice-call-ended",
+        "authentication": "headerAuth",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "01f43d52-5694-5b96-97c3-b94ea4873d0d",
+      "name": "Call Ended Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        0
+      ],
+      "webhookId": "45bd11a6-ac99-5835-b29c-ec251a0fb04e",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Voice tools secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — the only node you edit. Business hours, services, staff and rules.\n// Everything below this node reads its settings from here.\nreturn [{ json: {\n  \"staff_chat_id\": \"REPLACE_WITH_TELEGRAM_CHAT_ID\"\n} }];\n"
+      },
+      "id": "19e48bfe-d094-5c92-a942-21e9fa2e153b",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalise the end-of-call report of any of the three providers into one message.\nconst cfg = $('Config').first().json;\nconst body = $('Call Ended Webhook').first().json.body || {};\nconst pick = (...values) => values.find((value) => value !== undefined && value !== null && value !== '');\nlet provider = 'unknown', summary, seconds, caller, reason, success, callId;\n\nif (body.message && body.message.type === 'end-of-call-report') {\n  const m = body.message;\n  provider = 'vapi';\n  summary = pick(m.summary, m.analysis && m.analysis.summary);\n  seconds = pick(m.durationSeconds, m.call && m.call.durationSeconds);\n  caller = m.call && m.call.customer && m.call.customer.number;\n  reason = m.endedReason;\n  success = m.analysis && m.analysis.successEvaluation;\n  callId = m.call && m.call.id;\n} else if (body.event && body.call) {\n  if (body.event !== 'call_analyzed') return [];\n  const c = body.call;\n  provider = 'retell';\n  summary = c.call_analysis && c.call_analysis.call_summary;\n  seconds = c.duration_ms ? Math.round(c.duration_ms / 1000) : undefined;\n  caller = c.direction === 'outbound' ? c.to_number : c.from_number;\n  reason = c.disconnection_reason;\n  success = c.call_analysis && c.call_analysis.call_successful;\n  callId = c.call_id;\n} else if (body.type && body.data) {\n  if (body.type !== 'post_call_transcription') return [];\n  const d = body.data;\n  provider = 'elevenlabs';\n  summary = d.analysis && d.analysis.transcript_summary;\n  seconds = d.metadata && d.metadata.call_duration_secs;\n  caller = d.metadata && d.metadata.phone_call && d.metadata.phone_call.external_number;\n  reason = d.metadata && d.metadata.termination_reason;\n  success = d.analysis && d.analysis.call_successful;\n  callId = d.conversation_id;\n} else {\n  return [];\n}\n\nconst minutes = seconds ? `${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}` : '—';\nconst lines = [\n  'Звонок завершён',\n  `Номер: ${caller || 'не определён'}`,\n  `Длительность: ${minutes}`,\n  success !== undefined ? `Цель достигнута: ${success === true || success === 'true' || success === 'successful' ? 'да' : String(success)}` : '',\n  reason ? `Завершение: ${reason}` : '',\n  '',\n  summary ? String(summary).slice(0, 900) : 'Сводка не пришла — проверьте, что у провайдера включён анализ звонка.',\n].filter((line) => line !== '');\nreturn [{ json: { provider, call_id: callId || '', staff_message: lines.join('\\n'), chat_id: cfg.staff_chat_id } }];\n"
+      },
+      "id": "36b435b0-ed0b-5e0b-94bf-db72ecbf5a5e",
+      "name": "Summarise",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -40,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.staff_message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "ac455f01-d993-5277-b6c6-c8faad7cbae7",
+      "name": "Send Summary",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Call Ended Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Summarise",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarise": {
+      "main": [
+        [
+          {
+            "node": "Send Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

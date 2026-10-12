@@ -2036,8 +2036,9 @@
   {
    "fileTypes": [
     "ZIP",
+    "MD",
     "JSON",
-    "PDF"
+    "CSV"
    ],
    "faqRu": [
     {
@@ -2086,10 +2087,10 @@
    "videoPreview": null,
    "freePreview": {
     "type": "prompt",
-    "titleRu": "Бесплатный фрагмент: приветствие салона",
-    "titleEn": "Free sample: salon greeting",
-    "contentRu": "Ты — голосовой ассистент салона красоты. Цель: записать клиента на услугу.\nПравила:\n1) Уточни услугу, мастера и удобное время.\n2) Проверь слот в календаре (tool: check_slot).\n3) Подтверди запись коротко и тепло.\n4) Если слот занят — предложи 2 альтернативы.\nТон: дружелюбный, без канцелярита, максимум 2 предложения за реплику.",
-    "contentEn": "You are a beauty salon voice assistant. Goal: book the client.\nRules:\n1) Confirm service, stylist and preferred time.\n2) Check calendar slot (tool: check_slot).\n3) Confirm booking briefly and warmly.\n4) If busy — offer 2 alternatives.\nTone: friendly, no jargon, max 2 sentences per turn."
+    "titleRu": "Фрагмент промпта: чего агент не делает",
+    "titleEn": "Prompt excerpt: what the agent never does",
+    "contentRu": "Не обещаешь результат окрашивания или процедуры:\n«получится ли такой цвет» решает мастер.\nНе даёшь медицинских советов: аллергия, беременность —\n«это обсудит мастер, при необходимости посоветуйтесь с врачом».\nНе называешь свободное время по памяти:\nтолько из ответа инструмента check_availability.",
+    "contentEn": "Never promise the result of colouring or a treatment:\nthe stylist decides whether a shade is achievable.\nNever give medical advice: allergies, pregnancy —\nthe stylist will discuss it; consult a doctor if needed.\nNever state a free time from memory:\nonly from the check_availability tool result."
    },
    "coverImage": null,
    "id": "mp-voice-beauty-salon",
@@ -2098,30 +2099,35 @@
    "productType": "agent-pack",
    "titleRu": "Voice Agent Kit: Beauty Salon",
    "titleEn": "Voice Agent Kit: Beauty Salon",
-   "shortRu": "Голосовой агент записи для салона: сценарии диалогов, интеграция с календарём, шаблоны Vapi/Retell/ElevenLabs, инструкция запуска за 1 день.",
-   "shortEn": "Voice booking agent for salons: dialog flows, calendar integration, Vapi/Retell/ElevenLabs templates, 1-day launch guide.",
+   "shortRu": "Набор для запуска голосового администратора салона красоты: проверенный бэкенд записи на n8n и Google Календаре, промпт, конфигурации Vapi, Retell и ElevenLabs, 30 тестовых звонков и комплект для продажи клиенту.",
+   "shortEn": "A kit for launching a voice receptionist for a beauty salon: a tested booking backend on n8n and Google Calendar, the prompt, Vapi, Retell and ElevenLabs configurations, 30 test calls and a client sales kit. Files are in Russian.",
    "priceEur": 79,
    "coverGradient": "linear-gradient(135deg, #14b8a6, #a855f7)",
    "coverIcon": "💇",
    "creatorId": "creator-agent-studio",
    "includedRu": [
-    "Сценарии диалогов",
-    "Интеграция с календарём",
-    "Шаблоны Vapi / Retell / ElevenLabs",
-    "Инструкция запуска за 1 день"
+    "Воркфлоу n8n: запись, перенос, отмена, обратный звонок",
+    "Системный промпт на русском и английском",
+    "Конфигурации Vapi, Retell и ElevenLabs",
+    "30 тестовых звонков и оценочный лист запуска",
+    "9 инструкций: от настройки до эксплуатации",
+    "Комплект продаж: калькулятор, цены, объём работ, отчёт"
    ],
    "includedEn": [
-    "Dialog scenarios",
-    "Calendar integration",
-    "Vapi / Retell / ElevenLabs templates",
-    "1-day launch guide"
+    "n8n workflows: book, move, cancel, callback",
+    "System prompt in Russian and English",
+    "Vapi, Retell and ElevenLabs configurations",
+    "30 test calls and a launch scorecard",
+    "9 guides, from setup to operations",
+    "Sales kit: calculator, pricing, scope, report"
    ]
   },
   {
    "fileTypes": [
     "ZIP",
+    "MD",
     "JSON",
-    "PDF"
+    "CSV"
    ],
    "faqRu": [
     {
@@ -2170,10 +2176,10 @@
    "videoPreview": null,
    "freePreview": {
     "type": "prompt",
-    "titleRu": "Бесплатный фрагмент: квалификация пациента",
-    "titleEn": "Free sample: patient qualification",
-    "contentRu": "Перед записью уточни:\n- Новый или повторный визит?\n- Симптом / цель визита (1 фраза)\n- Срочность: сегодня / на этой неделе / планово\nЕсли срочно и нет слота — эскалируй на администратора (tool: handoff_human).",
-    "contentEn": "Before booking ask:\n- New or returning patient?\n- Visit goal in one sentence\n- Urgency: today / this week / planned\nIf urgent and no slots — hand off to admin (tool: handoff_human)."
+    "titleRu": "Фрагмент промпта: неотложные состояния",
+    "titleEn": "Prompt excerpt: emergencies",
+    "contentRu": "Боль в груди, затруднённое дыхание, признаки инсульта,\nсильное кровотечение — сразу скажи:\n«Это может быть опасно. Немедленно позвоните\nв экстренную службу».\nНе продолжай запись, пока человек не подтвердит,\nчто помощь вызвана. Диагнозов и советов не давай.",
+    "contentEn": "Chest pain, trouble breathing, signs of a stroke,\nheavy bleeding — say at once:\nThis may be dangerous. Call emergency services immediately.\nDo not continue booking until the person confirms\nhelp has been called. Give no diagnosis or advice."
    },
    "coverImage": null,
    "id": "mp-voice-clinic-services",
@@ -2182,23 +2188,199 @@
    "productType": "agent-pack",
    "titleRu": "Voice Agent Kit: Clinic & Services",
    "titleEn": "Voice Agent Kit: Clinic & Services",
-   "shortRu": "Запись на приём голосом: квалификация, напоминания, перенос записи. Шаблоны под Vapi и Retell.",
-   "shortEn": "Voice appointment booking: qualification, reminders, rescheduling. Vapi and Retell templates.",
+   "shortRu": "Набор для запуска голосового администратора клиники: проверенный бэкенд записи на n8n и Google Календаре, промпт, конфигурации Vapi, Retell и ElevenLabs, 30 тестовых звонков и комплект для продажи клиенту.",
+   "shortEn": "A kit for launching a voice receptionist for a clinic: a tested booking backend on n8n and Google Calendar, the prompt, Vapi, Retell and ElevenLabs configurations, 30 test calls and a client sales kit. Files are in Russian.",
    "priceEur": 79,
    "coverGradient": "linear-gradient(135deg, #06b6d4, #6366f1)",
    "coverIcon": "🏥",
    "creatorId": "creator-agent-studio",
    "includedRu": [
-    "Сценарии записи на приём",
-    "Квалификация и напоминания",
-    "Перенос записи",
-    "Шаблоны Vapi и Retell"
+    "Воркфлоу n8n: запись, перенос, отмена, обратный звонок",
+    "Системный промпт на русском и английском",
+    "Конфигурации Vapi, Retell и ElevenLabs",
+    "30 тестовых звонков и оценочный лист запуска",
+    "9 инструкций: от настройки до эксплуатации",
+    "Комплект продаж: калькулятор, цены, объём работ, отчёт"
    ],
    "includedEn": [
-    "Appointment booking flows",
-    "Qualification and reminders",
-    "Rescheduling logic",
-    "Vapi and Retell templates"
+    "n8n workflows: book, move, cancel, callback",
+    "System prompt in Russian and English",
+    "Vapi, Retell and ElevenLabs configurations",
+    "30 test calls and a launch scorecard",
+    "9 guides, from setup to operations",
+    "Sales kit: calculator, pricing, scope, report"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "MD",
+    "JSON",
+    "CSV"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending",
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-voice-beauty-salon",
+    "mp-voice-clinic-services"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "prompt",
+    "titleRu": "Фрагмент промпта: опасная неисправность",
+    "titleEn": "Prompt excerpt: an unsafe fault",
+    "contentRu": "Не говоришь, можно ли ездить с неисправностью.\nТормоза, руль, перегрев, запах топлива,\nлампа давления масла — отвечай:\n«С такой неисправностью ехать небезопасно,\nлучше вызвать эвакуатор».\nДиагноз по описанию не ставишь: записываешь на диагностику.",
+    "contentEn": "Never say whether the car is safe to drive with a fault.\nBrakes, steering, overheating, fuel smell,\noil pressure light — answer:\nIt is not safe to drive with that; better call a tow truck.\nNever diagnose from a description: book a diagnostic."
+   },
+   "coverImage": null,
+   "id": "mp-voice-auto-service",
+   "slug": "voice-agent-kit-auto-service",
+   "categoryId": "voice-agents",
+   "productType": "agent-pack",
+   "titleRu": "Voice Agent Kit: Auto Service",
+   "titleEn": "Voice Agent Kit: Auto Service",
+   "shortRu": "Набор для запуска голосового администратора автосервиса: проверенный бэкенд записи на n8n и Google Календаре, промпт, конфигурации Vapi, Retell и ElevenLabs, 30 тестовых звонков и комплект для продажи клиенту.",
+   "shortEn": "A kit for launching a voice receptionist for an auto repair shop: a tested booking backend on n8n and Google Calendar, the prompt, Vapi, Retell and ElevenLabs configurations, 30 test calls and a client sales kit. Files are in Russian.",
+   "priceEur": 79,
+   "coverGradient": "linear-gradient(135deg, #f59e0b, #ef4444)",
+   "coverIcon": "🔧",
+   "creatorId": "creator-agent-studio",
+   "includedRu": [
+    "Воркфлоу n8n: запись, перенос, отмена, обратный звонок",
+    "Системный промпт на русском и английском",
+    "Конфигурации Vapi, Retell и ElevenLabs",
+    "30 тестовых звонков и оценочный лист запуска",
+    "9 инструкций: от настройки до эксплуатации",
+    "Комплект продаж: калькулятор, цены, объём работ, отчёт"
+   ],
+   "includedEn": [
+    "n8n workflows: book, move, cancel, callback",
+    "System prompt in Russian and English",
+    "Vapi, Retell and ElevenLabs configurations",
+    "30 test calls and a launch scorecard",
+    "9 guides, from setup to operations",
+    "Sales kit: calculator, pricing, scope, report"
+   ]
+  },
+  {
+   "fileTypes": [
+    "ZIP",
+    "MD",
+    "JSON",
+    "CSV"
+   ],
+   "faqRu": [
+    {
+     "q": "Как получить файлы после оплаты?",
+     "a": "Сразу в личном кабинете → Marketplace → Мои загрузки."
+    },
+    {
+     "q": "Можно ли использовать в коммерческих проектах?",
+     "a": "Да, лицензия на использование в работе с клиентами включена."
+    },
+    {
+     "q": "Есть ли обновления?",
+     "a": "Да, пожизненный доступ к обновлениям в рамках продукта."
+    }
+   ],
+   "faqEn": [
+    {
+     "q": "How do I get files after payment?",
+     "a": "Instantly in your account → Marketplace → My downloads."
+    },
+    {
+     "q": "Can I use this commercially?",
+     "a": "Yes, client work license is included."
+    },
+    {
+     "q": "Do I get updates?",
+     "a": "Yes, lifetime updates for this product."
+    }
+   ],
+   "badges": [
+    "trending",
+    "new"
+   ],
+   "badge": "trend-2026",
+   "relatedIds": [
+    "mp-voice-beauty-salon",
+    "mp-voice-clinic-services"
+   ],
+   "recommendsForCourses": [
+    "ai-agent-engineer"
+   ],
+   "screenshots": [],
+   "videoPreview": null,
+   "freePreview": {
+    "type": "prompt",
+    "titleRu": "Фрагмент промпта: что обсуждает только агент",
+    "titleEn": "Prompt excerpt: what only the agent discusses",
+    "contentRu": "Не обсуждаешь торг и не говоришь, уступит ли собственник.\nНе подтверждаешь, что объект свободен:\n«Актуальность подтвердит агент перед просмотром».\nНе называешь точный адрес до подтверждённого просмотра.\nНе учитываешь национальность, семейное положение\nи другие личные признаки и не передаёшь такие условия.",
+    "contentEn": "Never negotiate or say whether the owner will come down.\nNever confirm a property is still available:\nthe agent will confirm it before the viewing.\nNever give the exact address before a confirmed viewing.\nNever act on nationality, marital status or other\npersonal characteristics, or relay such conditions."
+   },
+   "coverImage": null,
+   "id": "mp-voice-real-estate",
+   "slug": "voice-agent-kit-real-estate",
+   "categoryId": "voice-agents",
+   "productType": "agent-pack",
+   "titleRu": "Voice Agent Kit: Real Estate",
+   "titleEn": "Voice Agent Kit: Real Estate",
+   "shortRu": "Набор для запуска голосового администратора агентства недвижимости: проверенный бэкенд записи на n8n и Google Календаре, промпт, конфигурации Vapi, Retell и ElevenLabs, 30 тестовых звонков и комплект для продажи клиенту.",
+   "shortEn": "A kit for launching a voice receptionist for a real estate agency: a tested booking backend on n8n and Google Calendar, the prompt, Vapi, Retell and ElevenLabs configurations, 30 test calls and a client sales kit. Files are in Russian.",
+   "priceEur": 79,
+   "coverGradient": "linear-gradient(135deg, #10b981, #3b82f6)",
+   "coverIcon": "🏠",
+   "creatorId": "creator-agent-studio",
+   "includedRu": [
+    "Воркфлоу n8n: запись, перенос, отмена, обратный звонок",
+    "Системный промпт на русском и английском",
+    "Конфигурации Vapi, Retell и ElevenLabs",
+    "30 тестовых звонков и оценочный лист запуска",
+    "9 инструкций: от настройки до эксплуатации",
+    "Комплект продаж: калькулятор, цены, объём работ, отчёт"
+   ],
+   "includedEn": [
+    "n8n workflows: book, move, cancel, callback",
+    "System prompt in Russian and English",
+    "Vapi, Retell and ElevenLabs configurations",
+    "30 test calls and a launch scorecard",
+    "9 guides, from setup to operations",
+    "Sales kit: calculator, pricing, scope, report"
    ]
   },
   {

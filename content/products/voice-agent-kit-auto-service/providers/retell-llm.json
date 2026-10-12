@@ -1,0 +1,276 @@
+{
+  "model": "REPLACE_WITH_MODEL",
+  "start_speaker": "agent",
+  "begin_message": "Автосервис «{{business_name}}», здравствуйте. Я {{agent_name}}, виртуальный администратор. Чем помочь?",
+  "general_prompt": "ВСТАВЬТЕ СЮДА ТЕКСТ ИЗ prompts/system-prompt.ru.md",
+  "general_tools": [
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "Завершить звонок, когда вопрос решён и клиент попрощался."
+    },
+    {
+      "type": "transfer_call",
+      "name": "transfer_to_admin",
+      "description": "Перевести на администратора: жалоба, просьба о человеке, вопрос вне рамок.",
+      "transfer_destination": {
+        "type": "predefined",
+        "number": "REPLACE_WITH_ADMIN_NUMBER_E164"
+      },
+      "transfer_option": {
+        "type": "cold_transfer",
+        "show_transferee_as_caller": false
+      }
+    },
+    {
+      "type": "custom",
+      "name": "check_availability",
+      "description": "Найти свободное время для услуги. Вызывай перед тем, как предлагать время. Никогда не называй время без этого вызова.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "description": "Идентификатор услуги из каталога: diagnostics — Диагностика; oil_change — Замена масла и фильтра; tyre_fitting — Шиномонтаж, четыре колеса; brake_pads — Замена тормозных колодок, одна ось; alignment — Развал-схождение; maintenance — Плановое техобслуживание; ac_service — Заправка кондиционера"
+          },
+          "date": {
+            "type": "string",
+            "description": "Дата: ГГГГ-ММ-ДД, либо today, tomorrow, день недели (mon, tue, wed, thu, fri, sat, sun), либо +N дней. Не вычисляй дату сам."
+          },
+          "part_of_day": {
+            "type": "string",
+            "enum": [
+              "any",
+              "morning",
+              "afternoon",
+              "evening"
+            ],
+            "description": "Время суток, если клиент назвал."
+          },
+          "staff_id": {
+            "type": "string",
+            "description": "Нужный пост, если клиент выбрал: bay_1 — первый пост; bay_2 — второй пост; bay_3 — третий пост"
+          }
+        },
+        "required": [
+          "service_id",
+          "date"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "create_booking",
+      "description": "Создать запись. Вызывай только после того, как повторил клиенту детали и получил явное «да».",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "description": "Идентификатор услуги из каталога."
+          },
+          "slot_start": {
+            "type": "string",
+            "description": "Значение slot_start из ответа check_availability, без изменений."
+          },
+          "staff_id": {
+            "type": "string",
+            "description": "staff_id выбранного времени из ответа check_availability."
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Имя клиента, как он назвал."
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон клиента цифрами, как он его продиктовал."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Короткий комментарий словами клиента. Без сведений о здоровье и платёжных данных."
+          },
+          "consent": {
+            "type": "boolean",
+            "description": "true — только после подтверждения клиентом."
+          },
+          "car": {
+            "type": "string",
+            "description": "Марка, модель и год автомобиля, как назвал клиент."
+          },
+          "problem": {
+            "type": "string",
+            "description": "Коротко о проблеме словами клиента, без предположений о причине."
+          }
+        },
+        "required": [
+          "service_id",
+          "slot_start",
+          "customer_name",
+          "customer_phone",
+          "consent",
+          "car"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "find_booking",
+      "description": "Найти предстоящие записи клиента по номеру телефона. Вызывай перед переносом или отменой.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон клиента цифрами, как он его продиктовал."
+          }
+        },
+        "required": [
+          "customer_phone"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "reschedule_booking",
+      "description": "Перенести запись на новое время. Сначала find_booking и check_availability.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "booking_id": {
+            "type": "string",
+            "description": "booking_id из ответа find_booking."
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон клиента цифрами, как он его продиктовал."
+          },
+          "new_slot_start": {
+            "type": "string",
+            "description": "slot_start нового времени из ответа check_availability."
+          }
+        },
+        "required": [
+          "booking_id",
+          "customer_phone",
+          "new_slot_start"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "cancel_booking",
+      "description": "Отменить запись после того, как клиент подтвердил отмену.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "booking_id": {
+            "type": "string",
+            "description": "booking_id из ответа find_booking."
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон клиента цифрами, как он его продиктовал."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Причина словами клиента, если назвал."
+          }
+        },
+        "required": [
+          "booking_id",
+          "customer_phone"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "request_callback",
+      "description": "Передать администратору просьбу перезвонить: жалоба, вопрос без ответа в базе знаний, сбой, нет свободного времени, нерабочие часы.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_name": {
+            "type": "string",
+            "description": "Имя клиента."
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон клиента цифрами, как он его продиктовал."
+          },
+          "topic": {
+            "type": "string",
+            "description": "О чём просят перезвонить, одной фразой."
+          },
+          "urgency": {
+            "type": "string",
+            "description": "Срочность словами: сегодня, в течение дня, не срочно."
+          },
+          "details": {
+            "type": "string",
+            "description": "Что важно знать администратору до звонка."
+          }
+        },
+        "required": [
+          "customer_name",
+          "customer_phone",
+          "topic"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    }
+  ],
+  "default_dynamic_variables": {
+    "business_name": "REPLACE",
+    "agent_name": "REPLACE",
+    "language": "русский",
+    "recording_notice": "",
+    "emergency_number": "112"
+  }
+}

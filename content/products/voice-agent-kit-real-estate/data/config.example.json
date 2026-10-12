@@ -1,0 +1,108 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "calendar_api_base": "https://www.googleapis.com/calendar/v3",
+  "calendar_id": "primary",
+  "staff_chat_id": "REPLACE_WITH_TELEGRAM_CHAT_ID",
+  "phone": {
+    "country_code": "380",
+    "national_prefix": "0"
+  },
+  "slot_step_min": 30,
+  "lead_time_min": 180,
+  "buffer_min": 30,
+  "booking_window_days": 30,
+  "offer_slots": 3,
+  "closed_dates": [],
+  "require_caller_match": true,
+  "callback_promise": "в течение рабочего дня",
+  "hours": {
+    "mon": {
+      "open": "09:00",
+      "close": "20:00"
+    },
+    "tue": {
+      "open": "09:00",
+      "close": "20:00"
+    },
+    "wed": {
+      "open": "09:00",
+      "close": "20:00"
+    },
+    "thu": {
+      "open": "09:00",
+      "close": "20:00"
+    },
+    "fri": {
+      "open": "09:00",
+      "close": "20:00"
+    },
+    "sat": {
+      "open": "10:00",
+      "close": "16:00"
+    },
+    "sun": null
+  },
+  "cancel_min_hours": 3,
+  "late_cancel_note": "",
+  "address": "офис на улице Центральной, дом десять",
+  "detail_fields": [
+    "deal_type",
+    "listing_ref",
+    "area",
+    "budget"
+  ],
+  "detail_labels": {
+    "deal_type": "Цель",
+    "listing_ref": "Объект",
+    "area": "Район",
+    "budget": "Бюджет"
+  },
+  "required_details": [
+    "deal_type"
+  ],
+  "services": [
+    {
+      "id": "viewing",
+      "name": "Просмотр объекта",
+      "duration_min": 60,
+      "price": "бесплатно"
+    },
+    {
+      "id": "consult_buy",
+      "name": "Консультация по покупке",
+      "duration_min": 30,
+      "price": "бесплатно"
+    },
+    {
+      "id": "consult_rent",
+      "name": "Консультация по аренде",
+      "duration_min": 30,
+      "price": "бесплатно"
+    },
+    {
+      "id": "valuation",
+      "name": "Оценка объекта для продажи или сдачи",
+      "duration_min": 60,
+      "price": "бесплатно",
+      "staff": [
+        "agent_maria"
+      ]
+    }
+  ],
+  "staff": [
+    {
+      "id": "agent_maria",
+      "name": "Мария"
+    },
+    {
+      "id": "agent_pavel",
+      "name": "Павел"
+    },
+    {
+      "id": "agent_dina",
+      "name": "Дина"
+    }
+  ],
+  "_comment": "Скопируйте значения в узел Config воркфлоу Booking Tools. Поле _comment удалите."
+}

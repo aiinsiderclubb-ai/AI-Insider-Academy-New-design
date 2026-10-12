@@ -1,0 +1,150 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "calendar_api_base": "https://www.googleapis.com/calendar/v3",
+  "calendar_id": "primary",
+  "staff_chat_id": "REPLACE_WITH_TELEGRAM_CHAT_ID",
+  "phone": {
+    "country_code": "380",
+    "national_prefix": "0"
+  },
+  "slot_step_min": 30,
+  "lead_time_min": 120,
+  "buffer_min": 0,
+  "booking_window_days": 30,
+  "offer_slots": 3,
+  "closed_dates": [],
+  "require_caller_match": true,
+  "callback_promise": "в течение рабочего дня",
+  "hours": {
+    "mon": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "tue": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "wed": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "thu": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "fri": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "sat": {
+      "open": "10:00",
+      "close": "17:00"
+    },
+    "sun": null
+  },
+  "cancel_min_hours": 12,
+  "late_cancel_note": "Напомните: при отмене меньше чем за двенадцать часов предоплата не возвращается, если она была.",
+  "address": "улица Примерная, дом один",
+  "detail_fields": [],
+  "detail_labels": {},
+  "required_details": [],
+  "services": [
+    {
+      "id": "haircut_women",
+      "name": "Женская стрижка",
+      "duration_min": 60,
+      "price": "от 30 евро",
+      "staff": [
+        "anna",
+        "olga"
+      ]
+    },
+    {
+      "id": "haircut_men",
+      "name": "Мужская стрижка",
+      "duration_min": 30,
+      "price": "от 20 евро",
+      "staff": [
+        "olga",
+        "ira"
+      ]
+    },
+    {
+      "id": "coloring",
+      "name": "Окрашивание в один тон",
+      "duration_min": 120,
+      "price": "от 70 евро",
+      "staff": [
+        "anna"
+      ]
+    },
+    {
+      "id": "styling",
+      "name": "Укладка",
+      "duration_min": 60,
+      "price": "от 25 евро",
+      "staff": [
+        "anna",
+        "olga",
+        "ira"
+      ]
+    },
+    {
+      "id": "manicure",
+      "name": "Маникюр с покрытием",
+      "duration_min": 90,
+      "price": "от 28 евро",
+      "staff": [
+        "kate"
+      ]
+    },
+    {
+      "id": "pedicure",
+      "name": "Педикюр",
+      "duration_min": 90,
+      "price": "от 35 евро",
+      "staff": [
+        "kate"
+      ]
+    },
+    {
+      "id": "brows",
+      "name": "Коррекция и окрашивание бровей",
+      "duration_min": 30,
+      "price": "от 15 евро",
+      "staff": [
+        "ira"
+      ]
+    },
+    {
+      "id": "consultation",
+      "name": "Консультация мастера",
+      "duration_min": 30,
+      "price": "бесплатно",
+      "staff": [
+        "anna",
+        "olga"
+      ]
+    }
+  ],
+  "staff": [
+    {
+      "id": "anna",
+      "name": "Анна"
+    },
+    {
+      "id": "olga",
+      "name": "Ольга"
+    },
+    {
+      "id": "ira",
+      "name": "Ирина"
+    },
+    {
+      "id": "kate",
+      "name": "Екатерина"
+    }
+  ],
+  "_comment": "Скопируйте значения в узел Config воркфлоу Booking Tools. Поле _comment удалите."
+}

@@ -1,0 +1,61 @@
+{
+  "name": "Voice receptionist for a real estate agency",
+  "firstMessage": "Агентство «{{business_name}}», здравствуйте. Я {{agent_name}}, виртуальный помощник. Чем помочь?",
+  "firstMessageMode": "assistant-speaks-first",
+  "model": {
+    "provider": "REPLACE_WITH_LLM_PROVIDER",
+    "model": "REPLACE_WITH_MODEL",
+    "temperature": 0.3,
+    "messages": [
+      {
+        "role": "system",
+        "content": "ВСТАВЬТЕ СЮДА ТЕКСТ ИЗ prompts/system-prompt.ru.md"
+      }
+    ],
+    "toolIds": [
+      "REPLACE_WITH_TOOL_ID_1",
+      "REPLACE_WITH_TOOL_ID_2",
+      "REPLACE_WITH_TOOL_ID_3",
+      "REPLACE_WITH_TOOL_ID_4",
+      "REPLACE_WITH_TOOL_ID_5",
+      "REPLACE_WITH_TOOL_ID_6"
+    ],
+    "tools": [
+      {
+        "type": "endCall"
+      },
+      {
+        "type": "transferCall",
+        "destinations": [
+          {
+            "type": "number",
+            "number": "REPLACE_WITH_ADMIN_NUMBER_E164",
+            "message": "Соединяю с администратором, оставайтесь на линии."
+          }
+        ]
+      }
+    ]
+  },
+  "voice": {
+    "provider": "REPLACE_WITH_VOICE_PROVIDER",
+    "voiceId": "REPLACE_WITH_VOICE_ID"
+  },
+  "transcriber": {
+    "provider": "REPLACE_WITH_STT_PROVIDER",
+    "model": "REPLACE_WITH_STT_MODEL",
+    "language": "ru"
+  },
+  "endCallMessage": "Хорошего дня, до свидания.",
+  "maxDurationSeconds": 600,
+  "backgroundSound": "off",
+  "artifactPlan": {
+    "recordingEnabled": false
+  },
+  "server": {
+    "url": "https://REPLACE-N8N-HOST/webhook/voice-call-ended",
+    "credentialId": "REPLACE_WITH_VAPI_CREDENTIAL_ID"
+  },
+  "serverMessages": [
+    "end-of-call-report"
+  ]
+}

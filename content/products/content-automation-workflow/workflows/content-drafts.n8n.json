@@ -1,0 +1,553 @@
+{
+  "name": "Content Automation — Drafts",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Drafts\n\nКаждые 15 минут берёт одну строку со статусом **idea**, у которой публикация в ближайшие `draft_ahead_hours` часов (или без даты), и пишет текст под формат канала. Черновик приходит в чат одобрения с кнопками **Опубликовать / Переписать / Пропустить**.\n\nЕсли `require_approval: false` — текст сразу получает статус approved.\n\nСтроки с неизвестным каналом или непонятной датой получают статус failed и причину.",
+        "width": 500,
+        "height": 320
+      },
+      "id": "d3bf5e9f-dad1-5760-898f-7298162afee7",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/15 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "1557ea8e-6b45-537f-b19c-c9ec0e17a24e",
+      "name": "Every 15 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"plan_sheet\": \"Plan\",\n  \"approval_chat_id\": \"REPLACE_WITH_APPROVAL_CHAT_ID\",\n  \"require_approval\": true,\n  \"draft_ahead_hours\": 48,\n  \"max_attempts\": 3,\n  \"llm\": {\n    \"enabled\": true,\n    \"base_url\": \"https://api.openai.com/v1\",\n    \"model\": \"REPLACE_WITH_MODEL\",\n    \"json_mode\": true,\n    \"temperature\": 0.7\n  },\n  \"brand\": {\n    \"name\": \"REPLACE: название\",\n    \"about\": \"REPLACE: чем занимаетесь, для кого, чем отличаетесь — фактами\",\n    \"audience\": \"REPLACE: кто читает и что им важно\",\n    \"voice\": \"по-человечески, конкретно, без канцелярита и восклицательных знаков\",\n    \"rules\": [\n      \"Обращение на «вы»\",\n      \"Без хэштегов, если канал их не требует\",\n      \"Эмодзи — не больше двух на пост\"\n    ],\n    \"cta\": \"REPLACE: что предлагаем сделать читателю — подписаться, записаться, написать в личку\"\n  },\n  \"channels\": {\n    \"telegram\": {\n      \"type\": \"telegram\",\n      \"chat_id\": \"@REPLACE_channel\",\n      \"link_base\": \"https://t.me/REPLACE_channel\",\n      \"max_chars\": 2000,\n      \"style\": \"пост для Telegram-канала: 600–1500 знаков, короткие абзацы, первая строка цепляет, без Markdown-разметки\"\n    },\n    \"blog\": {\n      \"type\": \"wordpress\",\n      \"url\": \"https://REPLACE.example\",\n      \"status\": \"draft\",\n      \"max_chars\": 12000,\n      \"style\": \"статья для блога 4000–8000 знаков в Markdown: ## подзаголовки, списки, короткие абзацы, вывод в конце\"\n    },\n    \"linkedin\": {\n      \"type\": \"webhook\",\n      \"url\": \"REPLACE_WITH_WEBHOOK_URL\",\n      \"max_chars\": 3000,\n      \"style\": \"деловой пост для LinkedIn: 800–1500 знаков, первая строка — тезис, абзацы по 1–2 предложения, вопрос к читателю в конце\"\n    }\n  }\n} }];\n"
+      },
+      "id": "cf750104-aadd-56a2-bbf0-8000e3b8f81d",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.sheets_api_base }}/spreadsheets/{{ encodeURIComponent($('Config').first().json.spreadsheet_id) }}/values/{{ encodeURIComponent(\"'\" + $('Config').first().json.plan_sheet.replace(/'/g, \"''\") + \"'!A1:Q\") }}?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "77f228e7-1187-5fbb-bad7-8d9497c4d977",
+      "name": "Read Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pick Idea — the next post to draft: status \"idea\", due within draft_ahead_hours. Rows the bot cannot use are marked with the reason.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Plan sheet: one row per post. Columns A–G are the team's; H–Q are kept by the workflows (notes holds the editor's rewrite request).\nconst PCOLS = ['id', 'publish_at', 'channel', 'topic', 'brief', 'pillar', 'image_url', 'status', 'title', 'draft', 'final', 'attempts', 'approved_by',\n  'published_at', 'link', 'error', 'notes'];\nconst BOT_FROM = PCOLS.indexOf('status');\nconst BOT_TO = PCOLS.indexOf('notes');\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst planRange = () => `${quoteSheet(cfg.plan_sheet)}!A1:${colLetter(PCOLS.length - 1)}`;\n// Unformatted values: dates come back as serial numbers whatever the spreadsheet's locale is.\nconst planReadUrl = () => sheetUrl(encodeURIComponent(planRange())) + '?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER';\nfunction planTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'id';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), post: planObject(r) })) };\n}\nfunction planObject(row) {\n  const o = {};\n  PCOLS.forEach((c, i) => { const v = row[i]; o[c] = v === undefined || v === null ? '' : (c === 'publish_at' && typeof v === 'number' ? v : String(v).trim()); });\n  o.status = o.status.toLowerCase() || (o.topic ? 'idea' : '');\n  o.attempts = Number(o.attempts) || 0;\n  return o;\n}\n// The workflows write H–Q in one range, so the team's columns are never touched.\nfunction botWrite(sheetRow, post) {\n  return { range: `${quoteSheet(cfg.plan_sheet)}!${colLetter(BOT_FROM)}${sheetRow}:${colLetter(BOT_TO)}${sheetRow}`, values: [PCOLS.slice(BOT_FROM, BOT_TO + 1).map((c) => String(post[c] === undefined ? '' : post[c]))] };\n}\nconst batchUpdate = (data) => ({ method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data } });\nfunction localToMs(y, mo, d, h, mi) {\n  const want = Date.UTC(y, mo - 1, d, h, mi);\n  let guess = want;\n  for (let i = 0; i < 3; i++) {\n    const p = localParts(guess);\n    guess += want - Date.UTC(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)) - 1, Number(p.date.slice(8, 10)), p.hour, p.minute);\n  }\n  return guess;\n}\n// publish_at: a date cell (serial number), \"2026-10-28 10:00\" or \"28.10.2026 10:00\", in the Config time zone. Empty means \"as soon as possible\".\nfunction whenOf(value) {\n  if (value === '' || value === null || value === undefined) return null;\n  if (typeof value === 'number' || /^\\d+(\\.\\d+)?$/.test(String(value))) {\n    const wall = new Date(Math.round((Number(value) - 25569) * 86400000));\n    return localToMs(wall.getUTCFullYear(), wall.getUTCMonth() + 1, wall.getUTCDate(), wall.getUTCHours(), wall.getUTCMinutes());\n  }\n  const s = String(value).trim();\n  let m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})(?:[ T](\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[1], +m[2], +m[3], +(m[4] || 9), +(m[5] || 0));\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})(?:,?\\s+(\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[3], +m[2], +m[1], +(m[4] || 9), +(m[5] || 0));\n  return NaN;\n}\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nfunction parseModelJson(input) {\n  const content = input && input.choices && input.choices[0] && input.choices[0].message && input.choices[0].message.content;\n  if (!content) return { problem: input && input.error ? 'llm_error' : 'no_answer' };\n  try { const t = String(content).replace(/```(json)?/g, ''); return { data: JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)) }; } catch (e) { return { problem: 'bad_json' }; }\n}\nconst llmBase = (messages) => ({ model: (cfg.llm || {}).model, temperature: (cfg.llm || {}).temperature === undefined ? 0.7 : cfg.llm.temperature,\n  ...((cfg.llm || {}).json_mode ? { response_format: { type: 'json_object' } } : {}), messages });\nfunction brandLines() {\n  const b = cfg.brand || {};\n  return [`Бренд: ${b.name || ''}. ${b.about || ''}`, `Аудитория: ${b.audience || ''}`, `Голос: ${b.voice || ''}`,\n    ...(b.rules || []).map((r) => `- ${r}`)].join('\\n');\n}\nconst table = planTable($input.first().json.values);\nconst now = nowMs();\nconst max = cfg.max_attempts || 3;\nconst bad = [];\nconst ready = [];\nfor (const r of table.rows) {\n  const p = r.post;\n  if (p.status !== 'idea' || !p.topic) continue;\n  const at = whenOf(p.publish_at);\n  let reason = '';\n  if (!(cfg.channels || {})[p.channel]) reason = `канал «${p.channel}» не настроен в Config`;\n  else if (Number.isNaN(at)) reason = `не понял дату «${p.publish_at}» — нужен формат 2026-10-28 10:00`;\n  else if (p.attempts >= max) reason = p.error || 'не получилось написать черновик';\n  if (reason) { bad.push({ r, reason }); continue; }\n  if (at === null || at - now <= (cfg.draft_ahead_hours || 48) * 60 * MIN) ready.push({ r, at: at === null ? 0 : at });\n}\nconst data = bad.map(({ r, reason }) => { const p = Object.assign({}, r.post, { status: 'failed', error: reason }); return botWrite(r.sheetRow, p); });\nconst out = { pick: false, fix: bad.length > 0, fix_http: bad.length ? batchUpdate(data) : null, chat: cfg.approval_chat_id,\n  fix_text: bad.length ? ['Строки плана, которые бот не может взять:', ...bad.map(({ r, reason }) => `• строка ${r.sheetRow} «${r.post.topic.slice(0, 80)}» — ${reason}`)].join('\\n') : '' };\nif (!ready.length) return [{ json: out }];\nready.sort((a, b) => a.at - b.at);\nconst { r } = ready[0];\nconst p = r.post;\nconst ch = cfg.channels[p.channel];\nconst id = p.id || `${stamp(now).replace(/[-: ]/g, '').slice(2)}-${r.sheetRow}`;\nreturn [{ json: Object.assign(out, { pick: true, sheet_row: r.sheetRow, id, needs_id: !p.id, post: Object.assign({}, p, { id }), llm_request: llmBase([\n  { role: 'system', content: [\n    `Ты — автор публикаций бренда. Пишешь для канала «${p.channel}».`,\n    brandLines(),\n    `Формат канала: ${ch.style || 'пост для соцсетей'}`,\n    `Длина: не больше ${ch.max_chars || 2000} знаков вместе с пробелами.`,\n    (cfg.brand || {}).cta ? `Призыв к действию, если уместен: ${cfg.brand.cta}` : '',\n    'Правила:',\n    '- Не выдумывай факты, цифры, исследования, цитаты, кейсы и отзывы. Если их нет в брифе — пиши без них.',\n    '- Одна мысль на пост, конкретно и по делу, без воды и клише.',\n    '- Пиши на языке брифа.',\n    'Ответь только JSON: {\"title\": \"заголовок до 100 знаков\", \"text\": \"готовый текст публикации\"}',\n  ].filter(Boolean).join('\\n') },\n  { role: 'user', content: JSON.stringify({ topic: p.topic, brief: p.brief, pillar: p.pillar, ...(p.draft ? { rejected_draft: p.draft.slice(0, 3000), instruction: 'Предыдущий вариант отклонён — напиши заметно иначе.' } : {}),\n    ...(p.notes ? { editor_notes: p.notes.slice(0, 1000) } : {}) }) },\n]) }) }];\n"
+      },
+      "id": "ac7ad8a8-533c-57f3-bcad-d3615222b206",
+      "name": "Pick Idea",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.fix }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "13178cf0-7c7a-576f-8445-29fa21df1654",
+      "name": "Bad Rows?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        360,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.fix_http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.fix_http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "77d75bd2-e512-5872-81de-f1ce3c0f8754",
+      "name": "Mark Bad Rows",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        200
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Pick Idea').first().json.chat }}",
+        "text": "={{ $('Pick Idea').first().json.fix_text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "3665db2f-ca4f-5e23-a41a-2d63cd2d6074",
+      "name": "Alert: Bad Rows",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        200
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.pick }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e23496e3-eb1e-587b-bc55-2e6e3113db01",
+      "name": "Something to Draft?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.llm.base_url }}/chat/completions",
+        "options": {
+          "timeout": 90000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.llm_request) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "0f54a707-c960-5c0a-ae2a-a49359056e52",
+      "name": "Ask AI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        -80
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "LLM API key"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Save Draft — stores the model's text and sends it for approval, or approves it straight away when approval is off.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Plan sheet: one row per post. Columns A–G are the team's; H–Q are kept by the workflows (notes holds the editor's rewrite request).\nconst PCOLS = ['id', 'publish_at', 'channel', 'topic', 'brief', 'pillar', 'image_url', 'status', 'title', 'draft', 'final', 'attempts', 'approved_by',\n  'published_at', 'link', 'error', 'notes'];\nconst BOT_FROM = PCOLS.indexOf('status');\nconst BOT_TO = PCOLS.indexOf('notes');\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst planRange = () => `${quoteSheet(cfg.plan_sheet)}!A1:${colLetter(PCOLS.length - 1)}`;\n// Unformatted values: dates come back as serial numbers whatever the spreadsheet's locale is.\nconst planReadUrl = () => sheetUrl(encodeURIComponent(planRange())) + '?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER';\nfunction planTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'id';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), post: planObject(r) })) };\n}\nfunction planObject(row) {\n  const o = {};\n  PCOLS.forEach((c, i) => { const v = row[i]; o[c] = v === undefined || v === null ? '' : (c === 'publish_at' && typeof v === 'number' ? v : String(v).trim()); });\n  o.status = o.status.toLowerCase() || (o.topic ? 'idea' : '');\n  o.attempts = Number(o.attempts) || 0;\n  return o;\n}\n// The workflows write H–Q in one range, so the team's columns are never touched.\nfunction botWrite(sheetRow, post) {\n  return { range: `${quoteSheet(cfg.plan_sheet)}!${colLetter(BOT_FROM)}${sheetRow}:${colLetter(BOT_TO)}${sheetRow}`, values: [PCOLS.slice(BOT_FROM, BOT_TO + 1).map((c) => String(post[c] === undefined ? '' : post[c]))] };\n}\nconst batchUpdate = (data) => ({ method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data } });\nfunction localToMs(y, mo, d, h, mi) {\n  const want = Date.UTC(y, mo - 1, d, h, mi);\n  let guess = want;\n  for (let i = 0; i < 3; i++) {\n    const p = localParts(guess);\n    guess += want - Date.UTC(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)) - 1, Number(p.date.slice(8, 10)), p.hour, p.minute);\n  }\n  return guess;\n}\n// publish_at: a date cell (serial number), \"2026-10-28 10:00\" or \"28.10.2026 10:00\", in the Config time zone. Empty means \"as soon as possible\".\nfunction whenOf(value) {\n  if (value === '' || value === null || value === undefined) return null;\n  if (typeof value === 'number' || /^\\d+(\\.\\d+)?$/.test(String(value))) {\n    const wall = new Date(Math.round((Number(value) - 25569) * 86400000));\n    return localToMs(wall.getUTCFullYear(), wall.getUTCMonth() + 1, wall.getUTCDate(), wall.getUTCHours(), wall.getUTCMinutes());\n  }\n  const s = String(value).trim();\n  let m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})(?:[ T](\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[1], +m[2], +m[3], +(m[4] || 9), +(m[5] || 0));\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})(?:,?\\s+(\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[3], +m[2], +m[1], +(m[4] || 9), +(m[5] || 0));\n  return NaN;\n}\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nfunction parseModelJson(input) {\n  const content = input && input.choices && input.choices[0] && input.choices[0].message && input.choices[0].message.content;\n  if (!content) return { problem: input && input.error ? 'llm_error' : 'no_answer' };\n  try { const t = String(content).replace(/```(json)?/g, ''); return { data: JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)) }; } catch (e) { return { problem: 'bad_json' }; }\n}\nconst llmBase = (messages) => ({ model: (cfg.llm || {}).model, temperature: (cfg.llm || {}).temperature === undefined ? 0.7 : cfg.llm.temperature,\n  ...((cfg.llm || {}).json_mode ? { response_format: { type: 'json_object' } } : {}), messages });\nfunction brandLines() {\n  const b = cfg.brand || {};\n  return [`Бренд: ${b.name || ''}. ${b.about || ''}`, `Аудитория: ${b.audience || ''}`, `Голос: ${b.voice || ''}`,\n    ...(b.rules || []).map((r) => `- ${r}`)].join('\\n');\n}\nconst pick = $('Pick Idea').first().json;\nconst post = Object.assign({}, pick.post);\nconst ch = cfg.channels[post.channel] || {};\nconst parsed = parseModelJson($input.first().json);\nconst text = parsed.data ? String(parsed.data.text || '').trim() : '';\nlet problem = parsed.problem || (!text ? 'пустой текст' : text.length > (ch.max_chars || 2000) ? `текст длиннее ${ch.max_chars || 2000} знаков` : '');\nconst data = pick.needs_id ? [{ range: `${quoteSheet(cfg.plan_sheet)}!A${pick.sheet_row}`, values: [[post.id]] }] : [];\nconst approval = cfg.require_approval !== false;\nif (problem) {\n  post.attempts = (post.attempts || 0) + 1;\n  post.error = `попытка ${post.attempts}: ${problem}`;\n  if (post.attempts >= (cfg.max_attempts || 3)) post.status = 'failed';\n  data.push(botWrite(pick.sheet_row, post));\n  return [{ json: { ok: false, send_for_approval: false, http: batchUpdate(data), chat: cfg.approval_chat_id, id: post.id,\n    alert: post.attempts >= (cfg.max_attempts || 3), text: `Не получилось написать черновик: «${post.topic}» (${problem}). Строка ${pick.sheet_row}. Поправьте тему или бриф и поставьте статус idea.` } }];\n}\npost.title = String(parsed.data.title || '').trim().slice(0, 150);\npost.draft = text;\npost.error = '';\npost.attempts = 0;\npost.status = approval ? 'draft_ready' : 'approved';\nif (!approval) post.final = text;\ndata.push(botWrite(pick.sheet_row, post));\nconst at = whenOf(post.publish_at);\nconst preview = text.length > 3300 ? text.slice(0, 3300) + '\\n… (полный текст — в таблице, колонка draft)' : text;\nreturn [{ json: {\n  ok: true, send_for_approval: approval, http: batchUpdate(data), chat: cfg.approval_chat_id, id: post.id, alert: false,\n  text: [`Черновик на одобрение · ${post.channel} · ${at ? stamp(at) : 'сразу после одобрения'}`, `Тема: ${post.topic}`, '', post.title ? post.title + '\\n' : '', preview, '',\n    'Опубликовать — кнопка ниже. Поправить — ответьте на это сообщение своим текстом. Переписать с указанием — ответьте «Переписать: что изменить».', `ID: ${post.id}`].join('\\n'),\n} }];\n"
+      },
+      "id": "c54c080d-bd0d-5bae-9f06-089a271e2be9",
+      "name": "Save Draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "ac0b0342-1ab8-5c65-b323-fe06c1e57c37",
+      "name": "Write Draft",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        -120
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Save Draft').first().json.send_for_approval }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e1ae9a1e-b1ff-5951-9112-cb8644ccd36e",
+      "name": "For Approval?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Save Draft').first().json.chat }}",
+        "text": "={{ $('Save Draft').first().json.text }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Опубликовать",
+                    "additionalFields": {
+                      "callback_data": "=ok:{{ $('Save Draft').first().json.id }}"
+                    }
+                  },
+                  {
+                    "text": "Переписать",
+                    "additionalFields": {
+                      "callback_data": "=redo:{{ $('Save Draft').first().json.id }}"
+                    }
+                  },
+                  {
+                    "text": "Пропустить",
+                    "additionalFields": {
+                      "callback_data": "=skip:{{ $('Save Draft').first().json.id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "d1417f61-121d-5ae3-ac3d-3ae8ff7be416",
+      "name": "Approval Message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        -120
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.alert }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "9abd1db7-d53f-5804-b4fa-307e984066af",
+      "name": "Alert?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "b55263f6-63d0-560a-9254-c9bf60e435a3",
+      "name": "Alert: Draft Failed",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1240,
+        80
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 15 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Plan": {
+      "main": [
+        [
+          {
+            "node": "Pick Idea",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick Idea": {
+      "main": [
+        [
+          {
+            "node": "Bad Rows?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Something to Draft?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bad Rows?": {
+      "main": [
+        [
+          {
+            "node": "Mark Bad Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Bad Rows": {
+      "main": [
+        [
+          {
+            "node": "Alert: Bad Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Something to Draft?": {
+      "main": [
+        [
+          {
+            "node": "Ask AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask AI": {
+      "main": [
+        [
+          {
+            "node": "Save Draft",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Draft": {
+      "main": [
+        [
+          {
+            "node": "Write Draft",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Alert?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Draft": {
+      "main": [
+        [
+          {
+            "node": "For Approval?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "For Approval?": {
+      "main": [
+        [
+          {
+            "node": "Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert?": {
+      "main": [
+        [
+          {
+            "node": "Alert: Draft Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

@@ -1,0 +1,374 @@
+{
+  "name": "Content Automation — Approvals",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Approvals\n\nКнопки и ответы в чате одобрения:\n\n- **Опубликовать** — статус approved, публикация в назначенное время.\n- **Переписать** — бот напишет новый вариант, не похожий на прежний.\n- **Ответ «Переписать: короче и с примером»** — новый вариант с вашим замечанием.\n- **Ответ любым другим текстом** — ваш текст заменяет черновик и сразу одобрен.\n- **Пропустить** — статус skipped.\n\nУ одного Telegram-бота может быть только один Telegram Trigger. Если бот уже принимает сообщения в другом воркфлоу, создайте для набора отдельного бота.",
+        "width": 520,
+        "height": 360
+      },
+      "id": "e65e94dd-9299-5af5-b01f-62c1b472fb9e",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "id": "0c937ca1-3778-5de6-ae41-c281e52aeae7",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -520,
+        0
+      ],
+      "webhookId": "eb243c46-71ef-590b-bead-aab14a0e3e59",
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"plan_sheet\": \"Plan\",\n  \"approval_chat_id\": \"REPLACE_WITH_APPROVAL_CHAT_ID\"\n} }];\n"
+      },
+      "id": "c7632161-a6b5-5e09-bc45-ca006fb6cc5e",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ String((($('Telegram Trigger').first().json.callback_query || {}).message || $('Telegram Trigger').first().json.message || { chat: {} }).chat.id) === String($json.approval_chat_id) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ef7878c7-e7ac-5bc1-a6b3-7b6a714bf9ab",
+      "name": "From Approval Chat?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.sheets_api_base }}/spreadsheets/{{ encodeURIComponent($('Config').first().json.spreadsheet_id) }}/values/{{ encodeURIComponent(\"'\" + $('Config').first().json.plan_sheet.replace(/'/g, \"''\") + \"'!A1:Q\") }}?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "4150618f-e53f-5ce8-b602-91369f9726a7",
+      "name": "Read Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        140,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Act on Draft — buttons and replies in the approval chat: publish, rewrite, skip, or replace the text.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Plan sheet: one row per post. Columns A–G are the team's; H–Q are kept by the workflows (notes holds the editor's rewrite request).\nconst PCOLS = ['id', 'publish_at', 'channel', 'topic', 'brief', 'pillar', 'image_url', 'status', 'title', 'draft', 'final', 'attempts', 'approved_by',\n  'published_at', 'link', 'error', 'notes'];\nconst BOT_FROM = PCOLS.indexOf('status');\nconst BOT_TO = PCOLS.indexOf('notes');\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst planRange = () => `${quoteSheet(cfg.plan_sheet)}!A1:${colLetter(PCOLS.length - 1)}`;\n// Unformatted values: dates come back as serial numbers whatever the spreadsheet's locale is.\nconst planReadUrl = () => sheetUrl(encodeURIComponent(planRange())) + '?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER';\nfunction planTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'id';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), post: planObject(r) })) };\n}\nfunction planObject(row) {\n  const o = {};\n  PCOLS.forEach((c, i) => { const v = row[i]; o[c] = v === undefined || v === null ? '' : (c === 'publish_at' && typeof v === 'number' ? v : String(v).trim()); });\n  o.status = o.status.toLowerCase() || (o.topic ? 'idea' : '');\n  o.attempts = Number(o.attempts) || 0;\n  return o;\n}\n// The workflows write H–Q in one range, so the team's columns are never touched.\nfunction botWrite(sheetRow, post) {\n  return { range: `${quoteSheet(cfg.plan_sheet)}!${colLetter(BOT_FROM)}${sheetRow}:${colLetter(BOT_TO)}${sheetRow}`, values: [PCOLS.slice(BOT_FROM, BOT_TO + 1).map((c) => String(post[c] === undefined ? '' : post[c]))] };\n}\nconst batchUpdate = (data) => ({ method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data } });\nfunction localToMs(y, mo, d, h, mi) {\n  const want = Date.UTC(y, mo - 1, d, h, mi);\n  let guess = want;\n  for (let i = 0; i < 3; i++) {\n    const p = localParts(guess);\n    guess += want - Date.UTC(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)) - 1, Number(p.date.slice(8, 10)), p.hour, p.minute);\n  }\n  return guess;\n}\n// publish_at: a date cell (serial number), \"2026-10-28 10:00\" or \"28.10.2026 10:00\", in the Config time zone. Empty means \"as soon as possible\".\nfunction whenOf(value) {\n  if (value === '' || value === null || value === undefined) return null;\n  if (typeof value === 'number' || /^\\d+(\\.\\d+)?$/.test(String(value))) {\n    const wall = new Date(Math.round((Number(value) - 25569) * 86400000));\n    return localToMs(wall.getUTCFullYear(), wall.getUTCMonth() + 1, wall.getUTCDate(), wall.getUTCHours(), wall.getUTCMinutes());\n  }\n  const s = String(value).trim();\n  let m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})(?:[ T](\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[1], +m[2], +m[3], +(m[4] || 9), +(m[5] || 0));\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})(?:,?\\s+(\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[3], +m[2], +m[1], +(m[4] || 9), +(m[5] || 0));\n  return NaN;\n}\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nfunction parseModelJson(input) {\n  const content = input && input.choices && input.choices[0] && input.choices[0].message && input.choices[0].message.content;\n  if (!content) return { problem: input && input.error ? 'llm_error' : 'no_answer' };\n  try { const t = String(content).replace(/```(json)?/g, ''); return { data: JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)) }; } catch (e) { return { problem: 'bad_json' }; }\n}\nconst llmBase = (messages) => ({ model: (cfg.llm || {}).model, temperature: (cfg.llm || {}).temperature === undefined ? 0.7 : cfg.llm.temperature,\n  ...((cfg.llm || {}).json_mode ? { response_format: { type: 'json_object' } } : {}), messages });\nfunction brandLines() {\n  const b = cfg.brand || {};\n  return [`Бренд: ${b.name || ''}. ${b.about || ''}`, `Аудитория: ${b.audience || ''}`, `Голос: ${b.voice || ''}`,\n    ...(b.rules || []).map((r) => `- ${r}`)].join('\\n');\n}\nconst update = $('Telegram Trigger').first().json;\nconst table = planTable($input.first().json.values);\nconst chat = String(cfg.approval_chat_id);\nconst out = (json) => [{ json: Object.assign({ act: false, write: false, note: '', callback_id: '', chat: cfg.approval_chat_id }, json) }];\nlet action = '', id = '', text = '', who = '', callbackId = '';\nconst cb = update.callback_query;\nif (cb) {\n  if (String(cb.message && cb.message.chat && cb.message.chat.id) !== chat) return out({});\n  [action, id] = String(cb.data || '').split(/:(.*)/s);\n  who = [cb.from.first_name, cb.from.last_name].filter(Boolean).join(' ') || cb.from.username || '';\n  callbackId = cb.id;\n} else if (update.message && String(update.message.chat.id) === chat && update.message.text) {\n  const ref = /ID: (\\S+)\\s*$/.exec((update.message.reply_to_message || {}).text || '');\n  if (!ref) return out({});\n  id = ref[1];\n  text = update.message.text.trim();\n  const rewrite = /^(переписать|переделать|rewrite)\\s*[:\\-—]\\s*/i.exec(text);\n  action = rewrite ? 'redo' : 'edit';\n  if (rewrite) text = text.slice(rewrite[0].length);\n  who = [update.message.from.first_name, update.message.from.last_name].filter(Boolean).join(' ');\n} else return out({});\nif (!['ok', 'redo', 'skip', 'edit'].includes(action) || !id) return out({});\nconst found = table.rows.find(({ post }) => post.id === id);\nif (!found) return out({ act: true, callback_id: callbackId, note: `Публикация ${id} не найдена в таблице` });\nconst post = Object.assign({}, found.post);\nif (['published', 'publishing', 'skipped'].includes(post.status)) return out({ act: true, callback_id: callbackId, note: `«${post.topic}» уже ${post.status === 'skipped' ? 'пропущена' : 'опубликована'}` });\nconst write = (note) => out({ act: true, write: true, callback_id: callbackId, note, http: batchUpdate([botWrite(found.sheetRow, post)]) });\nconst at = whenOf(post.publish_at);\nconst when = at ? `в ${stamp(at)}` : 'в ближайшие минуты';\nif (action === 'ok') {\n  if (!post.draft && !post.final) return out({ act: true, callback_id: callbackId, note: 'Черновика ещё нет' });\n  post.status = 'approved'; post.final = post.final || post.draft; post.approved_by = who;\n  return write(`${who || 'Команда'} одобрил(а) «${post.topic}». Публикация ${when}.`);\n}\nif (action === 'edit') {\n  post.status = 'approved'; post.final = text.slice(0, 20000); post.approved_by = who;\n  return write(`Текст «${post.topic}» заменён и одобрен (${who}). Публикация ${when}.`);\n}\nif (action === 'redo') {\n  post.status = 'idea'; post.attempts = 0; post.error = '';\n  post.notes = text ? text.slice(0, 1000) : post.notes;\n  return write(`«${post.topic}» — пишу новый вариант${text ? ' с учётом замечания' : ''}.`);\n}\npost.status = 'skipped';\nreturn write(`«${post.topic}» пропущена.`);\n"
+      },
+      "id": "a6ef8817-5c89-5d79-9656-baaeadbb0982",
+      "name": "Act on Draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.write }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "d3a07626-199c-5a27-8a3f-c598aec08104",
+      "name": "Update?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        580,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "a556d766-7a66-560a-b702-11e56f412450",
+      "name": "Update Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        -160
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($json.callback_id) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "a0301ea5-a43a-57b1-a829-5aa431bc0725",
+      "name": "Pressed a Button?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        580,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "operation": "answerQuery",
+        "queryId": "={{ $json.callback_id }}",
+        "additionalFields": {
+          "text": "={{ $json.note.slice(0, 190) }}"
+        }
+      },
+      "id": "be4f1b72-dd13-514b-8666-09d7e2c63434",
+      "name": "Answer Button",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.act && Boolean($json.note) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "1968369b-4af1-512a-8f1a-838ec04ea39b",
+      "name": "Tell Team?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        580,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat }}",
+        "text": "={{ $json.note }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "53d5e0f7-b809-597f-b73d-2a0ee217c33d",
+      "name": "Tell Team",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        160
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "From Approval Chat?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "From Approval Chat?": {
+      "main": [
+        [
+          {
+            "node": "Read Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Plan": {
+      "main": [
+        [
+          {
+            "node": "Act on Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Act on Draft": {
+      "main": [
+        [
+          {
+            "node": "Update?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Pressed a Button?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tell Team?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update?": {
+      "main": [
+        [
+          {
+            "node": "Update Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pressed a Button?": {
+      "main": [
+        [
+          {
+            "node": "Answer Button",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tell Team?": {
+      "main": [
+        [
+          {
+            "node": "Tell Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

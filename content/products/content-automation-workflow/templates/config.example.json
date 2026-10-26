@@ -1,0 +1,101 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "sheets_api_base": "https://sheets.googleapis.com/v4",
+  "spreadsheet_id": "1AbCdEfGhIjKlMnOpQrStUvWxYz0123456789",
+  "plan_sheet": "Plan",
+  "approval_chat_id": "-1001234567890",
+  "require_approval": true,
+  "draft_ahead_hours": 48,
+  "max_attempts": 3,
+  "max_late_hours": 12,
+  "notify_published": true,
+  "llm": {
+    "enabled": true,
+    "base_url": "https://openrouter.ai/api/v1",
+    "model": "ВЫБРАННАЯ-МОДЕЛЬ",
+    "json_mode": true,
+    "temperature": 0.7
+  },
+  "brand": {
+    "name": "Ремонт-Про",
+    "about": "Ремонт квартир под ключ в Киеве с 2015 года: смета до начала работ, фиксированная цена, гарантия 3 года",
+    "audience": "Владельцы квартир 28–45 лет, которые делают ремонт впервые и боятся сорванных сроков и перерасхода",
+    "voice": "по-человечески, конкретно, без канцелярита и восклицательных знаков",
+    "rules": [
+      "Обращение на «вы»",
+      "Без хэштегов, если канал их не требует",
+      "Эмодзи — не больше двух на пост"
+    ],
+    "cta": "Записаться на бесплатный замер — в личные сообщения канала"
+  },
+  "pillars": [
+    {
+      "name": "Польза",
+      "description": "практические советы, которые читатель применит сам"
+    },
+    {
+      "name": "Разбор",
+      "description": "типичная ошибка или миф и как правильно"
+    },
+    {
+      "name": "Изнутри",
+      "description": "как мы работаем, процесс, команда, решения"
+    },
+    {
+      "name": "Предложение",
+      "description": "услуга или продукт через задачу клиента, не чаще раза в неделю"
+    }
+  ],
+  "channels": {
+    "telegram": {
+      "type": "telegram",
+      "chat_id": "@remontpro",
+      "link_base": "https://t.me/remontpro",
+      "max_chars": 2000,
+      "style": "пост для Telegram-канала: 600–1500 знаков, короткие абзацы, первая строка цепляет, без Markdown-разметки"
+    },
+    "blog": {
+      "type": "wordpress",
+      "url": "https://remontpro.example",
+      "status": "draft",
+      "max_chars": 12000,
+      "style": "статья для блога 4000–8000 знаков в Markdown: ## подзаголовки, списки, короткие абзацы, вывод в конце"
+    },
+    "linkedin": {
+      "type": "webhook",
+      "url": "https://hook.eu2.make.com/abc123",
+      "max_chars": 3000,
+      "style": "деловой пост для LinkedIn: 800–1500 знаков, первая строка — тезис, абзацы по 1–2 предложения, вопрос к читателю в конце"
+    }
+  },
+  "slots": [
+    {
+      "day": "mon",
+      "time": "10:00",
+      "channel": "telegram"
+    },
+    {
+      "day": "wed",
+      "time": "10:00",
+      "channel": "telegram"
+    },
+    {
+      "day": "thu",
+      "time": "09:00",
+      "channel": "linkedin"
+    },
+    {
+      "day": "fri",
+      "time": "18:00",
+      "channel": "telegram",
+      "pillar": "Изнутри"
+    },
+    {
+      "day": "sat",
+      "time": "11:00",
+      "channel": "blog"
+    }
+  ],
+  "ideas_lookback": 40
+}

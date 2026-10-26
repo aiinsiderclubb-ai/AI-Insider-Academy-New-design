@@ -725,7 +725,10 @@
   },
   {
    "fileTypes": [
-    "ZIP"
+    "ZIP",
+    "JSON",
+    "MD",
+    "CSV"
    ],
    "faqRu": [
     {
@@ -764,7 +767,13 @@
    ],
    "screenshots": [],
    "videoPreview": null,
-   "freePreview": null,
+   "freePreview": {
+    "type": "workflow",
+    "titleRu": "Фрагмент: путь одной публикации",
+    "titleEn": "Sample: the path of one post",
+    "contentRu": "idea          — тема в таблице\n  ↓ за 48 ч до публикации\ndraft_ready   — черновик в Telegram:\n                [Опубликовать] [Переписать] [Пропустить]\n  ↓ одобрено\napproved      — ждёт своего времени\n  ↓ время наступило\npublishing    — отмечено до отправки, дубля не будет\n  ↓\npublished     — ссылка в таблице и в чате",
+    "contentEn": "idea          — a topic in the sheet\n  ↓ 48 h before publishing\ndraft_ready   — draft in Telegram:\n                [Publish] [Rewrite] [Skip]\n  ↓ approved\napproved      — waits for its time\n  ↓ time has come\npublishing    — marked before sending, no duplicates\n  ↓\npublished     — link in the sheet and the chat"
+   },
    "coverImage": null,
    "id": "mp-workflow-content",
    "slug": "content-automation-workflow",
@@ -772,15 +781,31 @@
    "productType": "automation-pack",
    "titleRu": "Content Automation",
    "titleEn": "Content Automation",
-   "shortRu": "Генерация и публикация контента по расписанию.",
-   "shortEn": "Scheduled content generation and publishing.",
+   "shortRu": "Контент-план в Google Таблице, который ведёт себя сам: каждую неделю темы под ваши рубрики, черновики в голосе бренда под формат каждого канала, одобрение кнопками в Telegram и публикация по расписанию в Telegram-канал, WordPress или через вебхук (Make, Zapier, Buffer). Без дублей и публикаций задним числом. Проверено в n8n 2.44.",
+   "shortEn": "A content plan in Google Sheets that runs itself: weekly topics for your content pillars, drafts in your brand voice for each channel's format, approval with Telegram buttons, and scheduled publishing to a Telegram channel, WordPress or any webhook (Make, Zapier, Buffer). No duplicates, no late posts. Tested in n8n 2.44. Files are in Russian.",
    "priceEur": 39,
    "rating": 4.6,
    "reviewCount": 92,
    "downloads": 1500,
    "coverGradient": "linear-gradient(135deg, #ec4899, #f97316)",
    "coverIcon": "📝",
-   "creatorId": "creator-n8n-lab"
+   "creatorId": "creator-n8n-lab",
+   "includedRu": [
+    "5 воркфлоу n8n: план недели, черновики, одобрение, публикация, оповещение о сбоях",
+    "Темы на неделю по рубрикам и расписанию слотов",
+    "Черновики в голосе бренда, без выдуманных фактов",
+    "Кнопки «Опубликовать / Переписать / Пропустить» в Telegram",
+    "Telegram-канал, WordPress и вебхук для LinkedIn, Instagram и других",
+    "Шаблон контент-плана, пример Config и 4 инструкции"
+   ],
+   "includedEn": [
+    "5 n8n workflows: weekly plan, drafts, approvals, publisher, error alerts",
+    "Weekly topics by content pillar and slot schedule",
+    "Drafts in your brand voice, no invented facts",
+    "Publish / Rewrite / Skip buttons in Telegram",
+    "Telegram channel, WordPress, and a webhook for LinkedIn, Instagram and more",
+    "Content plan template, sample Config and 4 guides"
+   ]
   },
   {
    "fileTypes": [

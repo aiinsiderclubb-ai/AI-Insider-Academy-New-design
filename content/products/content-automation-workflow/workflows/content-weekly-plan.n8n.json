@@ -1,0 +1,350 @@
+{
+  "name": "Content Automation — Weekly Plan",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Weekly Plan\n\nВ воскресенье вечером смотрит слоты на следующие 7 дней (`slots` в Config), пропускает занятые и просит модель придумать тему и бриф на каждый свободный — с учётом рубрик и без повторов недавних тем. Строки появляются в листе Plan со статусом **idea**; в чат приходит план недели.\n\nТемы можно править и добавлять вручную — бот возьмёт любую строку со статусом idea.",
+        "width": 480,
+        "height": 300
+      },
+      "id": "58835816-ef92-5f90-b42e-5cbcc5331ceb",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -380
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 18 * * 0"
+            }
+          ]
+        }
+      },
+      "id": "66604141-22a3-51d0-8044-829a0591a7d5",
+      "name": "Every Sunday",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"plan_sheet\": \"Plan\",\n  \"approval_chat_id\": \"REPLACE_WITH_APPROVAL_CHAT_ID\",\n  \"llm\": {\n    \"enabled\": true,\n    \"base_url\": \"https://api.openai.com/v1\",\n    \"model\": \"REPLACE_WITH_MODEL\",\n    \"json_mode\": true,\n    \"temperature\": 0.7\n  },\n  \"brand\": {\n    \"name\": \"REPLACE: название\",\n    \"about\": \"REPLACE: чем занимаетесь, для кого, чем отличаетесь — фактами\",\n    \"audience\": \"REPLACE: кто читает и что им важно\",\n    \"voice\": \"по-человечески, конкретно, без канцелярита и восклицательных знаков\",\n    \"rules\": [\n      \"Обращение на «вы»\",\n      \"Без хэштегов, если канал их не требует\",\n      \"Эмодзи — не больше двух на пост\"\n    ],\n    \"cta\": \"REPLACE: что предлагаем сделать читателю — подписаться, записаться, написать в личку\"\n  },\n  \"pillars\": [\n    {\n      \"name\": \"Польза\",\n      \"description\": \"практические советы, которые читатель применит сам\"\n    },\n    {\n      \"name\": \"Разбор\",\n      \"description\": \"типичная ошибка или миф и как правильно\"\n    },\n    {\n      \"name\": \"Изнутри\",\n      \"description\": \"как мы работаем, процесс, команда, решения\"\n    },\n    {\n      \"name\": \"Предложение\",\n      \"description\": \"услуга или продукт через задачу клиента, не чаще раза в неделю\"\n    }\n  ],\n  \"channels\": {\n    \"telegram\": {\n      \"type\": \"telegram\",\n      \"chat_id\": \"@REPLACE_channel\",\n      \"link_base\": \"https://t.me/REPLACE_channel\",\n      \"max_chars\": 2000,\n      \"style\": \"пост для Telegram-канала: 600–1500 знаков, короткие абзацы, первая строка цепляет, без Markdown-разметки\"\n    },\n    \"blog\": {\n      \"type\": \"wordpress\",\n      \"url\": \"https://REPLACE.example\",\n      \"status\": \"draft\",\n      \"max_chars\": 12000,\n      \"style\": \"статья для блога 4000–8000 знаков в Markdown: ## подзаголовки, списки, короткие абзацы, вывод в конце\"\n    },\n    \"linkedin\": {\n      \"type\": \"webhook\",\n      \"url\": \"REPLACE_WITH_WEBHOOK_URL\",\n      \"max_chars\": 3000,\n      \"style\": \"деловой пост для LinkedIn: 800–1500 знаков, первая строка — тезис, абзацы по 1–2 предложения, вопрос к читателю в конце\"\n    }\n  },\n  \"slots\": [\n    {\n      \"day\": \"mon\",\n      \"time\": \"10:00\",\n      \"channel\": \"telegram\"\n    },\n    {\n      \"day\": \"wed\",\n      \"time\": \"10:00\",\n      \"channel\": \"telegram\"\n    },\n    {\n      \"day\": \"thu\",\n      \"time\": \"09:00\",\n      \"channel\": \"linkedin\"\n    },\n    {\n      \"day\": \"fri\",\n      \"time\": \"18:00\",\n      \"channel\": \"telegram\",\n      \"pillar\": \"Изнутри\"\n    },\n    {\n      \"day\": \"sat\",\n      \"time\": \"11:00\",\n      \"channel\": \"blog\"\n    }\n  ],\n  \"ideas_lookback\": 40\n} }];\n"
+      },
+      "id": "0aeb79ba-a767-590d-b07f-f97507841f8c",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.sheets_api_base }}/spreadsheets/{{ encodeURIComponent($('Config').first().json.spreadsheet_id) }}/values/{{ encodeURIComponent(\"'\" + $('Config').first().json.plan_sheet.replace(/'/g, \"''\") + \"'!A1:Q\") }}?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "94c7a256-b62b-55b0-84d9-ec597df4d746",
+      "name": "Read Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Plan Week — finds next week's empty slots and asks the model for one idea per slot.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Plan sheet: one row per post. Columns A–G are the team's; H–Q are kept by the workflows (notes holds the editor's rewrite request).\nconst PCOLS = ['id', 'publish_at', 'channel', 'topic', 'brief', 'pillar', 'image_url', 'status', 'title', 'draft', 'final', 'attempts', 'approved_by',\n  'published_at', 'link', 'error', 'notes'];\nconst BOT_FROM = PCOLS.indexOf('status');\nconst BOT_TO = PCOLS.indexOf('notes');\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst planRange = () => `${quoteSheet(cfg.plan_sheet)}!A1:${colLetter(PCOLS.length - 1)}`;\n// Unformatted values: dates come back as serial numbers whatever the spreadsheet's locale is.\nconst planReadUrl = () => sheetUrl(encodeURIComponent(planRange())) + '?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER';\nfunction planTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'id';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), post: planObject(r) })) };\n}\nfunction planObject(row) {\n  const o = {};\n  PCOLS.forEach((c, i) => { const v = row[i]; o[c] = v === undefined || v === null ? '' : (c === 'publish_at' && typeof v === 'number' ? v : String(v).trim()); });\n  o.status = o.status.toLowerCase() || (o.topic ? 'idea' : '');\n  o.attempts = Number(o.attempts) || 0;\n  return o;\n}\n// The workflows write H–Q in one range, so the team's columns are never touched.\nfunction botWrite(sheetRow, post) {\n  return { range: `${quoteSheet(cfg.plan_sheet)}!${colLetter(BOT_FROM)}${sheetRow}:${colLetter(BOT_TO)}${sheetRow}`, values: [PCOLS.slice(BOT_FROM, BOT_TO + 1).map((c) => String(post[c] === undefined ? '' : post[c]))] };\n}\nconst batchUpdate = (data) => ({ method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data } });\nfunction localToMs(y, mo, d, h, mi) {\n  const want = Date.UTC(y, mo - 1, d, h, mi);\n  let guess = want;\n  for (let i = 0; i < 3; i++) {\n    const p = localParts(guess);\n    guess += want - Date.UTC(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)) - 1, Number(p.date.slice(8, 10)), p.hour, p.minute);\n  }\n  return guess;\n}\n// publish_at: a date cell (serial number), \"2026-10-28 10:00\" or \"28.10.2026 10:00\", in the Config time zone. Empty means \"as soon as possible\".\nfunction whenOf(value) {\n  if (value === '' || value === null || value === undefined) return null;\n  if (typeof value === 'number' || /^\\d+(\\.\\d+)?$/.test(String(value))) {\n    const wall = new Date(Math.round((Number(value) - 25569) * 86400000));\n    return localToMs(wall.getUTCFullYear(), wall.getUTCMonth() + 1, wall.getUTCDate(), wall.getUTCHours(), wall.getUTCMinutes());\n  }\n  const s = String(value).trim();\n  let m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})(?:[ T](\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[1], +m[2], +m[3], +(m[4] || 9), +(m[5] || 0));\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})(?:,?\\s+(\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[3], +m[2], +m[1], +(m[4] || 9), +(m[5] || 0));\n  return NaN;\n}\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nfunction parseModelJson(input) {\n  const content = input && input.choices && input.choices[0] && input.choices[0].message && input.choices[0].message.content;\n  if (!content) return { problem: input && input.error ? 'llm_error' : 'no_answer' };\n  try { const t = String(content).replace(/```(json)?/g, ''); return { data: JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)) }; } catch (e) { return { problem: 'bad_json' }; }\n}\nconst llmBase = (messages) => ({ model: (cfg.llm || {}).model, temperature: (cfg.llm || {}).temperature === undefined ? 0.7 : cfg.llm.temperature,\n  ...((cfg.llm || {}).json_mode ? { response_format: { type: 'json_object' } } : {}), messages });\nfunction brandLines() {\n  const b = cfg.brand || {};\n  return [`Бренд: ${b.name || ''}. ${b.about || ''}`, `Аудитория: ${b.audience || ''}`, `Голос: ${b.voice || ''}`,\n    ...(b.rules || []).map((r) => `- ${r}`)].join('\\n');\n}\nconst table = planTable($input.first().json.values);\nconst now = nowMs();\nconst taken = new Set(table.rows.map(({ post }) => `${post.channel}|${whenOf(post.publish_at)}`));\nconst slots = [];\nfor (let day = 1; day <= 7; day++) {\n  const p = localParts(now + day * 24 * 60 * MIN);\n  for (const s of cfg.slots || []) {\n    if (s.day !== p.weekday || !(cfg.channels || {})[s.channel]) continue;\n    const [h, m] = String(s.time).split(':').map(Number);\n    const at = localToMs(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)), Number(p.date.slice(8, 10)), h, m || 0);\n    if (!taken.has(`${s.channel}|${at}`)) slots.push({ at, publish_at: stamp(at), channel: s.channel, pillar: s.pillar || '' });\n  }\n}\nslots.sort((a, b) => a.at - b.at);\nif (!slots.length) return [{ json: { plan: false, slots: [], has_header: table.header } }];\nconst recent = table.rows.map(({ post }) => post.topic).filter(Boolean).slice(-(cfg.ideas_lookback || 40));\nconst pillars = (cfg.pillars || []).map((p) => `- ${p.name}: ${p.description}`).join('\\n');\nreturn [{ json: { plan: true, slots, has_header: table.header, llm_request: llmBase([\n  { role: 'system', content: [\n    'Ты — контент-стратег. Придумай темы публикаций на следующую неделю.',\n    brandLines(),\n    'Рубрики:', pillars || '(свободно)',\n    'Правила:',\n    '- Одна идея на каждый слот из списка, в том же порядке. Учитывай канал и рубрику слота, если она указана.',\n    '- Тема — конкретная, с пользой для аудитории, не «советы по маркетингу», а «3 вопроса, которые стоит задать подрядчику до договора».',\n    '- Не повторяй недавние темы.',\n    '- brief — 1–3 предложения: о чём пост, какой главный тезис, что читатель должен сделать после.',\n    'Ответь только JSON: {\"ideas\": [{\"topic\": \"...\", \"brief\": \"...\", \"pillar\": \"...\"}]}',\n  ].join('\\n') },\n  { role: 'user', content: JSON.stringify({ slots: slots.map((s) => ({ when: s.publish_at, channel: s.channel, pillar: s.pillar })), recent_topics: recent }) },\n]) } }];\n"
+      },
+      "id": "30c925eb-1287-5140-a7b3-0f6650160e9c",
+      "name": "Plan Week",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.plan }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f2d82895-276a-53b0-8a12-62981bcf3027",
+      "name": "Free Slots?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.llm.base_url }}/chat/completions",
+        "options": {
+          "timeout": 60000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.llm_request) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "5cc6f3ff-d2cc-5321-b39d-76a413f74919",
+      "name": "Ask AI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        -80
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "LLM API key"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Add Ideas — writes one plan row per slot and tells the team what next week looks like.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Plan sheet: one row per post. Columns A–G are the team's; H–Q are kept by the workflows (notes holds the editor's rewrite request).\nconst PCOLS = ['id', 'publish_at', 'channel', 'topic', 'brief', 'pillar', 'image_url', 'status', 'title', 'draft', 'final', 'attempts', 'approved_by',\n  'published_at', 'link', 'error', 'notes'];\nconst BOT_FROM = PCOLS.indexOf('status');\nconst BOT_TO = PCOLS.indexOf('notes');\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst planRange = () => `${quoteSheet(cfg.plan_sheet)}!A1:${colLetter(PCOLS.length - 1)}`;\n// Unformatted values: dates come back as serial numbers whatever the spreadsheet's locale is.\nconst planReadUrl = () => sheetUrl(encodeURIComponent(planRange())) + '?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER';\nfunction planTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'id';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), post: planObject(r) })) };\n}\nfunction planObject(row) {\n  const o = {};\n  PCOLS.forEach((c, i) => { const v = row[i]; o[c] = v === undefined || v === null ? '' : (c === 'publish_at' && typeof v === 'number' ? v : String(v).trim()); });\n  o.status = o.status.toLowerCase() || (o.topic ? 'idea' : '');\n  o.attempts = Number(o.attempts) || 0;\n  return o;\n}\n// The workflows write H–Q in one range, so the team's columns are never touched.\nfunction botWrite(sheetRow, post) {\n  return { range: `${quoteSheet(cfg.plan_sheet)}!${colLetter(BOT_FROM)}${sheetRow}:${colLetter(BOT_TO)}${sheetRow}`, values: [PCOLS.slice(BOT_FROM, BOT_TO + 1).map((c) => String(post[c] === undefined ? '' : post[c]))] };\n}\nconst batchUpdate = (data) => ({ method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data } });\nfunction localToMs(y, mo, d, h, mi) {\n  const want = Date.UTC(y, mo - 1, d, h, mi);\n  let guess = want;\n  for (let i = 0; i < 3; i++) {\n    const p = localParts(guess);\n    guess += want - Date.UTC(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)) - 1, Number(p.date.slice(8, 10)), p.hour, p.minute);\n  }\n  return guess;\n}\n// publish_at: a date cell (serial number), \"2026-10-28 10:00\" or \"28.10.2026 10:00\", in the Config time zone. Empty means \"as soon as possible\".\nfunction whenOf(value) {\n  if (value === '' || value === null || value === undefined) return null;\n  if (typeof value === 'number' || /^\\d+(\\.\\d+)?$/.test(String(value))) {\n    const wall = new Date(Math.round((Number(value) - 25569) * 86400000));\n    return localToMs(wall.getUTCFullYear(), wall.getUTCMonth() + 1, wall.getUTCDate(), wall.getUTCHours(), wall.getUTCMinutes());\n  }\n  const s = String(value).trim();\n  let m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})(?:[ T](\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[1], +m[2], +m[3], +(m[4] || 9), +(m[5] || 0));\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})(?:,?\\s+(\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[3], +m[2], +m[1], +(m[4] || 9), +(m[5] || 0));\n  return NaN;\n}\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nfunction parseModelJson(input) {\n  const content = input && input.choices && input.choices[0] && input.choices[0].message && input.choices[0].message.content;\n  if (!content) return { problem: input && input.error ? 'llm_error' : 'no_answer' };\n  try { const t = String(content).replace(/```(json)?/g, ''); return { data: JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)) }; } catch (e) { return { problem: 'bad_json' }; }\n}\nconst llmBase = (messages) => ({ model: (cfg.llm || {}).model, temperature: (cfg.llm || {}).temperature === undefined ? 0.7 : cfg.llm.temperature,\n  ...((cfg.llm || {}).json_mode ? { response_format: { type: 'json_object' } } : {}), messages });\nfunction brandLines() {\n  const b = cfg.brand || {};\n  return [`Бренд: ${b.name || ''}. ${b.about || ''}`, `Аудитория: ${b.audience || ''}`, `Голос: ${b.voice || ''}`,\n    ...(b.rules || []).map((r) => `- ${r}`)].join('\\n');\n}\nconst week = $('Plan Week').first().json;\nconst parsed = parseModelJson($input.first().json);\nconst ideas = parsed.data && Array.isArray(parsed.data.ideas) ? parsed.data.ideas : [];\nconst chat = cfg.approval_chat_id;\nif (!ideas.length) return [{ json: { write: false, chat, text: `Не удалось придумать темы на неделю (${parsed.problem || 'пустой ответ'}). Свободных слотов: ${week.slots.length}. Добавьте темы в таблицу вручную.` } }];\n// A cell that starts with = + - @ would become a formula when the sheet parses it.\nconst safe = (v) => { const s = String(v || '').replace(/\\s+/g, ' ').trim().slice(0, 500); return /^[=+\\-@]/.test(s) ? \"'\" + s : s; };\nconst rows = week.slots.slice(0, ideas.length).map((slot, i) => {\n  const idea = ideas[i] || {};\n  const id = `${slot.publish_at.slice(2, 10).replace(/-/g, '')}${slot.publish_at.slice(11).replace(':', '')}-${slot.channel}`;\n  return [id, slot.publish_at, slot.channel, safe(idea.topic), safe(idea.brief), safe(idea.pillar || slot.pillar), '', 'idea'];\n}).filter((r) => r[3]);\nconst values = week.has_header ? rows : [PCOLS, ...rows];\nreturn [{ json: {\n  write: rows.length > 0, chat,\n  http: { method: 'POST', url: sheetUrl(encodeURIComponent(planRange()) + ':append') + '?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS', body: { values } },\n  text: [`План на неделю: ${rows.length} публикаций`, ...rows.map((r) => `• ${r[1]} · ${r[2]} — ${r[3]}`), '', 'Темы можно поправить в таблице до того, как бот начнёт черновики.'].join('\\n'),\n} }];\n"
+      },
+      "id": "070d3e0d-1d40-513e-a69b-ffbf411147c6",
+      "name": "Add Ideas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.write }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e8ea02d5-9775-5377-b6ba-6d739c65fd99",
+      "name": "Write?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "c844d388-0326-5719-ad02-b570aa96f65e",
+      "name": "Append Rows",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        -80
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "d99ee82c-1cd2-58e2-a927-9c728d3c467c",
+      "name": "Tell Team",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1020,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Sunday": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Plan": {
+      "main": [
+        [
+          {
+            "node": "Plan Week",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan Week": {
+      "main": [
+        [
+          {
+            "node": "Free Slots?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Free Slots?": {
+      "main": [
+        [
+          {
+            "node": "Ask AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask AI": {
+      "main": [
+        [
+          {
+            "node": "Add Ideas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add Ideas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Ideas": {
+      "main": [
+        [
+          {
+            "node": "Write?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tell Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write?": {
+      "main": [
+        [
+          {
+            "node": "Append Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

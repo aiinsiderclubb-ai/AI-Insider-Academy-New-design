@@ -1,0 +1,803 @@
+{
+  "name": "Content Automation — Publisher",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Publisher\n\nКаждые 5 минут публикует одну одобренную запись, время которой наступило. Перед публикацией ставит статус **publishing** — если запуск оборвётся, пост не выйдет дважды. После — **published** со ссылкой или **failed** с причиной; в чат приходит сообщение.\n\nКаналы: `telegram` (канал, бот — администратор), `wordpress` (REST API, пароль приложения), `webhook` (Make, Zapier, Buffer, свой сервер).\n\nПост, который опоздал больше чем на `max_late_hours` часов (n8n был выключен), не публикуется задним числом — он получает failed и причину.",
+        "width": 540,
+        "height": 360
+      },
+      "id": "58aa07e5-d7bf-53e0-8a03-0301435f9bb8",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -520
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "f2f9b253-7ae3-5347-b7f7-438d9c1a89b8",
+      "name": "Every 5 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"plan_sheet\": \"Plan\",\n  \"approval_chat_id\": \"REPLACE_WITH_APPROVAL_CHAT_ID\",\n  \"max_late_hours\": 12,\n  \"notify_published\": true,\n  \"channels\": {\n    \"telegram\": {\n      \"type\": \"telegram\",\n      \"chat_id\": \"@REPLACE_channel\",\n      \"link_base\": \"https://t.me/REPLACE_channel\",\n      \"max_chars\": 2000,\n      \"style\": \"пост для Telegram-канала: 600–1500 знаков, короткие абзацы, первая строка цепляет, без Markdown-разметки\"\n    },\n    \"blog\": {\n      \"type\": \"wordpress\",\n      \"url\": \"https://REPLACE.example\",\n      \"status\": \"draft\",\n      \"max_chars\": 12000,\n      \"style\": \"статья для блога 4000–8000 знаков в Markdown: ## подзаголовки, списки, короткие абзацы, вывод в конце\"\n    },\n    \"linkedin\": {\n      \"type\": \"webhook\",\n      \"url\": \"REPLACE_WITH_WEBHOOK_URL\",\n      \"max_chars\": 3000,\n      \"style\": \"деловой пост для LinkedIn: 800–1500 знаков, первая строка — тезис, абзацы по 1–2 предложения, вопрос к читателю в конце\"\n    }\n  }\n} }];\n"
+      },
+      "id": "f794ec7a-55ef-53ae-a883-2511d7d0899e",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.sheets_api_base }}/spreadsheets/{{ encodeURIComponent($('Config').first().json.spreadsheet_id) }}/values/{{ encodeURIComponent(\"'\" + $('Config').first().json.plan_sheet.replace(/'/g, \"''\") + \"'!A1:Q\") }}?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "5edf5b45-7cd8-5843-bb45-ac2aa4f829b6",
+      "name": "Read Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pick Due — the earliest approved post whose time has come, prepared for its channel. Posts that missed their time by too much are not published late.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Plan sheet: one row per post. Columns A–G are the team's; H–Q are kept by the workflows (notes holds the editor's rewrite request).\nconst PCOLS = ['id', 'publish_at', 'channel', 'topic', 'brief', 'pillar', 'image_url', 'status', 'title', 'draft', 'final', 'attempts', 'approved_by',\n  'published_at', 'link', 'error', 'notes'];\nconst BOT_FROM = PCOLS.indexOf('status');\nconst BOT_TO = PCOLS.indexOf('notes');\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst planRange = () => `${quoteSheet(cfg.plan_sheet)}!A1:${colLetter(PCOLS.length - 1)}`;\n// Unformatted values: dates come back as serial numbers whatever the spreadsheet's locale is.\nconst planReadUrl = () => sheetUrl(encodeURIComponent(planRange())) + '?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER';\nfunction planTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'id';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), post: planObject(r) })) };\n}\nfunction planObject(row) {\n  const o = {};\n  PCOLS.forEach((c, i) => { const v = row[i]; o[c] = v === undefined || v === null ? '' : (c === 'publish_at' && typeof v === 'number' ? v : String(v).trim()); });\n  o.status = o.status.toLowerCase() || (o.topic ? 'idea' : '');\n  o.attempts = Number(o.attempts) || 0;\n  return o;\n}\n// The workflows write H–Q in one range, so the team's columns are never touched.\nfunction botWrite(sheetRow, post) {\n  return { range: `${quoteSheet(cfg.plan_sheet)}!${colLetter(BOT_FROM)}${sheetRow}:${colLetter(BOT_TO)}${sheetRow}`, values: [PCOLS.slice(BOT_FROM, BOT_TO + 1).map((c) => String(post[c] === undefined ? '' : post[c]))] };\n}\nconst batchUpdate = (data) => ({ method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data } });\nfunction localToMs(y, mo, d, h, mi) {\n  const want = Date.UTC(y, mo - 1, d, h, mi);\n  let guess = want;\n  for (let i = 0; i < 3; i++) {\n    const p = localParts(guess);\n    guess += want - Date.UTC(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)) - 1, Number(p.date.slice(8, 10)), p.hour, p.minute);\n  }\n  return guess;\n}\n// publish_at: a date cell (serial number), \"2026-10-28 10:00\" or \"28.10.2026 10:00\", in the Config time zone. Empty means \"as soon as possible\".\nfunction whenOf(value) {\n  if (value === '' || value === null || value === undefined) return null;\n  if (typeof value === 'number' || /^\\d+(\\.\\d+)?$/.test(String(value))) {\n    const wall = new Date(Math.round((Number(value) - 25569) * 86400000));\n    return localToMs(wall.getUTCFullYear(), wall.getUTCMonth() + 1, wall.getUTCDate(), wall.getUTCHours(), wall.getUTCMinutes());\n  }\n  const s = String(value).trim();\n  let m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})(?:[ T](\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[1], +m[2], +m[3], +(m[4] || 9), +(m[5] || 0));\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})(?:,?\\s+(\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[3], +m[2], +m[1], +(m[4] || 9), +(m[5] || 0));\n  return NaN;\n}\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nfunction parseModelJson(input) {\n  const content = input && input.choices && input.choices[0] && input.choices[0].message && input.choices[0].message.content;\n  if (!content) return { problem: input && input.error ? 'llm_error' : 'no_answer' };\n  try { const t = String(content).replace(/```(json)?/g, ''); return { data: JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)) }; } catch (e) { return { problem: 'bad_json' }; }\n}\nconst llmBase = (messages) => ({ model: (cfg.llm || {}).model, temperature: (cfg.llm || {}).temperature === undefined ? 0.7 : cfg.llm.temperature,\n  ...((cfg.llm || {}).json_mode ? { response_format: { type: 'json_object' } } : {}), messages });\nfunction brandLines() {\n  const b = cfg.brand || {};\n  return [`Бренд: ${b.name || ''}. ${b.about || ''}`, `Аудитория: ${b.audience || ''}`, `Голос: ${b.voice || ''}`,\n    ...(b.rules || []).map((r) => `- ${r}`)].join('\\n');\n}\nconst table = planTable($input.first().json.values);\nconst now = nowMs();\nconst late = (cfg.max_late_hours || 12) * 60 * MIN;\nconst missed = [];\nconst due = [];\nfor (const r of table.rows) {\n  if (r.post.status !== 'approved') continue;\n  const at = whenOf(r.post.publish_at);\n  if (Number.isNaN(at) || !(cfg.channels || {})[r.post.channel]) { missed.push({ r, reason: Number.isNaN(at) ? 'не понял дату' : 'канал не настроен' }); continue; }\n  if (at !== null && at > now) continue;\n  if (at !== null && now - at > late) { missed.push({ r, reason: `время публикации ${stamp(at)} прошло больше ${cfg.max_late_hours || 12} ч назад` }); continue; }\n  due.push({ r, at: at || 0 });\n}\nconst data = missed.map(({ r, reason }) => botWrite(r.sheetRow, Object.assign({}, r.post, { status: 'failed', error: reason })));\nconst base = { kind: 'none', chat: cfg.approval_chat_id, fix: missed.length > 0, fix_http: missed.length ? batchUpdate(data) : null,\n  fix_text: missed.length ? ['Не опубликовано:', ...missed.map(({ r, reason }) => `• «${r.post.topic.slice(0, 80)}» (${r.post.channel}) — ${reason}`), 'Поставьте новую дату и статус approved, если публикация ещё нужна.'].join('\\n') : '' };\nif (!due.length) return [{ json: base }];\ndue.sort((a, b) => a.at - b.at);\nconst { r } = due[0];\nconst post = r.post;\nconst ch = cfg.channels[post.channel];\nconst text = post.final || post.draft;\nconst lock = Object.assign({}, post, { status: 'publishing', error: '' });\nconst out = Object.assign(base, { kind: ch.type, id: post.id, sheet_row: r.sheetRow, post: lock, channel: post.channel,\n  // Marked \"publishing\" before the call: if the run breaks after publishing, the post is not published twice.\n  lock_http: batchUpdate([botWrite(r.sheetRow, lock)]) });\n\nfunction html(md) {\n  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n  const inline = (s) => esc(s).replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>').replace(/\\[([^\\]]+)\\]\\((https?:[^)\\s]+)\\)/g, '<a href=\"$2\">$1</a>');\n  return md.split(/\\n{2,}/).map((block) => {\n    const lines = block.split('\\n');\n    const h = /^(#{2,4})\\s+(.*)$/.exec(block.trim());\n    if (h && lines.length === 1) return `<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`;\n    if (lines.every((l) => /^\\s*[-•*]\\s+/.test(l))) return '<ul>' + lines.map((l) => `<li>${inline(l.replace(/^\\s*[-•*]\\s+/, ''))}</li>`).join('') + '</ul>';\n    if (lines.every((l) => /^\\s*\\d+[.)]\\s+/.test(l))) return '<ol>' + lines.map((l) => `<li>${inline(l.replace(/^\\s*\\d+[.)]\\s+/, ''))}</li>`).join('') + '</ol>';\n    return `<p>${lines.map(inline).join('<br>')}</p>`;\n  }).join('\\n');\n}\nif (ch.type === 'telegram') {\n  const photo = /^https?:\\/\\//.test(post.image_url) ? post.image_url : '';\n  const short = text.length <= 1024;\n  out.telegram = { chat: ch.chat_id, photo, caption: photo && short ? text : '', text, text_after: Boolean(photo) && !short };\n} else if (ch.type === 'wordpress') {\n  const image = /^https?:\\/\\//.test(post.image_url) ? `<p><img src=\"${post.image_url.replace(/\"/g, '%22')}\" alt=\"\"></p>\\n` : '';\n  out.request = { url: String(ch.url).replace(/\\/$/, '') + '/wp-json/wp/v2/posts', body: { title: post.title || post.topic, content: image + html(text), status: ch.status || 'draft' } };\n} else if (ch.type === 'webhook') {\n  out.request = { url: ch.url, body: { id: post.id, channel: post.channel, title: post.title || post.topic, text, image_url: post.image_url || '', topic: post.topic, publish_at: stamp(due[0].at || now) } };\n} else out.kind = 'none';\nreturn [{ json: out }];\n"
+      },
+      "id": "9fa77563-b8fd-57f6-869a-31e610aa7215",
+      "name": "Pick Due",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.fix }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "92da968a-6e70-5b53-8804-6c3ab26461dd",
+      "name": "Missed Posts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        360,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.fix_http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.fix_http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "73aa539b-822f-5d94-9a56-91b2ac7c4642",
+      "name": "Mark Missed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        280
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Pick Due').first().json.chat }}",
+        "text": "={{ $('Pick Due').first().json.fix_text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "b74fbbb3-3abb-5e94-8c6f-9558e782b78b",
+      "name": "Alert: Missed",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        280
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.kind !== 'none' }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "a3dd1f4d-1509-5bb6-bd25-10ebfca09712",
+      "name": "Something Due?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.lock_http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.lock_http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "c33d6d09-638d-5029-965a-3640d027d2ad",
+      "name": "Mark Publishing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Pick Due').first().json.kind === 'telegram' }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "0348b9cd-5b52-5391-b3cc-67e8d8c24f49",
+      "name": "Telegram?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($('Pick Due').first().json.telegram.photo) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "1d61953a-293a-5674-ba20-f0719842bab7",
+      "name": "With Photo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('Pick Due').first().json.telegram.chat }}",
+        "file": "={{ $('Pick Due').first().json.telegram.photo }}",
+        "additionalFields": {
+          "caption": "={{ $('Pick Due').first().json.telegram.caption }}"
+        }
+      },
+      "id": "ac017d99-7d76-5513-86c8-dfd8d8a6b507",
+      "name": "Telegram Photo",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1240,
+        -360
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Pick Due').first().json.telegram.text_after }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "a34e96d9-4203-550f-8a14-88f4cfd4ac5a",
+      "name": "Text After Photo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        -360
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Pick Due').first().json.telegram.chat }}",
+        "text": "={{ $('Pick Due').first().json.telegram.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "27de3f35-3679-5826-b8d2-0673e3dad986",
+      "name": "Telegram Text",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1680,
+        -220
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Pick Due').first().json.kind === 'wordpress' }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "51bfd622-1502-5735-8e27-7cedc4c359f1",
+      "name": "WordPress?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Pick Due').first().json.request.url }}",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Pick Due').first().json.request.body) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth"
+      },
+      "id": "dafbc4cf-0a4b-5ec4-ba1a-2debd5a2c1c3",
+      "name": "WordPress Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        0
+      ],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "REPLACE_ME",
+          "name": "WordPress application password"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Pick Due').first().json.kind === 'webhook' }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "62c05ae8-bd08-5332-b949-341407a743bc",
+      "name": "Webhook?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Pick Due').first().json.request.url }}",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Pick Due').first().json.request.body) }}"
+      },
+      "id": "4cc1093d-7580-5045-b66c-b1244ceb60c8",
+      "name": "Webhook Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        160
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Record Result — after the channel answered: published with a link, or failed with the reason. The team hears about both.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Plan sheet: one row per post. Columns A–G are the team's; H–Q are kept by the workflows (notes holds the editor's rewrite request).\nconst PCOLS = ['id', 'publish_at', 'channel', 'topic', 'brief', 'pillar', 'image_url', 'status', 'title', 'draft', 'final', 'attempts', 'approved_by',\n  'published_at', 'link', 'error', 'notes'];\nconst BOT_FROM = PCOLS.indexOf('status');\nconst BOT_TO = PCOLS.indexOf('notes');\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst planRange = () => `${quoteSheet(cfg.plan_sheet)}!A1:${colLetter(PCOLS.length - 1)}`;\n// Unformatted values: dates come back as serial numbers whatever the spreadsheet's locale is.\nconst planReadUrl = () => sheetUrl(encodeURIComponent(planRange())) + '?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER';\nfunction planTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'id';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), post: planObject(r) })) };\n}\nfunction planObject(row) {\n  const o = {};\n  PCOLS.forEach((c, i) => { const v = row[i]; o[c] = v === undefined || v === null ? '' : (c === 'publish_at' && typeof v === 'number' ? v : String(v).trim()); });\n  o.status = o.status.toLowerCase() || (o.topic ? 'idea' : '');\n  o.attempts = Number(o.attempts) || 0;\n  return o;\n}\n// The workflows write H–Q in one range, so the team's columns are never touched.\nfunction botWrite(sheetRow, post) {\n  return { range: `${quoteSheet(cfg.plan_sheet)}!${colLetter(BOT_FROM)}${sheetRow}:${colLetter(BOT_TO)}${sheetRow}`, values: [PCOLS.slice(BOT_FROM, BOT_TO + 1).map((c) => String(post[c] === undefined ? '' : post[c]))] };\n}\nconst batchUpdate = (data) => ({ method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data } });\nfunction localToMs(y, mo, d, h, mi) {\n  const want = Date.UTC(y, mo - 1, d, h, mi);\n  let guess = want;\n  for (let i = 0; i < 3; i++) {\n    const p = localParts(guess);\n    guess += want - Date.UTC(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)) - 1, Number(p.date.slice(8, 10)), p.hour, p.minute);\n  }\n  return guess;\n}\n// publish_at: a date cell (serial number), \"2026-10-28 10:00\" or \"28.10.2026 10:00\", in the Config time zone. Empty means \"as soon as possible\".\nfunction whenOf(value) {\n  if (value === '' || value === null || value === undefined) return null;\n  if (typeof value === 'number' || /^\\d+(\\.\\d+)?$/.test(String(value))) {\n    const wall = new Date(Math.round((Number(value) - 25569) * 86400000));\n    return localToMs(wall.getUTCFullYear(), wall.getUTCMonth() + 1, wall.getUTCDate(), wall.getUTCHours(), wall.getUTCMinutes());\n  }\n  const s = String(value).trim();\n  let m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})(?:[ T](\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[1], +m[2], +m[3], +(m[4] || 9), +(m[5] || 0));\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})(?:,?\\s+(\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[3], +m[2], +m[1], +(m[4] || 9), +(m[5] || 0));\n  return NaN;\n}\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nfunction parseModelJson(input) {\n  const content = input && input.choices && input.choices[0] && input.choices[0].message && input.choices[0].message.content;\n  if (!content) return { problem: input && input.error ? 'llm_error' : 'no_answer' };\n  try { const t = String(content).replace(/```(json)?/g, ''); return { data: JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)) }; } catch (e) { return { problem: 'bad_json' }; }\n}\nconst llmBase = (messages) => ({ model: (cfg.llm || {}).model, temperature: (cfg.llm || {}).temperature === undefined ? 0.7 : cfg.llm.temperature,\n  ...((cfg.llm || {}).json_mode ? { response_format: { type: 'json_object' } } : {}), messages });\nfunction brandLines() {\n  const b = cfg.brand || {};\n  return [`Бренд: ${b.name || ''}. ${b.about || ''}`, `Аудитория: ${b.audience || ''}`, `Голос: ${b.voice || ''}`,\n    ...(b.rules || []).map((r) => `- ${r}`)].join('\\n');\n}\nconst due = $('Pick Due').first().json;\nconst res = $input.first().json || {};\nconst ch = cfg.channels[due.channel] || {};\nconst post = Object.assign({}, due.post);\nconst failed = Boolean(res.error);\nif (failed) {\n  const e = res.error;\n  post.status = 'failed';\n  post.error = String((e && (e.description || e.message)) || JSON.stringify(e)).slice(0, 300);\n} else {\n  const msgId = (res.result || res).message_id;\n  post.status = 'published';\n  post.published_at = stamp(nowMs());\n  post.error = '';\n  post.link = due.kind === 'telegram' ? (ch.link_base && msgId ? `${String(ch.link_base).replace(/\\/$/, '')}/${msgId}` : '') : String(res.link || res.url || '');\n}\nreturn [{ json: {\n  http: batchUpdate([botWrite(due.sheet_row, post)]), chat: cfg.approval_chat_id,\n  notify: failed || cfg.notify_published !== false,\n  text: failed ? `Не опубликовано: «${post.topic}» (${post.channel})\\nОшибка: ${post.error}\\nИсправьте и поставьте статус approved — бот попробует снова.`\n    : `Опубликовано: «${post.topic}» (${post.channel})${post.link ? '\\n' + post.link : ''}`,\n} }];\n"
+      },
+      "id": "6ce3b79f-5ff5-5688-bc46-195feeddc542",
+      "name": "Record Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1900,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "2789883d-78a8-5032-8cf0-0ea643de9d1a",
+      "name": "Save Result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2120,
+        -80
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.notify }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "d976fcdf-6871-5598-b0ae-a48ad43ac489",
+      "name": "Notify?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2120,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "08216b7e-4b9a-56c6-9ecf-9cc3aa15f9d6",
+      "name": "Tell Team",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2340,
+        80
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 5 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Plan": {
+      "main": [
+        [
+          {
+            "node": "Pick Due",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick Due": {
+      "main": [
+        [
+          {
+            "node": "Missed Posts?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Something Due?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Missed Posts?": {
+      "main": [
+        [
+          {
+            "node": "Mark Missed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Missed": {
+      "main": [
+        [
+          {
+            "node": "Alert: Missed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Something Due?": {
+      "main": [
+        [
+          {
+            "node": "Mark Publishing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Publishing": {
+      "main": [
+        [
+          {
+            "node": "Telegram?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "WordPress?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Webhook?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram?": {
+      "main": [
+        [
+          {
+            "node": "With Photo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "With Photo?": {
+      "main": [
+        [
+          {
+            "node": "Telegram Photo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Photo": {
+      "main": [
+        [
+          {
+            "node": "Text After Photo?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Record Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text After Photo?": {
+      "main": [
+        [
+          {
+            "node": "Telegram Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Record Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Text": {
+      "main": [
+        [
+          {
+            "node": "Record Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Record Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WordPress?": {
+      "main": [
+        [
+          {
+            "node": "WordPress Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WordPress Post": {
+      "main": [
+        [
+          {
+            "node": "Record Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Record Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook?": {
+      "main": [
+        [
+          {
+            "node": "Webhook Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Post": {
+      "main": [
+        [
+          {
+            "node": "Record Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Record Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record Result": {
+      "main": [
+        [
+          {
+            "node": "Save Result",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify?": {
+      "main": [
+        [
+          {
+            "node": "Tell Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

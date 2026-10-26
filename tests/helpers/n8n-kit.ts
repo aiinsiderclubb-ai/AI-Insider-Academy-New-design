@@ -53,7 +53,8 @@ export class Sheets {
     if (tail === ":batchUpdate") {
       for (const item of http.body.data) {
         const r = Sheets.range(item.range);
-        this.tab(r.tab)[r.row - 1][r.col] = item.values[0][0];
+        const row = (this.tab(r.tab)[r.row - 1] ??= []);
+        item.values[0].forEach((value: string, i: number) => (row[r.col + i] = value));
       }
       return {};
     }

@@ -1,0 +1,178 @@
+{
+  "name": "Lead Generation — Daily Report",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Daily Report\n\nКаждое утро в 9:00 — сводка за вчера: сколько заявок, откуда, сколько горячих, сколько спама и кто до сих пор ждёт ответа.",
+        "width": 420,
+        "height": 200
+      },
+      "id": "24e25dea-b2d8-5ed5-b2c7-bda520e6ad9b",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "aa938e61-e230-5556-abee-7c042be55171",
+      "name": "Every Morning",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"sheet_name\": \"Leads\",\n  \"notify_chat_id\": \"REPLACE_WITH_CHAT_ID\",\n  \"hot_threshold\": 4,\n  \"report_chat_id\": \"\"\n} }];\n"
+      },
+      "id": "8316b8f4-3179-539b-b7ff-ffc81e57d27b",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sheets_api_base + '/spreadsheets/' + encodeURIComponent($json.spreadsheet_id) + '/values/' + encodeURIComponent(\"'\" + $json.sheet_name.replace(/'/g, \"''\") + \"'!A1:U\") }}",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "267dbabf-0f90-5f9a-b313-6a089322885e",
+      "name": "Read Leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Daily Report — yesterday's leads in numbers, and who is still waiting.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Column order of the Leads sheet. The sheet may start empty: the header is written with the first lead.\nconst COLUMNS = ['id', 'created_at', 'source', 'form', 'name', 'phone', 'email', 'message', 'utm_source', 'utm_medium', 'utm_campaign', 'page',\n  'score', 'intent', 'summary', 'status', 'owner', 'touches', 'last_touch_at', 'reminded_level', 'notes'];\nconst colLetter = (index) => { let s = ''; let n = index + 1; while (n) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); } return s; };\nconst LAST = colLetter(COLUMNS.length - 1);\nconst rows = $input.first().json.values || [];\nconst now = nowMs();\nconst yesterday = localParts(now - 24 * 60 * MIN).date;\nconst at = (row, c) => row[COLUMNS.indexOf(c)] || '';\nconst data = rows.length && rows[0][0] === 'id' ? rows.slice(1) : [];\nconst made = data.filter((r) => { const t = Date.parse(at(r, 'created_at')); return !isNaN(t) && localParts(t).date === yesterday; });\nconst real = made.filter((r) => at(r, 'status') !== 'spam');\nconst count = (list, key) => { const out = {}; for (const r of list) { const k = at(r, key) || '—'; out[k] = (out[k] || 0) + 1; } return Object.entries(out).sort((a, b) => b[1] - a[1]); };\nconst hot = real.filter((r) => Number(at(r, 'score')) >= (cfg.hot_threshold || 4)).length;\nconst repeats = data.filter((r) => { const t = Date.parse(at(r, 'last_touch_at')); return Number(at(r, 'touches')) > 1 && !isNaN(t) && localParts(t).date === yesterday; }).length;\nconst waiting = data.filter((r) => at(r, 'status') === 'new')\n  .map((r) => ({ name: at(r, 'name') || '—', contact: at(r, 'phone') || at(r, 'email'), since: Date.parse(at(r, 'created_at')) }))\n  .filter((r) => !isNaN(r.since)).sort((a, b) => a.since - b.since);\n\nconst lines = [`Заявки за ${yesterday}`, `Новых: ${real.length}${hot ? `, из них горячих: ${hot}` : ''}`];\nif (repeats) lines.push(`Повторных обращений: ${repeats}`);\nif (made.length - real.length) lines.push(`Спам отсеян: ${made.length - real.length}`);\nif (real.length) lines.push('', 'Источники:', ...count(real, 'source').map(([k, v]) => `• ${k}: ${v}`));\nconst campaigns = count(real.filter((r) => at(r, 'utm_campaign')), 'utm_campaign');\nif (campaigns.length) lines.push('', 'Кампании:', ...campaigns.slice(0, 5).map(([k, v]) => `• ${k}: ${v}`));\nlines.push('', waiting.length ? `Ждут ответа: ${waiting.length}` : 'Все заявки разобраны.');\nfor (const w of waiting.slice(0, 5)) lines.push(`• ${w.name}, ${w.contact}, с ${localText(w.since)}`);\nreturn [{ json: { chat_id: cfg.report_chat_id || cfg.notify_chat_id, text: lines.join('\\n') } }];\n"
+      },
+      "id": "845eee9a-f96d-592d-a022-9fede3e42a35",
+      "name": "Build Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "bb4ae57d-4347-5264-9bbc-8d5b55e1f010",
+      "name": "Send Report",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Morning": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Leads": {
+      "main": [
+        [
+          {
+            "node": "Build Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Report": {
+      "main": [
+        [
+          {
+            "node": "Send Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

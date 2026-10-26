@@ -1,0 +1,41 @@
+<!--
+  Форма заявки для любого сайта. Вставьте в страницу и замените два значения:
+  ENDPOINT — адрес вебхука Lead Intake, TOKEN — значение intake_token из узла Config.
+
+  Токен виден в коде страницы. Он отсекает случайные запросы к адресу вебхука,
+  но не является секретом. От ботов защищает скрытое поле website (ловушка)
+  и проверки спама в воркфлоу.
+-->
+<form id="lead-form" novalidate>
+  <input name="name" placeholder="Как к вам обращаться" autocomplete="name" required>
+  <input name="phone" type="tel" placeholder="Телефон" autocomplete="tel">
+  <input name="email" type="email" placeholder="Email" autocomplete="email">
+  <textarea name="message" placeholder="Коротко о задаче"></textarea>
+  <!-- Ловушка для ботов: человек это поле не видит и не заполняет -->
+  <input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+  <label><input type="checkbox" name="consent" required> Согласен на обработку персональных данных</label>
+  <button type="submit">Отправить</button>
+  <p id="lead-status" role="status"></p>
+</form>
+<script>
+(function () {
+  var ENDPOINT = 'https://REPLACE-N8N-HOST/webhook/lead';
+  var TOKEN = 'REPLACE_WITH_INTAKE_TOKEN';
+  var form = document.getElementById('lead-form');
+  var status = document.getElementById('lead-status');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var data = Object.fromEntries(new FormData(form));
+    if (!data.phone && !data.email) { status.textContent = 'Укажите телефон или email.'; return; }
+    if (!data.consent) { status.textContent = 'Нужно согласие на обработку данных.'; return; }
+    data.token = TOKEN;
+    data.page = location.href;
+    data.source = 'site';
+    status.textContent = 'Отправляем…';
+    fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) { return r.json().then(function (body) { return { ok: r.ok, body: body }; }); })
+      .then(function (r) { status.textContent = r.body.message || (r.ok ? 'Спасибо!' : 'Не получилось отправить.'); if (r.ok) form.reset(); })
+      .catch(function () { status.textContent = 'Не получилось отправить. Позвоните нам, пожалуйста.'; });
+  });
+})();
+</script>

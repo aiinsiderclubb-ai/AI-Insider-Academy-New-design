@@ -33,7 +33,7 @@ const MIME = {
 };
 
 /** What a bundle folder may carry: text only, so the whole product stays reviewable in a diff. */
-const BUNDLE_TYPES = new Set([".md", ".json", ".csv", ".txt", ".py", ".sh", ".yaml", ".yml", ".toml", ".svg", ".js"]);
+const BUNDLE_TYPES = new Set([".md", ".json", ".csv", ".txt", ".py", ".sh", ".yaml", ".yml", ".toml", ".svg", ".js", ".html"]);
 
 function walk(dir, prefix) {
   const found = [];

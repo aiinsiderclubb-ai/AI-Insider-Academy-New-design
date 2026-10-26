@@ -1,0 +1,276 @@
+{
+  "name": "Lead Generation — SLA Reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## SLA Reminder\n\nКаждые 10 минут ищет заявки со статусом **new**, которые ждут дольше порога, и напоминает в Telegram. Второе напоминание — руководителю. В нерабочее время молчит.\n\nЗаявка перестаёт быть «ждущей», когда менеджер меняет статус в таблице.",
+        "width": 440,
+        "height": 240
+      },
+      "id": "fbf03029-fe91-523b-b680-f547b0ef1042",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/10 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "b7f19f53-99e8-539b-99ef-1b54ad53c522",
+      "name": "Every 10 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"sheet_name\": \"Leads\",\n  \"notify_chat_id\": \"REPLACE_WITH_CHAT_ID\",\n  \"hot_chat_id\": \"\",\n  \"working_hours\": {\n    \"mon\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"tue\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"wed\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"thu\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"fri\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    }\n  },\n  \"sla\": {\n    \"first_reminder_minutes\": 15,\n    \"escalate_minutes\": 60,\n    \"escalate_chat_id\": \"\"\n  }\n} }];\n"
+      },
+      "id": "26086f0c-1e0c-5f71-868b-595923c87ab3",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sheets_api_base + '/spreadsheets/' + encodeURIComponent($json.spreadsheet_id) + '/values/' + encodeURIComponent(\"'\" + $json.sheet_name.replace(/'/g, \"''\") + \"'!A1:U\") }}",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "13d8a0fd-7852-5693-8a11-84bb02288b37",
+      "name": "Read Leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Find Overdue — leads nobody has taken. Status stays \"new\" until a manager changes it in the sheet.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Column order of the Leads sheet. The sheet may start empty: the header is written with the first lead.\nconst COLUMNS = ['id', 'created_at', 'source', 'form', 'name', 'phone', 'email', 'message', 'utm_source', 'utm_medium', 'utm_campaign', 'page',\n  'score', 'intent', 'summary', 'status', 'owner', 'touches', 'last_touch_at', 'reminded_level', 'notes'];\nconst colLetter = (index) => { let s = ''; let n = index + 1; while (n) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); } return s; };\nconst LAST = colLetter(COLUMNS.length - 1);\nconst rows = $input.first().json.values || [];\nconst now = nowMs();\nconst sla = cfg.sla || {};\nconst here = localParts(now);\nconst day = (cfg.working_hours || {})[here.weekday];\nconst minutes = here.hour * 60 + here.minute;\nconst toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };\n// Outside working hours nobody can act on a reminder, so none is sent; overdue leads come up in the morning.\nif (!day || minutes < toMin(day.open) || minutes >= toMin(day.close)) return [{ json: { send: false, reason: 'outside_hours' } }];\nif (!rows.length || rows[0][0] !== 'id') return [{ json: { send: false, reason: 'empty_sheet' } }];\n\nconst at = (row, c) => row[COLUMNS.indexOf(c)] || '';\nconst levelCol = colLetter(COLUMNS.indexOf('reminded_level'));\nconst first = [], second = [], updates = [];\nrows.slice(1).forEach((row, i) => {\n  if (at(row, 'status') !== 'new') return;\n  const since = Date.parse(at(row, 'last_touch_at') || at(row, 'created_at'));\n  if (isNaN(since)) return;\n  const waited = Math.round((now - since) / MIN);\n  const level = Number(at(row, 'reminded_level') || 0);\n  const entry = { id: at(row, 'id'), name: at(row, 'name') || '—', contact: at(row, 'phone') || at(row, 'email'), score: at(row, 'score'), waited, owner: at(row, 'owner') };\n  if (waited >= (sla.escalate_minutes || 60) && level < 2) { second.push(entry); updates.push({ range: `${quoteSheet(cfg.sheet_name)}!${levelCol}${i + 2}`, values: [['2']] }); }\n  else if (waited >= (sla.first_reminder_minutes || 15) && level < 1) { first.push(entry); updates.push({ range: `${quoteSheet(cfg.sheet_name)}!${levelCol}${i + 2}`, values: [['1']] }); }\n});\nif (!updates.length) return [{ json: { send: false, reason: 'nothing_overdue' } }];\n\nconst fmt = (e) => `• ${e.name}, ${e.contact}, ${e.score}/5 — ждёт ${e.waited >= 120 ? Math.round(e.waited / 60) + ' ч' : e.waited + ' мин'}${e.owner ? ', ' + e.owner : ''} (${e.id})`;\nconst messages = [];\nif (first.length) messages.push({ chat_id: cfg.notify_chat_id, text: [`Заявки без ответа: ${first.length}`, ...first.map(fmt), 'Поменяйте статус в таблице, когда свяжетесь.'].join('\\n') });\nif (second.length) messages.push({ chat_id: sla.escalate_chat_id || cfg.hot_chat_id || cfg.notify_chat_id, text: [`Заявки без ответа больше ${sla.escalate_minutes || 60} мин: ${second.length}`, ...second.map(fmt)].join('\\n') });\nreturn messages.map((m, i) => ({ json: Object.assign({ send: true }, m, i === 0 ? { http: { method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data: updates } } } : {}) }));\n"
+      },
+      "id": "707dabff-a336-5ce2-9b27-f0fdc062dd16",
+      "name": "Find Overdue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.send }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e6e72f6a-29aa-5646-95ac-0275b41e7987",
+      "name": "Send?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "9baed825-85aa-57cc-b18a-eb946c11afb5",
+      "name": "Remind",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        -80
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($json.http) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "09775aee-0a60-533d-9ec5-972d0a04126d",
+      "name": "Mark Reminded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "e7b02d7d-87fa-5b6d-8958-4e347ad038d7",
+      "name": "Mark in Sheet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        120
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    }
+  ],
+  "connections": {
+    "Every 10 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Leads": {
+      "main": [
+        [
+          {
+            "node": "Find Overdue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Overdue": {
+      "main": [
+        [
+          {
+            "node": "Send?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mark Reminded?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send?": {
+      "main": [
+        [
+          {
+            "node": "Remind",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Reminded?": {
+      "main": [
+        [
+          {
+            "node": "Mark in Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

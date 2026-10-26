@@ -1,0 +1,112 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "sheets_api_base": "https://sheets.googleapis.com/v4",
+  "spreadsheet_id": "1AbCdEfGhIjKlMnOpQrStUvWxYz0123456789",
+  "sheet_name": "Leads",
+  "intake_token": "9f2c4e1a7b3d5f8e0a6c2b4d8f1e3a5c",
+  "token_field": "token",
+  "honeypot_field": "website",
+  "thank_you": "Спасибо! Мы свяжемся с вами в ближайшее время.",
+  "phone": {
+    "country_code": "380",
+    "national_prefix": "0"
+  },
+  "dedupe_days": 30,
+  "field_aliases": {
+    "name": [
+      "name",
+      "имя",
+      "fio",
+      "фио",
+      "your-name",
+      "first_name",
+      "full_name"
+    ],
+    "phone": [
+      "phone",
+      "телефон",
+      "tel",
+      "phone_number",
+      "your-tel",
+      "mobile",
+      "whatsapp"
+    ],
+    "email": [
+      "email",
+      "e-mail",
+      "почта",
+      "your-email",
+      "mail"
+    ],
+    "message": [
+      "message",
+      "comments",
+      "comment",
+      "комментарий",
+      "сообщение",
+      "text",
+      "your-message",
+      "question",
+      "вопрос"
+    ],
+    "page": [
+      "page",
+      "referer",
+      "referrer",
+      "page_url",
+      "url"
+    ]
+  },
+  "spam": {
+    "max_links": 1,
+    "stop_words": [
+      "casino",
+      "crypto",
+      "viagra",
+      "seo services",
+      "backlinks"
+    ],
+    "disposable_domains": [
+      "mailinator.com",
+      "10minutemail.com",
+      "guerrillamail.com",
+      "tempmail.com",
+      "yopmail.com",
+      "trashmail.com"
+    ]
+  },
+  "llm": {
+    "enabled": true,
+    "base_url": "https://openrouter.ai/api/v1",
+    "model": "ВЫБРАННАЯ-МОДЕЛЬ",
+    "json_mode": true
+  },
+  "business": {
+    "description": "Студия, которая делает чат-ботов и автоматизации для салонов красоты и клиник",
+    "ideal_customer": "Владелец салона или клиники с 3–20 сотрудниками, которому нужна онлайн-запись или ответы в мессенджерах. Не клиенты: студенты, агентства, предлагающие услуги",
+    "services": [
+      "Чат-бот записи в Telegram и WhatsApp",
+      "Голосовой администратор",
+      "Автоматизация заявок"
+    ],
+    "hot_keywords": [
+      "срочно",
+      "сегодня",
+      "цена",
+      "стоимость",
+      "купить",
+      "заказать"
+    ]
+  },
+  "hot_threshold": 4,
+  "notify_chat_id": "-1001234567890",
+  "hot_chat_id": "-1009876543210",
+  "store_spam": true,
+  "auto_reply": {
+    "enabled": true,
+    "from": "Студия Ромашка <hello@romashka.studio>",
+    "subject": "Мы получили вашу заявку",
+    "text": "Здравствуйте, {name}!\n\nСпасибо за заявку. Мы свяжемся с вами в течение рабочего дня.\n\nЕсли вопрос срочный — позвоните нам: REPLACE."
+  }
+}

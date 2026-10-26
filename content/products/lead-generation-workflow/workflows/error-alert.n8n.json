@@ -1,0 +1,105 @@
+{
+  "name": "Lead Generation — Error Alert",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Error Alert\n\nНазначьте этот воркфлоу в Settings → Error Workflow у остальных воркфлоу набора. При любом сбое придёт сообщение в Telegram.\n\nВпишите chat id в узел **Send Alert**.",
+        "width": 420,
+        "height": 200
+      },
+      "id": "d4fbe8f0-6e6d-5403-9545-ad6df262172b",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "8187a6b5-7e1d-5d57-b596-8194e5e5fb78",
+      "name": "On Error",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Turn an execution error into a message a person can act on.\nconst e = $input.first().json;\nconst execution = e.execution || {};\nconst error = execution.error || {};\nconst lines = [\n  'Ошибка воркфлоу',\n  `Воркфлоу: ${(e.workflow && e.workflow.name) || '—'}`,\n  `Узел: ${execution.lastNodeExecuted || (error.node && error.node.name) || '—'}`,\n  `Ошибка: ${String(error.message || 'неизвестно').slice(0, 500)}`,\n  execution.url ? `Запуск: ${execution.url}` : '',\n].filter(Boolean);\nreturn [{ json: { text: lines.join('\\n') } }];\n"
+      },
+      "id": "95d7a48c-aa34-5b95-abd9-528ad22e38b8",
+      "name": "Describe Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "REPLACE_WITH_CHAT_ID",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "7363a31e-f17c-5ccb-8bc2-de45cb656ab0",
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -40,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "On Error": {
+      "main": [
+        [
+          {
+            "node": "Describe Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Describe Error": {
+      "main": [
+        [
+          {
+            "node": "Send Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

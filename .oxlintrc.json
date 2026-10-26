@@ -52,6 +52,7 @@
     "node_modules/**",
     "next-env.d.ts",
     "public/**",
-    "content/data/**"
+    "content/data/**",
+    "content/products/**"
   ]
 }

@@ -473,7 +473,8 @@
   {
    "fileTypes": [
     "ZIP",
-    "JSON"
+    "JSON",
+    "MD"
    ],
    "faqRu": [
     {
@@ -519,10 +520,10 @@
    "videoPreview": null,
    "freePreview": {
     "type": "workflow",
-    "titleRu": "Бесплатный фрагмент: логика lead capture",
-    "titleEn": "Free sample: lead capture logic",
-    "contentRu": "Webhook (form)\n  → IF email valid\n    → Enrich (Clearbit / Apollo)\n    → CRM: create/update lead\n    → Slack #leads notify\n    → IF score >= hot → assign owner\n  ELSE\n    → Reply “invalid email”",
-    "contentEn": "Webhook (form)\n  → IF email valid\n    → Enrich (Clearbit / Apollo)\n    → CRM: create/update lead\n    → Slack #leads notify\n    → IF score >= hot → assign owner\n  ELSE\n    → Reply “invalid email”"
+    "titleRu": "Фрагмент: как идёт заявка",
+    "titleEn": "Sample: how a lead flows",
+    "contentRu": "Форма → Lead Intake\n  неверный токен → 403\n  нет телефона и почты → 422\n  ответ форме «Спасибо» — сразу\n  тот же человек за 30 дней → обновить его строку\n  двойной клик → пропустить\n  спам → статус spam, никому не писать\n  модель: оценка 1–5, кратко, что уточнить\n    не ответила → оценка по правилам\n  таблица недоступна → вся заявка в Telegram\n  оценка ≥ 4 → горячий чат",
+    "contentEn": "Form → Lead Intake\n  wrong token → 403\n  no phone or email → 422\n  answer the form at once\n  same person within 30 days → update their row\n  double click → skip\n  spam → status spam, notify nobody\n  model: score 1–5, summary, what to ask\n    no answer → score by rules\n  sheet down → whole lead to Telegram\n  score ≥ 4 → hot chat"
    },
    "coverImage": null,
    "id": "mp-workflow-lead-gen",
@@ -531,8 +532,8 @@
    "productType": "automation-pack",
    "titleRu": "Lead Generation Workflow",
    "titleEn": "Lead Generation Workflow",
-   "shortRu": "Сбор лидов из форм, соцсетей и CRM.",
-   "shortEn": "Capture leads from forms, social and CRM.",
+   "shortRu": "Заявки со всех форм в одну Google Таблицу: проверка, дубли и спам, оценка моделью, сообщение менеджеру в Telegram, напоминания о заявках без ответа и утренний отчёт. Четыре воркфлоу, проверенные в n8n 2.44.",
+   "shortEn": "Leads from every form into one Google Sheet: validation, duplicates and spam, AI scoring, a Telegram alert to the manager, reminders for unanswered leads and a morning report. Four workflows tested in n8n 2.44. Files are in Russian.",
    "priceEur": 49,
    "rating": 4.9,
    "reviewCount": 224,
@@ -541,14 +542,20 @@
    "coverIcon": "📈",
    "creatorId": "creator-n8n-lab",
    "includedRu": [
-    "n8n workflow JSON",
-    "Setup guide PDF",
-    "CRM mapping"
+    "4 воркфлоу n8n: приём, напоминания, отчёт, оповещение о сбоях",
+    "Tilda, WordPress, Webflow, Google Forms и своя форма",
+    "Оценка заявок моделью и запасные правила",
+    "Дубли, двойные клики и спам отсеиваются",
+    "Готовая HTML-форма и скрипт для Google Forms",
+    "6 инструкций и проверочные запросы"
    ],
    "includedEn": [
-    "n8n workflow JSON",
-    "Setup guide PDF",
-    "CRM mapping"
+    "4 n8n workflows: intake, reminders, report, error alerts",
+    "Tilda, WordPress, Webflow, Google Forms and your own form",
+    "AI lead scoring with rule-based fallback",
+    "Duplicates, double clicks and spam filtered out",
+    "Ready HTML form and a Google Forms script",
+    "6 guides and test requests"
    ]
   },
   {

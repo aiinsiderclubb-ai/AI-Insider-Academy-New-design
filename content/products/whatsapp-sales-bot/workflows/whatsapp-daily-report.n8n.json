@@ -1,0 +1,178 @@
+{
+  "name": "WhatsApp Sales Bot — Daily Report",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Daily Report\n\nКаждое утро: сколько людей написало вчера, сколько новых, сколько дошли до горячей стадии, сколько передано менеджерам и сколько отписалось. Ниже — список горячих клиентов с телефонами.",
+        "width": 440,
+        "height": 220
+      },
+      "id": "b8678f67-f6fd-57b1-8c39-c38139fc2ff6",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "2fe0f47b-3ea5-5271-b825-3fa0bd353057",
+      "name": "Every Morning",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"contacts_sheet\": \"Contacts\",\n  \"team_chat_id\": \"REPLACE_WITH_TEAM_CHAT_ID\",\n  \"report_chat_id\": \"\"\n} }];\n"
+      },
+      "id": "050c2527-8aac-5661-ad46-f7b8b43fe3a9",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sheets_api_base + '/spreadsheets/' + encodeURIComponent($json.spreadsheet_id) + '/values/' + encodeURIComponent(\"'\" + $json.contacts_sheet.replace(/'/g, \"''\") + \"'!A1:R\") }}",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "1f72f4a0-a37b-57a1-bca1-f7bac679c66c",
+      "name": "Read Contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Daily Report — yesterday's WhatsApp conversations: new clients, qualified, hot, handed over, unsubscribed.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Contacts sheet: one row per WhatsApp number. The sheet may start empty: the header is written with the first contact.\nconst CCOLS = ['wa_id', 'name', 'phone', 'first_seen', 'last_in_at', 'last_out_at', 'status', 'stage', 'need', 'budget', 'timeline', 'details',\n  'hot', 'handoff_until', 'followup_sent', 'history', 'manager', 'notes'];\nconst colLetter = (index) => { let s = ''; let n = index + 1; while (n) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); } return s; };\nconst CLAST = colLetter(CCOLS.length - 1);\nconst contactsRange = () => `${quoteSheet(cfg.contacts_sheet)}!A1:${CLAST}`;\nconst contactRow = (row) => `${quoteSheet(cfg.contacts_sheet)}!A${row}:${CLAST}${row}`;\nconst waBatchUrl = () => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchGet?ranges=${encodeURIComponent(contactsRange())}&ranges=${encodeURIComponent(`${quoteSheet(cfg.catalog_sheet)}!A1:C`)}`;\nconst contactsTable = (values) => { const rows = values || []; const header = rows.length && rows[0][0] === 'wa_id'; return { header, rows: header ? rows.slice(1) : [] }; };\nconst ccell = (row, c) => row[CCOLS.indexOf(c)] || '';\nconst contactObject = (row) => Object.fromEntries(CCOLS.map((c) => [c, ccell(row, c)]));\nconst graphUrl = () => `${cfg.graph_api_base}/${encodeURIComponent(cfg.phone_number_id)}/messages`;\nconst waText = (to, body) => ({ messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'text', text: { preview_url: false, body: String(body).slice(0, 4000) } });\nconst table = contactsTable($input.first().json.values);\nconst now = nowMs();\nconst yesterday = localParts(now - 24 * 60 * MIN).date;\nconst on = (value) => { const t = Date.parse(value); return !isNaN(t) && localParts(t).date === yesterday; };\nconst all = table.rows.map(contactObject);\nconst talked = all.filter((c) => on(c.last_in_at));\nconst fresh = all.filter((c) => on(c.first_seen));\nconst by = (key) => { const o = {}; for (const c of talked) { const k = c[key] || '—'; o[k] = (o[k] || 0) + 1; } return o; };\nconst stages = by('stage');\nconst lines = [`WhatsApp за ${yesterday}`, `Писали: ${talked.length}, из них новых: ${fresh.length}`];\nconst label = { new: 'новые', qualifying: 'выясняем', qualified: 'квалифицированы', hot: 'горячие', not_fit: 'не наш клиент', support: 'поддержка' };\nfor (const [k, v] of Object.entries(stages)) lines.push(`• ${label[k] || k}: ${v}`);\nconst manager = talked.filter((c) => c.status === 'manager').length;\nif (manager) lines.push(`У менеджеров: ${manager}`);\nconst out = all.filter((c) => c.status === 'opted_out' && on(c.last_in_at)).length;\nif (out) lines.push(`Отписались: ${out}`);\nconst hot = talked.filter((c) => c.hot === 'yes');\nif (hot.length) lines.push('', 'Горячие:', ...hot.slice(0, 10).map((c) => `• ${c.name || '—'}, +${c.wa_id}${c.need ? ' — ' + c.need : ''}${c.manager ? ' (' + c.manager + ')' : ''}`));\nreturn [{ json: { chat_id: cfg.report_chat_id || cfg.team_chat_id, text: lines.join('\\n') } }];\n"
+      },
+      "id": "4be49106-e443-5e85-9b1a-0735fa5f02d1",
+      "name": "Build Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "8003ae19-046b-546c-956b-f4245547d136",
+      "name": "Send Report",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Morning": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Contacts": {
+      "main": [
+        [
+          {
+            "node": "Build Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Report": {
+      "main": [
+        [
+          {
+            "node": "Send Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

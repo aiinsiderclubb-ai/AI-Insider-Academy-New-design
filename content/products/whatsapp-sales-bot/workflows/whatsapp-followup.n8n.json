@@ -1,0 +1,281 @@
+{
+  "name": "WhatsApp Sales Bot — Follow-up",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Follow-up\n\nРаз в час ищет клиентов, которые замолчали посреди разговора (бот ответил последним), и через `followup.after_hours` часов пишет им одно короткое напоминание. Только в рабочее время и только пока WhatsApp разрешает свободное сообщение — в пределах 24 часов с последнего сообщения клиента. Второго напоминания не будет.",
+        "width": 460,
+        "height": 260
+      },
+      "id": "29b59d3f-dada-5c2a-8dcd-93596b8b52df",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -380
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "5 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "b0df741e-811a-5ddd-afb8-40730eb30e98",
+      "name": "Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"contacts_sheet\": \"Contacts\",\n  \"graph_api_base\": \"https://graph.facebook.com/v25.0\",\n  \"phone_number_id\": \"REPLACE_WITH_PHONE_NUMBER_ID\",\n  \"team_chat_id\": \"REPLACE_WITH_TEAM_CHAT_ID\",\n  \"followup\": {\n    \"enabled\": true,\n    \"after_hours\": 20,\n    \"text\": \"{name}, подскажите, вопрос ещё актуален? Если удобно, продолжим здесь.\"\n  },\n  \"working_hours\": {\n    \"mon\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"tue\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"wed\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"thu\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"fri\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"sat\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    }\n  }\n} }];\n"
+      },
+      "id": "b945c739-5fa8-5976-affc-d149100240f9",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sheets_api_base + '/spreadsheets/' + encodeURIComponent($json.spreadsheet_id) + '/values/' + encodeURIComponent(\"'\" + $json.contacts_sheet.replace(/'/g, \"''\") + \"'!A1:R\") }}",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "9e77ed6d-6359-5fc1-980b-ce0d321e00ef",
+      "name": "Read Contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Find Silent — clients who stopped answering mid-conversation. One gentle follow-up, while WhatsApp still allows it.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Contacts sheet: one row per WhatsApp number. The sheet may start empty: the header is written with the first contact.\nconst CCOLS = ['wa_id', 'name', 'phone', 'first_seen', 'last_in_at', 'last_out_at', 'status', 'stage', 'need', 'budget', 'timeline', 'details',\n  'hot', 'handoff_until', 'followup_sent', 'history', 'manager', 'notes'];\nconst colLetter = (index) => { let s = ''; let n = index + 1; while (n) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); } return s; };\nconst CLAST = colLetter(CCOLS.length - 1);\nconst contactsRange = () => `${quoteSheet(cfg.contacts_sheet)}!A1:${CLAST}`;\nconst contactRow = (row) => `${quoteSheet(cfg.contacts_sheet)}!A${row}:${CLAST}${row}`;\nconst waBatchUrl = () => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchGet?ranges=${encodeURIComponent(contactsRange())}&ranges=${encodeURIComponent(`${quoteSheet(cfg.catalog_sheet)}!A1:C`)}`;\nconst contactsTable = (values) => { const rows = values || []; const header = rows.length && rows[0][0] === 'wa_id'; return { header, rows: header ? rows.slice(1) : [] }; };\nconst ccell = (row, c) => row[CCOLS.indexOf(c)] || '';\nconst contactObject = (row) => Object.fromEntries(CCOLS.map((c) => [c, ccell(row, c)]));\nconst graphUrl = () => `${cfg.graph_api_base}/${encodeURIComponent(cfg.phone_number_id)}/messages`;\nconst waText = (to, body) => ({ messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'text', text: { preview_url: false, body: String(body).slice(0, 4000) } });\nconst table = contactsTable($input.first().json.values);\nconst now = nowMs();\nconst here = localParts(now);\nconst day = (cfg.working_hours || {})[here.weekday];\nconst minutes = here.hour * 60 + here.minute;\nconst toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };\nconst f = cfg.followup || {};\nif (!f.enabled) return [{ json: { send: false, reason: 'disabled' } }];\nif (!day || minutes < toMin(day.open) || minutes >= toMin(day.close)) return [{ json: { send: false, reason: 'outside_hours' } }];\nconst flagCol = colLetter(CCOLS.indexOf('followup_sent'));\nconst outCol = colLetter(CCOLS.indexOf('last_out_at'));\nconst items = [];\nconst updates = [];\ntable.rows.forEach((row, i) => {\n  const c = contactObject(row);\n  if (c.status !== 'bot' || !['new', 'qualifying'].includes(c.stage) || c.followup_sent === 'yes') return;\n  const lastIn = Date.parse(c.last_in_at), lastOut = Date.parse(c.last_out_at);\n  if (isNaN(lastIn) || isNaN(lastOut) || lastOut < lastIn) return; // the client wrote last: that is not silence\n  const silent = (now - lastIn) / (60 * MIN);\n  // 23.5 hours, not 24: the follow-up must arrive inside the 24-hour window.\n  if (silent < (f.after_hours || 20) || silent > 23.5) return;\n  const sheetRow = i + (table.header ? 2 : 1);\n  items.push({ send: true, wa_id: c.wa_id, message: waText(c.wa_id, String(f.text || '').replace(/\\{name\\}/g, c.name || '').trim()), graph_url: graphUrl() });\n  updates.push({ range: `${quoteSheet(cfg.contacts_sheet)}!${flagCol}${sheetRow}`, values: [['yes']] }, { range: `${quoteSheet(cfg.contacts_sheet)}!${outCol}${sheetRow}`, values: [[new Date(now).toISOString()]] });\n});\nif (!items.length) return [{ json: { send: false, reason: 'nobody' } }];\nitems[0].http = { method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data: updates } };\nreturn items.map((json) => ({ json }));\n"
+      },
+      "id": "2913dec5-8927-502e-bc91-054b5adfedac",
+      "name": "Find Silent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.send }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "64c0f4aa-c52e-5c9a-b86f-da7fb85094fc",
+      "name": "Send?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.graph_url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.message) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "7c734d39-69ed-535c-bb9e-228d0af3de36",
+      "name": "Send WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        -80
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "WhatsApp token"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($json.http) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b9700695-1fbd-5fd8-b0cd-d056dc09d983",
+      "name": "Mark Sent?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "2fd341f7-0480-58b7-ab3c-2abe097a1e0b",
+      "name": "Mark in Sheet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        120
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    }
+  ],
+  "connections": {
+    "Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Contacts": {
+      "main": [
+        [
+          {
+            "node": "Find Silent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Silent": {
+      "main": [
+        [
+          {
+            "node": "Send?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mark Sent?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send?": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Sent?": {
+      "main": [
+        [
+          {
+            "node": "Mark in Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

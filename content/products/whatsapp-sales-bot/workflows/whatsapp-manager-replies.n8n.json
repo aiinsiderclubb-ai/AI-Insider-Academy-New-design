@@ -1,0 +1,505 @@
+{
+  "name": "WhatsApp Sales Bot — Manager Replies",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Manager Replies\n\nМенеджеры ведут клиента из Telegram, не открывая WhatsApp:\n\n- **Ответ на сообщение бота** (Reply) в чате команды уходит клиенту в WhatsApp.\n- **Беру** — клиент закреплён за менеджером, бот молчит `handoff_hours` часов.\n- **Вернуть боту** — бот снова отвечает.\n\nУ одного Telegram-бота может быть только один Telegram Trigger. Если бот уже принимает сообщения в другом воркфлоу, создайте для этого набора отдельного бота.",
+        "width": 520,
+        "height": 320
+      },
+      "id": "0a2822e5-56cb-5885-a908-686889c62111",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -460
+      ]
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "id": "2bb7d560-cf0a-5e47-b71b-2d4f0703cf97",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        0
+      ],
+      "webhookId": "c1c7d529-3ad4-5818-9c61-0b1645bad827",
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"contacts_sheet\": \"Contacts\",\n  \"graph_api_base\": \"https://graph.facebook.com/v25.0\",\n  \"phone_number_id\": \"REPLACE_WITH_PHONE_NUMBER_ID\",\n  \"team_chat_id\": \"REPLACE_WITH_TEAM_CHAT_ID\",\n  \"handoff_hours\": 12\n} }];\n"
+      },
+      "id": "64a89378-36d1-5ec3-987e-9256c6d1f926",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ String((($('Telegram Trigger').first().json.callback_query || {}).message || $('Telegram Trigger').first().json.message || { chat: {} }).chat.id) === String($json.team_chat_id) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "bd885b6f-90f8-5f15-a946-00f6f281a94e",
+      "name": "From Team Chat?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sheets_api_base + '/spreadsheets/' + encodeURIComponent($json.spreadsheet_id) + '/values/' + encodeURIComponent(\"'\" + $json.contacts_sheet.replace(/'/g, \"''\") + \"'!A1:R\") }}",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "00e2bf75-1ded-5910-a95a-c219e610789d",
+      "name": "Read Contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -60,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Bridge — a manager answers a WhatsApp client from the Telegram team chat, takes the client, or gives them back to the bot.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Contacts sheet: one row per WhatsApp number. The sheet may start empty: the header is written with the first contact.\nconst CCOLS = ['wa_id', 'name', 'phone', 'first_seen', 'last_in_at', 'last_out_at', 'status', 'stage', 'need', 'budget', 'timeline', 'details',\n  'hot', 'handoff_until', 'followup_sent', 'history', 'manager', 'notes'];\nconst colLetter = (index) => { let s = ''; let n = index + 1; while (n) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); } return s; };\nconst CLAST = colLetter(CCOLS.length - 1);\nconst contactsRange = () => `${quoteSheet(cfg.contacts_sheet)}!A1:${CLAST}`;\nconst contactRow = (row) => `${quoteSheet(cfg.contacts_sheet)}!A${row}:${CLAST}${row}`;\nconst waBatchUrl = () => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchGet?ranges=${encodeURIComponent(contactsRange())}&ranges=${encodeURIComponent(`${quoteSheet(cfg.catalog_sheet)}!A1:C`)}`;\nconst contactsTable = (values) => { const rows = values || []; const header = rows.length && rows[0][0] === 'wa_id'; return { header, rows: header ? rows.slice(1) : [] }; };\nconst ccell = (row, c) => row[CCOLS.indexOf(c)] || '';\nconst contactObject = (row) => Object.fromEntries(CCOLS.map((c) => [c, ccell(row, c)]));\nconst graphUrl = () => `${cfg.graph_api_base}/${encodeURIComponent(cfg.phone_number_id)}/messages`;\nconst waText = (to, body) => ({ messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'text', text: { preview_url: false, body: String(body).slice(0, 4000) } });\nconst update = $('Telegram Trigger').first().json;\nconst table = contactsTable($input.first().json.values);\nconst now = nowMs();\nconst iso = new Date(now).toISOString();\nconst team = String(cfg.team_chat_id);\nconst out = (json) => [{ json: Object.assign({ act: false, send: false, write: false, note: '', callback_id: '', team_chat: cfg.team_chat_id, graph_url: graphUrl() }, json) }];\n\nlet action = '', waId = '', text = '', who = '', callbackId = '';\nconst cb = update.callback_query;\nif (cb) {\n  if (String(cb.message && cb.message.chat && cb.message.chat.id) !== team) return out({});\n  [action, waId] = String(cb.data || '').split(':');\n  who = [cb.from.first_name, cb.from.last_name].filter(Boolean).join(' ') || cb.from.username || '';\n  callbackId = cb.id;\n} else if (update.message && String(update.message.chat.id) === team && update.message.text) {\n  const quoted = (update.message.reply_to_message || {}).text || '';\n  const ref = /WA: (\\d{6,15})/.exec(quoted);\n  if (!ref) return out({});\n  action = 'reply'; waId = ref[1]; text = update.message.text.slice(0, 4000);\n  who = [update.message.from.first_name, update.message.from.last_name].filter(Boolean).join(' ');\n} else return out({});\nif (!['reply', 'take', 'bot'].includes(action) || !waId) return out({});\n\nconst index = table.rows.findIndex((r) => ccell(r, 'wa_id') === waId);\nif (index < 0) return out({ act: true, note: `Клиент +${waId} не найден в таблице`, callback_id: callbackId });\nconst c = contactObject(table.rows[index]);\nconst write = (extra) => ({ write: true, http: { method: 'PUT', url: sheetUrl(encodeURIComponent(contactRow(index + (table.header ? 2 : 1)))) + '?valueInputOption=RAW', body: { values: [CCOLS.map((k) => String(c[k] || ''))] } }, ...extra });\n\nif (action === 'bot') {\n  c.status = 'bot'; c.handoff_until = '';\n  return out(Object.assign({ act: true, note: `Клиент +${waId} снова с ботом`, callback_id: callbackId }, write({})));\n}\nc.status = 'manager';\nc.manager = who || c.manager;\nc.handoff_until = new Date(now + (cfg.handoff_hours || 12) * 60 * MIN).toISOString();\nif (action === 'take') return out(Object.assign({ act: true, note: `${who || 'Менеджер'} ведёт клиента +${waId}. Бот молчит ${cfg.handoff_hours || 12} ч.`, callback_id: callbackId }, write({})));\n\n// WhatsApp allows free-form messages only within 24 hours of the client's last message.\nconst lastIn = Date.parse(c.last_in_at);\nif (isNaN(lastIn) || now - lastIn > 24 * 60 * MIN) {\n  return out({ act: true, note: `Не отправлено: с последнего сообщения клиента прошло больше 24 часов. WhatsApp разрешает только одобренный шаблон — напишите клиенту из инструмента рассылок или позвоните: +${waId}.` });\n}\nc.last_out_at = iso;\nc.history = `${c.history ? c.history + '\\n' : ''}${localText(now)} · ${who || 'менеджер'}: ${text.replace(/\\n+/g, ' ').slice(0, 400)}`.slice(-3500);\nreturn out(Object.assign({ act: true, send: true, message: waText(waId, text), note: `Отправлено в WhatsApp: +${waId}` }, write({})));\n"
+      },
+      "id": "62a0a1cb-731f-51e3-bff8-56b10765062f",
+      "name": "Bridge",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.send }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "528627ba-07e4-552d-a0c9-c82e13cacb00",
+      "name": "Send?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        380,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.graph_url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.message) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "90436077-4c5e-5d4e-bbaf-9ab6f7d6f19b",
+      "name": "Send WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        600,
+        -160
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "WhatsApp token"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Not Delivered — WhatsApp refused the message (most often: more than 24 hours since the client wrote). A person must act.\nconst sent = $('Bridge').first().json;\nconst error = $input.first().json.error || $input.first().json;\nconst raw = JSON.stringify(error);\nconst window = /131047|re-engagement/i.test(raw);\nreturn [{ json: { text: [\n  'Сообщение в WhatsApp не доставлено',\n  `Клиент: +${sent.wa_id || (sent.message || {}).to || '—'}`,\n  window ? 'Причина: прошло больше 24 часов с последнего сообщения клиента — WhatsApp разрешает только одобренный шаблон.' : `Ошибка: ${raw.slice(0, 300)}`,\n  `Текст: ${(((sent.message || {}).text || {}).body || ((((sent.message || {}).interactive || {}).body) || {}).text || '').slice(0, 600)}`,\n].join('\\n') } }];\n"
+      },
+      "id": "59a371d2-c735-5e3b-a6a4-dc0c35fbdc8b",
+      "name": "Not Delivered",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        820,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.team_chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "06a21c6c-f761-5961-ab77-0963574da261",
+      "name": "Alert: Not Delivered",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        -160
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.write }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "9dbe5d6c-2081-538b-8d22-81b13166daef",
+      "name": "Update?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        380,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "c166f992-dd40-5610-8c05-25265e3de325",
+      "name": "Update Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        600,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($json.callback_id) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "3f5c876d-a111-514b-ac24-e97267f4e6bd",
+      "name": "Pressed a Button?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        380,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "operation": "answerQuery",
+        "queryId": "={{ $json.callback_id }}",
+        "additionalFields": {
+          "text": "={{ $json.note }}"
+        }
+      },
+      "id": "b3de7c3b-5193-534b-b31b-57166a348be3",
+      "name": "Answer Button",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        160
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.act && Boolean($json.note) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "2c0f9ae7-de2e-5474-9c28-defc23924e5c",
+      "name": "Tell Team?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        380,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.team_chat }}",
+        "text": "={{ $json.note }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "c4e89eaf-fb27-5c37-8b4a-313283383008",
+      "name": "Tell Team",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        320
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "From Team Chat?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "From Team Chat?": {
+      "main": [
+        [
+          {
+            "node": "Read Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Contacts": {
+      "main": [
+        [
+          {
+            "node": "Bridge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bridge": {
+      "main": [
+        [
+          {
+            "node": "Send?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Pressed a Button?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tell Team?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send?": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Not Delivered",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Not Delivered": {
+      "main": [
+        [
+          {
+            "node": "Alert: Not Delivered",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update?": {
+      "main": [
+        [
+          {
+            "node": "Update Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pressed a Button?": {
+      "main": [
+        [
+          {
+            "node": "Answer Button",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tell Team?": {
+      "main": [
+        [
+          {
+            "node": "Tell Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

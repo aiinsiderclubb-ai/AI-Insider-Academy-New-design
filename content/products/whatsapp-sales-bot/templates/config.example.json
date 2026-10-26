@@ -1,0 +1,99 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "sheets_api_base": "https://sheets.googleapis.com/v4",
+  "spreadsheet_id": "1AbCdEfGhIjKlMnOpQrStUvWxYz0123456789",
+  "contacts_sheet": "Contacts",
+  "catalog_sheet": "Catalog",
+  "catalog_max_chars": 8000,
+  "graph_api_base": "https://graph.facebook.com/v25.0",
+  "phone_number_id": "104523456789012",
+  "verify_token": "9f3c2a7e5b1d8f4a6c0e2b7d9a1f3c5e",
+  "verify_signature": true,
+  "max_message_age_minutes": 60,
+  "team_chat_id": "-1001234567890",
+  "handoff_hours": 12,
+  "llm": {
+    "enabled": true,
+    "base_url": "https://openrouter.ai/api/v1",
+    "model": "ВЫБРАННАЯ-МОДЕЛЬ",
+    "json_mode": true
+  },
+  "business": {
+    "name": "Ремонт-Про",
+    "description": "Ремонт квартир под ключ в Киеве: дизайн, черновые и чистовые работы, закупка материалов",
+    "offer": "Ремонт квартир и домов от 40 м², косметический и капитальный",
+    "next_step": "Бесплатный выезд замерщика и смета за 2 дня",
+    "tone": "дружелюбно, коротко, на «вы», без канцелярита"
+  },
+  "qualify": [
+    {
+      "key": "need",
+      "label": "Что ремонтируем, площадь, вторичка или новостройка"
+    },
+    {
+      "key": "budget",
+      "label": "Бюджет на работы и материалы"
+    },
+    {
+      "key": "timeline",
+      "label": "Когда хотят начать"
+    }
+  ],
+  "opt_out_words": [
+    "стоп",
+    "stop",
+    "отписаться",
+    "unsubscribe"
+  ],
+  "opt_in_words": [
+    "старт",
+    "start"
+  ],
+  "human_words": [
+    "менеджер",
+    "оператор",
+    "человек",
+    "живой",
+    "позвоните"
+  ],
+  "texts": {
+    "opt_out": "Вы отписались от сообщений. Чтобы вернуться, напишите «старт».",
+    "opt_in": "Снова на связи! Чем можем помочь?",
+    "handoff": "Передаю ваш вопрос менеджеру — он ответит здесь же в рабочее время.",
+    "fallback": "Спасибо за сообщение! Менеджер ответит здесь же в рабочее время."
+  },
+  "followup": {
+    "enabled": true,
+    "after_hours": 20,
+    "text": "{name}, подскажите, вопрос ещё актуален? Если удобно, продолжим здесь."
+  },
+  "working_hours": {
+    "mon": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "tue": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "wed": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "thu": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "fri": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "sat": {
+      "open": "09:00",
+      "close": "19:00"
+    }
+  },
+  "max_reply_chars": 700,
+  "report_chat_id": ""
+}

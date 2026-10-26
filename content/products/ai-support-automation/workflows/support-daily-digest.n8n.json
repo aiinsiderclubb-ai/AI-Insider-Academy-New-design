@@ -1,0 +1,178 @@
+{
+  "name": "AI Support — Daily Digest",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Daily Digest\n\nКаждое утро: сколько обращений, какую долю закрыл бот, медиана первого ответа, каналы, темы, недовольные клиенты — и список вопросов, на которые в FAQ не нашлось ответа. Это и есть план пополнения базы знаний.",
+        "width": 440,
+        "height": 220
+      },
+      "id": "5f7c8643-995b-5d81-995d-b9eecd4334d0",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "f102fd2e-9859-56fb-b847-87744a63b54f",
+      "name": "Every Morning",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"tickets_sheet\": \"Tickets\",\n  \"team_chat_id\": \"REPLACE_WITH_TEAM_CHAT_ID\",\n  \"digest_chat_id\": \"\"\n} }];\n"
+      },
+      "id": "ebed248e-0ef1-55e8-8321-ae4cae6e5952",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sheets_api_base + '/spreadsheets/' + encodeURIComponent($json.spreadsheet_id) + '/values/' + encodeURIComponent(\"'\" + $json.tickets_sheet.replace(/'/g, \"''\") + \"'!A1:U\") }}",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "4c4f67a0-3241-54d4-a1b9-4e766f7e52e1",
+      "name": "Read Tickets",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Daily Digest — yesterday in numbers, and the questions the FAQ could not answer: the list to add next.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Tickets sheet columns. The sheet may start empty: the header is written with the first ticket.\nconst TCOLS = ['id', 'created_at', 'updated_at', 'channel', 'customer', 'name', 'email', 'telegram_chat', 'subject', 'category', 'urgency', 'sentiment',\n  'status', 'summary', 'last_message', 'draft', 'history', 'first_response_at', 'reminded_level', 'assignee', 'kb_answer'];\nconst colLetter = (index) => { let s = ''; let n = index + 1; while (n) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); } return s; };\nconst TLAST = colLetter(TCOLS.length - 1);\nconst ticketRange = () => `${quoteSheet(cfg.tickets_sheet)}!A1:${TLAST}`;\nconst rowRange = (row) => `${quoteSheet(cfg.tickets_sheet)}!A${row}:${TLAST}${row}`;\nconst batchGetUrl = () => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchGet?ranges=${encodeURIComponent(ticketRange())}&ranges=${encodeURIComponent(`${quoteSheet(cfg.faq_sheet)}!A1:B`)}`;\nfunction tableOf(values) {\n  const rows = values || [];\n  const header = rows.length && rows[0][0] === 'id';\n  return { header, rows: header ? rows.slice(1) : [] };\n}\nconst cell = (row, c) => row[TCOLS.indexOf(c)] || '';\nconst rowObject = (row) => Object.fromEntries(TCOLS.map((c) => [c, cell(row, c)]));\nconst tickets = tableOf($input.first().json.values);\nconst now = nowMs();\nconst yesterday = localParts(now - 24 * 60 * MIN).date;\nconst made = tickets.rows.filter((r) => { const t = Date.parse(cell(r, 'created_at')); return !isNaN(t) && localParts(t).date === yesterday; });\nconst count = (list, key) => { const o = {}; for (const r of list) { const k = cell(r, key) || '—'; o[k] = (o[k] || 0) + 1; } return Object.entries(o).sort((a, b) => b[1] - a[1]); };\nconst bot = made.filter((r) => /· бот:/.test(cell(r, 'history'))).length;\nconst responded = made.filter((r) => cell(r, 'first_response_at'));\nconst waits = responded.map((r) => (Date.parse(cell(r, 'first_response_at')) - Date.parse(cell(r, 'created_at'))) / MIN).filter((m) => m >= 0).sort((a, b) => a - b);\nconst median = waits.length ? waits[Math.floor(waits.length / 2)] : null;\nconst fmt = (m) => (m < 60 ? `${Math.round(m)} мин` : `${(m / 60).toFixed(1).replace('.', ',')} ч`);\nconst gaps = [...new Set(made.filter((r) => cell(r, 'kb_answer') === 'no' && cell(r, 'summary')).map((r) => cell(r, 'summary')))].slice(0, 7);\nconst open = tickets.rows.filter((r) => ['new', 'draft_ready'].includes(cell(r, 'status'))).length;\nconst lines = [`Поддержка за ${yesterday}`, `Обращений: ${made.length}`];\nif (made.length) {\n  lines.push(`Ответил бот: ${bot} (${Math.round((bot / made.length) * 100)}%)`);\n  if (median !== null) lines.push(`Первый ответ, медиана: ${fmt(median)}`);\n  lines.push('', 'Каналы:', ...count(made, 'channel').map(([k, v]) => `• ${k}: ${v}`));\n  lines.push('', 'Темы:', ...count(made, 'category').map(([k, v]) => `• ${k}: ${v}`));\n  const angry = made.filter((r) => ['negative', 'angry'].includes(cell(r, 'sentiment'))).length;\n  if (angry) lines.push('', `Недовольных клиентов: ${angry}`);\n}\nif (gaps.length) lines.push('', 'Нет ответа в базе знаний — стоит добавить:', ...gaps.map((g) => `• ${g}`));\nlines.push('', open ? `Ждут ответа сейчас: ${open}` : 'Все обращения отвечены.');\nreturn [{ json: { chat_id: cfg.digest_chat_id || cfg.team_chat_id, text: lines.join('\\n') } }];\n"
+      },
+      "id": "3c25800a-0daf-566a-819c-9c61ea22d1a4",
+      "name": "Build Digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "27face24-856e-5ab5-8bc4-8bafccd1046c",
+      "name": "Send Digest",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Morning": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Tickets": {
+      "main": [
+        [
+          {
+            "node": "Build Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Digest": {
+      "main": [
+        [
+          {
+            "node": "Send Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

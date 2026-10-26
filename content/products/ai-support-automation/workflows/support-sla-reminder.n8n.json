@@ -1,0 +1,276 @@
+{
+  "name": "AI Support — SLA Reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## SLA Reminder\n\nКаждые 15 минут ищет обращения со статусом **new** или **draft_ready**, которые ждут дольше срока для своей срочности (минуты в `sla`). Одно напоминание команде; при двойной просрочке — руководителю. В нерабочее время молчит.",
+        "width": 440,
+        "height": 220
+      },
+      "id": "a3fe57a2-b03e-5e55-a878-33d135b7ee4b",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/15 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "a07f64f9-52ad-589c-8690-c2c538baed3c",
+      "name": "Every 15 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"tickets_sheet\": \"Tickets\",\n  \"team_chat_id\": \"REPLACE_WITH_TEAM_CHAT_ID\",\n  \"working_hours\": {\n    \"mon\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"tue\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"wed\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"thu\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"fri\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    }\n  },\n  \"sla\": {\n    \"high\": 30,\n    \"normal\": 240,\n    \"low\": 1440,\n    \"escalate_chat_id\": \"\"\n  }\n} }];\n"
+      },
+      "id": "996b1ae7-8148-5a3c-b367-6707ef985e28",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sheets_api_base + '/spreadsheets/' + encodeURIComponent($json.spreadsheet_id) + '/values/' + encodeURIComponent(\"'\" + $json.tickets_sheet.replace(/'/g, \"''\") + \"'!A1:U\") }}",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "e010c489-9454-5029-868e-6167d149bbc0",
+      "name": "Read Tickets",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Find Waiting — tickets without a first answer past their deadline. One reminder each, then one escalation.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Tickets sheet columns. The sheet may start empty: the header is written with the first ticket.\nconst TCOLS = ['id', 'created_at', 'updated_at', 'channel', 'customer', 'name', 'email', 'telegram_chat', 'subject', 'category', 'urgency', 'sentiment',\n  'status', 'summary', 'last_message', 'draft', 'history', 'first_response_at', 'reminded_level', 'assignee', 'kb_answer'];\nconst colLetter = (index) => { let s = ''; let n = index + 1; while (n) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); } return s; };\nconst TLAST = colLetter(TCOLS.length - 1);\nconst ticketRange = () => `${quoteSheet(cfg.tickets_sheet)}!A1:${TLAST}`;\nconst rowRange = (row) => `${quoteSheet(cfg.tickets_sheet)}!A${row}:${TLAST}${row}`;\nconst batchGetUrl = () => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchGet?ranges=${encodeURIComponent(ticketRange())}&ranges=${encodeURIComponent(`${quoteSheet(cfg.faq_sheet)}!A1:B`)}`;\nfunction tableOf(values) {\n  const rows = values || [];\n  const header = rows.length && rows[0][0] === 'id';\n  return { header, rows: header ? rows.slice(1) : [] };\n}\nconst cell = (row, c) => row[TCOLS.indexOf(c)] || '';\nconst rowObject = (row) => Object.fromEntries(TCOLS.map((c) => [c, cell(row, c)]));\nconst tickets = tableOf($input.first().json.values);\nconst now = nowMs();\nconst here = localParts(now);\nconst day = (cfg.working_hours || {})[here.weekday];\nconst minutes = here.hour * 60 + here.minute;\nconst toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };\nif (!day || minutes < toMin(day.open) || minutes >= toMin(day.close)) return [{ json: { send: false, reason: 'outside_hours' } }];\nconst levelCol = colLetter(TCOLS.indexOf('reminded_level'));\nconst first = [], second = [], updates = [];\ntickets.rows.forEach((row, i) => {\n  if (!['new', 'draft_ready'].includes(cell(row, 'status'))) return;\n  const since = Date.parse(cell(row, 'updated_at') || cell(row, 'created_at'));\n  if (isNaN(since)) return;\n  const limit = (cfg.sla || {})[cell(row, 'urgency')] || (cfg.sla || {}).normal || 240;\n  const waited = Math.round((now - since) / MIN);\n  const level = Number(cell(row, 'reminded_level') || 0);\n  const entry = `• ${cell(row, 'name') || cell(row, 'customer')}, ${cell(row, 'channel')}, ${cell(row, 'category')}${cell(row, 'urgency') === 'high' ? ', срочно' : ''} — ждёт ${waited >= 120 ? Math.round(waited / 60) + ' ч' : waited + ' мин'}${cell(row, 'status') === 'draft_ready' ? ', черновик готов' : ''} (${cell(row, 'id')})`;\n  const at = `${quoteSheet(cfg.tickets_sheet)}!${levelCol}${i + (tickets.header ? 2 : 1)}`;\n  if (waited >= limit * 2 && level < 2) { second.push(entry); updates.push({ range: at, values: [['2']] }); }\n  else if (waited >= limit && level < 1) { first.push(entry); updates.push({ range: at, values: [['1']] }); }\n});\nif (!updates.length) return [{ json: { send: false, reason: 'nothing_waiting' } }];\nconst messages = [];\nif (first.length) messages.push({ chat_id: cfg.team_chat_id, text: [`Обращения без ответа: ${first.length}`, ...first].join('\\n') });\nif (second.length) messages.push({ chat_id: (cfg.sla || {}).escalate_chat_id || cfg.team_chat_id, text: [`Просрочено вдвое: ${second.length}`, ...second].join('\\n') });\nreturn messages.map((m, i) => ({ json: Object.assign({ send: true }, m, i === 0 ? { http: { method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data: updates } } } : {}) }));\n"
+      },
+      "id": "5da14a62-70c1-5e7d-b05e-4902c900e42f",
+      "name": "Find Waiting",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.send }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "03e0e985-3e9a-5ef2-81e2-4f782866b3e8",
+      "name": "Send?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "c3dc6610-5deb-5ecc-aba1-3f05a40db10f",
+      "name": "Remind",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        -80
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($json.http) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "bf11cf6f-0242-58a7-8ae8-55f10b4e0a95",
+      "name": "Mark Reminded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "18930bab-e9e5-5cc5-9c60-8fb506b5e528",
+      "name": "Mark in Sheet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        120
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    }
+  ],
+  "connections": {
+    "Every 15 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Tickets": {
+      "main": [
+        [
+          {
+            "node": "Find Waiting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Waiting": {
+      "main": [
+        [
+          {
+            "node": "Send?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mark Reminded?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send?": {
+      "main": [
+        [
+          {
+            "node": "Remind",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Reminded?": {
+      "main": [
+        [
+          {
+            "node": "Mark in Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

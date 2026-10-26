@@ -32,7 +32,7 @@ export function runCode(code: string, nodes: J, input: J): J[] {
   return (new Function("$", "$input", code)($, $input) as { json: J }[]).map((item) => item.json);
 }
 
-/** The Google Sheets values API, in memory: get, append, update, batchUpdate. */
+/** The Google Sheets values API, in memory: get, batchGet, append, update, batchUpdate. */
 export class Sheets {
   tabs: Record<string, string[][]> = {};
 
@@ -56,6 +56,14 @@ export class Sheets {
         this.tab(r.tab)[r.row - 1][r.col] = item.values[0][0];
       }
       return {};
+    }
+    if (tail === ":batchGet") {
+      return {
+        valueRanges: url.searchParams.getAll("ranges").map((range) => {
+          const rows = this.tab(Sheets.range(range).tab);
+          return rows.length ? { range, values: rows.map((row) => [...row]) } : { range };
+        }),
+      };
     }
     const target = tail.slice(1).replace(/:append$/, "");
     const r = Sheets.range(target);

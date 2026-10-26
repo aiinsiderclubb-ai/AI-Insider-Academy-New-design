@@ -1,0 +1,77 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "sheets_api_base": "https://sheets.googleapis.com/v4",
+  "spreadsheet_id": "1AbCdEfGhIjKlMnOpQrStUvWxYz0123456789",
+  "tickets_sheet": "Tickets",
+  "faq_sheet": "FAQ",
+  "kb_max_chars": 12000,
+  "web_token": "4b9e1f0c7a2d6e8b3c5f9a1d7e2b4c6f",
+  "team_chat_id": "-1001234567890",
+  "mode": "draft",
+  "confidence_threshold": 0.8,
+  "auto_categories": [
+    "delivery",
+    "how_to",
+    "account"
+  ],
+  "categories": [
+    {
+      "id": "delivery",
+      "description": "доставка, сроки, отслеживание"
+    },
+    {
+      "id": "billing",
+      "description": "оплата, счета, возвраты денег"
+    },
+    {
+      "id": "how_to",
+      "description": "как пользоваться продуктом или услугой"
+    },
+    {
+      "id": "account",
+      "description": "вход, пароль, личный кабинет"
+    },
+    {
+      "id": "complaint",
+      "description": "жалоба на качество или сотрудника"
+    },
+    {
+      "id": "sales",
+      "description": "хочет купить, уточняет условия"
+    }
+  ],
+  "forbidden_topics": [
+    "возврат",
+    "верните",
+    "компенсац",
+    "суд",
+    "юрист",
+    "претензи",
+    "refund",
+    "chargeback"
+  ],
+  "thread_days": 7,
+  "llm": {
+    "enabled": true,
+    "base_url": "https://openrouter.ai/api/v1",
+    "model": "ВЫБРАННАЯ-МОДЕЛЬ",
+    "json_mode": true
+  },
+  "business": {
+    "name": "Ромашка",
+    "description": "Интернет-магазин товаров для дома с доставкой по стране",
+    "tone": "вежливо, коротко, по делу, без канцелярита",
+    "signature": "— Служба поддержки Ромашки"
+  },
+  "email": {
+    "from": "Ромашка — поддержка <support@romashka.shop>",
+    "default_subject": "Ответ службы поддержки"
+  },
+  "telegram": {
+    "greeting": "Здравствуйте! Это поддержка Ромашки. Напишите вопрос — ответим здесь же."
+  },
+  "web": {
+    "ack": "Спасибо! Мы получили ваше сообщение и ответим в ближайшее время."
+  }
+}

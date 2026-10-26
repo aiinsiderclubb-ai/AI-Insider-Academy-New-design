@@ -1,0 +1,37 @@
+<!--
+  Форма поддержки для сайта: вопрос уходит в Support Inbox, ответ бота показывается сразу,
+  если он разрешён; иначе — сообщение «ответим в ближайшее время» и ответ придёт на почту.
+  Замените ENDPOINT и TOKEN (web_token из Config). Токен виден в коде страницы:
+  он отсекает случайные запросы, но не является секретом.
+-->
+<div id="support-box">
+  <form id="support-form">
+    <input name="name" placeholder="Имя" autocomplete="name">
+    <input name="email" type="email" placeholder="Email для ответа" autocomplete="email" required>
+    <textarea name="message" placeholder="Ваш вопрос" required></textarea>
+    <label><input type="checkbox" name="consent" required> Согласен на обработку персональных данных</label>
+    <button type="submit">Отправить</button>
+  </form>
+  <div id="support-answer" role="status"></div>
+</div>
+<script>
+(function () {
+  var ENDPOINT = 'https://REPLACE-N8N-HOST/webhook/support';
+  var TOKEN = 'REPLACE_WITH_WEB_TOKEN';
+  var form = document.getElementById('support-form');
+  var out = document.getElementById('support-answer');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var data = Object.fromEntries(new FormData(form));
+    data.token = TOKEN;
+    out.textContent = 'Отправляем…';
+    fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) { return r.json(); })
+      .then(function (body) {
+        out.textContent = body.answer || body.message || 'Спасибо! Мы ответим на почту.';
+        if (body.ok) form.querySelector('textarea').value = '';
+      })
+      .catch(function () { out.textContent = 'Не получилось отправить. Напишите нам на почту.'; });
+  });
+})();
+</script>

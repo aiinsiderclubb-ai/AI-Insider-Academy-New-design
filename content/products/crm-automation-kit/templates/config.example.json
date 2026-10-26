@@ -1,0 +1,94 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "sheets_api_base": "https://sheets.googleapis.com/v4",
+  "spreadsheet_id": "1AbCdEfGhIjKlMnOpQrStUvWxYz0123456789",
+  "deals_sheet": "Deals",
+  "intake_token": "7c1e9a4f2b8d6e3a",
+  "team_chat_id": "-1001234567890",
+  "report_chat_id": "",
+  "currency": "€",
+  "phone": {
+    "country_code": "380",
+    "national_prefix": "0"
+  },
+  "owners": [
+    {
+      "name": "Олег",
+      "chat_id": "123456789",
+      "active": true
+    },
+    {
+      "name": "Аня",
+      "chat_id": "987654321",
+      "active": true
+    },
+    {
+      "name": "Ира",
+      "chat_id": "555666777",
+      "active": false
+    }
+  ],
+  "first_action": "Позвонить клиенту",
+  "first_contact_minutes": 30,
+  "escalate_after_minutes": 120,
+  "remind_time": "10:00",
+  "working_hours": {
+    "mon": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "tue": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "wed": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "thu": {
+      "open": "09:00",
+      "close": "19:00"
+    },
+    "fri": {
+      "open": "09:00",
+      "close": "19:00"
+    }
+  },
+  "stages": [
+    {
+      "id": "new",
+      "label": "Новая",
+      "stale_days": 1
+    },
+    {
+      "id": "contacted",
+      "label": "Связались",
+      "next_action": "Назначить встречу или звонок",
+      "follow_up_days": 2,
+      "stale_days": 3
+    },
+    {
+      "id": "meeting",
+      "label": "Встреча",
+      "next_action": "Отправить предложение",
+      "follow_up_days": 1,
+      "stale_days": 5
+    },
+    {
+      "id": "proposal",
+      "label": "КП отправлено",
+      "next_action": "Узнать решение",
+      "follow_up_days": 3,
+      "stale_days": 4
+    },
+    {
+      "id": "won",
+      "label": "Выиграна"
+    },
+    {
+      "id": "lost",
+      "label": "Проиграна"
+    }
+  ]
+}

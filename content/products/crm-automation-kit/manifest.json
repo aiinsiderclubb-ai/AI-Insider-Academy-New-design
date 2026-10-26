@@ -1,0 +1,25 @@
+{
+ "files": [
+  {
+   "file": "README.md",
+   "labelRu": "С чего начать",
+   "labelEn": "Start here"
+  },
+  {
+   "file": "QUICKSTART.md",
+   "labelRu": "Запуск за 45 минут",
+   "labelEn": "Launch in 45 minutes"
+  },
+  {
+   "file": "CONTENTS.md",
+   "labelRu": "Состав набора",
+   "labelEn": "What is inside"
+  }
+ ],
+ "bundle": [
+  "docs",
+  "templates",
+  "tests",
+  "workflows"
+ ]
+}

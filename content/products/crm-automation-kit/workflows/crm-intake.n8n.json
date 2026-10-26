@@ -1,0 +1,509 @@
+{
+  "name": "CRM Automation — Intake",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Intake\n\nОдин адрес для всех источников: формы сайта, Tilda, Make, наборы Lead Generation и WhatsApp Sales Bot, ваш сервер. Заявка чистится (телефон в международном формате, почта в нижнем регистре), сверяется с таблицей и:\n\n- **новый клиент** → сделка, ответственный по очереди, первый шаг в рабочее время, карточка менеджеру в Telegram;\n- **клиент с открытой сделкой** → запись в историю той же сделки, без дубля;\n- **клиент после закрытой сделки** → новая сделка тому же менеджеру, отметка «повторный».\n\nЗапросы без токена из Config (поле `token`, заголовок `X-CRM-Token` или `?token=` в адресе) отклоняются.",
+        "width": 540,
+        "height": 360
+      },
+      "id": "88e2d27b-299a-5523-a17c-3fd41cf09498",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        -440
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crm-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "e5974d6c-36b1-5f48-9ab7-4c0f34b29c61",
+      "name": "CRM Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -660,
+        0
+      ],
+      "webhookId": "1c8c6c92-3636-50a1-9236-f7c6792d9ed7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"deals_sheet\": \"Deals\",\n  \"team_chat_id\": \"REPLACE_WITH_TEAM_CHAT_ID\",\n  \"currency\": \"€\",\n  \"owners\": [\n    {\n      \"name\": \"REPLACE: Имя менеджера 1\",\n      \"chat_id\": \"REPLACE_WITH_CHAT_ID\",\n      \"active\": true\n    },\n    {\n      \"name\": \"REPLACE: Имя менеджера 2\",\n      \"chat_id\": \"REPLACE_WITH_CHAT_ID\",\n      \"active\": true\n    }\n  ],\n  \"stages\": [\n    {\n      \"id\": \"new\",\n      \"label\": \"Новая\",\n      \"stale_days\": 1\n    },\n    {\n      \"id\": \"contacted\",\n      \"label\": \"Связались\",\n      \"next_action\": \"Назначить встречу или звонок\",\n      \"follow_up_days\": 2,\n      \"stale_days\": 3\n    },\n    {\n      \"id\": \"meeting\",\n      \"label\": \"Встреча\",\n      \"next_action\": \"Отправить предложение\",\n      \"follow_up_days\": 1,\n      \"stale_days\": 5\n    },\n    {\n      \"id\": \"proposal\",\n      \"label\": \"КП отправлено\",\n      \"next_action\": \"Узнать решение\",\n      \"follow_up_days\": 3,\n      \"stale_days\": 4\n    },\n    {\n      \"id\": \"won\",\n      \"label\": \"Выиграна\"\n    },\n    {\n      \"id\": \"lost\",\n      \"label\": \"Проиграна\"\n    }\n  ],\n  \"intake_token\": \"REPLACE_WITH_RANDOM_TOKEN\",\n  \"phone\": {\n    \"country_code\": \"380\",\n    \"national_prefix\": \"0\"\n  },\n  \"first_action\": \"Позвонить клиенту\",\n  \"first_contact_minutes\": 30,\n  \"working_hours\": {\n    \"mon\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"tue\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"wed\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"thu\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    },\n    \"fri\": {\n      \"open\": \"09:00\",\n      \"close\": \"19:00\"\n    }\n  }\n} }];\n"
+      },
+      "id": "4d40d4cd-f58e-5ef4-a784-043da0f1adb3",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.sheets_api_base }}/spreadsheets/{{ encodeURIComponent($('Config').first().json.spreadsheet_id) }}/values/{{ encodeURIComponent(\"'\" + $('Config').first().json.deals_sheet.replace(/'/g, \"''\") + \"'!A1:V\") }}?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "cd5f97ca-3f57-5ea3-bb87-a663d1f7d175",
+      "name": "Read Deals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -220,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Intake — one lead from any source: cleaned, matched to an existing client, given an owner and a first step.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// Deals sheet: one row per deal, contact details included. Dates are local time \"YYYY-MM-DD HH:MM\" so people can read and edit them.\nconst DCOLS = ['id', 'created_at', 'updated_at', 'source', 'name', 'phone', 'email', 'company', 'need', 'amount', 'stage', 'owner', 'next_action',\n  'next_action_at', 'last_activity_at', 'reminded_at', 'escalated_at', 'lost_reason', 'closed_at', 'repeat', 'history', 'notes'];\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst DLAST = colLetter(DCOLS.length - 1);\nconst dealsRange = () => `${quoteSheet(cfg.deals_sheet)}!A1:${DLAST}`;\nconst dealRow = (row) => `${quoteSheet(cfg.deals_sheet)}!A${row}:${DLAST}${row}`;\nconst dealsReadUrl = () => sheetUrl(encodeURIComponent(dealsRange())) + '?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER';\nfunction dealsTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'id';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), deal: dealObject(r) })).filter((x) => x.deal.id) };\n}\nfunction dealObject(row) {\n  const o = {};\n  DCOLS.forEach((c, i) => { const v = row[i]; o[c] = v === undefined || v === null ? '' : typeof v === 'number' && /_at$/.test(c) ? v : String(v).trim(); });\n  o.stage = o.stage || 'new';\n  return o;\n}\nconst putDeal = (sheetRow, deal) => ({ method: 'PUT', url: sheetUrl(encodeURIComponent(dealRow(sheetRow))) + '?valueInputOption=RAW', body: { values: [DCOLS.map((c) => String(deal[c] === undefined ? '' : deal[c]))] } });\nconst appendDeal = (deal, hasHeader) => ({ method: 'POST', url: sheetUrl(encodeURIComponent(dealsRange()) + ':append') + '?valueInputOption=RAW&insertDataOption=INSERT_ROWS',\n  body: { values: [...(hasHeader ? [] : [DCOLS]), DCOLS.map((c) => String(deal[c] === undefined ? '' : deal[c]))] } });\nconst cellWrite = (sheetRow, col, value) => ({ range: `${quoteSheet(cfg.deals_sheet)}!${colLetter(DCOLS.indexOf(col))}${sheetRow}`, values: [[String(value)]] });\nconst batchUpdate = (data) => ({ method: 'POST', url: `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`, body: { valueInputOption: 'RAW', data } });\n\nfunction localToMs(y, mo, d, h, mi) {\n  const want = Date.UTC(y, mo - 1, d, h, mi);\n  let guess = want;\n  for (let i = 0; i < 3; i++) {\n    const p = localParts(guess);\n    guess += want - Date.UTC(Number(p.date.slice(0, 4)), Number(p.date.slice(5, 7)) - 1, Number(p.date.slice(8, 10)), p.hour, p.minute);\n  }\n  return guess;\n}\n// A date cell (serial number), \"2026-10-28 10:00\", \"28.10.2026 10:00\" or an ISO timestamp — in the Config time zone.\nfunction whenOf(value) {\n  if (value === '' || value === null || value === undefined) return null;\n  if (typeof value === 'number' || /^\\d+(\\.\\d+)?$/.test(String(value))) {\n    const wall = new Date(Math.round((Number(value) - 25569) * 86400000));\n    return localToMs(wall.getUTCFullYear(), wall.getUTCMonth() + 1, wall.getUTCDate(), wall.getUTCHours(), wall.getUTCMinutes());\n  }\n  const s = String(value).trim();\n  if (/^\\d{4}-\\d{2}-\\d{2}T.*(Z|[+-]\\d{2}:?\\d{2})$/.test(s)) return Date.parse(s);\n  let m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})(?:[ T](\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[1], +m[2], +m[3], +(m[4] || 9), +(m[5] || 0));\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})(?:,?\\s+(\\d{1,2}):(\\d{2}))?/.exec(s);\n  if (m) return localToMs(+m[3], +m[2], +m[1], +(m[4] || 9), +(m[5] || 0));\n  return NaN;\n}\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nconst toMin = (t) => { const [h, m] = String(t).split(':').map(Number); return h * 60 + (m || 0); };\nconst dayAt = (ms, hhmm) => { const p = localParts(ms); const t = toMin(hhmm); return localToMs(+p.date.slice(0, 4), +p.date.slice(5, 7), +p.date.slice(8, 10), Math.floor(t / 60), t % 60); };\nfunction inWorkingHours(ms) {\n  const p = localParts(ms);\n  const day = (cfg.working_hours || {})[p.weekday];\n  const m = p.hour * 60 + p.minute;\n  return Boolean(day) && m >= toMin(day.open) && m < toMin(day.close);\n}\n// The same moment if it falls in working hours, otherwise the next opening.\nfunction nextWorking(ms) {\n  if (inWorkingHours(ms)) return ms;\n  for (let i = 0; i < 8; i++) {\n    const probe = ms + i * 24 * 60 * MIN;\n    const day = (cfg.working_hours || {})[localParts(probe).weekday];\n    if (!day) continue;\n    const open = dayAt(probe, day.open);\n    if (open > ms) return open;\n  }\n  return ms;\n}\nconst stageOf = (id) => (cfg.stages || []).find((s) => s.id === id) || { id, label: id };\nconst isClosed = (deal) => deal.stage === 'won' || deal.stage === 'lost';\nconst ownerByName = (name) => (cfg.owners || []).find((o) => o.name === name);\nconst ownerByChat = (chat) => (cfg.owners || []).find((o) => String(o.chat_id) === String(chat));\nconst amountOf = (v) => { const n = Number(String(v || '').replace(/\\s/g, '').replace(/[^\\d.,-]/g, '').replace(',', '.')); return Number.isFinite(n) ? n : 0; };\nconst money = (n) => `${Math.round(n).toLocaleString('ru-RU').replace(/\\s/g, ' ')}${cfg.currency ? ' ' + cfg.currency : ''}`;\nconst addHistory = (deal, ms, who, text) => { deal.history = `${deal.history ? deal.history + '\\n' : ''}${stamp(ms)} · ${who}: ${String(text).replace(/\\n+/g, ' ').slice(0, 300)}`.slice(-4000); };\nfunction card(deal, title) {\n  const at = whenOf(deal.next_action_at);\n  const lines = [\n    `${title} ${deal.id}`,\n    deal.name ? `Имя: ${deal.name}` : '', deal.phone ? `Телефон: ${deal.phone}` : '', deal.email ? `Почта: ${deal.email}` : '', deal.company ? `Компания: ${deal.company}` : '',\n    deal.need ? `Запрос: ${deal.need.slice(0, 600)}` : '', deal.amount ? `Сумма: ${deal.amount}` : '', deal.source ? `Источник: ${deal.source}` : '',\n    `Этап: ${stageOf(deal.stage).label}${deal.owner ? ' · ' + deal.owner : ''}`,\n    deal.next_action ? `Следующий шаг: ${deal.next_action}${at ? ' — ' + stamp(at) : ''}` : '',\n  ].filter(Boolean);\n  return lines.join('\\n') + '\\n\\nОтветьте на это сообщение: заметка, «сумма: 1500», «напомнить: завтра 15:00 перезвонить», «причина: дорого».\\nID: ' + deal.id;\n}\nconst req = $('CRM Webhook').first().json;\nlet body = req.body || {};\nif (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }\n// Every source proves itself with the token from Config: in the body, a header or the address.\nconst token = String(body.token || (req.headers || {})['x-crm-token'] || (req.query || {}).token || '');\nconst expected = String(cfg.intake_token || '');\nif (!expected || expected.startsWith('REPLACE') || token !== expected) return [{ json: { kind: 'reject', status: 403, response: { ok: false, error: 'bad token' } } }];\n// Tilda checks a new webhook with a test request.\nif (body.test === 'test') return [{ json: { kind: 'reject', status: 200, response: { ok: true, test: true } } }];\n// Field names differ between forms and services; the first non-empty alias wins.\nconst ALIASES = {\n  name: ['name', 'Name', 'имя', 'Имя', 'fio', 'full_name', 'contact_name'],\n  phone: ['phone', 'Phone', 'телефон', 'Телефон', 'tel', 'phone_number', 'mobile'],\n  email: ['email', 'Email', 'e-mail', 'mail', 'почта', 'Почта'],\n  company: ['company', 'Company', 'компания', 'Компания', 'organization'],\n  need: ['need', 'message', 'Message', 'comment', 'Comments', 'сообщение', 'Сообщение', 'комментарий', 'request', 'summary'],\n  amount: ['amount', 'budget', 'Budget', 'бюджет', 'Бюджет', 'value', 'sum'],\n  source: ['source', 'utm_source', 'channel', 'источник'],\n};\nconst pick = (key) => { for (const a of ALIASES[key]) { const v = body[a]; if (v !== undefined && v !== null && String(v).trim()) return String(v).trim(); } return ''; };\nconst clip = (v, n) => String(v || '').replace(/\\s+/g, ' ').trim().slice(0, n);\nconst lead = { name: clip(pick('name'), 120), phone: phoneOf(pick('phone')), email: emailOf(pick('email')), company: clip(pick('company'), 120),\n  need: String(pick('need')).trim().slice(0, 2000), amount: clip(pick('amount'), 40), source: clip(pick('source') || 'api', 60) };\nif (!lead.phone && !lead.email) return [{ json: { kind: 'reject', status: 422, response: { ok: false, error: 'phone or email required' } } }];\n\nconst table = dealsTable($input.first().json.values);\nconst now = nowMs();\nconst at = stamp(now);\nconst same = (d) => (lead.phone && d.phone === lead.phone) || (lead.email && d.email.toLowerCase() === lead.email);\nconst mine = table.rows.filter(({ deal }) => same(deal));\nconst open = mine.find(({ deal }) => !isClosed(deal));\nconst team = cfg.team_chat_id;\nconst text = (deal, title) => card(deal, title);\n\nif (open) {\n  // The client wrote again while a deal is open: the same deal, not a duplicate.\n  const deal = Object.assign({}, open.deal);\n  for (const k of ['name', 'company', 'amount']) if (!deal[k] && lead[k]) deal[k] = lead[k];\n  if (!deal.email && lead.email) deal.email = lead.email;\n  if (!deal.phone && lead.phone) deal.phone = lead.phone;\n  addHistory(deal, now, 'клиент', `повторное обращение (${lead.source})${lead.need ? ': ' + lead.need : ''}`);\n  deal.updated_at = at; deal.last_activity_at = at;\n  const owner = ownerByName(deal.owner);\n  return [{ json: { kind: 'repeat_open', id: deal.id, deal, http: putDeal(open.sheetRow, deal), response: { ok: true, id: deal.id, duplicate: true },\n    owner_chat: owner ? owner.chat_id : team, owner_text: text(deal, 'Клиент снова написал · сделка'), team_chat: '', team_text: '' } }];\n}\n\nconst active = (cfg.owners || []).filter((o) => o.active !== false && o.chat_id);\nconst previous = mine.length ? ownerByName(mine[mine.length - 1].deal.owner) : null;\nlet owner = previous && previous.active !== false ? previous : null;\nif (!owner && active.length) {\n  // Fewest open deals first; on a tie, whoever got a deal longest ago.\n  const load = (o) => table.rows.filter(({ deal }) => deal.owner === o.name && !isClosed(deal)).length;\n  const last = (o) => Math.max(0, ...table.rows.filter(({ deal }) => deal.owner === o.name).map(({ deal }) => whenOf(deal.created_at) || 0));\n  owner = active.slice().sort((a, b) => load(a) - load(b) || last(a) - last(b))[0];\n}\nconst p = localParts(now);\nconst seq = table.rows.filter(({ deal }) => deal.id.startsWith(`D${p.date.slice(2).replace(/-/g, '')}`)).length + 1;\nconst deal = Object.assign({ id: `D${p.date.slice(2).replace(/-/g, '')}-${seq}`, created_at: at, updated_at: at, stage: 'new', owner: owner ? owner.name : '',\n  next_action: cfg.first_action || 'Связаться с клиентом', next_action_at: stamp(nextWorking(now + (cfg.first_contact_minutes || 30) * MIN)),\n  last_activity_at: at, repeat: mine.length ? 'yes' : '', history: '', notes: '' }, lead);\n// A returning client keeps the details they gave last time.\nif (mine.length) for (const k of ['name', 'phone', 'email', 'company']) if (!deal[k]) deal[k] = mine[mine.length - 1].deal[k];\naddHistory(deal, now, 'клиент', `заявка (${lead.source})${lead.need ? ': ' + lead.need : ''}`);\nreturn [{ json: {\n  kind: mine.length ? 'repeat_closed' : 'new', id: deal.id, deal, http: appendDeal(deal, table.header), response: { ok: true, id: deal.id, duplicate: false },\n  owner_chat: owner ? owner.chat_id : team, owner_text: text(deal, mine.length ? 'Повторный клиент · новая сделка' : 'Новая сделка'),\n  team_chat: owner && team ? team : '', team_text: owner ? `Новая сделка ${deal.id} → ${owner.name}: ${deal.name || deal.phone || deal.email}${deal.need ? ' — ' + deal.need.slice(0, 120) : ''}` : '',\n} }];\n"
+      },
+      "id": "c56d6079-6f21-5507-ad8b-4e11cbd97544",
+      "name": "Intake",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.kind !== 'reject' }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "986b4542-29bc-5aba-859f-a65e4daa0bd7",
+      "name": "Accepted?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={{ $json.http.method }}",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "583ed1f9-86c8-5b84-b0bf-064f2964818b",
+      "name": "Write Deal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        -140
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($('Intake').first().json.response) }}",
+        "options": {}
+      },
+      "id": "9632a074-237b-51b9-a1a8-18cf285ece78",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Intake').first().json.owner_chat }}",
+        "text": "={{ $('Intake').first().json.owner_text }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Связались",
+                    "additionalFields": {
+                      "callback_data": "=st:contacted:{{ $('Intake').first().json.id }}"
+                    }
+                  },
+                  {
+                    "text": "Встреча",
+                    "additionalFields": {
+                      "callback_data": "=st:meeting:{{ $('Intake').first().json.id }}"
+                    }
+                  },
+                  {
+                    "text": "КП",
+                    "additionalFields": {
+                      "callback_data": "=st:proposal:{{ $('Intake').first().json.id }}"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Выиграна",
+                    "additionalFields": {
+                      "callback_data": "=st:won:{{ $('Intake').first().json.id }}"
+                    }
+                  },
+                  {
+                    "text": "Проиграна",
+                    "additionalFields": {
+                      "callback_data": "=st:lost:{{ $('Intake').first().json.id }}"
+                    }
+                  },
+                  {
+                    "text": "Завтра",
+                    "additionalFields": {
+                      "callback_data": "=rm:{{ $('Intake').first().json.id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "e049cc3c-79ff-53e6-b078-d58febf3efbc",
+      "name": "Card to Owner",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        -140
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($('Intake').first().json.team_chat) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "22db0551-24f8-5ee1-b54b-19a2df500358",
+      "name": "Tell Team?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        880,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Intake').first().json.team_chat }}",
+        "text": "={{ $('Intake').first().json.team_text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "a153a031-905f-5e1c-ba96-5616e69e8d0c",
+      "name": "Team Notice",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        20
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": "={{ $json.status }}"
+        }
+      },
+      "id": "9ef42e01-5606-5773-a52d-8be15b026b31",
+      "name": "Respond Refused",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Sheet Unavailable — the lead is not lost: it goes to the team in full, and the sender is told to retry.\nconst req = $('CRM Webhook').first().json;\nconst error = $input.first().json.error || $input.first().json;\nreturn [{ json: { text: ['Таблица CRM недоступна — заявка не записана, обработайте вручную', JSON.stringify(req.body || {}).slice(0, 1500), `Ошибка: ${JSON.stringify(error).slice(0, 300)}`].join('\\n') } }];\n"
+      },
+      "id": "393c7fb7-745d-5212-b774-a86a74f406a6",
+      "name": "Sheet Unavailable",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, error: 'temporarily unavailable, retry later' }) }}",
+        "options": {
+          "responseCode": 503
+        }
+      },
+      "id": "e803fc5a-7d37-54e8-b3c8-d898ebb2e6aa",
+      "name": "Respond Retry",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        220,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.team_chat_id }}",
+        "text": "={{ $('Sheet Unavailable').first().json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "f902a8ab-d67c-56aa-aac4-2c75c324487f",
+      "name": "Alert: Not Saved",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        280
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "CRM Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Deals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Deals": {
+      "main": [
+        [
+          {
+            "node": "Intake",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sheet Unavailable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intake": {
+      "main": [
+        [
+          {
+            "node": "Accepted?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Unavailable": {
+      "main": [
+        [
+          {
+            "node": "Respond Retry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond Retry": {
+      "main": [
+        [
+          {
+            "node": "Alert: Not Saved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accepted?": {
+      "main": [
+        [
+          {
+            "node": "Write Deal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Refused",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Deal": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sheet Unavailable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond OK": {
+      "main": [
+        [
+          {
+            "node": "Card to Owner",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tell Team?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tell Team?": {
+      "main": [
+        [
+          {
+            "node": "Team Notice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

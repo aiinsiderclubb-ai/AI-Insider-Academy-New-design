@@ -1,0 +1,9 @@
+wave,workflow,platform,complexity,hours,runs_per_month,n8n_workflow_name,owner,built,parallel_run_from,matched_days,cut_over,old_disabled,notes
+1,Оплата Stripe → счёт в QuickBooks,Zapier,простая,4.0,420,Zapier · Оплата Stripe → счёт в QuickBooks,,,,,,,
+1,Заявка с сайта → HubSpot + Slack,Make,простая,4.0,,Make · Заявка с сайта → HubSpot + Slack,,,,,,,
+2,Новый подписчик → Mailchimp → Notion,Make,средняя,5.0,1800,Make · Новый подписчик → Mailchimp → Notion,,,,,,,
+2,Ежедневный отчёт по продажам,Zapier,средняя,5.0,30,Zapier · Ежедневный отчёт по продажам,,,,,,,
+2,Typeform → Pipedrive + письмо клиенту,Zapier,средняя,4.5,,Zapier · Typeform → Pipedrive + письмо клиенту,,,,,,,
+2,Новая строка в таблице → Paths → Slack или Trello,Zapier,средняя,6.0,,Zapier · Новая строка в таблице → Paths → Slack или Trello,,,,,,,
+3,"Заказы Shopify → Google Sheets, крупные — в Telegram",Make,сложная,10.5,,"Make · Заказы Shopify → Google Sheets, крупные — в Telegram",,,,,,,
+3,Письма на адрес Zapier → счётчик → ежедневная сводка,Zapier,сложная,10.5,,Zapier · Письма на адрес Zapier → счётчик → ежедневная сводка,,,,,,,

@@ -1,0 +1,698 @@
+{
+ "_about": "App and module equivalents. key: normalized app name (lowercase, no spaces, no version or API suffix). n8n: node to use. support: native | partial | http | logic | none. note: what to watch for. internal: a platform feature, not a client account — no access to request.",
+ "apps": {
+  "googlesheets": {
+   "label": "Google Sheets",
+   "n8n": "Google Sheets",
+   "support": "native",
+   "note": "Триггер «строка добавлена» в n8n опрашивает лист; проверьте, что старые строки не обработаются повторно при первом запуске."
+  },
+  "googledrive": {
+   "label": "Google Drive",
+   "n8n": "Google Drive",
+   "support": "native",
+   "note": ""
+  },
+  "googledocs": {
+   "label": "Google Docs",
+   "n8n": "Google Docs",
+   "support": "native",
+   "note": ""
+  },
+  "googlecalendar": {
+   "label": "Google Calendar",
+   "n8n": "Google Calendar",
+   "support": "native",
+   "note": "Часовые пояса: задайте timezone в настройках воркфлоу."
+  },
+  "googleforms": {
+   "label": "Google Forms",
+   "n8n": "Google Sheets (лист ответов) или Apps Script → Webhook",
+   "support": "partial",
+   "note": "Прямого триггера нет: берите строки листа ответов или отправку из Apps Script."
+  },
+  "googlecontacts": {
+   "label": "Google Contacts",
+   "n8n": "Google Contacts",
+   "support": "native",
+   "note": ""
+  },
+  "gmail": {
+   "label": "Gmail",
+   "n8n": "Gmail",
+   "support": "native",
+   "note": "Триггер Gmail — опрос; для мгновенной реакции используйте IMAP или Pub/Sub."
+  },
+  "email": {
+   "label": "Email (SMTP/IMAP)",
+   "n8n": "Send Email / Email Trigger (IMAP)",
+   "support": "native",
+   "note": ""
+  },
+  "outlook": {
+   "label": "Microsoft Outlook",
+   "n8n": "Microsoft Outlook",
+   "support": "native",
+   "note": ""
+  },
+  "microsoftemail": {
+   "label": "Microsoft 365 Email",
+   "n8n": "Microsoft Outlook",
+   "support": "native",
+   "note": ""
+  },
+  "microsoftexcel": {
+   "label": "Microsoft Excel 365",
+   "n8n": "Microsoft Excel 365",
+   "support": "native",
+   "note": ""
+  },
+  "onedrive": {
+   "label": "OneDrive",
+   "n8n": "Microsoft OneDrive",
+   "support": "native",
+   "note": ""
+  },
+  "microsoftteams": {
+   "label": "Microsoft Teams",
+   "n8n": "Microsoft Teams",
+   "support": "native",
+   "note": ""
+  },
+  "slack": {
+   "label": "Slack",
+   "n8n": "Slack",
+   "support": "native",
+   "note": ""
+  },
+  "telegram": {
+   "label": "Telegram",
+   "n8n": "Telegram",
+   "support": "native",
+   "note": "У одного бота — один вебхук: два воркфлоу с Telegram Trigger на одном боте не работают."
+  },
+  "telegrambot": {
+   "label": "Telegram Bot",
+   "n8n": "Telegram",
+   "support": "native",
+   "note": "У одного бота — один вебхук."
+  },
+  "discord": {
+   "label": "Discord",
+   "n8n": "Discord",
+   "support": "native",
+   "note": ""
+  },
+  "whatsappbusinesscloud": {
+   "label": "WhatsApp Business Cloud",
+   "n8n": "WhatsApp Business Cloud",
+   "support": "native",
+   "note": "Шаблоны вне 24-часового окна."
+  },
+  "twilio": {
+   "label": "Twilio",
+   "n8n": "Twilio",
+   "support": "native",
+   "note": ""
+  },
+  "airtable": {
+   "label": "Airtable",
+   "n8n": "Airtable",
+   "support": "native",
+   "note": "Нужен Personal Access Token; старые API-ключи Airtable не работают."
+  },
+  "notion": {
+   "label": "Notion",
+   "n8n": "Notion",
+   "support": "native",
+   "note": "Интеграцию нужно заново подключить к каждой базе."
+  },
+  "trello": {
+   "label": "Trello",
+   "n8n": "Trello",
+   "support": "native",
+   "note": ""
+  },
+  "asana": {
+   "label": "Asana",
+   "n8n": "Asana",
+   "support": "native",
+   "note": ""
+  },
+  "clickup": {
+   "label": "ClickUp",
+   "n8n": "ClickUp",
+   "support": "native",
+   "note": ""
+  },
+  "mondaycom": {
+   "label": "monday.com",
+   "n8n": "monday.com",
+   "support": "native",
+   "note": ""
+  },
+  "monday": {
+   "label": "monday.com",
+   "n8n": "monday.com",
+   "support": "native",
+   "note": ""
+  },
+  "jira": {
+   "label": "Jira",
+   "n8n": "Jira Software",
+   "support": "native",
+   "note": ""
+  },
+  "todoist": {
+   "label": "Todoist",
+   "n8n": "Todoist",
+   "support": "native",
+   "note": ""
+  },
+  "hubspot": {
+   "label": "HubSpot",
+   "n8n": "HubSpot",
+   "support": "native",
+   "note": "Нужен Private App token или OAuth-приложение."
+  },
+  "hubspotcrm": {
+   "label": "HubSpot CRM",
+   "n8n": "HubSpot",
+   "support": "native",
+   "note": ""
+  },
+  "pipedrive": {
+   "label": "Pipedrive",
+   "n8n": "Pipedrive",
+   "support": "native",
+   "note": ""
+  },
+  "salesforce": {
+   "label": "Salesforce",
+   "n8n": "Salesforce",
+   "support": "native",
+   "note": "Подключение через Connected App — закладывайте время на доступы."
+  },
+  "zohocrm": {
+   "label": "Zoho CRM",
+   "n8n": "Zoho CRM",
+   "support": "native",
+   "note": "Регион аккаунта (eu, com, in) влияет на адрес API."
+  },
+  "activecampaign": {
+   "label": "ActiveCampaign",
+   "n8n": "ActiveCampaign",
+   "support": "native",
+   "note": ""
+  },
+  "mailchimp": {
+   "label": "Mailchimp",
+   "n8n": "Mailchimp",
+   "support": "native",
+   "note": ""
+  },
+  "brevo": {
+   "label": "Brevo (Sendinblue)",
+   "n8n": "Brevo",
+   "support": "native",
+   "note": ""
+  },
+  "sendinblue": {
+   "label": "Brevo (Sendinblue)",
+   "n8n": "Brevo",
+   "support": "native",
+   "note": ""
+  },
+  "convertkit": {
+   "label": "Kit (ConvertKit)",
+   "n8n": "ConvertKit",
+   "support": "native",
+   "note": ""
+  },
+  "intercom": {
+   "label": "Intercom",
+   "n8n": "Intercom",
+   "support": "native",
+   "note": ""
+  },
+  "zendesk": {
+   "label": "Zendesk",
+   "n8n": "Zendesk",
+   "support": "native",
+   "note": ""
+  },
+  "freshdesk": {
+   "label": "Freshdesk",
+   "n8n": "Freshdesk",
+   "support": "native",
+   "note": ""
+  },
+  "shopify": {
+   "label": "Shopify",
+   "n8n": "Shopify",
+   "support": "native",
+   "note": "Вебхуки Shopify регистрируются заново на адрес n8n."
+  },
+  "woocommerce": {
+   "label": "WooCommerce",
+   "n8n": "WooCommerce",
+   "support": "native",
+   "note": ""
+  },
+  "stripe": {
+   "label": "Stripe",
+   "n8n": "Stripe",
+   "support": "native",
+   "note": "Новый вебхук-эндпоинт в Stripe и его секрет подписи."
+  },
+  "paypal": {
+   "label": "PayPal",
+   "n8n": "PayPal",
+   "support": "native",
+   "note": ""
+  },
+  "quickbooks": {
+   "label": "QuickBooks Online",
+   "n8n": "QuickBooks Online",
+   "support": "native",
+   "note": ""
+  },
+  "xero": {
+   "label": "Xero",
+   "n8n": "Xero",
+   "support": "native",
+   "note": ""
+  },
+  "calendly": {
+   "label": "Calendly",
+   "n8n": "Calendly Trigger",
+   "support": "native",
+   "note": "Вебхуки Calendly доступны на платных тарифах Calendly."
+  },
+  "typeform": {
+   "label": "Typeform",
+   "n8n": "Typeform Trigger",
+   "support": "native",
+   "note": ""
+  },
+  "jotform": {
+   "label": "Jotform",
+   "n8n": "Jotform Trigger",
+   "support": "native",
+   "note": ""
+  },
+  "tally": {
+   "label": "Tally",
+   "n8n": "Webhook",
+   "support": "http",
+   "note": "Tally отправляет вебхук — принимайте узлом Webhook."
+  },
+  "webflow": {
+   "label": "Webflow",
+   "n8n": "Webflow",
+   "support": "native",
+   "note": ""
+  },
+  "wordpress": {
+   "label": "WordPress",
+   "n8n": "WordPress",
+   "support": "native",
+   "note": "Пароль приложения WordPress."
+  },
+  "facebookleadads": {
+   "label": "Facebook Lead Ads",
+   "n8n": "Facebook Lead Ads Trigger",
+   "support": "native",
+   "note": "Нужно своё приложение Meta с разрешениями на лиды страницы."
+  },
+  "facebookpages": {
+   "label": "Facebook Pages",
+   "n8n": "Facebook Graph API",
+   "support": "partial",
+   "note": "Через Graph API и своё приложение Meta."
+  },
+  "instagrambusiness": {
+   "label": "Instagram for Business",
+   "n8n": "Facebook Graph API",
+   "support": "partial",
+   "note": "Публикация через Graph API, нужно приложение Meta."
+  },
+  "linkedin": {
+   "label": "LinkedIn",
+   "n8n": "LinkedIn",
+   "support": "partial",
+   "note": "Публикация от имени человека или страницы; многие действия требуют одобрения приложения."
+  },
+  "twitter": {
+   "label": "X (Twitter)",
+   "n8n": "X (Formerly Twitter)",
+   "support": "partial",
+   "note": "Платный доступ к API X."
+  },
+  "youtube": {
+   "label": "YouTube",
+   "n8n": "YouTube",
+   "support": "native",
+   "note": ""
+  },
+  "dropbox": {
+   "label": "Dropbox",
+   "n8n": "Dropbox",
+   "support": "native",
+   "note": ""
+  },
+  "box": {
+   "label": "Box",
+   "n8n": "Box",
+   "support": "native",
+   "note": ""
+  },
+  "openai": {
+   "label": "OpenAI",
+   "n8n": "OpenAI / AI Agent",
+   "support": "native",
+   "note": "Перенесите промпты дословно и сравните ответы на тех же данных."
+  },
+  "openaigpt3": {
+   "label": "OpenAI (Make)",
+   "n8n": "OpenAI / AI Agent",
+   "support": "native",
+   "note": "Перенесите промпты дословно."
+  },
+  "chatgpt": {
+   "label": "ChatGPT",
+   "n8n": "OpenAI / AI Agent",
+   "support": "native",
+   "note": ""
+  },
+  "anthropicclaude": {
+   "label": "Anthropic Claude",
+   "n8n": "Anthropic Chat Model / HTTP Request",
+   "support": "native",
+   "note": ""
+  },
+  "postgres": {
+   "label": "PostgreSQL",
+   "n8n": "Postgres",
+   "support": "native",
+   "note": ""
+  },
+  "mysql": {
+   "label": "MySQL",
+   "n8n": "MySQL",
+   "support": "native",
+   "note": ""
+  },
+  "supabase": {
+   "label": "Supabase",
+   "n8n": "Supabase",
+   "support": "native",
+   "note": ""
+  },
+  "docusign": {
+   "label": "DocuSign",
+   "n8n": "HTTP Request",
+   "support": "http",
+   "note": "Через REST API DocuSign."
+  },
+  "pandadoc": {
+   "label": "PandaDoc",
+   "n8n": "HTTP Request",
+   "support": "http",
+   "note": ""
+  },
+  "quickbase": {
+   "label": "Quickbase",
+   "n8n": "Quickbase",
+   "support": "native",
+   "note": ""
+  },
+  "webhook": {
+   "label": "Webhooks",
+   "n8n": "Webhook / HTTP Request",
+   "support": "native",
+   "note": "Новый адрес: обновите его у всех отправителей. Проверьте метод, формат тела и ответ.",
+   "internal": true
+  },
+  "webhooks": {
+   "label": "Webhooks",
+   "n8n": "Webhook / HTTP Request",
+   "support": "native",
+   "note": "Новый адрес: обновите его у всех отправителей.",
+   "internal": true
+  },
+  "gateway": {
+   "label": "Make Webhooks",
+   "n8n": "Webhook / Respond to Webhook",
+   "support": "native",
+   "note": "Новый адрес: обновите его у всех отправителей.",
+   "internal": true
+  },
+  "http": {
+   "label": "HTTP",
+   "n8n": "HTTP Request",
+   "support": "native",
+   "note": ""
+  },
+  "json": {
+   "label": "JSON",
+   "n8n": "Code / Edit Fields",
+   "support": "logic",
+   "note": "n8n разбирает JSON сам; отдельный шаг обычно не нужен.",
+   "internal": true
+  },
+  "formatter": {
+   "label": "Formatter by Zapier",
+   "n8n": "Edit Fields (Set) + выражения / Date & Time / Code",
+   "support": "logic",
+   "note": "Каждую операцию Formatter переносите выражением; таблицы подстановки — объектом в Code.",
+   "internal": true
+  },
+  "filter": {
+   "label": "Filter",
+   "n8n": "Filter / If",
+   "support": "logic",
+   "note": "Zapier останавливает zap молча; в n8n ветка false просто ничего не делает.",
+   "internal": true
+  },
+  "paths": {
+   "label": "Paths by Zapier",
+   "n8n": "Switch / If",
+   "support": "logic",
+   "note": "",
+   "internal": true
+  },
+  "delay": {
+   "label": "Delay by Zapier",
+   "n8n": "Wait",
+   "support": "logic",
+   "note": "Долгие Wait переживают перезапуск n8n только в режиме с базой данных.",
+   "internal": true
+  },
+  "schedule": {
+   "label": "Schedule by Zapier",
+   "n8n": "Schedule Trigger",
+   "support": "logic",
+   "note": "Задайте часовой пояс воркфлоу.",
+   "internal": true
+  },
+  "code": {
+   "label": "Code by Zapier",
+   "n8n": "Code",
+   "support": "logic",
+   "note": "Переписать под формат items n8n: return [{ json: … }].",
+   "internal": true
+  },
+  "storage": {
+   "label": "Storage by Zapier",
+   "n8n": "Static data в Code / Google Sheets / Postgres",
+   "support": "partial",
+   "note": "Выберите хранилище и перенесите текущие значения.",
+   "internal": true
+  },
+  "digest": {
+   "label": "Digest by Zapier",
+   "n8n": "Таблица-накопитель + Schedule Trigger",
+   "support": "partial",
+   "note": "Накопление пишется в таблицу, отправка — по расписанию.",
+   "internal": true
+  },
+  "looping": {
+   "label": "Looping by Zapier",
+   "n8n": "Split Out / Loop Over Items",
+   "support": "logic",
+   "note": "n8n обрабатывает списки поэлементно по умолчанию.",
+   "internal": true
+  },
+  "subzap": {
+   "label": "Sub-Zap",
+   "n8n": "Execute Workflow",
+   "support": "logic",
+   "note": "",
+   "internal": true
+  },
+  "zapiertables": {
+   "label": "Zapier Tables",
+   "n8n": "Google Sheets / Airtable / Postgres",
+   "support": "none",
+   "note": "Данные нужно выгрузить и перенести; интерфейсы Tables не переносятся.",
+   "internal": true
+  },
+  "interfaces": {
+   "label": "Zapier Interfaces",
+   "n8n": "n8n Form Trigger / свой фронтенд",
+   "support": "none",
+   "note": "Формы — n8n Form Trigger; страницы и порталы — отдельная разработка.",
+   "internal": true
+  },
+  "chatbots": {
+   "label": "Zapier Chatbots",
+   "n8n": "Chat Trigger + AI Agent",
+   "support": "partial",
+   "note": "Интерфейс чата и база знаний собираются заново.",
+   "internal": true
+  },
+  "aibyzapier": {
+   "label": "AI by Zapier",
+   "n8n": "OpenAI / Basic LLM Chain",
+   "support": "native",
+   "note": "Нужен свой ключ модели."
+  },
+  "emailbyzapier": {
+   "label": "Email by Zapier",
+   "n8n": "Email Trigger (IMAP) / Send Email",
+   "support": "partial",
+   "note": "Входящий адрес @zapiermail.com не переносится: нужен свой ящик или пересылка.",
+   "internal": true
+  },
+  "smsbyzapier": {
+   "label": "SMS by Zapier",
+   "n8n": "Twilio / другой SMS-провайдер",
+   "support": "partial",
+   "note": "Нужен свой SMS-провайдер."
+  },
+  "rss": {
+   "label": "RSS",
+   "n8n": "RSS Feed Trigger",
+   "support": "native",
+   "note": "",
+   "internal": true
+  },
+  "builtin": {
+   "label": "Make flow control",
+   "n8n": "Switch / Split Out / Aggregate",
+   "support": "logic",
+   "note": "",
+   "internal": true
+  },
+  "util": {
+   "label": "Make Tools",
+   "n8n": "Edit Fields / Wait / Code",
+   "support": "logic",
+   "note": "",
+   "internal": true
+  },
+  "regexp": {
+   "label": "Make Text parser",
+   "n8n": "Code / выражения с match()",
+   "support": "logic",
+   "note": "",
+   "internal": true
+  },
+  "datastore": {
+   "label": "Make Data store",
+   "n8n": "Google Sheets / Postgres / static data",
+   "support": "partial",
+   "note": "Выгрузите данные хранилища и перенесите.",
+   "internal": true
+  },
+  "csv": {
+   "label": "CSV",
+   "n8n": "Extract from File / Convert to File",
+   "support": "logic",
+   "note": "",
+   "internal": true
+  },
+  "array": {
+   "label": "Array functions",
+   "n8n": "Split Out / Aggregate / выражения",
+   "support": "logic",
+   "note": "",
+   "internal": true
+  }
+ },
+ "make_modules": {
+  "builtin:BasicRouter": {
+   "n8n": "Switch",
+   "kind": "router"
+  },
+  "builtin:BasicFeeder": {
+   "n8n": "Split Out",
+   "kind": "iterator"
+  },
+  "builtin:BasicAggregator": {
+   "n8n": "Aggregate",
+   "kind": "aggregator"
+  },
+  "builtin:BasicRepeater": {
+   "n8n": "Loop Over Items / Code",
+   "kind": "iterator"
+  },
+  "util:TextAggregator": {
+   "n8n": "Aggregate + выражение join()",
+   "kind": "aggregator"
+  },
+  "util:SetVariable2": {
+   "n8n": "Edit Fields (Set)",
+   "kind": "logic"
+  },
+  "util:SetVariables": {
+   "n8n": "Edit Fields (Set)",
+   "kind": "logic"
+  },
+  "util:GetVariable2": {
+   "n8n": "выражение $('Узел')",
+   "kind": "logic"
+  },
+  "util:FunctionSleep": {
+   "n8n": "Wait",
+   "kind": "logic"
+  },
+  "util:Switcher": {
+   "n8n": "Switch / выражение",
+   "kind": "logic"
+  },
+  "json:ParseJSON": {
+   "n8n": "не нужен — n8n разбирает JSON",
+   "kind": "logic"
+  },
+  "json:CreateJSON": {
+   "n8n": "Edit Fields / выражение JSON.stringify",
+   "kind": "logic"
+  },
+  "gateway:CustomWebHook": {
+   "n8n": "Webhook",
+   "kind": "trigger"
+  },
+  "gateway:WebhookRespond": {
+   "n8n": "Respond to Webhook",
+   "kind": "logic"
+  },
+  "http:ActionSendData": {
+   "n8n": "HTTP Request",
+   "kind": "action"
+  },
+  "http:ActionSendDataBasicAuth": {
+   "n8n": "HTTP Request (Basic Auth)",
+   "kind": "action"
+  },
+  "regexp:Parser": {
+   "n8n": "Code / выражение match()",
+   "kind": "logic"
+  },
+  "regexp:Replace": {
+   "n8n": "выражение replace()",
+   "kind": "logic"
+  }
+ }
+}

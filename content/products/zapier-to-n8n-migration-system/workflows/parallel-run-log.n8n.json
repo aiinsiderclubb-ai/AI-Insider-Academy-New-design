@@ -1,0 +1,362 @@
+{
+  "name": "Migration — Parallel Run Log",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Parallel Run Log\n\nВо время параллельного прогона и старая система, и n8n в конце своей автоматизации отправляют сюда итог:\n\n```\n{ \"token\": \"…\", \"flow\": \"Заявки с сайта\", \"key\": \"id события\", \"system\": \"old\" | \"new\", \"result\": { … } }\n```\n\nКогда пришли обе стороны, результаты сравниваются (без учёта пробелов, регистра почты, формата чисел и полей из `ignore_fields`). Расхождение — сообщение в Telegram с полями, которые отличаются. Всё пишется в лист ParallelRun.",
+        "width": 560,
+        "height": 380
+      },
+      "id": "cb46e46c-8747-520e-aa9a-6d9fabb46eac",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -620,
+        -460
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "parallel-run",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "1c39c4cc-63c7-5f51-88ab-dbdee69e127c",
+      "name": "Shadow Log",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        0
+      ],
+      "webhookId": "f85741d0-20ae-5927-9ee2-796def6ade1d"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — настройки. Меняйте значения справа от двоеточия.\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"runs_sheet\": \"ParallelRun\",\n  \"token\": \"REPLACE_WITH_RANDOM_TOKEN\",\n  \"alert_chat_id\": \"REPLACE_WITH_CHAT_ID\",\n  \"ignore_fields\": [\n    \"id\",\n    \"created_at\",\n    \"updated_at\",\n    \"timestamp\",\n    \"execution_id\",\n    \"zap_id\"\n  ],\n  \"compare\": {\n    \"Пример: заявки с сайта\": {\n      \"fields\": [],\n      \"ignore\": [\n        \"internal_note\"\n      ]\n    }\n  },\n  \"wait_minutes\": 30,\n  \"report_hour\": 9,\n  \"ready_days\": 3,\n  \"ready_min_events\": 20\n} }];\n"
+      },
+      "id": "639a4bb8-f6ad-52f3-a239-ad85cf9575d1",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -360,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.sheets_api_base }}/spreadsheets/{{ encodeURIComponent($('Config').first().json.spreadsheet_id) }}/values/{{ encodeURIComponent(\"'\" + $('Config').first().json.runs_sheet.replace(/'/g, \"''\") + \"'!A1:I\") }}",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "02c1acea-de5e-57ae-a99d-f0b38a66c0b7",
+      "name": "Read Runs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -140,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Record Run — one side of an event arrives; when both are in, the results are compared.\nconst cfg = $('Config').first().json;\n// ---- shared helpers ----\nconst MIN = 60000;\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nconst digitsOf = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Phones are stored in one international form, so the same person is recognised however they typed it.\nfunction phoneOf(value) {\n  const rules = cfg.phone || {};\n  let d = digitsOf(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (rules.national_prefix && rules.country_code && d.startsWith(rules.national_prefix) && !d.startsWith(rules.country_code)) {\n    d = rules.country_code + d.slice(rules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n}\nfunction emailOf(value) {\n  const e = String(value || '').trim().toLowerCase();\n  return /^[^\\s@<>()\",;]+@[^\\s@<>()\",;]+\\.[a-z]{2,}$/.test(e) ? e : '';\n}\nconst localText = (ms) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', {\n  timeZone: cfg.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',\n}).format(new Date(ms));\nfunction localParts(ms) {\n  const parts = {};\n  for (const p of new Intl.DateTimeFormat('en-GB', { timeZone: cfg.timezone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' }).formatToParts(new Date(ms))) parts[p.type] = p.value;\n  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute), weekday: parts.weekday.toLowerCase().slice(0, 3) };\n}\nconst sheetUrl = (path) => `${cfg.sheets_api_base}/spreadsheets/${encodeURIComponent(cfg.spreadsheet_id)}/values/${path}`;\nconst quoteSheet = (name) => \"'\" + String(name).replace(/'/g, \"''\") + \"'\";\n// ParallelRun sheet: one row per event, filled from both sides — the old platform and n8n.\nconst RCOLS = ['flow', 'key', 'first_at', 'status', 'old_at', 'old_result', 'new_at', 'new_result', 'diff'];\nconst colLetter = (index) => String.fromCharCode(65 + index);\nconst runsRange = () => `${quoteSheet(cfg.runs_sheet)}!A1:${colLetter(RCOLS.length - 1)}`;\nconst runRow = (row) => `${quoteSheet(cfg.runs_sheet)}!A${row}:${colLetter(RCOLS.length - 1)}${row}`;\nfunction runsTable(values) {\n  const all = values || [];\n  const header = all.length > 0 && String(all[0][0]).trim().toLowerCase() === 'flow';\n  return { header, rows: (header ? all.slice(1) : all).map((r, i) => ({ sheetRow: i + (header ? 2 : 1), run: Object.fromEntries(RCOLS.map((c, k) => [c, r[k] === undefined ? '' : String(r[k])])) })) };\n}\nconst putRun = (sheetRow, run) => ({ method: 'PUT', url: sheetUrl(encodeURIComponent(runRow(sheetRow))) + '?valueInputOption=RAW', body: { values: [RCOLS.map((c) => String(run[c] || ''))] } });\nconst appendRun = (run, hasHeader) => ({ method: 'POST', url: sheetUrl(encodeURIComponent(runsRange()) + ':append') + '?valueInputOption=RAW&insertDataOption=INSERT_ROWS',\n  body: { values: [...(hasHeader ? [] : [RCOLS]), RCOLS.map((c) => String(run[c] || ''))] } });\nconst pad = (n) => String(n).padStart(2, '0');\nconst stamp = (ms) => { const p = localParts(ms); return `${p.date} ${pad(p.hour)}:${pad(p.minute)}`; };\nconst parseStamp = (s) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})$/.exec(String(s)); if (!m) return Date.parse(s) || 0; const guess = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]); const p = localParts(guess); return guess - (Date.UTC(+p.date.slice(0, 4), +p.date.slice(5, 7) - 1, +p.date.slice(8, 10), p.hour, p.minute) - guess); };\nconst plural = (n, one, few, many) => (n % 10 === 1 && n % 100 !== 11 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? few : many);\nconst req = $('Shadow Log').first().json;\nlet body = req.body || {};\nif (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }\nconst token = String(body.token || (req.headers || {})['x-shadow-token'] || (req.query || {}).token || '');\nif (!cfg.token || String(cfg.token).startsWith('REPLACE') || token !== String(cfg.token)) return [{ json: { ok: false, status: 403, response: { ok: false, error: 'bad token' } } }];\nconst flow = String(body.flow || '').trim().slice(0, 80);\nconst key = String(body.key || '').trim().slice(0, 120);\nconst system = String(body.system || '').toLowerCase();\nif (!flow || !key || !['old', 'new'].includes(system)) return [{ json: { ok: false, status: 422, response: { ok: false, error: 'flow, key and system (old|new) are required' } } }];\nlet result = body.result === undefined ? {} : body.result;\nif (typeof result === 'string') { try { result = JSON.parse(result); } catch (e) { result = { value: result }; } }\n\nconst rules = Object.assign({ fields: [], ignore: [] }, (cfg.compare || {})[flow] || {});\nconst ignore = new Set([...(cfg.ignore_fields || []), ...rules.ignore]);\n// Values are compared after light normalisation: trimmed text, numbers as numbers, case-insensitive emails.\nconst normal = (v) => {\n  if (v === null || v === undefined) return '';\n  if (typeof v === 'number' || typeof v === 'boolean') return String(v);\n  if (typeof v === 'object') return JSON.stringify(v, Object.keys(v).sort());\n  const s = String(v).trim().replace(/\\s+/g, ' ');\n  if (/^-?\\d+([.,]\\d+)?$/.test(s)) return String(Number(s.replace(',', '.')));\n  if (/^[^\\s@]+@[^\\s@]+$/.test(s)) return s.toLowerCase();\n  return s;\n};\nconst flat = (obj, prefix = '', out = {}) => {\n  if (obj && typeof obj === 'object' && !Array.isArray(obj)) { for (const [k, v] of Object.entries(obj)) flat(v, prefix ? `${prefix}.${k}` : k, out); }\n  else out[prefix || 'value'] = obj;\n  return out;\n};\nfunction compare(a, b) {\n  const fa = flat(a), fb = flat(b);\n  const keys = rules.fields.length ? rules.fields : [...new Set([...Object.keys(fa), ...Object.keys(fb)])].sort();\n  return keys.filter((k) => !ignore.has(k) && !ignore.has(k.split('.').pop())).filter((k) => normal(fa[k]) !== normal(fb[k]))\n    .map((k) => `${k}: ${String(normal(fa[k]) || '—').slice(0, 80)} → ${String(normal(fb[k]) || '—').slice(0, 80)}`);\n}\nconst table = runsTable($input.first().json.values);\nconst now = nowMs();\nconst found = table.rows.find(({ run }) => run.flow === flow && run.key === key);\nconst run = found ? Object.assign({}, found.run) : { flow, key, first_at: stamp(now), status: 'waiting' };\nrun[`${system}_at`] = stamp(now);\nrun[`${system}_result`] = JSON.stringify(result).slice(0, 4000);\nlet alert = '';\nif (run.old_result && run.new_result) {\n  const diff = compare(JSON.parse(run.old_result || '{}'), JSON.parse(run.new_result || '{}'));\n  const was = run.status;\n  run.status = diff.length ? 'mismatch' : 'match';\n  run.diff = diff.join('; ').slice(0, 1000);\n  if (diff.length && was !== 'mismatch') alert = [`Расхождение: ${flow}`, `Событие: ${key}`, ...diff.slice(0, 10).map((d) => `• ${d}`), diff.length > 10 ? `…и ещё ${diff.length - 10}` : ''].filter(Boolean).join('\\n');\n}\nreturn [{ json: { ok: true, status: 200, response: { ok: true, status: run.status }, http: found ? putRun(found.sheetRow, run) : appendRun(run, table.header), alert: Boolean(alert), chat: cfg.alert_chat_id, text: alert } }];\n"
+      },
+      "id": "be9cf461-f9e1-528a-b016-308ac2aa59f2",
+      "name": "Record Run",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.ok }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "67694b28-bdee-5a5e-8ba8-d055ffea9661",
+      "name": "Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        300,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={{ $json.http.method }}",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "e392d002-315f-5f12-851a-d283e1cc9553",
+      "name": "Write Run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        -120
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($('Record Run').first().json.response) }}",
+        "options": {}
+      },
+      "id": "06aa9044-d6a4-51c1-bb36-a280062f34a6",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        740,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Record Run').first().json.alert }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "bf84a674-7b08-5fb9-9221-2107411f9f5f",
+      "name": "Mismatch?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        960,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Record Run').first().json.chat }}",
+        "text": "={{ $('Record Run').first().json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "79952d3c-06cf-565b-b874-fdf9807fe4bf",
+      "name": "Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1180,
+        -120
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": "={{ $json.status }}"
+        }
+      },
+      "id": "09b5c0a7-93b6-54ef-a5ff-fee43008540c",
+      "name": "Respond Refused",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, error: 'sheet unavailable' }) }}",
+        "options": {
+          "responseCode": 503
+        }
+      },
+      "id": "f2212af2-24f8-5f47-a828-d89472b231f7",
+      "name": "Respond Unavailable",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        220
+      ]
+    }
+  ],
+  "connections": {
+    "Shadow Log": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Runs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Runs": {
+      "main": [
+        [
+          {
+            "node": "Record Run",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Unavailable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record Run": {
+      "main": [
+        [
+          {
+            "node": "Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valid?": {
+      "main": [
+        [
+          {
+            "node": "Write Run",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Refused",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Run": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Unavailable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond OK": {
+      "main": [
+        [
+          {
+            "node": "Mismatch?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mismatch?": {
+      "main": [
+        [
+          {
+            "node": "Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

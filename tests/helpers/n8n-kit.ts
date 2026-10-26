@@ -29,7 +29,9 @@ export function runCode(code: string, nodes: J, input: J): J[] {
     },
   });
   const $input = { first: () => ({ json: input }), all: () => [{ json: input }] };
-  return (new Function("$", "$input", code)($, $input) as { json: J }[]).map((item) => item.json);
+  // Workflow static data lives in nodes.$static, so a test can carry it from one run to the next.
+  const staticData = () => (nodes.$static ??= {});
+  return (new Function("$", "$input", "$getWorkflowStaticData", code)($, $input, staticData) as { json: J }[]).map((item) => item.json);
 }
 
 /** The Google Sheets values API, in memory: get, batchGet, append, update, batchUpdate. */

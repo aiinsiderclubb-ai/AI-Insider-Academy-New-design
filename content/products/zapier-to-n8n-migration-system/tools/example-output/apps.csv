@@ -1,0 +1,20 @@
+app,used_in,workflows,n8n,support,access_needed,note
+Google Sheets,3,"Ежедневный отчёт по продажам; Новая строка в таблице → Paths → Slack или Trello; Заказы Shopify → Google Sheets, крупные — в Telegram",Google Sheets,native,yes,"Триггер «строка добавлена» в n8n опрашивает лист; проверьте, что старые строки не обработаются повторно при первом запуске."
+Slack,3,Заявка с сайта → HubSpot + Slack; Ежедневный отчёт по продажам; Новая строка в таблице → Paths → Slack или Trello,Slack,native,yes,
+Gmail,2,Оплата Stripe → счёт в QuickBooks; Typeform → Pipedrive + письмо клиенту,Gmail,native,yes,Триггер Gmail — опрос; для мгновенной реакции используйте IMAP или Pub/Sub.
+Telegram,2,"Заказы Shopify → Google Sheets, крупные — в Telegram; Письма на адрес Zapier → счётчик → ежедневная сводка",Telegram,native,yes,У одного бота — один вебхук: два воркфлоу с Telegram Trigger на одном боте не работают.
+Digest by Zapier,1,Письма на адрес Zapier → счётчик → ежедневная сводка,Таблица-накопитель + Schedule Trigger,partial,,"Накопление пишется в таблицу, отправка — по расписанию."
+Email by Zapier,1,Письма на адрес Zapier → счётчик → ежедневная сводка,Email Trigger (IMAP) / Send Email,partial,,Входящий адрес @zapiermail.com не переносится: нужен свой ящик или пересылка.
+HubSpot CRM,1,Заявка с сайта → HubSpot + Slack,HubSpot,native,yes,
+Mailchimp,1,Новый подписчик → Mailchimp → Notion,Mailchimp,native,yes,
+Make Data store,1,"Заказы Shopify → Google Sheets, крупные — в Telegram",Google Sheets / Postgres / static data,partial,,Выгрузите данные хранилища и перенесите.
+Make Webhooks,1,Заявка с сайта → HubSpot + Slack,Webhook,native,,Новый адрес: обновите его у всех отправителей.
+Notion,1,Новый подписчик → Mailchimp → Notion,Notion,native,yes,Интеграцию нужно заново подключить к каждой базе.
+Pipedrive,1,Typeform → Pipedrive + письмо клиенту,Pipedrive,native,yes,
+QuickBooks Online,1,Оплата Stripe → счёт в QuickBooks,QuickBooks Online,native,yes,
+Shopify,1,"Заказы Shopify → Google Sheets, крупные — в Telegram",Shopify,native,yes,Вебхуки Shopify регистрируются заново на адрес n8n.
+Storage by Zapier,1,Письма на адрес Zapier → счётчик → ежедневная сводка,Static data в Code / Google Sheets / Postgres,partial,,Выберите хранилище и перенесите текущие значения.
+Stripe,1,Оплата Stripe → счёт в QuickBooks,Stripe,native,yes,Новый вебхук-эндпоинт в Stripe и его секрет подписи.
+Trello,1,Новая строка в таблице → Paths → Slack или Trello,Trello,native,yes,
+Typeform,1,Typeform → Pipedrive + письмо клиенту,Typeform Trigger,native,yes,
+Webhooks,1,Новый подписчик → Mailchimp → Notion,Webhook / HTTP Request,native,,Новый адрес: обновите его у всех отправителей.

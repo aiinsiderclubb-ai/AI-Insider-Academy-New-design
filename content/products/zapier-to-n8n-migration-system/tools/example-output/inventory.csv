@@ -1,0 +1,9 @@
+name,platform,source,status,trigger,polling_trigger,steps,routers,iterators,code_steps,runs_per_month,complexity,hours,risks
+Оплата Stripe → счёт в QuickBooks,Zapier,inventory.csv,on,Stripe: new charge,yes,3,0,0,0,420,простая,4.0,
+Заявка с сайта → HubSpot + Slack,Make,lead-to-crm.blueprint.json,,Make Webhooks: CustomWebHook,,5,0,0,0,,простая,4.0,
+Новый подписчик → Mailchimp → Notion,Make,inventory.csv,on,Webhooks: catch hook,,4,0,0,1,1800,средняя,5.0,
+Ежедневный отчёт по продажам,Zapier,inventory.csv,on,Schedule by Zapier: every day,,5,0,1,0,30,средняя,5.0,
+Typeform → Pipedrive + письмо клиенту,Zapier,zapfile.json,on,Typeform: form_response,yes,4,0,0,0,,средняя,4.5,
+Новая строка в таблице → Paths → Slack или Trello,Zapier,zapfile.json,on,Google Sheets: new_row,yes,5,1,0,0,,средняя,6.0,
+"Заказы Shopify → Google Sheets, крупные — в Telegram",Make,shopify-orders.blueprint.json,,Shopify: WatchOrders,yes,7,1,2,0,,сложная,10.5,Make Data store
+Письма на адрес Zapier → счётчик → ежедневная сводка,Zapier,zapfile.json,off,Email by Zapier: new_inbound,yes,5,0,0,1,,сложная,10.5,Digest by Zapier; Email by Zapier; Storage by Zapier

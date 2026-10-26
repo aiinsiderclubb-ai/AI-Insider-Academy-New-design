@@ -1,0 +1,39 @@
+workflow,n,app,action,source_module,n8n,support,note
+Оплата Stripe → счёт в QuickBooks,1,Stripe,new charge,Stripe,Stripe,native,Новый вебхук-эндпоинт в Stripe и его секрет подписи.
+Оплата Stripe → счёт в QuickBooks,2,QuickBooks Online,create invoice,QuickBooks,QuickBooks Online,native,
+Оплата Stripe → счёт в QuickBooks,3,Gmail,send email,Gmail,Gmail,native,Триггер Gmail — опрос; для мгновенной реакции используйте IMAP или Pub/Sub.
+Заявка с сайта → HubSpot + Slack,1,Make Webhooks,CustomWebHook,gateway:CustomWebHook,Webhook,native,Новый адрес: обновите его у всех отправителей.
+Заявка с сайта → HubSpot + Slack,2,Make Tools,SetVariables,util:SetVariables,Edit Fields (Set),logic,
+Заявка с сайта → HubSpot + Slack,3,HubSpot CRM,createContact,hubspotcrm:createContact,HubSpot,native,
+Заявка с сайта → HubSpot + Slack,4,Slack,CreateMessage,slack:CreateMessage,Slack,native,
+Заявка с сайта → HubSpot + Slack,5,Make Webhooks,WebhookRespond,gateway:WebhookRespond,Respond to Webhook,logic,Новый адрес: обновите его у всех отправителей.
+Новый подписчик → Mailchimp → Notion,1,Webhooks,catch hook,Webhooks,Webhook / HTTP Request,native,Новый адрес: обновите его у всех отправителей.
+Новый подписчик → Mailchimp → Notion,2,Mailchimp,add subscriber,Mailchimp,Mailchimp,native,
+Новый подписчик → Mailchimp → Notion,3,Notion,create page,Notion,Notion,native,Интеграцию нужно заново подключить к каждой базе.
+Новый подписчик → Mailchimp → Notion,4,Code by Zapier,run javascript,Code,Code,logic,Переписать под формат items n8n: return [{ json: … }].
+Ежедневный отчёт по продажам,1,Schedule by Zapier,every day,Schedule,Schedule Trigger,logic,Задайте часовой пояс воркфлоу.
+Ежедневный отчёт по продажам,2,Google Sheets,lookup rows,Google Sheets,Google Sheets,native,"Триггер «строка добавлена» в n8n опрашивает лист; проверьте, что старые строки не обработаются повторно при первом запуске."
+Ежедневный отчёт по продажам,3,Looping by Zapier,create loop,Looping,Split Out / Loop Over Items,logic,n8n обрабатывает списки поэлементно по умолчанию.
+Ежедневный отчёт по продажам,4,Formatter by Zapier,numbers,Formatter,Edit Fields (Set) + выражения / Date & Time / Code,logic,Каждую операцию Formatter переносите выражением; таблицы подстановки — объектом в Code.
+Ежедневный отчёт по продажам,5,Slack,send message,Slack,Slack,native,
+Typeform → Pipedrive + письмо клиенту,1,Typeform,form_response,TypeformCLIAPI,Typeform Trigger,native,
+Typeform → Pipedrive + письмо клиенту,2,Formatter by Zapier,text,FormatterV2CLIAPI,Edit Fields (Set) + выражения / Date & Time / Code,logic,Каждую операцию Formatter переносите выражением; таблицы подстановки — объектом в Code.
+Typeform → Pipedrive + письмо клиенту,3,Pipedrive,deal,PipedriveCLIAPI,Pipedrive,native,
+Typeform → Pipedrive + письмо клиенту,4,Gmail,message,GmailV2API,Gmail,native,Триггер Gmail — опрос; для мгновенной реакции используйте IMAP или Pub/Sub.
+Новая строка в таблице → Paths → Slack или Trello,1,Google Sheets,new_row,GoogleSheetsV2CLIAPI,Google Sheets,native,"Триггер «строка добавлена» в n8n опрашивает лист; проверьте, что старые строки не обработаются повторно при первом запуске."
+Новая строка в таблице → Paths → Slack или Trello,2,Filter,filter,FilterAPI,Filter / If,logic,Zapier останавливает zap молча; в n8n ветка false просто ничего не делает.
+Новая строка в таблице → Paths → Slack или Trello,3,Paths by Zapier,branch,BranchingAPI,Switch / If,logic,
+Новая строка в таблице → Paths → Slack или Trello,4,Slack,channel_message,SlackAPI,Slack,native,
+Новая строка в таблице → Paths → Slack или Trello,5,Trello,card,TrelloCLIAPI,Trello,native,
+"Заказы Shopify → Google Sheets, крупные — в Telegram",1,Shopify,WatchOrders,shopify:WatchOrders,Shopify,native,Вебхуки Shopify регистрируются заново на адрес n8n.
+"Заказы Shopify → Google Sheets, крупные — в Telegram",2,Make flow control,BasicFeeder,builtin:BasicFeeder,Split Out,logic,
+"Заказы Shopify → Google Sheets, крупные — в Telegram",3,Google Sheets,addRow,google-sheets:addRow,Google Sheets,native,"Триггер «строка добавлена» в n8n опрашивает лист; проверьте, что старые строки не обработаются повторно при первом запуске."
+"Заказы Shopify → Google Sheets, крупные — в Telegram",4,Make flow control,BasicAggregator,builtin:BasicAggregator,Aggregate,logic,
+"Заказы Shopify → Google Sheets, крупные — в Telegram",5,Make flow control,BasicRouter,builtin:BasicRouter,Switch,logic,
+"Заказы Shopify → Google Sheets, крупные — в Telegram",6,Telegram,SendReplyMessage,telegram:SendReplyMessage,Telegram,native,У одного бота — один вебхук: два воркфлоу с Telegram Trigger на одном боте не работают.
+"Заказы Shopify → Google Sheets, крупные — в Telegram",7,Make Data store,AddRecord,datastore:AddRecord,Google Sheets / Postgres / static data,partial,Выгрузите данные хранилища и перенесите.
+Письма на адрес Zapier → счётчик → ежедневная сводка,1,Email by Zapier,new_inbound,EmailByZapierAPI,Email Trigger (IMAP) / Send Email,partial,Входящий адрес @zapiermail.com не переносится: нужен свой ящик или пересылка.
+Письма на адрес Zapier → счётчик → ежедневная сводка,2,Storage by Zapier,increment,StorageAPI,Static data в Code / Google Sheets / Postgres,partial,Выберите хранилище и перенесите текущие значения.
+Письма на адрес Zapier → счётчик → ежедневная сводка,3,Code by Zapier,run_javascript,CodeAPI,Code,logic,Переписать под формат items n8n: return [{ json: … }].
+Письма на адрес Zapier → счётчик → ежедневная сводка,4,Digest by Zapier,append_entry_and_schedule_digest,DigestCLIAPI,Таблица-накопитель + Schedule Trigger,partial,"Накопление пишется в таблицу, отправка — по расписанию."
+Письма на адрес Zapier → счётчик → ежедневная сводка,5,Telegram,message,TelegramCLIAPI,Telegram,native,У одного бота — один вебхук: два воркфлоу с Telegram Trigger на одном боте не работают.

@@ -1,0 +1,15 @@
+{
+  "name": "Заказы Shopify → Google Sheets, крупные — в Telegram",
+  "flow": [
+    {"id": 1, "module": "shopify:WatchOrders", "version": 2, "parameters": {"__IMTCONN__": 333, "limit": 10}, "mapper": {}, "metadata": {}},
+    {"id": 2, "module": "builtin:BasicFeeder", "version": 1, "parameters": {}, "mapper": {"array": "{{1.line_items}}"}, "metadata": {}},
+    {"id": 3, "module": "google-sheets:addRow", "version": 2, "parameters": {"__IMTCONN__": 444}, "mapper": {"spreadsheetId": "1abc", "sheetId": "Orders", "values": {"0": "{{1.name}}", "1": "{{2.title}}", "2": "{{2.quantity}}"}}, "metadata": {}},
+    {"id": 4, "module": "builtin:BasicAggregator", "version": 1, "parameters": {"feeder": 2}, "mapper": {"value": "{{2.title}}"}, "metadata": {}},
+    {"id": 5, "module": "builtin:BasicRouter", "version": 1, "mapper": null, "metadata": {},
+     "routes": [
+       {"flow": [{"id": 6, "module": "telegram:SendReplyMessage", "version": 1, "parameters": {"__IMTCONN__": 555}, "mapper": {"chatId": "-100123", "text": "Крупный заказ {{1.name}}: {{1.total_price}}"}, "metadata": {}, "filter": {"name": "больше 500", "conditions": [[{"a": "{{1.total_price}}", "b": "500", "o": "number:greater"}]]}}]},
+       {"flow": [{"id": 7, "module": "datastore:AddRecord", "version": 1, "parameters": {"datastore": 77}, "mapper": {"key": "{{1.id}}", "data": {"total": "{{1.total_price}}"}}, "metadata": {}}]}
+     ]}
+  ],
+  "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3}}
+}

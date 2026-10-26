@@ -1,0 +1,11 @@
+{
+  "name": "Заявка с сайта → HubSpot + Slack",
+  "flow": [
+    {"id": 1, "module": "gateway:CustomWebHook", "version": 1, "parameters": {"hook": 123456, "maxResults": 1}, "mapper": {}, "metadata": {"designer": {"x": 0, "y": 0}}},
+    {"id": 2, "module": "util:SetVariables", "version": 1, "parameters": {}, "mapper": {"variables": [{"name": "phone", "value": "{{replace(1.phone; \" \"; \"\")}}"}]}, "metadata": {"designer": {"x": 300, "y": 0}}},
+    {"id": 3, "module": "hubspotcrm:createContact", "version": 2, "parameters": {"__IMTCONN__": 111}, "mapper": {"email": "{{1.email}}", "firstname": "{{1.name}}", "phone": "{{2.phone}}"}, "metadata": {"designer": {"x": 600, "y": 0}}},
+    {"id": 4, "module": "slack:CreateMessage", "version": 4, "parameters": {"__IMTCONN__": 222}, "mapper": {"channel": "C0123", "text": "Новая заявка: {{1.name}}"}, "metadata": {"designer": {"x": 900, "y": 0}}},
+    {"id": 5, "module": "gateway:WebhookRespond", "version": 1, "parameters": {}, "mapper": {"status": "200", "body": "{\"ok\":true}"}, "metadata": {"designer": {"x": 1200, "y": 0}}}
+  ],
+  "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": true}}
+}

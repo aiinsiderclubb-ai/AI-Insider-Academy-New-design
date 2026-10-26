@@ -1,0 +1,22 @@
+{
+  "metadata": {"version": 2, "_note": "Пример. Структура экспорта Zapier меняется; инструмент читает zaps[].nodes или zaps[].steps с полями selected_api и action."},
+  "zaps": [
+    {"id": 101, "title": "Typeform → Pipedrive + письмо клиенту", "status": "on", "nodes": {
+      "1": {"id": 1, "parent_id": null, "type_of": "read", "selected_api": "TypeformCLIAPI", "action": "form_response", "params": {"form_id": "abc"}},
+      "2": {"id": 2, "parent_id": 1, "type_of": "write", "selected_api": "FormatterV2CLIAPI", "action": "text", "params": {"transform": "titlecase"}},
+      "3": {"id": 3, "parent_id": 2, "type_of": "write", "selected_api": "PipedriveCLIAPI", "action": "deal", "params": {}},
+      "4": {"id": 4, "parent_id": 3, "type_of": "write", "selected_api": "GmailV2API", "action": "message", "params": {}}}},
+    {"id": 102, "title": "Новая строка в таблице → Paths → Slack или Trello", "status": "on", "nodes": {
+      "1": {"id": 1, "parent_id": null, "type_of": "read", "selected_api": "GoogleSheetsV2CLIAPI", "action": "new_row", "params": {}},
+      "2": {"id": 2, "parent_id": 1, "type_of": "filter", "selected_api": "FilterAPI", "action": "filter", "params": {}},
+      "3": {"id": 3, "parent_id": 2, "type_of": "write", "selected_api": "BranchingAPI", "action": "branch", "params": {}},
+      "4": {"id": 4, "parent_id": 3, "type_of": "write", "selected_api": "SlackAPI", "action": "channel_message", "params": {}},
+      "5": {"id": 5, "parent_id": 3, "type_of": "write", "selected_api": "TrelloCLIAPI", "action": "card", "params": {}}}},
+    {"id": 103, "title": "Письма на адрес Zapier → счётчик → ежедневная сводка", "status": "off", "nodes": {
+      "1": {"id": 1, "parent_id": null, "type_of": "read", "selected_api": "EmailByZapierAPI", "action": "new_inbound", "params": {}},
+      "2": {"id": 2, "parent_id": 1, "type_of": "write", "selected_api": "StorageAPI", "action": "increment", "params": {}},
+      "3": {"id": 3, "parent_id": 2, "type_of": "write", "selected_api": "CodeAPI", "action": "run_javascript", "params": {}},
+      "4": {"id": 4, "parent_id": 3, "type_of": "write", "selected_api": "DigestCLIAPI", "action": "append_entry_and_schedule_digest", "params": {}},
+      "5": {"id": 5, "parent_id": 4, "type_of": "write", "selected_api": "TelegramCLIAPI", "action": "message", "params": {}}}}
+  ]
+}

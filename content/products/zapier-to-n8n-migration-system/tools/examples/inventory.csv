@@ -1,0 +1,4 @@
+name,platform,trigger,steps,runs_per_month,status,notes
+Оплата Stripe → счёт в QuickBooks,Zapier,Stripe: new charge,QuickBooks: create invoice; Gmail: send email,420,on,Счёт должен уйти в течение часа
+Новый подписчик → Mailchimp → Notion,Make,Webhooks: catch hook,Mailchimp: add subscriber; Notion: create page; Code: run javascript,1800,on,
+Ежедневный отчёт по продажам,Zapier,Schedule: every day,Google Sheets: lookup rows; Looping: create loop; Formatter: numbers; Slack: send message,30,on,

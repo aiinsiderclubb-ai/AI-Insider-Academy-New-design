@@ -105,7 +105,7 @@ function toProduct(raw: ApiProduct, locale: Locale): Product {
     creator: creator
       ? { id: creator.id, name: creator.name, slug: creator.slug, verified: creator.verified, gradient: creator.avatarGradient }
       : null,
-    rating: raw.rating,
+    rating: raw.rating ?? null,
     reviewCount: raw.reviewCount ?? 0,
     badges: raw.badges ?? [],
     included: suffixedList(raw as unknown as Record<string, unknown>, "included", locale),
@@ -136,7 +136,7 @@ export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
     { enabled: false, products: [], bundles: [] },
   );
 
-  // The API does not serve ratings yet; the migrated catalogue does.
+  // Ratings come only from real buyer reviews, which the API will serve once there are any.
   const localById = new Map(fallbackProducts.map((product) => [product.id, product]));
   const base = raw.products?.length ? raw.products : fallbackProducts;
   const seen = new Set(base.map((product) => product.id));
@@ -147,8 +147,6 @@ export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
       return toProduct(
         {
           ...product,
-          rating: product.rating ?? local?.rating ?? null,
-          reviewCount: product.reviewCount || local?.reviewCount || 0,
           availability: product.availability ?? local?.availability,
           outcomeRu: product.outcomeRu ?? local?.outcomeRu,
           outcomeEn: product.outcomeEn ?? local?.outcomeEn,
@@ -238,8 +236,10 @@ export function filterProducts(products: Product[], query: StoreQuery): Product[
       sorted.sort((a, b) => Number(b.badges.includes("trending")) - Number(a.badges.includes("trending")));
       break;
     default:
+      // On sale before "coming soon"; then real ratings, once there are any.
       sorted.sort(
         (a, b) =>
+          Number(b.available) - Number(a.available) ||
           (b.rating ?? 0) * 10 + b.reviewCount - ((a.rating ?? 0) * 10 + a.reviewCount) ||
           a.title.localeCompare(b.title),
       );

@@ -79,7 +79,8 @@ function StoreSearchInner({ d, className }: { d: Dictionary; className?: string 
 
 /* =================================== sort ================================== */
 
-function StoreSortInner({ d, className }: { d: Dictionary; className?: string }) {
+/** `rated` is false until real buyers have rated something: sorting by an empty rating would only shuffle the shelf. */
+function StoreSortInner({ d, className, rated = false }: { d: Dictionary; className?: string; rated?: boolean }) {
   const { write, params } = useQueryWriter();
   const current = params.get("sort") ?? "popular";
 
@@ -87,7 +88,7 @@ function StoreSortInner({ d, className }: { d: Dictionary; className?: string })
     { value: "popular", label: d.store.sortPopular },
     { value: "trending", label: d.store.sortTrending },
     { value: "new", label: d.store.sortNewest },
-    { value: "rating", label: d.store.sortRating },
+    ...(rated ? [{ value: "rating", label: d.store.sortRating }] : []),
     { value: "price-asc", label: d.store.sortPriceAsc },
     { value: "price-desc", label: d.store.sortPriceDesc },
   ];
@@ -125,7 +126,7 @@ const PRICE_BANDS = [
   { id: "150+", min: 150, max: 9999 },
 ];
 
-function FacetBody({ d, categories }: { d: Dictionary; categories: FacetCategory[] }) {
+function FacetBody({ d, categories, rated = false }: { d: Dictionary; categories: FacetCategory[]; rated?: boolean }) {
   const { write, params } = useQueryWriter();
   const category = params.get("category") ?? "all";
   const band = params.get("price") ?? "all";
@@ -185,16 +186,18 @@ function FacetBody({ d, categories }: { d: Dictionary; categories: FacetCategory
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend className="eyebrow mb-3">{d.store.filterRating}</legend>
-        <div className="flex flex-wrap gap-2">
-          {["4.5", "4.8"].map((value) => (
-            <Chip key={value} active={rating === value} onClick={() => write({ rating: rating === value ? null : value })}>
-              {value}+
-            </Chip>
-          ))}
-        </div>
-      </fieldset>
+      {rated && (
+        <fieldset>
+          <legend className="eyebrow mb-3">{d.store.filterRating}</legend>
+          <div className="flex flex-wrap gap-2">
+            {["4.5", "4.8"].map((value) => (
+              <Chip key={value} active={rating === value} onClick={() => write({ rating: rating === value ? null : value })}>
+                {value}+
+              </Chip>
+            ))}
+          </div>
+        </fieldset>
+      )}
 
       {(category !== "all" || band !== "all" || rating !== "all") && (
         <button
@@ -209,13 +212,13 @@ function FacetBody({ d, categories }: { d: Dictionary; categories: FacetCategory
   );
 }
 
-function StoreFacetsInner({ d, categories }: { d: Dictionary; categories: FacetCategory[] }) {
+function StoreFacetsInner({ d, categories, rated }: { d: Dictionary; categories: FacetCategory[]; rated?: boolean }) {
   const [open, setOpen] = React.useState(false);
 
   return (
     <>
       <div className="hidden lg:block">
-        <FacetBody d={d} categories={categories} />
+        <FacetBody d={d} categories={categories} rated={rated} />
       </div>
 
       <div className="lg:hidden">
@@ -224,7 +227,7 @@ function StoreFacetsInner({ d, categories }: { d: Dictionary; categories: FacetC
           {d.common.filters}
         </Button>
         <Drawer open={open} onClose={() => setOpen(false)} title={d.common.filters} side="bottom">
-          <FacetBody d={d} categories={categories} />
+          <FacetBody d={d} categories={categories} rated={rated} />
         </Drawer>
       </div>
     </>
@@ -247,7 +250,7 @@ export function StoreSearch(props: { d: Dictionary; className?: string }) {
   );
 }
 
-export function StoreSort(props: { d: Dictionary; className?: string }) {
+export function StoreSort(props: { d: Dictionary; className?: string; rated?: boolean }) {
   return (
     <React.Suspense fallback={<div className="h-9 w-44" aria-hidden />}>
       <StoreSortInner {...props} />
@@ -255,7 +258,7 @@ export function StoreSort(props: { d: Dictionary; className?: string }) {
   );
 }
 
-export function StoreFacets(props: { d: Dictionary; categories: FacetCategory[] }) {
+export function StoreFacets(props: { d: Dictionary; categories: FacetCategory[]; rated?: boolean }) {
   return (
     <React.Suspense fallback={<div className="h-64" aria-hidden />}>
       <StoreFacetsInner {...props} />

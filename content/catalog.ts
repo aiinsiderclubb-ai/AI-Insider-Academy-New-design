@@ -54,6 +54,8 @@ export interface VaultProduct {
   icon: string;
   coverImage: string;
   highlightRu: string;
+  /** "coming_soon" while the vault's products are still being written. */
+  availability?: string;
   highlightEn: string;
   accent: string;
   gradient: string;

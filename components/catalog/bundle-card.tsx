@@ -97,9 +97,15 @@ export function VaultCard({
   d: Dictionary;
 }) {
   const image = cover("vault", product.id) ?? product.coverImage;
+  const soon = product.availability === "coming_soon";
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-out-quart)] hover:-translate-y-0.5 hover:border-line-2 hover:shadow-md">
+    <article
+      className={cn(
+        "group relative flex flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-out-quart)] hover:-translate-y-0.5 hover:border-line-2 hover:shadow-md",
+        soon && "opacity-60",
+      )}
+    >
       <div className="relative aspect-[16/9] overflow-hidden border-b border-line bg-surface-3">
         {image && (
           <Image
@@ -114,7 +120,11 @@ export function VaultCard({
           <Badge className="border border-line/60 bg-[color-mix(in_oklab,var(--surface)_82%,transparent)] text-ink-2 backdrop-blur-sm">
             {product.categoryRu}
           </Badge>
-          <Badge tone="accent">{pick(locale, product.highlightRu, product.highlightEn)}</Badge>
+          {soon ? (
+            <Badge tone="warning">{d.badges.soon}</Badge>
+          ) : (
+            <Badge tone="accent">{pick(locale, product.highlightRu, product.highlightEn)}</Badge>
+          )}
         </div>
       </div>
 

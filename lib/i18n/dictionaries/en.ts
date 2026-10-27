@@ -347,7 +347,7 @@ export const en: Dictionary = {
     commercialLicense: "Commercial licence",
     tryFree: "Try a free sample",
     salesClosed: "Opening later",
-    salesClosedBody: "This one is in final review. Leave your email and we will tell you the moment it ships.",
+    salesClosedBody: "Sales are not open yet. Leave your email and we will tell you the moment you can buy it.",
     notifyRelease: "Notify me at release",
     sortPopular: "Popular",
     sortTrending: "Trending",

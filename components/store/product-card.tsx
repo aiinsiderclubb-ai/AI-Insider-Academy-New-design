@@ -75,7 +75,7 @@ export function ProductCard({
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-2.5">
           <div className="flex min-w-0 flex-col gap-1.5">
-            {product.rating !== null && <Rating value={product.rating} count={product.reviewCount} />}
+            {product.rating !== null && product.reviewCount > 0 && <Rating value={product.rating} count={product.reviewCount} />}
             {product.available ? (
               <span className="font-mono text-[16px] leading-none font-medium tabular-nums text-ink">
                 {formatPrice(product.priceEur, locale)}

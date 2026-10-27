@@ -347,7 +347,7 @@ export const ukr: Dictionary = {
     commercialLicense: "Комерційна ліцензія",
     tryFree: "Спробувати безкоштовно",
     salesClosed: "Продажі відкриються пізніше",
-    salesClosedBody: "Товар на фінальній перевірці. Залиште пошту — повідомимо, щойно він вийде.",
+    salesClosedBody: "Продажі ще не відкриті. Залиште пошту — повідомимо, щойно товар можна буде купити.",
     notifyRelease: "Повідомити про вихід",
     sortPopular: "Популярні",
     sortTrending: "У тренді",

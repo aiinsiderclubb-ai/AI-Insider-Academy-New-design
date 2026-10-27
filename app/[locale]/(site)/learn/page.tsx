@@ -10,7 +10,6 @@ import { Container, SectionHead } from "@/components/primitives/surface";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { Stat } from "@/components/primitives/badge";
 import { courseBundles, vaultBundle, vaultHub, vaultProducts } from "@/content/catalog";
-import seedReviews from "@/content/data/seedReviews.json";
 import { pick } from "@/content/locale";
 import { difficultyFilters } from "@/content/site";
 import { getCourses, groupCourses, type Course } from "@/lib/api/catalog";
@@ -47,7 +46,8 @@ export default async function LearnPage({
 
   const [courses, reviews] = await Promise.all([getCourses(locale), getReviews(locale)]);
   const groups = groupCourses(courses);
-  const ratingOf = courseRating(reviews.length ? reviews : seedReviews.SEED_REVIEWS);
+  // Ratings come only from real reviews; without them there is nothing to sort by.
+  const ratingOf = courseRating(reviews);
 
   const tab: Tab = (TABS as readonly string[]).includes(query.tab ?? "") ? (query.tab as Tab) : "all";
   const sort: SortKey | null = (SORTS as readonly string[]).includes(query.sort ?? "") ? (query.sort as SortKey) : null;
@@ -151,7 +151,7 @@ export default async function LearnPage({
                 { value: "price", label: d.learn.sortPrice },
                 { value: "name", label: d.learn.sortName },
                 { value: "difficulty", label: d.learn.sortDifficulty },
-                { value: "rating", label: d.learn.sortRating },
+                ...(reviews.length ? [{ value: "rating", label: d.learn.sortRating }] : []),
               ],
             }}
           />

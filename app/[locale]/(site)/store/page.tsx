@@ -75,8 +75,9 @@ export default async function StorePage({
   const drop = catalog.products.find((item) => item.available && item.badges.includes("trending")) ?? catalog.products[0];
 
   const newArrivals = catalog.products.filter((item) => item.badges.includes("new")).slice(0, 4);
+  const rated = catalog.products.some((item) => item.rating !== null && item.reviewCount > 0);
   const topRated = [...catalog.products]
-    .filter((item) => item.rating)
+    .filter((item) => item.rating !== null && item.reviewCount > 0)
     .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
     .slice(0, 4);
 
@@ -232,13 +233,13 @@ export default async function StorePage({
       <Container size="wide" className="pb-20">
         <div className="grid gap-x-10 gap-y-6 lg:grid-cols-[220px_minmax(0,1fr)]">
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <StoreFacets d={d} categories={facets.map((facet) => ({ slug: facet.slug, label: pick(locale, facet.titleRu, facet.titleEn), count: facet.count }))} />
+            <StoreFacets d={d} rated={rated} categories={facets.map((facet) => ({ slug: facet.slug, label: pick(locale, facet.titleRu, facet.titleEn), count: facet.count }))} />
           </aside>
 
           <div className="min-w-0">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
               <p className="text-[13px] text-muted tabular-nums">{resultCount(results.length, locale, d)}</p>
-              <StoreSort d={d} />
+              <StoreSort d={d} rated={rated} />
             </div>
 
             {results.length ? (

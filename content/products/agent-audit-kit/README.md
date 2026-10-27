@@ -5,7 +5,7 @@
 ## Файлы
 
 - `governance-framework.md` — уровни автономии, классы риска, роли, цикл аудита
-- `security-checklist.md` — 48 пункта в 8 разделах с правилом оценки
+- `security-checklist.md` — 48 пунктов в 8 разделах с правилом оценки
 - `policy-templates.md` — три политики: использование AI, данные и агенты, инциденты
 - `audit-report-template.md` — шаблон отчёта для клиента
 - `agent-register.csv` — реестр агентов

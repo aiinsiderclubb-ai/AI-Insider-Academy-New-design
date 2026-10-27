@@ -7,7 +7,6 @@ import { ButtonLink } from "@/components/primitives/button";
 import { ChapterHead } from "@/components/primitives/chapter";
 import { Container } from "@/components/primitives/surface";
 import { Rating } from "@/components/primitives/display";
-import { Note } from "@/components/primitives/states";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { Magnetic, Spotlight } from "@/components/motion/pointer";
 import { Marquee } from "@/components/motion/marquee";
@@ -362,13 +361,14 @@ export default async function CoursePage({
               )}
             </div>
 
-            <div id="reviews" className="scroll-mt-24">
-              <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
-                <p className="eyebrow">{d.learn.reviews}</p>
-                {count > 0 && <Rating value={average} count={count} size={15} />}
-              </div>
+            {/* Hidden until real students have left reviews. */}
+            {reviews.length > 0 && (
+              <div id="reviews" className="scroll-mt-24">
+                <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
+                  <p className="eyebrow">{d.learn.reviews}</p>
+                  {count > 0 && <Rating value={average} count={count} size={15} />}
+                </div>
 
-              {reviews.length ? (
                 <RevealGroup step={70} className="grid gap-4 pt-6 sm:grid-cols-2">
                   {reviews.map((review) => (
                     <figure
@@ -386,12 +386,8 @@ export default async function CoursePage({
                     </figure>
                   ))}
                 </RevealGroup>
-              ) : (
-                <div className="pt-6">
-                  <Note tone="neutral">{d.store.noReviews}</Note>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </Container>
       </section>

@@ -99,7 +99,7 @@ export default async function ProductPage({
             </div>
             <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-ink-2">{product.summary}</p>
 
-            {product.rating !== null && (
+            {product.rating !== null && product.reviewCount > 0 && (
               <div className="mt-4">
                 <Rating value={product.rating} count={product.reviewCount} size={15} />
               </div>
@@ -245,9 +245,10 @@ export default async function ProductPage({
             </section>
 
             {/* ------------------------------ reviews ---------------------------- */}
-            <section className="mt-10">
-              <h2 className="text-[19px]">{pick(locale, "Отзывы покупателей", "Buyer reviews")}</h2>
-              {product.reviewCount > 0 && product.rating !== null ? (
+            {/* Shown once real buyers have left reviews; an empty block reads as "nobody buys this". */}
+            {product.reviewCount > 0 && product.rating !== null && (
+              <section className="mt-10">
+                <h2 className="text-[19px]">{pick(locale, "Отзывы покупателей", "Buyer reviews")}</h2>
                 <div className="mt-4 flex flex-wrap items-center gap-6 rounded-lg border border-line bg-surface p-5">
                   <div>
                     <p className="font-display text-[2.5rem] leading-none font-extrabold tracking-tight tabular-nums">
@@ -265,12 +266,8 @@ export default async function ProductPage({
                     )}
                   </p>
                 </div>
-              ) : (
-                <Note tone="neutral" className="mt-4">
-                  {d.store.noReviews}
-                </Note>
-              )}
-            </section>
+              </section>
+            )}
 
             {/* -------------------------------- faq ------------------------------ */}
             {product.faq.length > 0 && (

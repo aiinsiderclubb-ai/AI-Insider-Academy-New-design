@@ -107,8 +107,9 @@ export interface ApiProduct {
   screenshots: string[];
   videoPreview: string | null;
   freePreview: ApiFreePreview | null;
-  reviewCount: number;
-  rating: number | null;
+  /** Present only once real buyers have reviewed the product. */
+  reviewCount?: number;
+  rating?: number | null;
   availability?: string;
   outcomeRu?: string;
   outcomeEn?: string;

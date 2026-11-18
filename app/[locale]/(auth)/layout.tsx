@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Brand } from "@/components/layout/brand";
-import { AuthShowcase } from "@/components/auth/auth-showcase";
+import { AuthPoster } from "@/components/auth/auth-poster";
 import { DotField } from "@/components/auth/dot-field";
 import { getDictionary, path, type Locale } from "@/lib/i18n";
 
@@ -9,10 +9,10 @@ import { getDictionary, path, type Locale } from "@/lib/i18n";
  * Sign-in, sign-up and the rest of the account doors.
  *
  * The form keeps the left half over a quiet field of dots that answers the
- * pointer. The right half is the showcase: an AI system running on its own
- * in a 3D stage — always dark, in either theme, like the site's other
- * cinematic blocks. It says nothing about courses, which stay hidden until
- * launch (lib/visibility.ts).
+ * pointer. The right half is a poster: the school's line set large over a
+ * living field of characters — always dark, in either theme, like the site's
+ * other cinematic blocks. It says nothing about courses, which stay hidden
+ * until launch (lib/visibility.ts).
  */
 export default async function AuthLayout({
   children,
@@ -61,7 +61,7 @@ export default async function AuthLayout({
 
       {/* ------------------------------ showcase ------------------------------ */}
       <aside className="on-dark relative hidden min-h-dvh border-l border-line lg:sticky lg:top-0 lg:block lg:h-dvh">
-        <AuthShowcase locale={locale} tagline={d.brand.tagline} />
+        <AuthPoster locale={locale} />
       </aside>
     </div>
   );

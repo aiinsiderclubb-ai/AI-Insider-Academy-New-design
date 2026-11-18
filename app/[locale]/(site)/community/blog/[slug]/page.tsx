@@ -10,6 +10,7 @@ import { Note } from "@/components/primitives/states";
 import { pick } from "@/content/locale";
 import { getBlogPost } from "@/lib/api/public";
 import { formatDate, getDictionary, path, type Locale } from "@/lib/i18n";
+import { coursesPublic } from "@/lib/visibility";
 
 export const revalidate = 600;
 
@@ -105,8 +106,13 @@ export default async function BlogPostPage({
                   "Migrated from the previous edition: the lead is here, the long version follows after editing.",
                 )}
               </p>
-              <ButtonLink href={path("/learn", locale)} variant="secondary" size="sm" className="mt-5">
-                {d.nav.catalog}
+              <ButtonLink
+                href={path(coursesPublic() ? "/learn" : "/store", locale)}
+                variant="secondary"
+                size="sm"
+                className="mt-5"
+              >
+                {coursesPublic() ? d.nav.catalog : d.nav.store}
               </ButtonLink>
             </div>
           )}

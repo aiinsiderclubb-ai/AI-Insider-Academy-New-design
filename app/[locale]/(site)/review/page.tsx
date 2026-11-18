@@ -7,6 +7,7 @@ import { getCourses } from "@/lib/api/catalog";
 import { getAccess, getMe } from "@/lib/api/session";
 import { getStoreCatalog } from "@/lib/api/store";
 import { getDictionary, path, type Locale } from "@/lib/i18n";
+import { coursesPublic } from "@/lib/visibility";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -61,7 +62,7 @@ export default async function ReviewPage({
           ) : (
             <ReviewForm
               item={{ id: itemId, title }}
-              spendHref={path("/learn", locale)}
+              spendHref={path(coursesPublic() ? "/learn" : "/store", locale)}
               dateLocale={locale === "en" ? "en-GB" : locale === "ukr" ? "uk-UA" : "ru-RU"}
               d={d}
             />

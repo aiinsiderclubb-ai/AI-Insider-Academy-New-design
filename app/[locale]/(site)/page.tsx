@@ -17,6 +17,7 @@ import { getStoreCatalog } from "@/lib/api/store";
 import { getReviews } from "@/lib/api/public";
 import { storeCategories } from "@/content/store";
 import { formatPrice, getDictionary, locales, path, type Locale } from "@/lib/i18n";
+import { coursesPublic } from "@/lib/visibility";
 
 export const revalidate = 300;
 
@@ -28,6 +29,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale: raw } = await params;
   const locale = raw as Locale;
   const d = getDictionary(locale);
+  // Before launch (lib/visibility.ts) the page keeps to the store and the
+  // community: no programmes, prices, reviews of courses or course counts.
+  const open = coursesPublic();
 
   const [courses, catalog, reviews] = await Promise.all([
     getCourses(locale),
@@ -109,15 +113,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     { id: "finish", label: pick(locale, "Старт", "Get going") },
   ];
 
+  const visibleStops = open
+    ? stops
+    : stops.filter((stop) => !["programmes", "access", "path", "voices", "finish"].includes(stop.id));
+
   const ribbon = storeCategories.map((category) => pick(locale, category.titleRu, category.titleEn));
 
   return (
     <>
       <Journey
-        stops={stops}
+        stops={visibleStops}
         from={pick(locale, "Вопрос", "Question")}
         to={pick(locale, "Результат", "Result")}
-        railUntil="access"
+        railUntil={open ? "access" : "store"}
       />
 
       <div id="start" />
@@ -125,39 +133,42 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <Hero
         locale={locale}
         d={d}
+        prelaunch={!open}
         stats={{
-          courses: courses.length,
-          lessons: totalLessons,
+          courses: open ? courses.length : null,
+          lessons: open ? totalLessons : null,
           products: catalog.products.length,
           languages: locales.length,
         }}
       />
 
       <div id="entrances" />
-      <Entrances locale={locale} d={d} />
+      <Entrances locale={locale} d={d} prelaunch={!open} />
 
       <Marquee items={ribbon} className="mb-20 sm:mb-28" />
 
-      <Container size="wide" id="programmes" className="pb-20 sm:pb-28">
-        <Reveal>
-        <SectionHead
-          eyebrow={d.learn.tabPaid}
-          title={d.home.coursesTitle}
-          body={d.home.coursesBody}
-          action={
-            <ButtonLink href={path("/learn", locale)} variant="ghost" size="sm">
-              {d.nav.catalog}
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </ButtonLink>
-          }
-        />
-        </Reveal>
-        <RevealGroup step={70} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {groups.paid.slice(0, 4).map((course, index) => (
-            <CourseCard key={course.id} course={course} locale={locale} d={d} priority={index < 2} />
-          ))}
-        </RevealGroup>
-      </Container>
+      {open && (
+        <Container size="wide" id="programmes" className="pb-20 sm:pb-28">
+          <Reveal>
+          <SectionHead
+            eyebrow={d.learn.tabPaid}
+            title={d.home.coursesTitle}
+            body={d.home.coursesBody}
+            action={
+              <ButtonLink href={path("/learn", locale)} variant="ghost" size="sm">
+                {d.nav.catalog}
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </ButtonLink>
+            }
+          />
+          </Reveal>
+          <RevealGroup step={70} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {groups.paid.slice(0, 4).map((course, index) => (
+              <CourseCard key={course.id} course={course} locale={locale} d={d} priority={index < 2} />
+            ))}
+          </RevealGroup>
+        </Container>
+      )}
 
       <Container size="wide" id="store">
         <Reveal>
@@ -180,18 +191,22 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </RevealGroup>
       </Container>
 
-      <div id="access" />
-      <Access d={d} options={accessOptions} />
+      {open && (
+        <>
+          <div id="access" />
+          <Access d={d} options={accessOptions} />
 
-      <div id="voices" />
-      <Reviews locale={locale} d={d} reviews={reviews} />
+          <div id="voices" />
+          <Reviews locale={locale} d={d} reviews={reviews} />
 
-      <div id="finish" />
-      <Closing
-        locale={locale}
-        d={d}
-        stats={{ courses: courses.length, lessons: totalLessons, products: catalog.products.length }}
-      />
+          <div id="finish" />
+          <Closing
+            locale={locale}
+            d={d}
+            stats={{ courses: courses.length, lessons: totalLessons, products: catalog.products.length }}
+          />
+        </>
+      )}
     </>
   );
 }

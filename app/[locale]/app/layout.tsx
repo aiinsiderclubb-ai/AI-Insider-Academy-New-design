@@ -5,6 +5,7 @@ import { buildAppNav } from "@/components/layout/nav-model";
 import { signOut } from "@/lib/auth/actions";
 import { getAccess, getMe, getNotifications } from "@/lib/api/session";
 import { getAssistantOnline } from "@/lib/api/public";
+import { coursesPublic } from "@/lib/visibility";
 import { getDictionary, path, type Locale } from "@/lib/i18n";
 
 export default async function AppLayout({
@@ -53,7 +54,13 @@ export default async function AppLayout({
       </AppShell>
       {/* Above the tab bar that docks to the bottom on phones and tablets. */}
       {assistantOnline && (
-        <AssistantWidget locale={locale} d={d} userName={me.user.name} lift="max-lg:[--assistant-lift:4.25rem]" />
+        <AssistantWidget
+          locale={locale}
+          d={d}
+          userName={me.user.name}
+          lift="max-lg:[--assistant-lift:4.25rem]"
+          prelaunch={!coursesPublic()}
+        />
       )}
     </>
   );

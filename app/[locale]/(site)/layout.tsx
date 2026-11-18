@@ -8,6 +8,7 @@ import { getStoreCatalog } from "@/lib/api/store";
 import { getSession } from "@/lib/api/session";
 import { getAssistantOnline } from "@/lib/api/public";
 import { getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
+import { coursesPublic } from "@/lib/visibility";
 
 export default async function SiteLayout({
   children,
@@ -44,13 +45,18 @@ export default async function SiteLayout({
       href: path(`/store/${product.slug}`, locale),
       keywords: product.summary,
     })),
-    {
-      id: "page-plans",
-      kind: "page" as const,
-      title: d.plans.title,
-      note: d.plans.subtitle,
-      href: path("/plans", locale),
-    },
+    // Plans only make sense once the courses are public (lib/visibility.ts).
+    ...(coursesPublic()
+      ? [
+          {
+            id: "page-plans",
+            kind: "page" as const,
+            title: d.plans.title,
+            note: d.plans.subtitle,
+            href: path("/plans", locale),
+          },
+        ]
+      : []),
     {
       id: "page-forum",
       kind: "page" as const,
@@ -73,7 +79,7 @@ export default async function SiteLayout({
         {children}
       </main>
       <SiteFooter locale={locale} d={d} />
-      {assistantOnline && <AssistantWidget locale={locale} d={d} userName={user?.name} />}
+      {assistantOnline && <AssistantWidget locale={locale} d={d} userName={user?.name} prelaunch={!coursesPublic()} />}
     </div>
   );
 }

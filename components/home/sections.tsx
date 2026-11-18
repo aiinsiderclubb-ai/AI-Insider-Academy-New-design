@@ -7,31 +7,34 @@ import { Container, SectionHead } from "@/components/primitives/surface";
 import { AnimatedNumber, Rating } from "@/components/primitives/display";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { Magnetic, Spotlight } from "@/components/motion/pointer";
-import { pick } from "@/content/locale";
-import type { Course } from "@/lib/api/catalog";
 import type { Review } from "@/lib/api/public";
 import { path, plural, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 /* ============================== four entrances ============================= */
 
-export function Entrances({ locale, d }: { locale: Locale; d: Dictionary }) {
-  const items = [
-    { title: d.nav.learn, note: d.home.coursesBody, href: path("/learn", locale) },
-    { title: d.nav.store, note: d.home.storeBody, href: path("/store", locale) },
-    { title: d.nav.plans, note: d.plans.body, href: path("/plans", locale) },
-    { title: d.nav.community, note: d.community.forumBody, href: path("/community/forum", locale) },
+export function Entrances({ locale, d, prelaunch = false }: { locale: Locale; d: Dictionary; prelaunch?: boolean }) {
+  const all = [
+    { id: "learn", title: d.nav.learn, note: d.home.coursesBody, href: path("/learn", locale) },
+    { id: "store", title: d.nav.store, note: d.home.storeBody, href: path("/store", locale) },
+    { id: "plans", title: d.nav.plans, note: d.plans.body, href: path("/plans", locale) },
+    { id: "community", title: d.nav.community, note: d.community.forumBody, href: path("/community/forum", locale) },
   ];
+  // Before launch only the doors that open onto something.
+  const items = prelaunch ? all.filter((item) => item.id === "store" || item.id === "community") : all;
 
   return (
     <Container size="wide" className="py-20 sm:py-28">
       <Reveal>
-        <SectionHead eyebrow={d.nav.learn} title={d.home.hubsTitle} body={d.home.hubsBody} />
+        <SectionHead eyebrow={prelaunch ? d.nav.store : d.nav.learn} title={d.home.hubsTitle} body={prelaunch ? undefined : d.home.hubsBody} />
       </Reveal>
 
       <RevealGroup
         step={70}
-        className="grid overflow-hidden rounded-2xl border border-line bg-surface sm:grid-cols-2 lg:grid-cols-4"
+        className={cn(
+          "grid overflow-hidden rounded-2xl border border-line bg-surface sm:grid-cols-2",
+          items.length === 4 && "lg:grid-cols-4",
+        )}
       >
         {items.map((item, index) => (
           <Link

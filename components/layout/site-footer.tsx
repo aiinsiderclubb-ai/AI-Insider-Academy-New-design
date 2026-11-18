@@ -7,6 +7,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { links } from "@/content/site";
 import type { Dictionary } from "@/lib/i18n";
 import { localeShort, locales, path, type Locale } from "@/lib/i18n/config";
+import { coursesPublic } from "@/lib/visibility";
 
 /** `https://t.me/name` → `@name`, the way a person would write it. */
 function handle(url: string) {
@@ -30,7 +31,7 @@ export function SiteFooter({ locale, d }: { locale: Locale; d: Dictionary }) {
   const p = (href: string) => path(href, locale);
   const year = new Date().getFullYear();
 
-  const columns: { title: string; links: { label: string; href: string }[] }[] = [
+  const allColumns: { title: string; links: { label: string; href: string }[] }[] = [
     {
       title: d.footer.learning,
       links: [
@@ -68,6 +69,8 @@ export function SiteFooter({ locale, d }: { locale: Locale; d: Dictionary }) {
       ],
     },
   ];
+  // Before launch the learning column would only lead to "opening soon".
+  const columns = coursesPublic() ? allColumns : allColumns.filter((column) => column.title !== d.footer.learning);
 
   const contacts = [
     {

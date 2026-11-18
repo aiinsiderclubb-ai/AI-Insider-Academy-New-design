@@ -8,6 +8,7 @@ import { creatorList } from "@/content/site";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
 import { getAllBlogPosts } from "@/lib/api/public";
+import { coursesPublic } from "@/lib/visibility";
 
 const SITE = resolveSiteUrl();
 
@@ -19,7 +20,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getAllBlogPosts(defaultLocale),
   ]);
 
-  const staticPaths = [
+  const open = coursesPublic();
+  const allStatic = [
     { path: "", priority: 1, changeFrequency: "weekly" as const },
     { path: "/learn", priority: 0.9, changeFrequency: "weekly" as const },
     { path: "/store", priority: 0.9, changeFrequency: "weekly" as const },
@@ -31,10 +33,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/community/giveaways", priority: 0.7, changeFrequency: "weekly" as const },
     { path: "/community/blog", priority: 0.8, changeFrequency: "weekly" as const },
   ];
+  // Hidden until launch (lib/visibility.ts): nothing under /learn or /plans is listed.
+  const staticPaths = open ? allStatic : allStatic.filter((entry) => entry.path !== "/learn" && entry.path !== "/plans");
 
   const dynamicPaths = [
     ...courses.map((course) => ({ path: `/learn/${course.slug}`, priority: 0.8, changeFrequency: "weekly" as const })),
-    ...courseBundles.map((bundle) => ({ path: `/learn/bundles/${bundle.id}`, priority: 0.7, changeFrequency: "monthly" as const })),
+    ...(open ? courseBundles : []).map((bundle) => ({ path: `/learn/bundles/${bundle.id}`, priority: 0.7, changeFrequency: "monthly" as const })),
     ...catalog.products.map((product) => ({ path: `/store/${product.slug}`, priority: 0.75, changeFrequency: "weekly" as const })),
     ...creatorList.map((creator) => ({ path: `/store/creators/${creator.slug}`, priority: 0.5, changeFrequency: "monthly" as const })),
     ...giveawayList.map((giveaway) => ({ path: `/community/giveaways/${giveaway.slug}`, priority: 0.6, changeFrequency: "weekly" as const })),

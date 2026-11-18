@@ -27,7 +27,8 @@ import type { Locale } from "@/lib/i18n/config";
 import type { AssistantChat, AssistantErrorCode, AssistantMessage } from "./use-assistant";
 import { Reply, useCopy } from "./reply";
 
-export type AssistantMode = "site" | "lesson";
+/** `soon`: the site before launch, when there are no courses to talk about. */
+export type AssistantMode = "site" | "lesson" | "soon";
 
 /** The assistant's face: a warm tile with the spark in it. */
 export function AssistantAvatar({ size = "md", online }: { size?: "sm" | "md" | "lg"; online?: boolean }) {
@@ -184,6 +185,7 @@ function Message({
 
 const SITE_ICONS = [Compass, Layers, Workflow, GraduationCap];
 const LESSON_ICONS = [BookOpen, ClipboardList, ListChecks, Sparkles];
+const SOON_ICONS = [Layers, Workflow, Sparkles, Compass];
 
 function Welcome({
   mode,
@@ -200,8 +202,10 @@ function Welcome({
   const suggestions =
     mode === "lesson"
       ? [a.lessonSuggest1, a.lessonSuggest2, a.lessonSuggest3, a.lessonSuggest4]
-      : [a.suggest1, a.suggest2, a.suggest3, a.suggest4];
-  const icons = mode === "lesson" ? LESSON_ICONS : SITE_ICONS;
+      : mode === "soon"
+        ? [a.soonSuggest1, a.soonSuggest2, a.soonSuggest3, a.soonSuggest4]
+        : [a.suggest1, a.suggest2, a.suggest3, a.suggest4];
+  const icons = mode === "lesson" ? LESSON_ICONS : mode === "soon" ? SOON_ICONS : SITE_ICONS;
   const firstName = userName?.trim().split(/\s+/)[0];
 
   return (
@@ -211,7 +215,9 @@ function Welcome({
         <h3 className="mt-4 font-display text-[1.35rem] leading-tight font-extrabold tracking-tight text-ink">
           {firstName ? a.greetingNamed.replace("{name}", firstName) : a.greeting}
         </h3>
-        <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-3">{mode === "lesson" ? a.lessonIntro : a.intro}</p>
+        <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-3">
+          {mode === "lesson" ? a.lessonIntro : mode === "soon" ? a.soonIntro : a.intro}
+        </p>
       </div>
 
       <ul className="grid gap-2">

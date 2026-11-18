@@ -6,6 +6,7 @@ import { field, pick } from "@/content/locale";
 import type { Locale } from "@/lib/i18n/config";
 import { tryApi } from "./http";
 import type { ApiCourse, ApiLesson } from "./types";
+import { coursesPublic } from "@/lib/visibility";
 
 /* ------------------------------- view models ------------------------------- */
 
@@ -149,8 +150,17 @@ function mergeCourse(content: ContentCourse, live: ApiCourse | undefined, locale
  * badges and the two unreleased courses); the API supplies live lesson data
  * and lock state where it knows the course.
  */
-export async function getCourses(locale: Locale): Promise<Course[]> {
-  const live = await tryApi<ApiCourse[]>("/courses", { revalidate: 120, tags: ["courses"] }, []);
+export async function getCourses(locale: Locale, { preview = false }: { preview?: boolean } = {}): Promise<Course[]> {
+  // Hidden until launch (lib/visibility.ts): the public site gets an empty
+  // shelf. Studio previews it, asking the API with the admin token, since the
+  // API withholds the catalogue from everyone else too.
+  const open = coursesPublic();
+  if (!open && !preview) return [];
+  const live = await tryApi<ApiCourse[]>(
+    "/courses",
+    open ? { revalidate: 120, tags: ["courses"] } : { admin: true, revalidate: false },
+    [],
+  );
   const liveById = new Map(live.map((course) => [course.id, course]));
 
   return contentCourses

@@ -11,7 +11,7 @@ export default async function StudioPulsePage({ params }: { params: Promise<{ lo
   const { locale: raw } = await params;
   const locale = raw as Locale;
 
-  const [dashboard, courses] = await Promise.all([getStudioDashboard(), getCourses(locale)]);
+  const [dashboard, courses] = await Promise.all([getStudioDashboard(), getCourses(locale, { preview: true })]);
   if (!dashboard) return null;
 
   const counts = queueCounts(dashboard);

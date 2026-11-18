@@ -3,6 +3,7 @@ import { ButtonLink } from "@/components/primitives/button";
 import { pick } from "@/content/locale";
 import type { ForumAccess } from "@/lib/api/public";
 import { path, type Locale } from "@/lib/i18n";
+import { coursesPublic } from "@/lib/visibility";
 
 /**
  * What stands in front of the forum for anyone who is not a member yet.
@@ -103,10 +104,12 @@ export function ForumGate({
             </>
           ) : (
             <>
-              <ButtonLink href={path("/learn", locale)} size="lg">
-                {pick(locale, "Выбрать курс", "Choose a course")}
-              </ButtonLink>
-              <ButtonLink href={path("/store", locale)} variant="secondary" size="lg">
+              {coursesPublic() && (
+                <ButtonLink href={path("/learn", locale)} size="lg">
+                  {pick(locale, "Выбрать курс", "Choose a course")}
+                </ButtonLink>
+              )}
+              <ButtonLink href={path("/store", locale)} variant={coursesPublic() ? "secondary" : "primary"} size="lg">
                 {pick(locale, "Магазин", "Store")}
               </ButtonLink>
             </>

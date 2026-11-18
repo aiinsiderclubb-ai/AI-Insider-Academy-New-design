@@ -28,11 +28,14 @@ export function AssistantWidget({
   d,
   userName,
   lift,
+  prelaunch = false,
 }: {
   locale: Locale;
   d: Dictionary;
   userName?: string | null;
   lift?: string;
+  /** Courses hidden (lib/visibility.ts): suggest the store, not programmes. */
+  prelaunch?: boolean;
 }) {
   const pathname = usePathname();
   const chat = useAssistant({ locale, storageKey: "insider-assistant:site:v1", page: pathname });
@@ -215,6 +218,7 @@ export function AssistantWidget({
               d={d}
               locale={locale}
               userName={userName}
+              mode={prelaunch ? "soon" : "site"}
               inputRef={inputRef}
               onNavigate={onNavigate}
             />

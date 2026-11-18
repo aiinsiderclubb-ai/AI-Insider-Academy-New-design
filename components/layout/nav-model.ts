@@ -1,5 +1,6 @@
 import type { Dictionary } from "@/lib/i18n";
 import { path, type Locale } from "@/lib/i18n/config";
+import { coursesPublic } from "@/lib/visibility";
 
 export interface NavLink {
   label: string;
@@ -23,7 +24,7 @@ export interface NavSection {
 export function buildNav(d: Dictionary, locale: Locale): NavSection[] {
   const p = (href: string) => path(href, locale);
 
-  return [
+  const sections: NavSection[] = [
     {
       id: "learn",
       label: d.nav.learn,
@@ -93,6 +94,9 @@ export function buildNav(d: Dictionary, locale: Locale): NavSection[] {
       ],
     },
   ];
+
+  // Before launch there is nothing behind "Learn" and "Plans" (lib/visibility.ts).
+  return coursesPublic() ? sections : sections.filter((section) => section.id !== "learn" && section.id !== "plans");
 }
 
 export interface AppNavItem {

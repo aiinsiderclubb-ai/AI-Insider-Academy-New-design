@@ -13,7 +13,7 @@ export default async function StudioCoursesPage({ params }: { params: Promise<{ 
   const { locale: raw } = await params;
   const locale = raw as Locale;
 
-  const [dashboard, courses] = await Promise.all([getStudioDashboard(), getCourses(locale)]);
+  const [dashboard, courses] = await Promise.all([getStudioDashboard(), getCourses(locale, { preview: true })]);
   if (!dashboard) return null;
 
   const lessons = courses.reduce((sum, course) => sum + course.lessonCount, 0);

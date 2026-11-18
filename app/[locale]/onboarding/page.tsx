@@ -32,13 +32,15 @@ export default async function OnboardingPage({ params }: { params: Promise<{ loc
     (Object.keys(TRACK_MAP) as TrackId[]).map((track) => {
       const course = courses.find((item) => item.id === TRACK_MAP[track].course);
       const product = catalog.products.find((item) => item.slug === TRACK_MAP[track].product);
-      if (!course) return [track, null];
+      // Before launch there is no course to point at (lib/visibility.ts): the
+      // store item alone still gives the new account somewhere to start.
+      if (!course && !product) return [track, null];
       return [
         track,
         {
-          courseSlug: course.slug,
-          courseTitle: course.title,
-          courseSummary: course.description || course.summary,
+          courseSlug: course?.slug,
+          courseTitle: course?.title,
+          courseSummary: course ? course.description || course.summary : undefined,
           productSlug: product?.slug,
           productTitle: product?.title,
           productSummary: product?.summary,

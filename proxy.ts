@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale, isLocale, locales, matchLocale } from "@/lib/i18n/config";
+import { coursesPublic, isCourseOnlyPath } from "@/lib/visibility";
 
 const LOCALE_COOKIE = "aia-locale";
 
@@ -42,6 +43,14 @@ export function proxy(request: NextRequest) {
     const legacy = legacyRedirects[rest];
     if (legacy) {
       return NextResponse.redirect(new URL(`/${first}${legacy}${search}`, request.url), 308);
+    }
+    // Courses are hidden until launch: every course, lesson and plan address
+    // shows the "opening soon" page instead — under its own URL, so old links
+    // and bookmarks come back to life by themselves once the flag is set.
+    if (!coursesPublic() && isCourseOnlyPath(rest)) {
+      const response = NextResponse.rewrite(new URL(`/${first}/soon`, request.url));
+      response.headers.set("X-Robots-Tag", "noindex");
+      return response;
     }
     return NextResponse.next();
   }

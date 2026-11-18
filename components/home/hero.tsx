@@ -8,27 +8,59 @@ import { Reveal } from "@/components/motion/reveal";
 import { ScrollHint } from "@/components/motion/journey";
 import { pick } from "@/content/locale";
 import { path, type Dictionary, type Locale } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 
 export interface HeroStats {
-  courses: number;
-  lessons: number;
+  /** Null while the courses are hidden (lib/visibility.ts). */
+  courses: number | null;
+  lessons: number | null;
   products: number;
   languages: number;
 }
+
+/** The hero before launch: nothing about courses, an account to wait in. */
+const PRELAUNCH = {
+  ru: {
+    kicker: "Marketplace · Сообщество · Academy скоро",
+    body: "Готовые AI-системы, шаблоны и сообщество практиков — уже сейчас. Обучение Academy откроется совсем скоро.",
+    primary: "Создать аккаунт",
+  },
+  ukr: {
+    kicker: "Marketplace · Спільнота · Academy незабаром",
+    body: "Готові AI-системи, шаблони та спільнота практиків — уже зараз. Навчання Academy відкриється зовсім скоро.",
+    primary: "Створити акаунт",
+  },
+  en: {
+    kicker: "Marketplace · Community · Academy soon",
+    body: "Ready-made AI systems, templates and a community of practitioners — available now. Academy learning opens very soon.",
+    primary: "Create an account",
+  },
+} satisfies Record<Locale, Record<string, string>>;
 
 /**
  * Cinematic opener: one full-bleed frame, one marked sentence, one action.
  * The figures sit on the same dark ground so the fold reads as a single shot.
  */
-export function Hero({ locale, d, stats }: { locale: Locale; d: Dictionary; stats: HeroStats }) {
+export function Hero({
+  locale,
+  d,
+  stats,
+  prelaunch = false,
+}: {
+  locale: Locale;
+  d: Dictionary;
+  stats: HeroStats;
+  prelaunch?: boolean;
+}) {
   const [firstLine, secondLine] = d.home.heroTitle.split("\n");
+  const early = prelaunch ? PRELAUNCH[locale] : null;
 
   const figures = [
     { value: stats.courses, suffix: "", label: d.home.statsCourses },
     { value: stats.lessons, suffix: "+", label: d.home.statsLessons },
     { value: stats.products, suffix: "", label: d.home.statsProducts },
     { value: stats.languages, suffix: "", label: d.home.statsLangs },
-  ];
+  ].filter((figure): figure is { value: number; suffix: string; label: string } => figure.value !== null);
 
   return (
     <section
@@ -60,7 +92,7 @@ export function Hero({ locale, d, stats }: { locale: Locale; d: Dictionary; stat
           <Reveal>
             <p className="eyebrow flex items-center gap-2.5 text-ink-3">
               <Dot pulse />
-              {d.home.heroKicker}
+              {early?.kicker ?? d.home.heroKicker}
             </p>
           </Reveal>
 
@@ -73,13 +105,13 @@ export function Hero({ locale, d, stats }: { locale: Locale; d: Dictionary; stat
           </Reveal>
 
           <Reveal delay={160}>
-            <p className="mt-8 max-w-xl text-[17px] leading-relaxed text-ink-2">{d.home.heroBody}</p>
+            <p className="mt-8 max-w-xl text-[17px] leading-relaxed text-ink-2">{early?.body ?? d.home.heroBody}</p>
           </Reveal>
 
           <Reveal delay={240}>
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <ButtonLink href={path("/learn", locale)} size="lg" className="group">
-                {d.home.heroPrimary}
+              <ButtonLink href={path(early ? "/register" : "/learn", locale)} size="lg" className="group">
+                {early?.primary ?? d.home.heroPrimary}
                 <ArrowRight
                   className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
                   aria-hidden
@@ -107,7 +139,7 @@ export function Hero({ locale, d, stats }: { locale: Locale; d: Dictionary; stat
       {/* the ledger */}
       <div className="relative border-t border-line-2/60">
         <Container size="wide">
-          <dl className="grid grid-cols-2 md:grid-cols-4">
+          <dl className={cn("grid grid-cols-2", figures.length === 4 ? "md:grid-cols-4" : "md:grid-cols-2")}>
             {figures.map((figure, index) => (
               <Reveal
                 key={figure.label}

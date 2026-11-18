@@ -13,9 +13,10 @@ import { cn } from "@/lib/utils";
 export type TrackId = "agents" | "automation" | "content" | "business";
 
 export interface Recommendation {
-  courseSlug: string;
-  courseTitle: string;
-  courseSummary: string;
+  /** Absent while the courses are hidden (lib/visibility.ts). */
+  courseSlug?: string;
+  courseTitle?: string;
+  courseSummary?: string;
   productSlug?: string;
   productTitle?: string;
   productSummary?: string;
@@ -126,12 +127,16 @@ export function OnboardingWizard({
         </h1>
         <p className="mt-4 max-w-xl text-[15.5px] leading-relaxed text-ink-2">
           {ru
-            ? "Три шага, чтобы не потеряться: начните с курса, возьмите готовый шаблон и зайдите в сообщество."
-            : "Three steps so you don't get lost: start the course, grab a template, join the community."}
+            ? recommendation?.courseSlug
+              ? "Три шага, чтобы не потеряться: начните с курса, возьмите готовый шаблон и зайдите в сообщество."
+              : "Пока Academy готовится к запуску: возьмите готовый шаблон и зайдите в сообщество."
+            : recommendation?.courseSlug
+              ? "Three steps so you don't get lost: start the course, grab a template, join the community."
+              : "While Academy gets ready to open: grab a ready-made template and join the community."}
         </p>
 
         <ol className="mt-9 flex flex-col gap-3">
-          {recommendation && (
+          {recommendation?.courseSlug && (
             <li className="rounded-lg border border-accent/35 bg-accent-soft p-5">
               <p className="eyebrow text-accent-ink">01 · {d.nav.catalog}</p>
               <p className="mt-3 text-[18px] font-extrabold tracking-tight text-ink">{recommendation.courseTitle}</p>

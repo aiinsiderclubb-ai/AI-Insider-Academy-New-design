@@ -17,15 +17,17 @@ export async function readSessionToken(): Promise<string | null> {
   return store.get(SESSION_COOKIE)?.value ?? null;
 }
 
+export const sessionCookieOptions = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  maxAge: THIRTY_DAYS,
+};
+
 export async function writeSessionToken(token: string) {
   const store = await cookies();
-  store.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: THIRTY_DAYS,
-  });
+  store.set(SESSION_COOKIE, token, sessionCookieOptions);
 }
 
 export async function clearSessionToken() {

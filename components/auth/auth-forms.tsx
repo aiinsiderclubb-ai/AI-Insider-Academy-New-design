@@ -7,6 +7,8 @@ import { Button } from "@/components/primitives/button";
 import { Field, Input } from "@/components/primitives/field";
 import { useToast } from "@/components/primitives/toast";
 import type { AuthResult } from "@/lib/auth/actions";
+import type { OAuthError, OAuthProvider } from "@/lib/auth/oauth";
+import { SocialSignIn } from "./social-sign-in";
 import type { Dictionary } from "@/lib/i18n";
 import { path, type Locale } from "@/lib/i18n/config";
 
@@ -65,6 +67,16 @@ function PasswordInput({
   );
 }
 
+function oauthMessage(error: OAuthError, d: Dictionary) {
+  return {
+    cancelled: d.auth.oauthCancelled,
+    expired: d.auth.oauthExpired,
+    unavailable: d.auth.oauthUnavailable,
+    verify: d.auth.oauthVerify,
+    failed: d.auth.oauthFailed,
+  }[error];
+}
+
 function Submit({ label, pending }: { label: string; pending: boolean }) {
   return (
     <Button type="submit" size="lg" full loading={pending}>
@@ -81,12 +93,16 @@ export function SignInForm({
   d,
   next,
   justReset,
+  providers = [],
+  oauthError,
 }: {
   action: Action;
   locale: Locale;
   d: Dictionary;
   next?: string;
   justReset?: boolean;
+  providers?: OAuthProvider[];
+  oauthError?: OAuthError;
 }) {
   const [state, formAction, pending] = React.useActionState(action, null);
 
@@ -101,7 +117,15 @@ export function SignInForm({
         </div>
       )}
 
-      <form action={formAction} className="mt-8 flex flex-col gap-4">
+      {oauthError && (
+        <div className="mt-6">
+          <Alert tone="danger">{oauthMessage(oauthError, d)}</Alert>
+        </div>
+      )}
+
+      <SocialSignIn providers={providers} locale={locale} next={next} d={d} />
+
+      <form action={formAction} className={providers.length ? "mt-6 flex flex-col gap-4" : "mt-8 flex flex-col gap-4"}>
         <input type="hidden" name="locale" value={locale} />
         {next && <input type="hidden" name="next" value={next} />}
 
@@ -165,7 +189,17 @@ export function SignInForm({
 
 /* ================================= sign up ================================= */
 
-export function SignUpForm({ action, locale, d }: { action: Action; locale: Locale; d: Dictionary }) {
+export function SignUpForm({
+  action,
+  locale,
+  d,
+  providers = [],
+}: {
+  action: Action;
+  locale: Locale;
+  d: Dictionary;
+  providers?: OAuthProvider[];
+}) {
   const [state, formAction, pending] = React.useActionState(action, null);
 
   return (
@@ -173,7 +207,9 @@ export function SignUpForm({ action, locale, d }: { action: Action; locale: Loca
       <h1 className="text-[clamp(1.75rem,4vw,2.5rem)] leading-tight tracking-[-0.035em]">{d.auth.signUpTitle}</h1>
       <p className="mt-3 text-[15px] leading-relaxed text-ink-3">{d.auth.signUpBody}</p>
 
-      <form action={formAction} className="mt-8 flex flex-col gap-4">
+      <SocialSignIn providers={providers} locale={locale} d={d} />
+
+      <form action={formAction} className={providers.length ? "mt-6 flex flex-col gap-4" : "mt-8 flex flex-col gap-4"}>
         <input type="hidden" name="locale" value={locale} />
 
         <Field label={d.auth.name} htmlFor="name" required>

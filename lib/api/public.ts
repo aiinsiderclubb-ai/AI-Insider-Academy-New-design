@@ -4,6 +4,7 @@ import blogContent from "@/content/data/blog.json";
 import { field, pick } from "@/content/locale";
 import type { Locale } from "@/lib/i18n/config";
 import { tryApi } from "./http";
+import type { OAuthConfig } from "@/lib/auth/oauth";
 import type {
   ApiBlogPost,
   ApiCalendarEvent,
@@ -34,6 +35,22 @@ export const getFeatureFlags = cache(async (): Promise<ApiFeatureFlags> => {
 export const getAssistantOnline = cache(async (): Promise<boolean> => {
   const status = await tryApi<{ online?: boolean }>("/assistant/status", { revalidate: 300, soft: true }, {});
   return status.online === true;
+});
+
+/* ---------------------------------- oauth ---------------------------------- */
+
+/**
+ * Which social sign-ins the API can verify, and the client ids it checks
+ * tokens against. A button is only shown for a provider that is configured.
+ */
+export const getOAuthConfig = cache(async (): Promise<OAuthConfig> => {
+  const config = await tryApi<Partial<OAuthConfig>>("/auth/oauth/config", { revalidate: 300 }, {});
+  return {
+    google: Boolean(config.google && config.googleClientId),
+    apple: Boolean(config.apple && config.appleClientId),
+    googleClientId: config.googleClientId ?? null,
+    appleClientId: config.appleClientId ?? null,
+  };
 });
 
 /* -------------------------------- reviews --------------------------------- */

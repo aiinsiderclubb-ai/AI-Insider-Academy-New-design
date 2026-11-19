@@ -1,0 +1,528 @@
+{
+  "name": "Delivery Voice Agent — Order Tools",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Delivery Voice Agent — инструменты заказов\n\nПринимает вызовы инструментов от Vapi, Retell и ElevenLabs и работает с таблицей заказов в Google Sheets.\n\n**Настройте:**\n1. Узел **Config** — таблица, города, интервалы, правила.\n2. Учётные данные: секрет вебхука, Google Sheets, Telegram.\n3. Settings → Error Workflow → «Error Alert».\n\n**Владелец:** впишите имя · **Версия:** 1.0.0",
+        "width": 420,
+        "height": 300
+      },
+      "id": "2a96fb3e-afb2-5d5e-a4fd-1fd0063fca0c",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Как это работает\n\n**Parse Request** приводит запрос к одному виду, отсекает неполные и чужие номера.\n**Plan** решает, нужно ли читать таблицу.\n**Decide** находит заказ, проверяет правила и готовит одно изменение.\n**Sheet Write** — единственный узел, который что-то меняет.\n\nСостав заказа агент не меняет никогда: такого инструмента нет.",
+        "width": 460,
+        "height": 300
+      },
+      "id": "8f5a97e6-4a2c-53c6-9e32-751e0bdad487",
+      "name": "How it works",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Если таблица не ответила\n\nАгент получает `tool_unavailable` и не называет клиенту выдуманный результат. Оператору уходит сообщение в Telegram.",
+        "width": 420,
+        "height": 180
+      },
+      "id": "94d4758b-7971-58f3-85ab-f303dc6161e3",
+      "name": "Failure path",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        420,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice-tools",
+        "responseMode": "responseNode",
+        "options": {},
+        "authentication": "headerAuth"
+      },
+      "id": "082196c0-c926-5236-9690-a39f6a9b02d9",
+      "name": "Voice Tool Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -720,
+        0
+      ],
+      "webhookId": "2315f523-7b35-58b3-80c2-76bda4706def",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Voice tools secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Config — the only node you edit. Delivery days, windows, cities and rules.\n// Everything below this node reads its settings from here. Guide: docs/02-backend-n8n.md\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4/spreadsheets\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"sheet_name\": \"Orders\",\n  \"staff_chat_id\": \"REPLACE_WITH_TELEGRAM_CHAT_ID\",\n  \"phone\": { \"country_code\": \"380\", \"national_prefix\": \"0\" },\n  \"require_caller_match\": true,\n  \"callback_promise\": \"в течение часа в рабочее время\",\n  \"service_cities\": [\"Киев\", \"Київ\", \"Kyiv\", \"Бровары\", \"Ирпень\"],\n  \"delivery_days\": [\"mon\", \"tue\", \"wed\", \"thu\", \"fri\", \"sat\"],\n  \"closed_dates\": [],\n  \"delivery_window_days\": 7,\n  \"windows\": [\n    { \"id\": \"09-12\", \"start\": \"09:00\", \"end\": \"12:00\", \"capacity\": 25 },\n    { \"id\": \"12-15\", \"start\": \"12:00\", \"end\": \"15:00\", \"capacity\": 25 },\n    { \"id\": \"15-18\", \"start\": \"15:00\", \"end\": \"18:00\", \"capacity\": 25 },\n    { \"id\": \"18-21\", \"start\": \"18:00\", \"end\": \"21:00\", \"capacity\": 20 }\n  ],\n  \"change_cutoff_hours\": 3,\n  \"changeable_statuses\": [\"new\", \"packed\"],\n  \"status_labels\": {\n    \"new\": \"принят\",\n    \"packed\": \"собран\",\n    \"out_for_delivery\": \"у курьера\",\n    \"delivered\": \"доставлен\",\n    \"cancelled\": \"отменён\"\n  },\n  \"notify_on_confirm\": false,\n  \"outbound\": {\n    \"provider\": \"vapi\",\n    \"vapi_api_base\": \"https://api.vapi.ai\",\n    \"vapi_assistant_id\": \"REPLACE_WITH_VAPI_ASSISTANT_ID\",\n    \"vapi_phone_number_id\": \"REPLACE_WITH_VAPI_PHONE_NUMBER_ID\",\n    \"retell_api_base\": \"https://api.retellai.com\",\n    \"retell_agent_id\": \"REPLACE_WITH_RETELL_AGENT_ID\",\n    \"retell_from_number\": \"REPLACE_WITH_RETELL_NUMBER_E164\",\n    \"call_from\": \"10:00\",\n    \"call_until\": \"20:00\",\n    \"max_attempts\": 2,\n    \"max_calls_per_run\": 50\n  }\n} }];\n"
+      },
+      "id": "89e06dd3-ad4b-571d-bdc2-a45ecf945d1c",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        0
+      ],
+      "notes": "Единственный узел, который нужно редактировать."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Request — turns the three providers' tool-call formats into one shape\n// and rejects anything the tools must never act on.\nconst cfg = $('Config').first().json;\nconst hook = $('Voice Tool Webhook').first().json;\nconst body = hook.body || {};\n\nlet provider = 'generic', callId = '', toolCallId = '', tool = '', args = {}, caller = '', extra = 0;\n\nif (body.message && body.message.type === 'tool-calls') {\n  provider = 'vapi';\n  const list = body.message.toolCallList || body.message.toolCalls || [];\n  const first = list[0] || {};\n  extra = Math.max(0, list.length - 1);\n  toolCallId = first.id || '';\n  tool = (first.function && first.function.name) || first.name || '';\n  args = (first.function && first.function.arguments) || first.arguments || {};\n  const call = body.message.call || {};\n  callId = call.id || '';\n  caller = (call.customer && call.customer.number) || '';\n} else if (body.name && body.args !== undefined) {\n  provider = 'retell';\n  tool = body.name;\n  args = body.args || {};\n  const call = body.call || {};\n  callId = call.call_id || '';\n  caller = call.direction === 'outbound' ? (call.to_number || '') : (call.from_number || '');\n} else {\n  // ElevenLabs and anything else: a flat JSON body that names the tool itself.\n  // The tool name may also come in the URL (?tool=find_order), one URL per tool.\n  provider = body.provider || 'elevenlabs';\n  tool = body.tool || (hook.query && hook.query.tool) || '';\n  args = body.args || body;\n  callId = body.conversation_id || body.call_id || '';\n  caller = body.caller_number || '';\n}\n\nif (typeof args === 'string') {\n  try { args = JSON.parse(args); } catch (e) { args = {}; }\n}\nargs = Object.assign({}, args);\ndelete args.tool; delete args.provider; delete args.conversation_id; delete args.caller_number;\n\nconst digits = (value) => String(value || '').replace(/[^\\d]/g, '');\n// Callers dictate numbers in the national form; orders are matched in the international one.\nconst phoneRules = cfg.phone || {};\nconst phone = (value) => {\n  let d = digits(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (phoneRules.national_prefix && phoneRules.country_code && d.startsWith(phoneRules.national_prefix) && !d.startsWith(phoneRules.country_code)) {\n    d = phoneRules.country_code + d.slice(phoneRules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n};\nconst fail = (code, say) => ({ ok: false, error: code, say });\n\nconst REQUIRED = {\n  find_order: ['customer_phone'],\n  confirm_delivery: ['order_id', 'customer_phone'],\n  update_address: ['order_id', 'customer_phone'],\n  check_windows: ['order_id', 'customer_phone', 'date'],\n  change_window: ['order_id', 'customer_phone', 'date', 'window_id'],\n  request_callback: ['customer_name', 'customer_phone', 'topic'],\n};\nconst ADDRESS_FIELDS = ['city', 'address', 'apartment', 'entrance', 'floor', 'intercom', 'courier_note'];\n\nlet verdict = { ok: true };\nif (!REQUIRED[tool]) {\n  verdict = fail('unknown_tool', 'Этот запрос я выполнить не могу. Изменить состав заказа, отменить его или вернуть деньги может только оператор: предложите request_callback.');\n} else {\n  const missing = REQUIRED[tool].filter((key) => args[key] === undefined || args[key] === null || String(args[key]).trim() === '');\n  if (missing.length) verdict = fail('missing_fields', 'Не хватает данных: ' + missing.join(', ') + '. Уточните у клиента и повторите.');\n}\n\nif (verdict.ok && args.customer_phone !== undefined) {\n  const normal = phone(args.customer_phone);\n  if (!normal) verdict = fail('bad_phone', 'Номер телефона не распознан. Попросите продиктовать его ещё раз по цифрам.');\n  else args.customer_phone = normal;\n}\nif (args.order_id !== undefined) {\n  args.order_ref = String(args.order_id).trim().slice(0, 40); // as said, for people\n  args.order_id = args.order_ref.replace(/[\\s#№-]/g, '').toUpperCase(); // for matching\n}\n\n// Models miscount dates. They may pass a word instead and let the backend resolve it.\nif (verdict.ok && (tool === 'check_windows' || tool === 'change_window')) {\n  args.date = String(args.date).trim().toLowerCase();\n  if (!/^(\\d{4}-\\d{2}-\\d{2}|today|tomorrow|mon|tue|wed|thu|fri|sat|sun|\\+\\d{1,2})$/.test(args.date)) {\n    verdict = fail('bad_date', 'Дата: ГГГГ-ММ-ДД, today, tomorrow, день недели (mon…sun) или +N дней.');\n  }\n}\nif (verdict.ok && tool === 'change_window' && !(cfg.windows || []).some((w) => w.id === String(args.window_id))) {\n  verdict = fail('unknown_window', 'Такого интервала нет. Возьмите window_id из ответа check_windows.');\n}\nif (verdict.ok && tool === 'update_address') {\n  for (const key of ADDRESS_FIELDS) if (args[key] !== undefined) args[key] = String(args[key]).replace(/\\s+/g, ' ').trim().slice(0, 200);\n  if (!ADDRESS_FIELDS.some((key) => args[key])) verdict = fail('missing_fields', 'Что меняем в адресе? Передайте хотя бы одно поле: ' + ADDRESS_FIELDS.join(', ') + '.');\n  else if (args.city && !args.address) verdict = fail('missing_fields', 'Новый город без улицы и дома не принимаю. Уточните полный адрес и передайте address.');\n}\nif (verdict.ok && ['confirm_delivery', 'update_address', 'change_window'].includes(tool) && args.consent !== true && args.consent !== 'true') {\n  verdict = fail('no_consent', 'Сначала повторите клиенту то, что меняете или подтверждаете, и получите явное «да». Затем вызовите инструмент с consent: true.');\n}\n\n// Only the order's own number may see or change it: the address is personal data.\nconst callerPhone = phone(caller);\nif (verdict.ok && cfg.require_caller_match && tool !== 'request_callback') {\n  if (!callerPhone || callerPhone !== args.customer_phone) {\n    verdict = fail('caller_mismatch', 'Данные заказа доступны только с номера, на который он оформлен. Предложите перезвонить с него или передайте оператору через request_callback.');\n  }\n}\n\nreturn [{ json: Object.assign({ provider, call_id: callId, tool_call_id: toolCallId, tool, args, caller: callerPhone, extra_calls: extra }, verdict) }];\n"
+      },
+      "id": "8e5f6cdb-e21c-5f32-a9d3-b57ca05a4ec4",
+      "name": "Parse Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -280,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Plan — decides whether the order sheet has to be read before the tool can answer.\nconst cfg = $('Config').first().json;\nconst req = $input.first().json;\n// ---- time helpers (business time zone, no libraries) ----\nconst TZ = cfg.timezone;\nconst MIN = 60000;\nconst DAY = 24 * 60 * MIN;\nconst pad = (n) => String(n).padStart(2, '0');\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nfunction offsetMin(utcMs) {\n  const parts = new Intl.DateTimeFormat('en-US', {\n    timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit', second: '2-digit',\n  }).formatToParts(new Date(utcMs));\n  const p = {};\n  for (const part of parts) p[part.type] = part.value;\n  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - utcMs) / MIN);\n}\nfunction localToUtc(y, mo, d, h, mi) {\n  const guess = Date.UTC(y, mo - 1, d, h, mi);\n  const first = guess - offsetMin(guess) * MIN;\n  return guess - offsetMin(first) * MIN; // second pass settles days when clocks change\n}\nfunction local(ms) {\n  const shifted = new Date(ms + offsetMin(ms) * MIN);\n  return {\n    y: shifted.getUTCFullYear(), mo: shifted.getUTCMonth() + 1, d: shifted.getUTCDate(),\n    h: shifted.getUTCHours(), mi: shifted.getUTCMinutes(), dow: shifted.getUTCDay(),\n  };\n}\nconst localIso = (ms) => { const t = local(ms); return `${t.y}-${pad(t.mo)}-${pad(t.d)}T${pad(t.h)}:${pad(t.mi)}`; };\nconst localDate = (ms) => localIso(ms).slice(0, 10);\nconst dayStart = (dateText) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); return localToUtc(+m[1], +m[2], +m[3], 0, 0); };\nconst at = (dateText, hhmm) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); const [h, mi] = String(hhmm).split(':').map(Number); return localToUtc(+m[1], +m[2], +m[3], h, mi); };\nconst DOW = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];\nconst spokenDay = (dateText) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(dayStart(dateText) + 12 * 60 * MIN));\nconst windowOf = (id) => (cfg.windows || []).find((w) => w.id === id);\nconst spokenWindow = (dateText, id) => {\n  const w = windowOf(id);\n  return w ? `${spokenDay(dateText)}, с ${w.start} до ${w.end}` : `${spokenDay(dateText)}, интервал ${id || 'не назначен'}`;\n};\nconst done = (result) => [{ json: Object.assign({}, req, { needs_sheet: false, needs_notify: false, result }) }];\n\nif (!req.ok) return done({ ok: false, error: req.error, say: req.say });\n\nconst now = nowMs();\nconst a = req.args;\n\nif (req.tool === 'request_callback') {\n  const lines = [\n    'Просят связаться с оператором', `Имя: ${a.customer_name}`, `Телефон: ${a.customer_phone}`, a.order_ref ? `Заказ: ${a.order_ref}` : '', `Тема: ${a.topic}`,\n    a.urgency ? `Срочность: ${a.urgency}` : '', a.details ? `Детали: ${a.details}` : '', `Звонок: ${req.call_id || '—'}`,\n  ].filter(Boolean);\n  return [{ json: Object.assign({}, req, { needs_sheet: false, needs_notify: true, staff_message: lines.join('\\n'),\n    result: { ok: true, say: 'Передал оператору. Скажите клиенту, что с ним свяжутся ' + (cfg.callback_promise || 'в рабочее время') + '.' } }) }];\n}\n\nif (req.tool === 'check_windows' || req.tool === 'change_window') {\n  const today = dayStart(localDate(now));\n  let resolved = a.date;\n  if (a.date === 'today') resolved = localDate(now);\n  else if (a.date === 'tomorrow') resolved = localDate(today + DAY + 12 * 60 * MIN);\n  else if (a.date[0] === '+') resolved = localDate(today + Number(a.date.slice(1)) * DAY + 12 * 60 * MIN);\n  else if (DOW.includes(a.date)) {\n    const ahead = (DOW.indexOf(a.date) - local(now).dow + 7) % 7;\n    resolved = localDate(today + ahead * DAY + 12 * 60 * MIN);\n  }\n  req.args = Object.assign({}, a, { date: resolved });\n  const start = dayStart(resolved);\n  const last = today + (cfg.delivery_window_days || 7) * DAY;\n  if (start + DAY <= now) return done({ ok: false, error: 'date_in_past', say: 'Эта дата уже прошла. Сегодня ' + localDate(now) + '. Уточните дату.' });\n  if (start > last) return done({ ok: false, error: 'too_far', say: `Доставку можно назначить не дальше ${localDate(last)}.` });\n}\n\nconst range = encodeURIComponent(`'${cfg.sheet_name || 'Orders'}'!A1:U5000`);\nreturn [{ json: Object.assign({}, req, {\n  needs_sheet: true, needs_notify: false,\n  http: { method: 'GET', url: `${cfg.sheets_api_base}/${encodeURIComponent(cfg.spreadsheet_id)}/values/${range}` },\n}) }];\n"
+      },
+      "id": "563a8f72-42bf-543d-8f20-4b2323e4b8da",
+      "name": "Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_sheet }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "249cf143-3382-595e-9eac-0c83529836e1",
+      "name": "Needs Sheet?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        160,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.http.url }}",
+        "options": {
+          "timeout": 10000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "cc774d4f-7f0b-5ee0-b931-aaf72c3a4d4d",
+      "name": "Sheet Read",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        -100
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 500,
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Decide — reads the order sheet and either answers the tool or prepares one write.\nconst cfg = $('Config').first().json;\nconst ctx = $('Plan').first().json;\nconst feed = $input.first().json || {};\n// ---- time helpers (business time zone, no libraries) ----\nconst TZ = cfg.timezone;\nconst MIN = 60000;\nconst DAY = 24 * 60 * MIN;\nconst pad = (n) => String(n).padStart(2, '0');\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nfunction offsetMin(utcMs) {\n  const parts = new Intl.DateTimeFormat('en-US', {\n    timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit', second: '2-digit',\n  }).formatToParts(new Date(utcMs));\n  const p = {};\n  for (const part of parts) p[part.type] = part.value;\n  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - utcMs) / MIN);\n}\nfunction localToUtc(y, mo, d, h, mi) {\n  const guess = Date.UTC(y, mo - 1, d, h, mi);\n  const first = guess - offsetMin(guess) * MIN;\n  return guess - offsetMin(first) * MIN; // second pass settles days when clocks change\n}\nfunction local(ms) {\n  const shifted = new Date(ms + offsetMin(ms) * MIN);\n  return {\n    y: shifted.getUTCFullYear(), mo: shifted.getUTCMonth() + 1, d: shifted.getUTCDate(),\n    h: shifted.getUTCHours(), mi: shifted.getUTCMinutes(), dow: shifted.getUTCDay(),\n  };\n}\nconst localIso = (ms) => { const t = local(ms); return `${t.y}-${pad(t.mo)}-${pad(t.d)}T${pad(t.h)}:${pad(t.mi)}`; };\nconst localDate = (ms) => localIso(ms).slice(0, 10);\nconst dayStart = (dateText) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); return localToUtc(+m[1], +m[2], +m[3], 0, 0); };\nconst at = (dateText, hhmm) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); const [h, mi] = String(hhmm).split(':').map(Number); return localToUtc(+m[1], +m[2], +m[3], h, mi); };\nconst DOW = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];\nconst spokenDay = (dateText) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(dayStart(dateText) + 12 * 60 * MIN));\nconst windowOf = (id) => (cfg.windows || []).find((w) => w.id === id);\nconst spokenWindow = (dateText, id) => {\n  const w = windowOf(id);\n  return w ? `${spokenDay(dateText)}, с ${w.start} до ${w.end}` : `${spokenDay(dateText)}, интервал ${id || 'не назначен'}`;\n};\nconst a = ctx.args;\nconst now = nowMs();\nconst done = (result) => [{ json: Object.assign({}, ctx, { needs_write: false, result }) }];\nconst write = (cells, onSuccess, staffMessage) => [{ json: Object.assign({}, ctx, {\n  needs_write: true, on_success: onSuccess, staff_message: staffMessage || '',\n  http: { method: 'POST', url: `${cfg.sheets_api_base}/${encodeURIComponent(cfg.spreadsheet_id)}/values:batchUpdate`,\n    body: { valueInputOption: 'RAW', data: cells } },\n}) }];\n\n// ---- the sheet: columns are found by their header, so their order does not matter ----\nconst COLUMNS = ['order_id', 'phone', 'customer_name', 'city', 'address', 'apartment', 'entrance', 'floor', 'intercom', 'courier_note',\n  'delivery_date', 'window', 'status', 'items', 'total', 'payment', 'confirmed', 'confirmed_at', 'calls', 'last_call', 'history'];\nconst values = Array.isArray(feed.values) ? feed.values : [];\nconst head = (values[0] || []).map((h) => String(h).trim().toLowerCase());\nconst missingCols = COLUMNS.filter((c) => !head.includes(c));\nif (missingCols.length) {\n  return [{ json: Object.assign({}, ctx, { needs_write: false, needs_notify: true,\n    staff_message: ['Таблица заказов не по шаблону', 'Нет колонок: ' + missingCols.join(', '), `Звонок: ${ctx.call_id || '—'}`].join('\\n'),\n    result: { ok: false, error: 'tool_unavailable', say: 'Система заказов сейчас недоступна. Извинитесь, не называйте результат, предложите связаться с оператором через request_callback.' } }) }];\n}\nconst letter = (i) => (i < 26 ? String.fromCharCode(65 + i) : String.fromCharCode(64 + Math.floor(i / 26)) + String.fromCharCode(65 + (i % 26)));\nconst sheet = `'${String(cfg.sheet_name || 'Orders').replace(/'/g, \"''\")}'`;\nconst cell = (order, col, value) => ({ range: `${sheet}!${letter(head.indexOf(col))}${order._row}`, values: [[value]] });\n\nconst digits = (value) => String(value || '').replace(/[^\\d]/g, '');\nconst phoneRules = cfg.phone || {};\nconst phone = (value) => {\n  let d = digits(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (phoneRules.national_prefix && phoneRules.country_code && d.startsWith(phoneRules.national_prefix) && !d.startsWith(phoneRules.country_code)) {\n    d = phoneRules.country_code + d.slice(phoneRules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n};\nconst orders = values.slice(1).map((row, i) => {\n  const o = { _row: i + 2 };\n  for (const c of COLUMNS) o[c] = String(row[head.indexOf(c)] ?? '').trim();\n  o.order_id_norm = o.order_id.replace(/[\\s#№-]/g, '').toUpperCase();\n  o.phone_norm = phone(o.phone);\n  o.status = o.status.toLowerCase();\n  return o;\n}).filter((o) => o.order_id);\n\nconst CLOSED = ['delivered', 'cancelled'];\nconst label = (status) => (cfg.status_labels || {})[status] || status || 'не указан';\nconst addressSpoken = (o) => [\n  [o.city, o.address].filter(Boolean).join(', '),\n  o.apartment && `квартира ${o.apartment}`, o.entrance && `подъезд ${o.entrance}`, o.floor && `этаж ${o.floor}`, o.intercom && `домофон ${o.intercom}`,\n].filter(Boolean).join(', ');\nconst windowStart = (o) => (o.delivery_date && windowOf(o.window) ? at(o.delivery_date, windowOf(o.window).start) : NaN);\nconst cutoff = (cfg.change_cutoff_hours || 0) * 60 * MIN;\nfunction blocked(o, strict) {\n  if (CLOSED.includes(o.status)) return { error: 'order_closed', say: `Заказ уже ${label(o.status)}. Изменить его нельзя.` };\n  if (strict && !(cfg.changeable_statuses || []).includes(o.status)) {\n    return { error: 'not_changeable', say: `Заказ сейчас «${label(o.status)}» — изменить адрес или время может только оператор. Предложите request_callback.` };\n  }\n  if (strict && windowStart(o) - now < cutoff) {\n    return { error: 'too_late', say: `До доставки меньше ${cfg.change_cutoff_hours} ч — изменения принимает только оператор. Предложите request_callback.` };\n  }\n  return null;\n}\nconst describe = (o) => {\n  const block = blocked(o, true);\n  return {\n    order_id: o.order_id, status: label(o.status), delivery_date: o.delivery_date, window_id: o.window,\n    delivery: o.delivery_date ? spokenWindow(o.delivery_date, o.window) : 'дата не назначена',\n    address: addressSpoken(o), items: o.items.slice(0, 300), total: o.total, payment: o.payment,\n    confirmed: /^(да|yes|1|true)$/i.test(o.confirmed), can_change: !block, change_note: block ? block.say : '',\n  };\n};\nconst history = (o, entry) => (o.history ? o.history + '\\n' : '') + `${localIso(now)} ${entry} (голосовой агент${ctx.call_id ? ', звонок ' + ctx.call_id : ''})`;\nconst tail = (text) => (text.length > 2000 ? text.slice(-2000) : text);\nconst mine = orders.filter((o) => o.phone_norm && o.phone_norm === a.customer_phone);\n\nif (ctx.tool === 'find_order') {\n  let list = mine.filter((o) => !CLOSED.includes(o.status));\n  if (a.order_id) list = mine.filter((o) => o.order_id_norm === a.order_id);\n  list = list.slice(0, 3).map(describe);\n  return done({ ok: true, orders: list,\n    say: list.length ? 'Назовите клиенту заказ, дату с интервалом и адрес и спросите, всё ли верно. Состав заказа не обсуждайте и не меняйте.'\n      : 'На этот номер активных заказов нет. Уточните номер телефона или номер заказа; если не найдётся — request_callback.' });\n}\n\nconst order = mine.find((o) => o.order_id_norm === a.order_id);\nif (!order) {\n  return done({ ok: false, error: 'order_not_found', say: 'Заказа с таким номером на этот телефон нет. Вызовите find_order и уточните.' });\n}\n\nif (ctx.tool === 'confirm_delivery') {\n  const block = blocked(order, false);\n  if (block) return done(Object.assign({ ok: false }, block));\n  if (/^(да|yes|1|true)$/i.test(order.confirmed)) {\n    return done({ ok: true, order_id: order.order_id, delivery: describe(order).delivery, say: 'Доставка уже подтверждена. Поблагодарите клиента.' });\n  }\n  const entry = 'доставка подтверждена клиентом';\n  return write([cell(order, 'confirmed', 'да'), cell(order, 'confirmed_at', localIso(now)), cell(order, 'history', tail(history(order, entry)))],\n    { ok: true, order_id: order.order_id, delivery: describe(order).delivery, address: addressSpoken(order),\n      say: 'Доставка подтверждена. Повторите клиенту дату, интервал и адрес и попрощайтесь.' },\n    cfg.notify_on_confirm ? ['Доставка подтверждена', `Заказ: ${order.order_id}`, describe(order).delivery, addressSpoken(order)].join('\\n') : '');\n}\n\nif (ctx.tool === 'update_address') {\n  // Courier details (flat, intercom, note) may change until delivery; the street only while the order is changeable.\n  const moving = Boolean(a.city || a.address);\n  const block = blocked(order, moving);\n  if (block) return done(Object.assign({ ok: false }, block));\n  const norm = (s) => String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/^(г\\.|город|м\\.|місто)\\s*/, '').trim();\n  if (a.city && !(cfg.service_cities || []).some((c) => norm(c) === norm(a.city))) {\n    return done({ ok: false, error: 'outside_zone', say: 'В этот город мы не доставляем по текущему заказу. Адрес вне зоны меняет только оператор: предложите request_callback.' });\n  }\n  const next = Object.assign({}, order);\n  const cells = [];\n  const changes = [];\n  for (const key of ['city', 'address', 'apartment', 'entrance', 'floor', 'intercom', 'courier_note']) {\n    if (a[key] === undefined || a[key] === '' || a[key] === order[key]) continue;\n    next[key] = a[key];\n    cells.push(cell(order, key, a[key]));\n    changes.push(`${key}: «${order[key] || '—'}» → «${a[key]}»`);\n  }\n  const relocated = (a.address && a.address !== order.address) || (a.city && norm(a.city) !== norm(order.city));\n  if (relocated && !a.apartment && order.apartment) {\n    // A new street makes the old flat number wrong; keep it only if the caller repeated it.\n    next.apartment = '';\n    cells.push(cell(order, 'apartment', ''));\n    changes.push(`apartment: «${order.apartment}» → «»`);\n  }\n  if (!cells.length) return done({ ok: true, order_id: order.order_id, address: addressSpoken(order), say: 'Адрес уже такой. Подтвердите его клиенту.' });\n  cells.push(cell(order, 'confirmed', 'да'), cell(order, 'confirmed_at', localIso(now)));\n  cells.push(cell(order, 'history', tail(history(order, 'адрес изменён: ' + changes.join('; ')))));\n  return write(cells, { ok: true, order_id: order.order_id, address: addressSpoken(next), delivery: describe(order).delivery,\n    say: 'Адрес изменён. Повторите клиенту новый адрес целиком и интервал доставки.' },\n  [moving ? 'Изменён адрес доставки' : 'Уточнение для курьера', `Заказ: ${order.order_id}`, `Телефон: ${order.phone}`, `Было: ${addressSpoken(order)}`, `Стало: ${addressSpoken(next)}`,\n    describe(order).delivery, order.status === 'out_for_delivery' ? 'Заказ уже у курьера — передайте ему.' : ''].filter(Boolean).join('\\n'));\n}\n\n// ---- windows ----\nconst loadOf = (date, id) => orders.filter((o) => o.delivery_date === date && o.window === id && o.status !== 'cancelled' && o.order_id_norm !== order.order_id_norm).length;\nfunction dateProblem(date) {\n  if ((cfg.closed_dates || []).includes(date)) return 'closed_date';\n  if (!(cfg.delivery_days || []).includes(DOW[local(dayStart(date) + 12 * 60 * MIN).dow])) return 'closed_date';\n  return null;\n}\nfunction freeWindows(date) {\n  if (dateProblem(date)) return [];\n  return (cfg.windows || [])\n    .filter((w) => at(date, w.start) - now >= cutoff && loadOf(date, w.id) < w.capacity)\n    .map((w) => ({ date, window_id: w.id, spoken: spokenWindow(date, w.id) }));\n}\nfunction nearestWindows(fromDate) {\n  const found = [];\n  const last = dayStart(localDate(now)) + (cfg.delivery_window_days || 7) * DAY;\n  for (let day = dayStart(fromDate) + 12 * 60 * MIN; day <= last + 12 * 60 * MIN && found.length < 3; day += DAY) {\n    found.push(...freeWindows(localDate(day)).slice(0, 3 - found.length));\n  }\n  return found;\n}\n\nconst block = blocked(order, true);\nif (block) return done(Object.assign({ ok: false }, block));\n\nif (ctx.tool === 'check_windows') {\n  const same = freeWindows(a.date);\n  if (same.length) {\n    return done({ ok: true, available: true, order_id: order.order_id, current: describe(order).delivery, date: a.date, windows: same,\n      say: 'Предложите клиенту эти интервалы, не больше двух за раз. В change_window передайте date и window_id выбранного.' });\n  }\n  const other = nearestWindows(localDate(dayStart(a.date) + DAY + 12 * 60 * MIN));\n  return done({ ok: true, available: false, order_id: order.order_id, current: describe(order).delivery, date: a.date, windows: other,\n    say: other.length ? 'На эту дату свободных интервалов нет. Предложите ближайшие из windows.' : 'Свободных интервалов на неделю вперёд нет. Предложите request_callback.' });\n}\n\n// change_window\nconst w = windowOf(String(a.window_id));\nif (order.delivery_date === a.date && order.window === w.id) {\n  return done({ ok: true, order_id: order.order_id, delivery: spokenWindow(a.date, w.id), say: 'Доставка уже назначена на этот интервал. Подтвердите его клиенту.' });\n}\nconst problem = dateProblem(a.date) ? 'closed_date' : at(a.date, w.start) - now < cutoff ? 'too_soon' : loadOf(a.date, w.id) >= w.capacity ? 'window_full' : null;\nif (problem) {\n  const why = { closed_date: 'В этот день доставки нет.', too_soon: 'Этот интервал слишком близко.', window_full: 'Этот интервал уже заполнен.' }[problem];\n  return done({ ok: false, error: problem, windows: nearestWindows(a.date), say: why + ' Предложите варианты из windows. Прежний интервал сохранён.' });\n}\nconst was = describe(order).delivery;\nreturn write([\n  cell(order, 'delivery_date', a.date), cell(order, 'window', w.id), cell(order, 'confirmed', 'да'), cell(order, 'confirmed_at', localIso(now)),\n  cell(order, 'history', tail(history(order, `интервал: ${order.delivery_date} ${order.window} → ${a.date} ${w.id}`))),\n], { ok: true, order_id: order.order_id, delivery: spokenWindow(a.date, w.id), previous: was, address: addressSpoken(order),\n  say: 'Интервал изменён. Назовите клиенту новые дату и интервал.' },\n['Перенос доставки', `Заказ: ${order.order_id}`, `Телефон: ${order.phone}`, `Было: ${was}`, `Стало: ${spokenWindow(a.date, w.id)}`, addressSpoken(order)].join('\\n'));\n"
+      },
+      "id": "244b9d40-9322-5137-8135-03e5af92e063",
+      "name": "Decide",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_write }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "185ff52f-3cf1-556d-b4f3-03eada4fa939",
+      "name": "Needs Write?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        820,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={{ $json.http.method }}",
+        "url": "={{ $json.http.url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.http.body) }}",
+        "options": {
+          "timeout": 10000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "id": "ce575e66-4aa1-516b-8635-6d06c72c3366",
+      "name": "Sheet Write",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        -200
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 500,
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Finish — the sheet accepted the change; hand the prepared answer on.\nconst ctx = $('Decide').first().json;\nreturn [{ json: Object.assign({}, ctx, { result: ctx.on_success, needs_notify: Boolean(ctx.staff_message) }) }];\n"
+      },
+      "id": "fc4466d9-3760-594d-a6f8-0086221cf09b",
+      "name": "Finish",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1260,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool Failed — the sheet did not answer or refused. Never invent a result.\nconst failure = $input.first().json || {};\nlet ctx = {};\ntry { ctx = $('Decide').first().json; } catch (e) { ctx = $('Plan').first().json; }\nconst text = JSON.stringify(failure.error || failure).slice(0, 600);\nreturn [{ json: Object.assign({}, ctx, { needs_notify: true,\n  staff_message: ['Сбой инструмента голосового агента доставки', `Инструмент: ${ctx.tool}`, ctx.args && ctx.args.order_ref ? `Заказ: ${ctx.args.order_ref}` : '', `Звонок: ${ctx.call_id || '—'}`, text].filter(Boolean).join('\\n'),\n  result: { ok: false, error: 'tool_unavailable', say: 'Система заказов сейчас недоступна. Извинитесь, не называйте результат, предложите связаться с оператором через request_callback.' } }) }];\n"
+      },
+      "id": "235b195e-41e3-51f2-9fd1-bc730e818142",
+      "name": "Tool Failed",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build Response — each provider expects its own envelope.\nconst item = $input.first().json;\nconst result = item.result || { ok: false, error: 'no_result', say: 'Не удалось выполнить запрос. Предложите перезвонить.' };\nlet response = result;\nif (item.provider === 'vapi') {\n  response = { results: [{ toolCallId: item.tool_call_id, result: JSON.stringify(result) }] };\n}\nreturn [{ json: { response } }];\n"
+      },
+      "id": "9f90f8a0-457f-5e96-a5f2-8e6e2f11153f",
+      "name": "Build Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {}
+      },
+      "id": "4ebd03a9-24de-5868-88a8-988ccec495ce",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1700,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_notify }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "6ad13451-b2f6-5c40-8170-49bd81b786ec",
+      "name": "Notify Staff?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.staff_chat_id }}",
+        "text": "={{ String($json.staff_message).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "01844f61-30a7-562a-b649-f4056e5d2cb1",
+      "name": "Notify Staff",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        260
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Voice Tool Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Parse Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Request": {
+      "main": [
+        [
+          {
+            "node": "Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan": {
+      "main": [
+        [
+          {
+            "node": "Needs Sheet?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Sheet?": {
+      "main": [
+        [
+          {
+            "node": "Sheet Read",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Staff?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Read": {
+      "main": [
+        [
+          {
+            "node": "Decide",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decide": {
+      "main": [
+        [
+          {
+            "node": "Needs Write?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Write?": {
+      "main": [
+        [
+          {
+            "node": "Sheet Write",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Write": {
+      "main": [
+        [
+          {
+            "node": "Finish",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finish": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Staff?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool Failed": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Staff?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Response": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Staff?": {
+      "main": [
+        [
+          {
+            "node": "Notify Staff",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

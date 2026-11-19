@@ -1,0 +1,279 @@
+{
+  "model": "REPLACE_WITH_MODEL",
+  "start_speaker": "agent",
+  "begin_message": "Ресторан «{{business_name}}», здравствуйте. Я {{agent_name}}, виртуальный администратор. Хотите забронировать стол?",
+  "general_prompt": "ВСТАВЬТЕ СЮДА ТЕКСТ ИЗ prompts/system-prompt.ru.md",
+  "general_tools": [
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "Завершить звонок, когда вопрос решён и клиент попрощался."
+    },
+    {
+      "type": "transfer_call",
+      "name": "transfer_to_admin",
+      "description": "Перевести на администратора: банкет, жалоба, просьба о человеке, вопрос вне рамок.",
+      "transfer_destination": {
+        "type": "predefined",
+        "number": "REPLACE_WITH_ADMIN_NUMBER_E164"
+      },
+      "transfer_option": {
+        "type": "cold_transfer",
+        "show_transferee_as_caller": false
+      }
+    },
+    {
+      "type": "custom",
+      "name": "check_availability",
+      "description": "Найти свободный стол на дату для компании. Вызывай перед тем, как предлагать время. Никогда не называй время без этого вызова.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "guests": {
+            "type": "integer",
+            "description": "Сколько будет гостей, числом. Больше 8 — не бронируй, вызывай request_callback."
+          },
+          "date": {
+            "type": "string",
+            "description": "Дата: ГГГГ-ММ-ДД, либо today, tomorrow, день недели (mon, tue, wed, thu, fri, sat, sun), либо +N дней. Не вычисляй дату сам."
+          },
+          "part_of_day": {
+            "type": "string",
+            "enum": [
+              "any",
+              "morning",
+              "afternoon",
+              "evening"
+            ],
+            "description": "Время суток, если гость назвал: afternoon — с 12 до 17, evening — после 17."
+          },
+          "zone": {
+            "type": "string",
+            "description": "Зона, если гость попросил: hall — основной зал; terrace — терраса. Не спрашивай сам, если гостю всё равно."
+          }
+        },
+        "required": [
+          "guests",
+          "date"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "create_booking",
+      "description": "Забронировать стол. Вызывай только после того, как повторил гостю дату, время, число гостей и имя и получил явное «да».",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "guests": {
+            "type": "integer",
+            "description": "Сколько будет гостей, числом. Больше 8 — не бронируй, вызывай request_callback."
+          },
+          "slot_start": {
+            "type": "string",
+            "description": "Значение slot_start из ответа check_availability, без изменений."
+          },
+          "table_id": {
+            "type": "string",
+            "description": "table_id выбранного времени из ответа check_availability."
+          },
+          "zone": {
+            "type": "string",
+            "description": "Зона, если гость попросил: hall — основной зал; terrace — терраса. Не спрашивай сам, если гостю всё равно."
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Имя гостя, как он назвал."
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон гостя цифрами, как он его продиктовал."
+          },
+          "occasion": {
+            "type": "string",
+            "description": "Повод, если гость сам назвал: день рождения, годовщина, деловая встреча."
+          },
+          "wishes": {
+            "type": "string",
+            "description": "Пожелания словами гостя: детский стул, тихий стол, торт к десерту. Без сведений о здоровье и платёжных данных."
+          },
+          "consent": {
+            "type": "boolean",
+            "description": "true — только после подтверждения гостем."
+          }
+        },
+        "required": [
+          "guests",
+          "slot_start",
+          "customer_name",
+          "customer_phone",
+          "consent"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "find_booking",
+      "description": "Найти предстоящие брони гостя по номеру телефона. Вызывай перед переносом или отменой.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон гостя цифрами, как он его продиктовал."
+          }
+        },
+        "required": [
+          "customer_phone"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "reschedule_booking",
+      "description": "Перенести бронь на новое время или изменить число гостей. Сначала find_booking и check_availability.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "booking_id": {
+            "type": "string",
+            "description": "booking_id из ответа find_booking."
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон гостя цифрами, как он его продиктовал."
+          },
+          "new_slot_start": {
+            "type": "string",
+            "description": "slot_start нового времени из ответа check_availability. Если меняется только число гостей — прежнее время брони."
+          },
+          "guests": {
+            "type": "integer",
+            "description": "Новое число гостей, если изменилось. Иначе не передавай."
+          }
+        },
+        "required": [
+          "booking_id",
+          "customer_phone",
+          "new_slot_start"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "cancel_booking",
+      "description": "Отменить бронь после того, как гость подтвердил отмену.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "booking_id": {
+            "type": "string",
+            "description": "booking_id из ответа find_booking."
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон гостя цифрами, как он его продиктовал."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Причина словами гостя, если назвал."
+          }
+        },
+        "required": [
+          "booking_id",
+          "customer_phone"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    },
+    {
+      "type": "custom",
+      "name": "request_callback",
+      "description": "Передать администратору просьбу перезвонить: банкет и большая компания, жалоба, вопрос без ответа в базе знаний, сбой, нет свободных столов.",
+      "url": "https://REPLACE-N8N-HOST/webhook/voice-tools",
+      "method": "POST",
+      "headers": {
+        "X-Voice-Secret": "REPLACE_WITH_SECRET"
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_name": {
+            "type": "string",
+            "description": "Имя гостя."
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Телефон гостя цифрами, как он его продиктовал."
+          },
+          "topic": {
+            "type": "string",
+            "description": "О чём просят перезвонить, одной фразой."
+          },
+          "urgency": {
+            "type": "string",
+            "description": "Срочность словами: сегодня, в течение дня, не срочно."
+          },
+          "details": {
+            "type": "string",
+            "description": "Что важно знать администратору до звонка: дата, число гостей, повод."
+          }
+        },
+        "required": [
+          "customer_name",
+          "customer_phone",
+          "topic"
+        ]
+      },
+      "speak_during_execution": true,
+      "speak_after_execution": true,
+      "timeout_ms": 15000
+    }
+  ],
+  "default_dynamic_variables": {
+    "business_name": "REPLACE",
+    "agent_name": "REPLACE",
+    "language": "русский",
+    "recording_notice": "",
+    "emergency_number": "112"
+  }
+}

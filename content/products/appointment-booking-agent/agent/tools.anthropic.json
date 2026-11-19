@@ -1,0 +1,186 @@
+[
+  {
+    "name": "list_services",
+    "description": "Список услуг: service_id, название, длительность, цена, описание, часовой пояс компании. Вызывай, когда клиент выбирает услугу.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string",
+          "description": "Что ищет клиент своими словами; пустая строка — показать все"
+        }
+      },
+      "required": [
+        "topic"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "check_availability",
+    "description": "Свободное время по календарю на день (и ближайшие дни, если этот занят). Предлагай клиенту только время из ответа.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "service_id": {
+          "type": "string",
+          "description": "service_id из list_services"
+        },
+        "date": {
+          "type": "string",
+          "description": "YYYY-MM-DD, today, tomorrow, +N (через N дней) или день недели по-английски: mon…sun"
+        },
+        "part_of_day": {
+          "type": "string",
+          "description": "morning, afternoon, evening или any"
+        },
+        "client_timezone": {
+          "type": "string",
+          "description": "Часовой пояс клиента IANA (Europe/Warsaw), если он не совпадает с часовым поясом компании; иначе пустая строка"
+        }
+      },
+      "required": [
+        "service_id",
+        "date",
+        "part_of_day",
+        "client_timezone"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "book_appointment",
+    "description": "Создаёт запись в календаре. Только после того, как клиент ответил «да» на повтор деталей. Возвращает код записи.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "service_id": {
+          "type": "string",
+          "description": "service_id из list_services"
+        },
+        "slot_start": {
+          "type": "string",
+          "description": "slot_start из ответа check_availability"
+        },
+        "name": {
+          "type": "string",
+          "description": "Имя клиента"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email клиента; пустая строка, если не дал"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Телефон клиента; пустая строка, если не дал"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Что клиент хочет обсудить, коротко; пустая строка, если ничего"
+        }
+      },
+      "required": [
+        "service_id",
+        "slot_start",
+        "name",
+        "email",
+        "phone",
+        "notes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "find_booking",
+    "description": "Находит предстоящую запись по коду из подтверждения.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "booking_code": {
+          "type": "string",
+          "description": "Код записи, 6 символов"
+        }
+      },
+      "required": [
+        "booking_code"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "reschedule_booking",
+    "description": "Переносит запись на новое время. Только после «да» клиента на повтор нового времени.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "booking_code": {
+          "type": "string",
+          "description": "Код записи"
+        },
+        "new_slot_start": {
+          "type": "string",
+          "description": "slot_start из ответа check_availability"
+        },
+        "client_timezone": {
+          "type": "string",
+          "description": "Часовой пояс клиента IANA или пустая строка"
+        }
+      },
+      "required": [
+        "booking_code",
+        "new_slot_start",
+        "client_timezone"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "cancel_booking",
+    "description": "Отменяет запись. Только после «да» клиента на вопрос об отмене.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "booking_code": {
+          "type": "string",
+          "description": "Код записи"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Причина, если клиент назвал; иначе пустая строка"
+        }
+      },
+      "required": [
+        "booking_code",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "handoff_to_human",
+    "description": "Передаёт диалог менеджеру и уведомляет команду: оплата, нестандартный запрос, недовольство, просьба позвать человека, повторные ошибки.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "Почему нужен человек, одной фразой"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Суть и что уже выяснено, чтобы менеджеру не перечитывать переписку"
+        },
+        "urgency": {
+          "type": "string",
+          "description": "low, normal или high"
+        }
+      },
+      "required": [
+        "reason",
+        "summary",
+        "urgency"
+      ],
+      "additionalProperties": false
+    }
+  }
+]

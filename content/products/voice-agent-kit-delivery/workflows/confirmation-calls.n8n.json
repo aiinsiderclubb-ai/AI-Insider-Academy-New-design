@@ -1,0 +1,283 @@
+{
+  "name": "Delivery Voice Agent — Confirmation Calls",
+  "nodes": [
+    {
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        -320
+      ],
+      "parameters": {
+        "content": "## Delivery Voice Agent — звонки для подтверждения\n\nКаждый день в 16:00 берёт завтрашние заказы без подтверждения и запускает исходящий звонок у Vapi или Retell (`outbound.provider` в Config).\n\nНе больше `max_attempts` начатых звонков на заказ, один в день, только с `call_from` до `call_until`.\n\nКлюч API провайдера — учётные данные Header Auth: `Authorization` = `Bearer ВАШ_КЛЮЧ`.\n\nВыключен при импорте: включите после тестов (docs/10-outbound.md).",
+        "width": 520,
+        "height": 300
+      },
+      "id": "f133a082-fc33-5785-85ae-87daf77950d8"
+    },
+    {
+      "name": "Every Day 16:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 16 * * *"
+            }
+          ]
+        }
+      },
+      "id": "6bb1bf88-757e-5cae-be57-98360c44dc01"
+    },
+    {
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Config — the only node you edit. Delivery days, windows, cities and rules.\n// Everything below this node reads its settings from here. Guide: docs/02-backend-n8n.md\nreturn [{ json: {\n  \"timezone\": \"Europe/Kyiv\",\n  \"locale\": \"ru-RU\",\n  \"sheets_api_base\": \"https://sheets.googleapis.com/v4/spreadsheets\",\n  \"spreadsheet_id\": \"REPLACE_WITH_SPREADSHEET_ID\",\n  \"sheet_name\": \"Orders\",\n  \"staff_chat_id\": \"REPLACE_WITH_TELEGRAM_CHAT_ID\",\n  \"phone\": { \"country_code\": \"380\", \"national_prefix\": \"0\" },\n  \"require_caller_match\": true,\n  \"callback_promise\": \"в течение часа в рабочее время\",\n  \"service_cities\": [\"Киев\", \"Київ\", \"Kyiv\", \"Бровары\", \"Ирпень\"],\n  \"delivery_days\": [\"mon\", \"tue\", \"wed\", \"thu\", \"fri\", \"sat\"],\n  \"closed_dates\": [],\n  \"delivery_window_days\": 7,\n  \"windows\": [\n    { \"id\": \"09-12\", \"start\": \"09:00\", \"end\": \"12:00\", \"capacity\": 25 },\n    { \"id\": \"12-15\", \"start\": \"12:00\", \"end\": \"15:00\", \"capacity\": 25 },\n    { \"id\": \"15-18\", \"start\": \"15:00\", \"end\": \"18:00\", \"capacity\": 25 },\n    { \"id\": \"18-21\", \"start\": \"18:00\", \"end\": \"21:00\", \"capacity\": 20 }\n  ],\n  \"change_cutoff_hours\": 3,\n  \"changeable_statuses\": [\"new\", \"packed\"],\n  \"status_labels\": {\n    \"new\": \"принят\",\n    \"packed\": \"собран\",\n    \"out_for_delivery\": \"у курьера\",\n    \"delivered\": \"доставлен\",\n    \"cancelled\": \"отменён\"\n  },\n  \"notify_on_confirm\": false,\n  \"outbound\": {\n    \"provider\": \"vapi\",\n    \"vapi_api_base\": \"https://api.vapi.ai\",\n    \"vapi_assistant_id\": \"REPLACE_WITH_VAPI_ASSISTANT_ID\",\n    \"vapi_phone_number_id\": \"REPLACE_WITH_VAPI_PHONE_NUMBER_ID\",\n    \"retell_api_base\": \"https://api.retellai.com\",\n    \"retell_agent_id\": \"REPLACE_WITH_RETELL_AGENT_ID\",\n    \"retell_from_number\": \"REPLACE_WITH_RETELL_NUMBER_E164\",\n    \"call_from\": \"10:00\",\n    \"call_until\": \"20:00\",\n    \"max_attempts\": 2,\n    \"max_calls_per_run\": 50\n  }\n} }];\n"
+      },
+      "id": "156565fc-6520-56f6-a3b6-24a81617232e"
+    },
+    {
+      "name": "Read Orders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sheets_api_base }}/{{ encodeURIComponent($json.spreadsheet_id) }}/values/{{ encodeURIComponent(\"'\" + $json.sheet_name + \"'!A1:U5000\") }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "id": "854f1c47-07e6-570c-9d79-2a81c83169ee"
+    },
+    {
+      "name": "Pick Calls",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Pick Calls — tomorrow's orders that still need a confirmation call.\nconst cfg = $('Config').first().json;\nconst out = cfg.outbound || {};\nconst feed = $input.first().json || {};\n// ---- time helpers (business time zone, no libraries) ----\nconst TZ = cfg.timezone;\nconst MIN = 60000;\nconst DAY = 24 * 60 * MIN;\nconst pad = (n) => String(n).padStart(2, '0');\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nfunction offsetMin(utcMs) {\n  const parts = new Intl.DateTimeFormat('en-US', {\n    timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit', second: '2-digit',\n  }).formatToParts(new Date(utcMs));\n  const p = {};\n  for (const part of parts) p[part.type] = part.value;\n  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - utcMs) / MIN);\n}\nfunction localToUtc(y, mo, d, h, mi) {\n  const guess = Date.UTC(y, mo - 1, d, h, mi);\n  const first = guess - offsetMin(guess) * MIN;\n  return guess - offsetMin(first) * MIN; // second pass settles days when clocks change\n}\nfunction local(ms) {\n  const shifted = new Date(ms + offsetMin(ms) * MIN);\n  return {\n    y: shifted.getUTCFullYear(), mo: shifted.getUTCMonth() + 1, d: shifted.getUTCDate(),\n    h: shifted.getUTCHours(), mi: shifted.getUTCMinutes(), dow: shifted.getUTCDay(),\n  };\n}\nconst localIso = (ms) => { const t = local(ms); return `${t.y}-${pad(t.mo)}-${pad(t.d)}T${pad(t.h)}:${pad(t.mi)}`; };\nconst localDate = (ms) => localIso(ms).slice(0, 10);\nconst dayStart = (dateText) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); return localToUtc(+m[1], +m[2], +m[3], 0, 0); };\nconst at = (dateText, hhmm) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); const [h, mi] = String(hhmm).split(':').map(Number); return localToUtc(+m[1], +m[2], +m[3], h, mi); };\nconst DOW = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];\nconst spokenDay = (dateText) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(dayStart(dateText) + 12 * 60 * MIN));\nconst windowOf = (id) => (cfg.windows || []).find((w) => w.id === id);\nconst spokenWindow = (dateText, id) => {\n  const w = windowOf(id);\n  return w ? `${spokenDay(dateText)}, с ${w.start} до ${w.end}` : `${spokenDay(dateText)}, интервал ${id || 'не назначен'}`;\n};\nconst now = nowMs();\nconst today = localDate(now);\nconst nowHm = localIso(now).slice(11);\nif (nowHm < (out.call_from || '10:00') || nowHm >= (out.call_until || '20:00')) return [];\n\nconst values = Array.isArray(feed.values) ? feed.values : [];\nconst head = (values[0] || []).map((h) => String(h).trim().toLowerCase());\nconst col = (row, name) => String(row[head.indexOf(name)] ?? '').trim();\nconst digits = (value) => String(value || '').replace(/[^\\d]/g, '');\nconst phoneRules = cfg.phone || {};\nconst phone = (value) => {\n  let d = digits(value);\n  if (d.startsWith('00')) d = d.slice(2);\n  else if (phoneRules.national_prefix && phoneRules.country_code && d.startsWith(phoneRules.national_prefix) && !d.startsWith(phoneRules.country_code)) {\n    d = phoneRules.country_code + d.slice(phoneRules.national_prefix.length);\n  }\n  return d.length >= 9 && d.length <= 15 ? '+' + d : '';\n};\nconst tomorrow = localDate(dayStart(today) + DAY + 12 * 60 * MIN);\nconst picked = [];\nvalues.slice(1).forEach((row, i) => {\n  const number = phone(col(row, 'phone'));\n  const calls = Number(col(row, 'calls')) || 0;\n  if (!col(row, 'order_id') || !number) return;\n  if (col(row, 'delivery_date') !== tomorrow) return;\n  if (!(cfg.changeable_statuses || []).includes(col(row, 'status').toLowerCase())) return;\n  if (/^(да|yes|1|true)$/i.test(col(row, 'confirmed'))) return;\n  if (calls >= (out.max_attempts || 2)) return;\n  if (col(row, 'last_call').startsWith(today)) return; // one attempt a day; the next run tries again tomorrow\n  const address = [col(row, 'city'), col(row, 'address'), col(row, 'apartment') && 'квартира ' + col(row, 'apartment')].filter(Boolean).join(', ');\n  const vars = {\n    order_id: col(row, 'order_id'), customer_name: col(row, 'customer_name') || 'клиент',\n    delivery: spokenWindow(col(row, 'delivery_date'), col(row, 'window')), address,\n  };\n  const request = out.provider === 'retell'\n    ? { url: `${out.retell_api_base}/v2/create-phone-call`, body: { from_number: out.retell_from_number, to_number: number, override_agent_id: out.retell_agent_id, retell_llm_dynamic_variables: vars } }\n    : { url: `${out.vapi_api_base}/call`, body: { assistantId: out.vapi_assistant_id, phoneNumberId: out.vapi_phone_number_id,\n        customer: { number, name: vars.customer_name }, assistantOverrides: { variableValues: vars } } };\n  picked.push({ json: { row: i + 2, order_id: vars.order_id, calls, history: col(row, 'history'), request } });\n});\nreturn picked.slice(0, out.max_calls_per_run || 50);\n"
+      },
+      "alwaysOutputData": false,
+      "id": "9136dbd3-d5e2-5bec-b372-f42c72d71bdd"
+    },
+    {
+      "name": "Start Call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.request.url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.request.body) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 20000,
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 3000
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Voice provider API key"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "id": "ea40ef4c-73a5-52e2-9d5d-f4e9dd41fd0e"
+    },
+    {
+      "name": "Mark Calls",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Mark Calls — counts the attempt on each order and builds one write for the sheet.\nconst cfg = $('Config').first().json;\nconst picked = $('Pick Calls').all();\nconst answers = $input.all();\n// ---- time helpers (business time zone, no libraries) ----\nconst TZ = cfg.timezone;\nconst MIN = 60000;\nconst DAY = 24 * 60 * MIN;\nconst pad = (n) => String(n).padStart(2, '0');\nconst nowMs = () => (cfg.now_override ? Date.parse(cfg.now_override) : Date.now());\nfunction offsetMin(utcMs) {\n  const parts = new Intl.DateTimeFormat('en-US', {\n    timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit', second: '2-digit',\n  }).formatToParts(new Date(utcMs));\n  const p = {};\n  for (const part of parts) p[part.type] = part.value;\n  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - utcMs) / MIN);\n}\nfunction localToUtc(y, mo, d, h, mi) {\n  const guess = Date.UTC(y, mo - 1, d, h, mi);\n  const first = guess - offsetMin(guess) * MIN;\n  return guess - offsetMin(first) * MIN; // second pass settles days when clocks change\n}\nfunction local(ms) {\n  const shifted = new Date(ms + offsetMin(ms) * MIN);\n  return {\n    y: shifted.getUTCFullYear(), mo: shifted.getUTCMonth() + 1, d: shifted.getUTCDate(),\n    h: shifted.getUTCHours(), mi: shifted.getUTCMinutes(), dow: shifted.getUTCDay(),\n  };\n}\nconst localIso = (ms) => { const t = local(ms); return `${t.y}-${pad(t.mo)}-${pad(t.d)}T${pad(t.h)}:${pad(t.mi)}`; };\nconst localDate = (ms) => localIso(ms).slice(0, 10);\nconst dayStart = (dateText) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); return localToUtc(+m[1], +m[2], +m[3], 0, 0); };\nconst at = (dateText, hhmm) => { const m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(dateText); const [h, mi] = String(hhmm).split(':').map(Number); return localToUtc(+m[1], +m[2], +m[3], h, mi); };\nconst DOW = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];\nconst spokenDay = (dateText) => new Intl.DateTimeFormat(cfg.locale || 'ru-RU', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(dayStart(dateText) + 12 * 60 * MIN));\nconst windowOf = (id) => (cfg.windows || []).find((w) => w.id === id);\nconst spokenWindow = (dateText, id) => {\n  const w = windowOf(id);\n  return w ? `${spokenDay(dateText)}, с ${w.start} до ${w.end}` : `${spokenDay(dateText)}, интервал ${id || 'не назначен'}`;\n};\nconst now = nowMs();\nconst head = ($('Read Orders').first().json.values || [[]])[0].map((h) => String(h).trim().toLowerCase());\nconst letter = (i) => (i < 26 ? String.fromCharCode(65 + i) : String.fromCharCode(64 + Math.floor(i / 26)) + String.fromCharCode(65 + (i % 26)));\nconst sheet = `'${String(cfg.sheet_name || 'Orders').replace(/'/g, \"''\")}'`;\nconst cell = (row, col, value) => ({ range: `${sheet}!${letter(head.indexOf(col))}${row}`, values: [[value]] });\nconst data = [];\nconst started = [];\nconst failed = [];\npicked.forEach((item, i) => {\n  const p = item.json;\n  const answer = (answers[i] && answers[i].json) || {};\n  const ok = !answer.error && (answer.id || answer.call_id);\n  (ok ? started : failed).push(p.order_id);\n  const entry = `${localIso(now)} исходящий звонок: ${ok ? 'начат, ' + (answer.id || answer.call_id) : 'не начат — ' + JSON.stringify(answer.error || answer).slice(0, 120)}`;\n  // A call that never started does not use up an attempt; last_call still stops a retry the same day.\n  data.push(cell(p.row, 'calls', String(ok ? p.calls + 1 : p.calls)), cell(p.row, 'last_call', localIso(now)),\n    cell(p.row, 'history', ((p.history ? p.history + '\\n' : '') + entry).slice(-2000)));\n});\nconst report = ['Звонки для подтверждения доставки', `Начато: ${started.length}`, failed.length ? `Не начато: ${failed.length} (${failed.join(', ')})` : ''].filter(Boolean).join('\\n');\nreturn [{ json: { body: { valueInputOption: 'RAW', data }, report } }];\n"
+      },
+      "id": "0be3d2fa-95ee-51b2-9110-d7bca95ee6f5"
+    },
+    {
+      "name": "Sheet Write",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.sheets_api_base }}/{{ encodeURIComponent($('Config').first().json.spreadsheet_id) }}/values:batchUpdate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets"
+        }
+      },
+      "id": "07286909-3e9c-55ed-8ff0-f25000c7f3cb"
+    },
+    {
+      "name": "Report",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1540,
+        0
+      ],
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.staff_chat_id }}",
+        "text": "={{ String($('Mark Calls').first().json.report).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram bot"
+        }
+      },
+      "id": "9dd9f3b0-f80e-5ce6-9370-89e2334d73ba"
+    }
+  ],
+  "connections": {
+    "Every Day 16:00": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Orders": {
+      "main": [
+        [
+          {
+            "node": "Pick Calls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick Calls": {
+      "main": [
+        [
+          {
+            "node": "Start Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Call": {
+      "main": [
+        [
+          {
+            "node": "Mark Calls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Calls": {
+      "main": [
+        [
+          {
+            "node": "Sheet Write",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Write": {
+      "main": [
+        [
+          {
+            "node": "Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false,
+    "timezone": "Europe/Kyiv"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

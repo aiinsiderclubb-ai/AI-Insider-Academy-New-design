@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@bytebase/dbhub@2", "--config", "/ПОЛНЫЙ/ПУТЬ/К/dbhub.toml"],
+      "env": {
+        "AGENT_DB_PASSWORD": "ПАРОЛЬ_РОЛИ_agent_readonly"
+      }
+    },
+    "github": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "-e", "GITHUB_TOOLSETS",
+        "-e", "GITHUB_READ_ONLY",
+        "ghcr.io/github/github-mcp-server:2.2.0"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ВАШ_FINE_GRAINED_PAT",
+        "GITHUB_TOOLSETS": "repos,issues,pull_requests",
+        "GITHUB_READ_ONLY": "1"
+      }
+    }
+  }
+}

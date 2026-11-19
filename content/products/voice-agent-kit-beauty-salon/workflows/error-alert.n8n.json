@@ -43,9 +43,10 @@
     {
       "parameters": {
         "chatId": "REPLACE_WITH_TELEGRAM_CHAT_ID",
-        "text": "={{ $json.staff_message }}",
+        "text": "={{ String($json.staff_message).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
         "additionalFields": {
-          "appendAttribution": false
+          "appendAttribution": false,
+          "parse_mode": "HTML"
         }
       },
       "id": "27fd1503-3826-5e25-a5c9-81c8260fb00e",

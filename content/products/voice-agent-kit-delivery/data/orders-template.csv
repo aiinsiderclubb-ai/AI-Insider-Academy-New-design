@@ -1,0 +1,4 @@
+﻿order_id,phone,customer_name,city,address,apartment,entrance,floor,intercom,courier_note,delivery_date,window,status,items,total,payment,confirmed,confirmed_at,calls,last_call,history
+A-1001,+380501112233,Ирина,Киев,"улица Примерная, 5",12,2,4,12К,,2026-10-13,12-15,packed,Кофемолка Lumo C40,5400 грн,оплачен,,,0,,
+A-1002,+380671234567,Олег,Бровары,"проспект Независимости, 20",,,,,позвонить за 15 минут,2026-10-13,18-21,new,Кофе Эфиопия 1 кг ×2,1980 грн,при получении,,,0,,
+A-1003,+380931112244,Мария,Киев,"улица Садовая, 3",7,1,2,,,2026-10-12,15-18,out_for_delivery,Кофемашина Brio 2,24900 грн,оплачен,да,2026-10-11T18:20,1,2026-10-11T16:05,

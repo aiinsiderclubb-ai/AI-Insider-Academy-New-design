@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "google-calendar": {
+      "type": "stdio",
+      "command": "python3",
+      "args": [
+        "${MCP_KIT_DIR}/server/calendar_mcp.py",
+        "--config",
+        "${MCP_KIT_DIR}/config/calendar.json"
+      ],
+      "env": {
+        "GOOGLE_CLIENT_ID": "${GOOGLE_CLIENT_ID}",
+        "GOOGLE_CLIENT_SECRET": "${GOOGLE_CLIENT_SECRET}",
+        "GOOGLE_REFRESH_TOKEN": "${GOOGLE_REFRESH_TOKEN}"
+      }
+    }
+  }
+}

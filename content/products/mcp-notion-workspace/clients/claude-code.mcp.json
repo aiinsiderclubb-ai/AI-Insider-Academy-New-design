@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "notion-workspace": {
+      "type": "stdio",
+      "command": "python3",
+      "args": [
+        "${MCP_KIT_DIR}/server/notion_workspace_mcp.py",
+        "--config",
+        "${MCP_KIT_DIR}/config/notion.json"
+      ],
+      "env": {
+        "NOTION_TOKEN": "${NOTION_TOKEN}"
+      }
+    }
+  }
+}

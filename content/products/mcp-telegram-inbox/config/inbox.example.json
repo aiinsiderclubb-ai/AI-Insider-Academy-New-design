@@ -1,0 +1,22 @@
+{
+ "chats": [
+  {"id": -1001234567890, "name": "Заявки и продажи"}
+ ],
+ "manager_chat_id": -1009876543210,
+ "lead_sink": {
+  "type": "webhook",
+  "url": "https://ВАШ-N8N/webhook/crm-lead",
+  "token_header": "X-CRM-Token",
+  "token_env": "CRM_WEBHOOK_TOKEN",
+  "source": "telegram"
+ },
+ "escalation": [
+  {"name": "жалоба или возврат", "patterns": ["жалоб", "верните", "возврат", "претензи", "обман", "\\bсуд", "refund", "complain"]},
+  {"name": "срочно", "patterns": ["срочно", "горит", "сегодня до", "asap", "urgent"]},
+  {"name": "крупный клиент", "patterns": ["тендер", "сеть из", "оптом", "\\b\\d{2,3}\\s?(000|тыс)"]}
+ ],
+ "ignore_patterns": ["^/", "^\\s*\\+\\s*$", "^\\s*(ок|ok|спасибо|👍)\\s*$"],
+ "max_leads_per_10_minutes": 5,
+ "retention_days": 14,
+ "data_dir": "data"
+}

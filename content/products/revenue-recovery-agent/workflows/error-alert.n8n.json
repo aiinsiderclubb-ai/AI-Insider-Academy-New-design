@@ -1,0 +1,104 @@
+{
+  "name": "Revenue Recovery — Error Alert",
+  "nodes": [
+    {
+      "id": "b5bc62ce-2a85-532c-80c0-a22ac04c52f2",
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -260
+      ],
+      "parameters": {
+        "content": "## Сигнал об ошибке\nЕсли агент упал (таблица недоступна, Telegram отклонил сообщение), вы узнаете в Telegram.\n\nВставьте ID чата в узел **Alert** и выберите этот воркфлоу в Settings → Error workflow агента.",
+        "width": 460,
+        "height": 200,
+        "color": 5
+      }
+    },
+    {
+      "id": "32182537-d731-5bba-bd48-b3dcf69778ff",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f096a582-d73d-5e3c-82a0-6cd892b82241",
+      "name": "Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const e = $input.first().json;\nconst esc = (t) => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst text = [\n  '<b>⚠️ Ошибка в Revenue Recovery</b>',\n  `Узел: ${esc(e.execution?.lastNodeExecuted)}`,\n  `Ошибка: ${esc(e.execution?.error?.message).slice(0, 500)}`,\n  e.execution?.url ? `<a href=\"${esc(e.execution.url)}\">Открыть выполнение</a>` : '',\n].filter(Boolean).join('\\n');\nreturn [{ json: { text } }];\n"
+      }
+    },
+    {
+      "id": "ffc97077-71fb-52d8-bf07-9214575ebe16",
+      "name": "Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "chatId": "ВСТАВЬТЕ_ID_ЧАТА",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "stopWorkflow"
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message": {
+      "main": [
+        [
+          {
+            "node": "Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

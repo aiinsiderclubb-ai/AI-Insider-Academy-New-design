@@ -1,0 +1,6 @@
+id,name,description,price,currency,url,payment_link,tags,in_stock
+crm-start,CRM Старт,"CRM для отдела продаж до 5 менеджеров: сделки, задачи, напоминания, бот в Telegram. Подписка на месяц.",49,EUR,https://example.com/crm-start,https://pay.example.com/crm-start,crm продажи сделки менеджеры малый бизнес,да
+crm-team,CRM Команда,"CRM для команды до 20 человек: несколько воронок, отчёты, роли и права. Подписка на месяц.",99,EUR,https://example.com/crm-team,https://pay.example.com/crm-team,crm воронки отчёты команда роли,да
+crm-pro,CRM Про,"CRM для компаний до 100 человек: API, интеграции, выделенный менеджер. Подписка по договору.",290,EUR,https://example.com/crm-pro,,crm api интеграции крупная компания договор,да
+onboarding,Внедрение под ключ,"Настроим воронки, перенесём базу клиентов и обучим команду за 2 недели.",600,EUR,https://example.com/onboarding,,внедрение настройка перенос данных обучение,да
+telephony,Интеграция с телефонией,"Звонки из CRM и запись разговоров: Binotel, Ringostat, Zadarma.",150,EUR,https://example.com/telephony,https://pay.example.com/telephony,телефония звонки запись разговоров,нет

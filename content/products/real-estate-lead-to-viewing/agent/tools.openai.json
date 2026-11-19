@@ -1,0 +1,212 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "update_lead",
+      "description": "Сохраняет в карточку клиента то, что он сообщил о запросе и контактах. Передавай только новые поля, остальные — пустой строкой (budget_max — 0). Возвращает, чего ещё не хватает, и закреплённого риелтора.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "deal_type": {
+            "type": "string",
+            "description": "buy или rent; пусто, если не говорил"
+          },
+          "property_type": {
+            "type": "string",
+            "description": "apartment, house, commercial, land или any; пусто, если не говорил"
+          },
+          "area": {
+            "type": "string",
+            "description": "Район или ориентир словами клиента; пусто, если не говорил"
+          },
+          "rooms": {
+            "type": "string",
+            "description": "Комнат: 2, 2-3 или 3+; пусто, если не говорил"
+          },
+          "budget_max": {
+            "type": "number",
+            "description": "Верхняя граница бюджета числом; 0, если не говорил"
+          },
+          "currency": {
+            "type": "string",
+            "description": "USD, EUR, UAH и т. п.; пусто, если не называл"
+          },
+          "timeline": {
+            "type": "string",
+            "description": "now, 1-3m, 3-6m или later; пусто, если не говорил"
+          },
+          "mortgage": {
+            "type": "string",
+            "description": "cash, preapproved, needed или no; пусто, если не говорил"
+          },
+          "name": {
+            "type": "string",
+            "description": "Имя клиента; пусто, если не называл"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Телефон клиента; пусто, если не называл"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email; пусто, если не называл"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Важные пожелания одной фразой: этаж, парковка, животные; пусто, если нет"
+          }
+        },
+        "required": [
+          "deal_type",
+          "property_type",
+          "area",
+          "rooms",
+          "budget_max",
+          "currency",
+          "timeline",
+          "mortgage",
+          "name",
+          "phone",
+          "email",
+          "notes"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_listings",
+      "description": "Подбирает до трёх объектов из базы агентства и объясняет, чем каждый подходит. Только активные объекты.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "deal_type": {
+            "type": "string",
+            "description": "buy или rent"
+          },
+          "property_type": {
+            "type": "string",
+            "description": "apartment, house, commercial, land или any"
+          },
+          "area": {
+            "type": "string",
+            "description": "Район; пусто — по всему городу"
+          },
+          "rooms": {
+            "type": "string",
+            "description": "2, 2-3, 3+ или пусто"
+          },
+          "budget_max": {
+            "type": "number",
+            "description": "Верхняя граница бюджета; 0 — без ограничения"
+          },
+          "listing_ref": {
+            "type": "string",
+            "description": "Номер объекта, с которым пришёл клиент; пусто, если нет"
+          }
+        },
+        "required": [
+          "deal_type",
+          "property_type",
+          "area",
+          "rooms",
+          "budget_max",
+          "listing_ref"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "check_viewing_slots",
+      "description": "Свободное время для просмотра объекта по календарю его риелтора.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "listing_id": {
+            "type": "string",
+            "description": "Номер объекта из результата search_listings"
+          },
+          "date": {
+            "type": "string",
+            "description": "today, tomorrow, день недели (mon…sun), ГГГГ-ММ-ДД или пусто — ближайшие дни"
+          }
+        },
+        "required": [
+          "listing_id",
+          "date"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "book_viewing",
+      "description": "Записывает клиента на просмотр в календарь риелтора и уведомляет риелтора. Вызывай только после явного «да» клиента в его последнем сообщении.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "listing_id": {
+            "type": "string",
+            "description": "Номер объекта"
+          },
+          "slot_start": {
+            "type": "string",
+            "description": "Время из ответа check_viewing_slots, поле slot_start: ГГГГ-ММ-ДДTЧЧ:ММ"
+          },
+          "name": {
+            "type": "string",
+            "description": "Имя клиента; пусто, если уже сохранено"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Телефон клиента; пусто, если уже сохранён"
+          }
+        },
+        "required": [
+          "listing_id",
+          "slot_start",
+          "name",
+          "phone"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "handoff_to_human",
+      "description": "Передаёт диалог риелтору и уведомляет команду: торг, сделка, документы, ипотека, продажа своего объекта, недовольство, ручной подбор.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Почему нужен человек, одной фразой"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Что ищет клиент и что уже выяснено"
+          },
+          "urgency": {
+            "type": "string",
+            "description": "low, normal или high"
+          }
+        },
+        "required": [
+          "reason",
+          "summary",
+          "urgency"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+]

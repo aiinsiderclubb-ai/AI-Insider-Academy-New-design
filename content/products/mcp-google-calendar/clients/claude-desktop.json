@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "google-calendar": {
+      "command": "python3",
+      "args": [
+        "/ПОЛНЫЙ/ПУТЬ/К/НАБОРУ/server/calendar_mcp.py",
+        "--config",
+        "/ПОЛНЫЙ/ПУТЬ/К/НАБОРУ/config/calendar.json"
+      ],
+      "env": {
+        "GOOGLE_CLIENT_ID": "ВСТАВЬТЕ_GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET": "ВСТАВЬТЕ_GOOGLE_CLIENT_SECRET",
+        "GOOGLE_REFRESH_TOKEN": "ВСТАВЬТЕ_GOOGLE_REFRESH_TOKEN"
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/readonly",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PAT}"
+      }
+    },
+    "postgres": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@bytebase/dbhub@2", "--config", "${DBHUB_CONFIG}"],
+      "env": {
+        "AGENT_DB_PASSWORD": "${AGENT_DB_PASSWORD}"
+      }
+    },
+    "hubspot": {
+      "type": "http",
+      "url": "https://mcp.hubspot.com",
+      "oauth": {
+        "clientId": "ВСТАВЬТЕ_CLIENT_ID_КОННЕКТОРА_HUBSPOT",
+        "callbackPort": 3118
+      }
+    },
+    "slack": {
+      "type": "http",
+      "url": "https://mcp.slack.com/mcp",
+      "oauth": {
+        "clientId": "ВСТАВЬТЕ_CLIENT_ID_SLACK_APP",
+        "callbackPort": 3119
+      }
+    }
+  }
+}

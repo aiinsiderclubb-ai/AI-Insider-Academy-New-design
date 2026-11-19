@@ -1,0 +1,136 @@
+{
+  "timezone": "Europe/Kyiv",
+  "locale": "ru-RU",
+  "calendar_api_base": "https://www.googleapis.com/calendar/v3",
+  "calendar_id": "primary",
+  "staff_chat_id": "REPLACE_WITH_TELEGRAM_CHAT_ID",
+  "phone": {
+    "country_code": "380",
+    "national_prefix": "0"
+  },
+  "slot_step_min": 30,
+  "lead_time_min": 60,
+  "buffer_min": 15,
+  "booking_window_days": 30,
+  "offer_slots": 3,
+  "closed_dates": [],
+  "require_caller_match": true,
+  "callback_promise": "в течение часа в рабочее время",
+  "hours": {
+    "mon": {
+      "open": "12:00",
+      "close": "23:00"
+    },
+    "tue": {
+      "open": "12:00",
+      "close": "23:00"
+    },
+    "wed": {
+      "open": "12:00",
+      "close": "23:00"
+    },
+    "thu": {
+      "open": "12:00",
+      "close": "23:00"
+    },
+    "fri": {
+      "open": "12:00",
+      "close": "23:30"
+    },
+    "sat": {
+      "open": "12:00",
+      "close": "23:30"
+    },
+    "sun": {
+      "open": "12:00",
+      "close": "22:00"
+    }
+  },
+  "cancel_min_hours": 3,
+  "late_cancel_note": "",
+  "address": "улица Примерная, дом десять, вход со двора",
+  "max_guests": 8,
+  "durations": [
+    {
+      "max_guests": 2,
+      "minutes": 90
+    },
+    {
+      "max_guests": 4,
+      "minutes": 120
+    },
+    {
+      "max_guests": 8,
+      "minutes": 150
+    }
+  ],
+  "deposit_note": "без депозита",
+  "zones": [
+    {
+      "id": "hall",
+      "name": "основной зал"
+    },
+    {
+      "id": "terrace",
+      "name": "терраса"
+    }
+  ],
+  "tables": [
+    {
+      "id": "t1",
+      "name": "стол у окна, на двоих",
+      "seats": 2,
+      "zone": "hall"
+    },
+    {
+      "id": "t2",
+      "name": "стол на двоих",
+      "seats": 2,
+      "zone": "hall"
+    },
+    {
+      "id": "t3",
+      "name": "стол на четверых",
+      "seats": 4,
+      "zone": "hall"
+    },
+    {
+      "id": "t4",
+      "name": "стол на четверых у камина",
+      "seats": 4,
+      "zone": "hall"
+    },
+    {
+      "id": "t5",
+      "name": "большой стол",
+      "seats": 8,
+      "min_guests": 5,
+      "zone": "hall"
+    },
+    {
+      "id": "t6",
+      "name": "стол на террасе, на двоих",
+      "seats": 2,
+      "zone": "terrace"
+    },
+    {
+      "id": "t7",
+      "name": "стол на террасе, на четверых",
+      "seats": 4,
+      "zone": "terrace"
+    }
+  ],
+  "detail_fields": [
+    "guests",
+    "zone",
+    "occasion",
+    "wishes"
+  ],
+  "detail_labels": {
+    "guests": "Гостей",
+    "zone": "Зона",
+    "occasion": "Повод",
+    "wishes": "Пожелания"
+  },
+  "required_details": []
+}

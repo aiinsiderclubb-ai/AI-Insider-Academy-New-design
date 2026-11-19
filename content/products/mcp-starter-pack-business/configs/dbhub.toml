@@ -1,0 +1,23 @@
+# DBHub (github.com/bytebase/dbhub) — MCP-сервер для Postgres, MySQL, SQL Server, SQLite.
+# Пароль не пишите сюда: он берётся из переменной окружения AGENT_DB_PASSWORD.
+# Подключайтесь ролью agent_readonly из postgres-readonly-role.sql, а не владельцем базы.
+
+[[sources]]
+id = "main"
+description = "Основная база: заказы, клиенты, товары"
+dsn = "postgres://agent_readonly:${AGENT_DB_PASSWORD}@db.example.com:5432/shop?sslmode=require"
+connection_timeout = 10
+query_timeout = 15
+lazy = true
+
+# Произвольный SQL — только чтение и не больше 200 строк в ответе.
+[[tools]]
+name = "execute_sql"
+source = "main"
+readonly = true
+max_rows = 200
+
+# Поиск таблиц и колонок по названию — чтобы агент сначала смотрел схему, а не угадывал.
+[[tools]]
+name = "search_objects"
+source = "main"

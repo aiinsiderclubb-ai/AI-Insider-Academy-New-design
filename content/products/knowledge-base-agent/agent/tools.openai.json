@@ -1,0 +1,65 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "search_documents",
+      "description": "Ищет по документам компании (регламенты, инструкции, политики, справка) и возвращает до пяти фрагментов с кодом документа для ссылки, например [d3], или found=false. Вызывай перед любым ответом по существу.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Что искать: ключевые слова на языке документов, например: отпуск перенос сроки заявления"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "list_documents",
+      "description": "Список документов в базе: код, название, дата изменения. Для вопросов «какие документы есть», «что ты знаешь».",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "handoff_to_human",
+      "description": "Передаёт вопрос людям и уведомляет команду в Telegram: ответа нет в документах, а вопрос важный; просят связаться с человеком; документы противоречат друг другу; личная ситуация или исключение из правил.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Почему нужен человек, одной фразой"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Суть вопроса и что уже нашлось в документах"
+          },
+          "urgency": {
+            "type": "string",
+            "description": "low, normal или high"
+          }
+        },
+        "required": [
+          "reason",
+          "summary",
+          "urgency"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+]

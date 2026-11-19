@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "notion-workspace": {
+      "command": "python3",
+      "args": [
+        "${userHome}/mcp/notion-workspace/server/notion_workspace_mcp.py",
+        "--config",
+        "${userHome}/mcp/notion-workspace/config/notion.json"
+      ],
+      "env": {
+        "NOTION_TOKEN": "${env:NOTION_TOKEN}"
+      }
+    }
+  }
+}

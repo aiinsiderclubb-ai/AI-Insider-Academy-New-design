@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "telegram-inbox": {
+      "type": "stdio",
+      "command": "python3",
+      "args": [
+        "${MCP_KIT_DIR}/server/telegram_inbox_mcp.py",
+        "--config",
+        "${MCP_KIT_DIR}/config/inbox.json"
+      ],
+      "env": {
+        "TELEGRAM_BOT_TOKEN": "${TELEGRAM_BOT_TOKEN}",
+        "CRM_WEBHOOK_TOKEN": "${CRM_WEBHOOK_TOKEN}"
+      }
+    }
+  }
+}

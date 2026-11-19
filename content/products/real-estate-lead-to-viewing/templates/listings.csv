@@ -1,0 +1,14 @@
+listing_id,status,deal_type,property_type,city,area,address,rooms,area_m2,price,currency,floor,description,url,agent_id,features
+KV-101,active,buy,apartment,Киев,Печерский,"ул. Лескова, 9",2,64,148000,USD,7/16,"Двухкомнатная после ремонта, кухня-гостиная, вид на парк",https://example.com/kv-101,maria,"паркинг, консьерж"
+KV-102,active,buy,apartment,Киев,Печерский,"ул. Филатова, 3",3,92,215000,USD,4/9,"Трёхкомнатная в кирпичном доме, две ванные",https://example.com/kv-102,maria,кладовая
+KV-103,active,buy,apartment,Киев,Голосеевский,"пр. Голосеевский, 120",1,42,69000,USD,12/25,"Однокомнатная в новостройке, сдан дом",https://example.com/kv-103,maria,"лифт, детская площадка"
+KV-104,active,buy,apartment,Киев,Оболонский,"ул. Героев Днепра, 31",2,56,82000,USD,5/12,"Двухкомнатная у метро, раздельные комнаты",https://example.com/kv-104,pavel,рядом метро
+KV-105,active,buy,apartment,Киев,Оболонский,"Оболонская наб., 15",3,88,139000,USD,18/25,Трёхкомнатная с видом на Днепр,https://example.com/kv-105,pavel,"паркинг, набережная"
+KV-106,active,buy,house,Киев,Подольский,"ул. Набережно-Луговая, 4",4,160,260000,USD,2,Дом с участком 6 соток,https://example.com/kv-106,pavel,"участок, гараж"
+KV-107,sold,buy,apartment,Киев,Печерский,"ул. Мечникова, 10",2,58,135000,USD,3/9,Продана,https://example.com/kv-107,maria,
+KV-108,active,buy,apartment,Киев,Подольский,"ул. Константиновская, 21",2,61,99000,USD,6/10,"Двухкомнатная на Подоле, высокие потолки",https://example.com/kv-108,pavel,исторический центр
+AR-201,active,rent,apartment,Киев,Печерский,"ул. Шелковичная, 42",1,45,900,USD,8/22,"Однокомнатная, вся техника",https://example.com/ar-201,dina,можно с животными
+AR-202,active,rent,apartment,Киев,Оболонский,"пр. Оболонский, 22",2,60,750,USD,9/16,Двухкомнатная у метро,https://example.com/ar-202,dina,без животных
+AR-203,active,rent,apartment,Киев,Голосеевский,"ул. Васильковская, 14",2,55,650,USD,3/9,"Двухкомнатная, тихий двор",https://example.com/ar-203,pavel,парковка во дворе
+AR-204,active,rent,apartment,Киев,Подольский,"ул. Сагайдачного, 25",3,85,1400,USD,4/5,Трёхкомнатная с камином,https://example.com/ar-204,dina,"камин, балкон"
+AR-205,active,rent,commercial,Киев,Печерский,"ул. Большая Васильковская, 5",,120,2500,USD,1/5,"Офис на первом этаже, отдельный вход",https://example.com/ar-205,dina,отдельный вход

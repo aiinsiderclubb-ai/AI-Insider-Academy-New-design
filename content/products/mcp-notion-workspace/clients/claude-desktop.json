@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "notion-workspace": {
+      "command": "python3",
+      "args": [
+        "/ПОЛНЫЙ/ПУТЬ/К/НАБОРУ/server/notion_workspace_mcp.py",
+        "--config",
+        "/ПОЛНЫЙ/ПУТЬ/К/НАБОРУ/config/notion.json"
+      ],
+      "env": {
+        "NOTION_TOKEN": "ВСТАВЬТЕ_NOTION_TOKEN"
+      }
+    }
+  }
+}

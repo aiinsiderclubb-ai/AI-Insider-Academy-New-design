@@ -1,0 +1,36 @@
+<!--
+  Форма заявки: отправка без перезагрузки страницы, ловушка для ботов.
+  Замените ENDPOINT (Production URL узла Lead Webhook) и TOKEN (agent_token из Config).
+  Токен виден в коде страницы: он отсекает случайные запросы, но не секрет.
+-->
+<form id="lq-form" style="display:grid;gap:10px;max-width:420px;font:15px system-ui,sans-serif">
+  <input name="name" placeholder="Имя" autocomplete="name" required>
+  <input name="email" type="email" placeholder="Рабочий email" autocomplete="email" required>
+  <input name="phone" type="tel" placeholder="Телефон" autocomplete="tel">
+  <input name="company" placeholder="Компания" autocomplete="organization">
+  <input name="website" placeholder="Сайт компании" autocomplete="url">
+  <textarea name="message" rows="4" placeholder="Какую задачу хотите решить?" required></textarea>
+  <!-- ловушка: люди это поле не видят и не заполняют -->
+  <input name="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+  <label style="font-size:13px"><input type="checkbox" required> Согласен на обработку персональных данных</label>
+  <button type="submit">Отправить</button>
+  <div id="lq-status" role="status"></div>
+</form>
+<script>
+(function () {
+  var ENDPOINT = 'https://REPLACE-N8N-HOST/webhook/lead-qualification';
+  var TOKEN = 'REPLACE_WITH_AGENT_TOKEN';
+  var form = document.getElementById('lq-form');
+  var status = document.getElementById('lq-status');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var data = Object.fromEntries(new FormData(form));
+    data.token = TOKEN;
+    data.source = new URLSearchParams(location.search).get('utm_source') || 'site';
+    status.textContent = 'Отправляем…';
+    fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) { if (!r.ok && r.status !== 202) throw new Error(r.status); status.textContent = 'Спасибо! Мы свяжемся с вами в рабочее время.'; form.reset(); })
+      .catch(function () { status.textContent = 'Не получилось отправить. Напишите нам на почту.'; });
+  });
+})();
+</script>

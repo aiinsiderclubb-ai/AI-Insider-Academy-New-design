@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/readonly",
+      "headers": {
+        "Authorization": "Bearer ${env:GITHUB_PAT}"
+      }
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@bytebase/dbhub@2", "--config", "${workspaceFolder}/dbhub.toml"],
+      "env": {
+        "AGENT_DB_PASSWORD": "${env:AGENT_DB_PASSWORD}"
+      }
+    },
+    "hubspot": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote@0.16", "https://mcp.hubspot.com", "3118",
+               "--static-oauth-client-info", "@${userHome}/.mcp-oauth/hubspot.json"]
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote@0.16", "https://mcp.slack.com/mcp", "3119",
+               "--static-oauth-client-info", "@${userHome}/.mcp-oauth/slack.json"]
+    }
+  }
+}

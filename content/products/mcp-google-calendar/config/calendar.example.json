@@ -1,0 +1,25 @@
+{
+ "calendar_id": "primary",
+ "busy_calendars": ["primary"],
+ "timezone": "Europe/Kyiv",
+ "working_hours": {
+  "mon": ["09:00", "18:00"],
+  "tue": ["09:00", "18:00"],
+  "wed": ["09:00", "18:00"],
+  "thu": ["09:00", "18:00"],
+  "fri": ["09:00", "17:00"],
+  "sat": null,
+  "sun": null
+ },
+ "slot_minutes": 30,
+ "default_duration_minutes": 30,
+ "max_duration_minutes": 120,
+ "buffer_minutes": 15,
+ "min_notice_hours": 2,
+ "max_days_ahead": 30,
+ "proposal_minutes": 15,
+ "title_template": "Встреча: {name}",
+ "description_footer": "Запись создана ассистентом после подтверждения клиента.",
+ "send_updates": "all",
+ "data_dir": "data"
+}

@@ -1,0 +1,1835 @@
+{
+  "name": "Revenue Recovery Agent",
+  "nodes": [
+    {
+      "id": "cc982e8c-6a0f-53ce-a57b-4b7d17e604b3",
+      "name": "Read Me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -520
+      ],
+      "parameters": {
+        "content": "## Revenue Recovery Agent\n1. **Каждое утро** — счета из листа Invoices: кому пора напомнить, риск по правилам и по оценке модели, черновик письма.\n2. **Черновик приходит в Telegram** с кнопками «Отправить», «Изменить», «Пропустить». Без нажатия ничего не уходит.\n3. **Команды** /paid, /promise, /dispute, /pause, /resume, /status — останавливают и возобновляют напоминания.\n4. **По понедельникам** — отчёт: просрочка, что вернулось, что ждёт решения.\n\n**Перед запуском:** узел **Config**, ключи (Google Sheets, Telegram, SMTP, модель), Publish. Подробно — QUICKSTART.md.",
+        "width": 620,
+        "height": 400,
+        "color": 5
+      }
+    },
+    {
+      "id": "f5de8289-3fc9-53b5-bfb6-dbf7fd457118",
+      "name": "Every Day 9:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -900,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8dfeee7c-e890-5447-9f52-35862880d660",
+      "name": "Monitor Tick",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        0
+      ],
+      "parameters": {
+        "jsCode": "return [{ json: { job: 'monitor' } }];\n"
+      }
+    },
+    {
+      "id": "71004e13-a02c-5eab-bdc1-c4513b97f9d7",
+      "name": "Every Monday 9:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -900,
+        160
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "39a7b58f-088b-57f8-9cbb-67195f4747d7",
+      "name": "Report Tick",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        160
+      ],
+      "parameters": {
+        "jsCode": "return [{ json: { job: 'report' } }];\n"
+      }
+    },
+    {
+      "id": "f2c02195-f8c6-551f-b52e-fc668a1332b8",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -700,
+        320
+      ],
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "91f7c06e-a217-581b-a560-e46741e7d506"
+    },
+    {
+      "id": "f09ed5c0-d28a-5281-970e-19a10c763e93",
+      "name": "Preview Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -700,
+        480
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "recovery-preview",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "76773913-9e95-5730-a014-5dcaeaeed3c1"
+    },
+    {
+      "id": "ef6fdaac-2c9b-5c35-ad9d-a0ecc4407622",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        240
+      ],
+      "parameters": {
+        "jsCode": "// ================= НАСТРОЙКИ =================\n// Меняйте только значения справа от двоеточия. Подробно — docs/02-setup.md.\nconst config = {\n  // ---- кто пишет ----\n  company: 'Название компании',\n  sender_name: 'Анна, финансовый отдел',\n  payment_details: 'Оплатить можно по реквизитам в счёте или по ссылке: https://example.com/pay',\n  timezone_offset_hours: 2,\n\n  // ---- где данные ----\n  spreadsheet_id: 'ВСТАВЬТЕ_ID_ТАБЛИЦЫ',   // листы Invoices, Drafts, Activity\n\n  // ---- кто одобряет ----\n  // ID Telegram-чатов, которым можно нажимать кнопки и писать команды. Первый получает черновики и отчёт.\n  approver_chat_ids: ['ВСТАВЬТЕ_ID_ЧАТА'],\n\n  // ---- письма ----\n  email: {\n    from: 'Финансовый отдел <billing@example.com>',\n    reply_to: 'billing@example.com',\n  },\n\n  // ---- последовательность напоминаний ----\n  // day — сколько дней просрочки, tone — тон письма. Шаг отправляется, только если предыдущий уже ушёл.\n  sequence: [\n    { day: 1, tone: 'friendly' },    // дружеское: «возможно, письмо потерялось»\n    { day: 7, tone: 'firm' },        // деловое: конкретная просьба и срок\n    { day: 14, tone: 'escalate' },   // настойчивое: предложить созвон, график платежей\n    { day: 30, tone: 'final' },      // последнее: что будет дальше — только то, что разрешено ниже\n  ],\n  min_gap_days: 3,                   // не чаще одного письма по счёту за столько дней\n  max_drafts_per_run: 20,\n\n  // ---- риск ----\n  high_amount: 5000,                 // счета от этой суммы — выше риск\n\n  // ---- что можно упоминать в письмах ----\n  // По умолчанию письма не грозят: никаких судов, коллекторов, штрафов.\n  allow_late_fee: false,             // true — можно упомянуть пени из договора\n  late_fee_text: '',                 // точная формулировка из договора, например «0,1% за день просрочки по п. 5.2»\n  allow_collection: false,           // true — в последнем письме можно упомянуть передачу долга агентству\n  collection_text: '',               // точная формулировка\n\n  // ---- предпросмотр для evals ----\n  preview_token: '',                 // пусто — вебхук предпросмотра выключен\n};\n\nreturn [{ json: { config, input: $input.first().json } }];\n"
+      }
+    },
+    {
+      "id": "aa617610-33a8-5b58-993e-814435096ad0",
+      "name": "Kind",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -240,
+        240
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d2d2cf76-98ee-59b6-8f87-3d0ab68c4a5d",
+                    "leftValue": "={{ $json.input.job ? $json.input.job : $json.input.update_id !== undefined ? 'telegram' : String($json.input.webhookUrl || '').includes('recovery-preview') ? 'preview' : 'none' }}",
+                    "rightValue": "monitor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "monitor"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8956672b-95d7-5326-bc76-794cd7f737b9",
+                    "leftValue": "={{ $json.input.job ? $json.input.job : $json.input.update_id !== undefined ? 'telegram' : String($json.input.webhookUrl || '').includes('recovery-preview') ? 'preview' : 'none' }}",
+                    "rightValue": "telegram",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "telegram"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "07ae71c1-a3bd-5d6d-8764-c6391cdb0a9b",
+                    "leftValue": "={{ $json.input.job ? $json.input.job : $json.input.update_id !== undefined ? 'telegram' : String($json.input.webhookUrl || '').includes('recovery-preview') ? 'preview' : 'none' }}",
+                    "rightValue": "report",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "report"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "52629d97-b90e-598e-8394-1548340b2f1a",
+                    "leftValue": "={{ $json.input.job ? $json.input.job : $json.input.update_id !== undefined ? 'telegram' : String($json.input.webhookUrl || '').includes('recovery-preview') ? 'preview' : 'none' }}",
+                    "rightValue": "preview",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "preview"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "f4d44844-ca02-594d-8a6e-ade1ff2ae9af",
+      "name": "Read Invoices",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        -100
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $('Config').first().json.config.spreadsheet_id }}/values:batchGet?ranges=Invoices!A1:P5000&ranges=Drafts!A1:M20000",
+        "options": {},
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "eda5ba7e-c4b4-5d86-bbc2-fd438d1e04af",
+      "name": "Plan Invoices",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        -100
+      ],
+      "parameters": {
+        "jsCode": "// Plan Invoices: какие счета пора напомнить сегодня и каким по счёту письмом.\n// ---- shared text helpers (inlined into Code nodes by the builder) ----\nconst STOP = new Set(('и в во не что он на я с со как а то все она так его но да ты к у же вы за бы по только ее мне было вот от меня еще нет о из ему теперь когда даже ну вдруг ли если уже или ни быть был него до вас нибудь опять уж вам ведь там потом себя ничего ей может они тут где есть надо ней для мы тебя их чем была сам чтоб без будто чего раз тоже себе под будет ж тогда кто этот того потому этого какой совсем ним здесь этом один почти мой тем чтобы нее сейчас были куда зачем всех никогда можно при наконец два об другой хоть после над больше тот через эти нас про всего них какая много разве три эту моя впрочем хорошо свою этой перед иногда лучше чуть том нельзя такой им более всегда конечно всю между это мой мою мое здравствуйте добрый день привет пожалуйста подскажите скажите хочу хотел хотела можно ли вы ваш ваша ваши the a an and or of to in on for is are be it this that with as at by from i you we my our your me do does how what can could please hi hello').split(' '));\n\nfunction stem(word) {\n  let w = word.toLowerCase().replace(/ё/g, 'е');\n  if (/^[a-z]+$/.test(w)) return w.replace(/(ing|ed|es|s)$/, '').slice(0, 7);\n  w = w.replace(/(ями|ами|иями|ией|ией|ого|ему|ому|ыми|ими|его|ая|яя|ое|ее|ие|ые|ой|ей|ий|ый|ов|ев|ам|ям|ах|ях|ом|ем|ую|юю|ть|ти|ешь|ет|ем|ете|ют|ут|ит|им|ите|ат|ят|ла|ло|ли|ся|сь|а|я|о|е|и|ы|у|ю|ь|й)$/, '');\n  return w.slice(0, 6);\n}\n\nfunction terms(text) {\n  return (String(text).toLowerCase().match(/[\\p{L}\\p{N}]+/gu) || [])\n    .filter((w) => w.length > 1 && !STOP.has(w))\n    .map(stem)\n    .filter((w) => w.length > 1);\n}\n\nfunction escapeHtml(text) {\n  return String(text ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\n\nfunction sheetRows(values) {\n  const [head = [], ...rows] = values || [];\n  const keys = head.map((h) => String(h).trim().toLowerCase());\n  return rows.map((r, i) => Object.fromEntries([['_row', i + 2], ...keys.map((k, j) => [k, String(r[j] ?? '').trim()])]));\n}\n\n// ---- счета: даты, правила остановки, риск по правилам ----\nconst DAY = 86400000;\n\nfunction today(config, now) {\n  return new Date(now + config.timezone_offset_hours * 3600000).toISOString().slice(0, 10);\n}\n\nfunction parseDate(v) {\n  const s = String(v || '').trim();\n  let m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(s);\n  if (m) return `${m[1]}-${m[2]}-${m[3]}`;\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})$/.exec(s);\n  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;\n  return '';\n}\n\nfunction daysBetween(a, b) {\n  return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / DAY);\n}\n\nfunction num(v) {\n  const n = parseFloat(String(v ?? '').replace(/[\\s ]/g, '').replace(',', '.'));\n  return Number.isFinite(n) ? n : 0;\n}\n\nfunction yesish(v) {\n  return /^(1|true|yes|да|y)$/i.test(String(v ?? '').trim());\n}\n\nfunction fmtAmount(n) {\n  const [i, d] = n.toFixed(2).split('.');\n  return i.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ' ') + (d === '00' ? '' : ',' + d);\n}\n\n/** Invoices: invoice_id | client | contact_name | email | amount | currency | issued | due | status | paid_at | promise_date | disputed | paused | last_contact | stage | notes */\nconst INVOICE_COLS = ['invoice_id', 'client', 'contact_name', 'email', 'amount', 'currency', 'issued', 'due', 'status', 'paid_at', 'promise_date', 'disputed', 'paused', 'last_contact', 'stage', 'notes'];\n\nfunction invoices(values) {\n  return sheetRows(values).filter((r) => r.invoice_id).map((r) => ({\n    ...r,\n    amount_n: num(r.amount),\n    due_d: parseDate(r.due),\n    paid_d: parseDate(r.paid_at),\n    promise_d: parseDate(r.promise_date),\n    last_d: parseDate(r.last_contact),\n    stage_n: Number(r.stage || 0),\n    closed: /^(paid|оплачен|cancelled|отменён|отменен|written.off|списан)/i.test(r.status || '') || Boolean(parseDate(r.paid_at)),\n  }));\n}\n\nfunction invoiceRow(inv) {\n  return INVOICE_COLS.map((k) => String(inv[k] ?? ''));\n}\n\n/** Why an invoice must not be chased right now; '' — can be chased. */\nfunction stopReason(inv, day) {\n  if (inv.closed) return 'оплачен или закрыт';\n  if (yesish(inv.disputed)) return 'клиент оспаривает счёт';\n  if (yesish(inv.paused)) return 'напоминания на паузе';\n  if (inv.promise_d && inv.promise_d >= day) return `клиент обещал оплатить до ${inv.promise_d}`;\n  if (!inv.email) return 'нет email';\n  if (!inv.due_d) return 'нет даты оплаты';\n  return '';\n}\n\n/** Deterministic risk: low / medium / high with reasons in words. */\nfunction ruleRisk(inv, all, day, config) {\n  const reasons = [];\n  let score = 0;\n  const overdue = daysBetween(inv.due_d, day);\n  if (overdue > 60) { score += 3; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 30) { score += 2; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 7) { score += 1; reasons.push(`просрочка ${overdue} дн.`); }\n  if (inv.amount_n >= config.high_amount) { score += 1; reasons.push(`крупная сумма (${fmtAmount(inv.amount_n)} ${inv.currency})`); }\n  const late = all.filter((x) => x.client === inv.client && x.invoice_id !== inv.invoice_id && x.paid_d && x.due_d && x.paid_d > x.due_d).length;\n  if (late >= 2) { score += 1; reasons.push(`клиент уже ${late} раза платил с опозданием`); }\n  if (inv.promise_d && inv.promise_d < day) { score += 2; reasons.push(`обещание оплатить до ${inv.promise_d} не выполнено`); }\n  if (inv.stage_n >= 3) { score += 1; reasons.push(`уже ${inv.stage_n} напоминания без оплаты`); }\n  const risk = score >= 4 ? 'high' : score >= 2 ? 'medium' : 'low';\n  return { risk, reasons: reasons.length ? reasons : ['небольшая просрочка, раньше проблем не было'], overdue, late_count: late };\n}\n\nconst RISK_ORDER = { low: 0, medium: 1, high: 2 };\n\nconst TONE_RU = { friendly: 'дружеский', firm: 'деловой', escalate: 'настойчивый', final: 'последнее напоминание' };\n\n/** What the model sees about one invoice. */\nfunction factsText(p, config) {\n  const allowed = [];\n  if (config.allow_late_fee && config.late_fee_text) allowed.push(`пени по договору: ${config.late_fee_text}`);\n  if (config.allow_collection && config.collection_text && p.final_step) allowed.push(`передача долга: ${config.collection_text}`);\n  return [\n    `Счёт: ${p.invoice_id}`,\n    `Клиент: ${p.client}${p.contact_name ? ', контакт: ' + p.contact_name : ''}`,\n    `Сумма: ${p.amount_text}`,\n    `Выставлен: ${p.issued || 'не указано'}; срок оплаты: ${p.due}; просрочка: ${p.overdue} дн.`,\n    `Письмо №${p.step} из ${config.sequence.length}, тон: ${p.tone} (${TONE_RU[p.tone] || p.tone})${p.final_step ? ', последнее в последовательности' : ''}`,\n    p.broken_promise ? 'Клиент обещал оплатить к дате, которая уже прошла.' : '',\n    p.late_count ? `Раньше клиент платил с опозданием: ${p.late_count} раз(а).` : 'Раньше просрочек по другим счетам не было.',\n    `Риск по правилам: ${p.rule_risk} — ${p.rule_reasons.join('; ')}`,\n    p.notes ? `Заметки менеджера: ${p.notes}` : 'Заметок нет.',\n    allowed.length ? `Разрешено упомянуть дословно: ${allowed.join('; ')}` : 'Упоминать пени, суд, коллекторов и любые санкции нельзя.',\n  ].filter(Boolean).join('\\n');\n}\n\nconst { config } = $('Config').first().json;\nconst day = today(config, Date.now());\nconst sheets = $input.first().json.valueRanges || [];\nconst all = invoices(sheets[0]?.values);\nconst drafts = sheetRows(sheets[1]?.values);\nconst waiting = new Set(drafts.filter((d) => ['pending', 'editing'].includes(d.status)).map((d) => d.invoice_id));\n\nconst plan = [];\nfor (const inv of all) {\n  if (stopReason(inv, day)) continue;\n  const overdue = daysBetween(inv.due_d, day);\n  if (overdue < 1) continue;\n  if (waiting.has(inv.invoice_id)) continue;                       // черновик уже ждёт решения\n  if (inv.last_d && daysBetween(inv.last_d, day) < config.min_gap_days) continue;\n  const step = config.sequence[inv.stage_n];\n  if (!step || overdue < step.day) continue;                       // все шаги пройдены или рано\n  const risk = ruleRisk(inv, all, day, config);\n  plan.push({\n    mode: 'monitor', invoice_id: inv.invoice_id, row: inv._row, client: inv.client, contact_name: inv.contact_name, email: inv.email,\n    amount: inv.amount_n, amount_text: `${fmtAmount(inv.amount_n)} ${inv.currency}`.trim(), currency: inv.currency,\n    issued: parseDate(inv.issued), due: inv.due_d, overdue, step: inv.stage_n + 1, tone: step.tone,\n    final_step: inv.stage_n + 1 === config.sequence.length, broken_promise: Boolean(inv.promise_d && inv.promise_d < day),\n    notes: String(inv.notes || '').slice(0, 500), rule_risk: risk.risk, rule_reasons: risk.reasons, late_count: risk.late_count,\n  });\n  plan[plan.length - 1].facts = factsText(plan[plan.length - 1], config);\n}\nplan.sort((a, b) => RISK_ORDER[b.rule_risk] - RISK_ORDER[a.rule_risk] || b.overdue - a.overdue || b.amount - a.amount);\nreturn plan.slice(0, config.max_drafts_per_run).map((p) => ({ json: p }));\n"
+      }
+    },
+    {
+      "id": "1d58f996-d59a-5b0c-963f-7302a8fe0a5d",
+      "name": "Preview Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        160
+      ],
+      "parameters": {
+        "jsCode": "// Preview Plan: один счёт из запроса — для evals и проверки тона. Ничего не сохраняет и не отправляет.\n// ---- shared text helpers (inlined into Code nodes by the builder) ----\nconst STOP = new Set(('и в во не что он на я с со как а то все она так его но да ты к у же вы за бы по только ее мне было вот от меня еще нет о из ему теперь когда даже ну вдруг ли если уже или ни быть был него до вас нибудь опять уж вам ведь там потом себя ничего ей может они тут где есть надо ней для мы тебя их чем была сам чтоб без будто чего раз тоже себе под будет ж тогда кто этот того потому этого какой совсем ним здесь этом один почти мой тем чтобы нее сейчас были куда зачем всех никогда можно при наконец два об другой хоть после над больше тот через эти нас про всего них какая много разве три эту моя впрочем хорошо свою этой перед иногда лучше чуть том нельзя такой им более всегда конечно всю между это мой мою мое здравствуйте добрый день привет пожалуйста подскажите скажите хочу хотел хотела можно ли вы ваш ваша ваши the a an and or of to in on for is are be it this that with as at by from i you we my our your me do does how what can could please hi hello').split(' '));\n\nfunction stem(word) {\n  let w = word.toLowerCase().replace(/ё/g, 'е');\n  if (/^[a-z]+$/.test(w)) return w.replace(/(ing|ed|es|s)$/, '').slice(0, 7);\n  w = w.replace(/(ями|ами|иями|ией|ией|ого|ему|ому|ыми|ими|его|ая|яя|ое|ее|ие|ые|ой|ей|ий|ый|ов|ев|ам|ям|ах|ях|ом|ем|ую|юю|ть|ти|ешь|ет|ем|ете|ют|ут|ит|им|ите|ат|ят|ла|ло|ли|ся|сь|а|я|о|е|и|ы|у|ю|ь|й)$/, '');\n  return w.slice(0, 6);\n}\n\nfunction terms(text) {\n  return (String(text).toLowerCase().match(/[\\p{L}\\p{N}]+/gu) || [])\n    .filter((w) => w.length > 1 && !STOP.has(w))\n    .map(stem)\n    .filter((w) => w.length > 1);\n}\n\nfunction escapeHtml(text) {\n  return String(text ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\n\nfunction sheetRows(values) {\n  const [head = [], ...rows] = values || [];\n  const keys = head.map((h) => String(h).trim().toLowerCase());\n  return rows.map((r, i) => Object.fromEntries([['_row', i + 2], ...keys.map((k, j) => [k, String(r[j] ?? '').trim()])]));\n}\n\n// ---- счета: даты, правила остановки, риск по правилам ----\nconst DAY = 86400000;\n\nfunction today(config, now) {\n  return new Date(now + config.timezone_offset_hours * 3600000).toISOString().slice(0, 10);\n}\n\nfunction parseDate(v) {\n  const s = String(v || '').trim();\n  let m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(s);\n  if (m) return `${m[1]}-${m[2]}-${m[3]}`;\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})$/.exec(s);\n  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;\n  return '';\n}\n\nfunction daysBetween(a, b) {\n  return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / DAY);\n}\n\nfunction num(v) {\n  const n = parseFloat(String(v ?? '').replace(/[\\s ]/g, '').replace(',', '.'));\n  return Number.isFinite(n) ? n : 0;\n}\n\nfunction yesish(v) {\n  return /^(1|true|yes|да|y)$/i.test(String(v ?? '').trim());\n}\n\nfunction fmtAmount(n) {\n  const [i, d] = n.toFixed(2).split('.');\n  return i.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ' ') + (d === '00' ? '' : ',' + d);\n}\n\n/** Invoices: invoice_id | client | contact_name | email | amount | currency | issued | due | status | paid_at | promise_date | disputed | paused | last_contact | stage | notes */\nconst INVOICE_COLS = ['invoice_id', 'client', 'contact_name', 'email', 'amount', 'currency', 'issued', 'due', 'status', 'paid_at', 'promise_date', 'disputed', 'paused', 'last_contact', 'stage', 'notes'];\n\nfunction invoices(values) {\n  return sheetRows(values).filter((r) => r.invoice_id).map((r) => ({\n    ...r,\n    amount_n: num(r.amount),\n    due_d: parseDate(r.due),\n    paid_d: parseDate(r.paid_at),\n    promise_d: parseDate(r.promise_date),\n    last_d: parseDate(r.last_contact),\n    stage_n: Number(r.stage || 0),\n    closed: /^(paid|оплачен|cancelled|отменён|отменен|written.off|списан)/i.test(r.status || '') || Boolean(parseDate(r.paid_at)),\n  }));\n}\n\nfunction invoiceRow(inv) {\n  return INVOICE_COLS.map((k) => String(inv[k] ?? ''));\n}\n\n/** Why an invoice must not be chased right now; '' — can be chased. */\nfunction stopReason(inv, day) {\n  if (inv.closed) return 'оплачен или закрыт';\n  if (yesish(inv.disputed)) return 'клиент оспаривает счёт';\n  if (yesish(inv.paused)) return 'напоминания на паузе';\n  if (inv.promise_d && inv.promise_d >= day) return `клиент обещал оплатить до ${inv.promise_d}`;\n  if (!inv.email) return 'нет email';\n  if (!inv.due_d) return 'нет даты оплаты';\n  return '';\n}\n\n/** Deterministic risk: low / medium / high with reasons in words. */\nfunction ruleRisk(inv, all, day, config) {\n  const reasons = [];\n  let score = 0;\n  const overdue = daysBetween(inv.due_d, day);\n  if (overdue > 60) { score += 3; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 30) { score += 2; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 7) { score += 1; reasons.push(`просрочка ${overdue} дн.`); }\n  if (inv.amount_n >= config.high_amount) { score += 1; reasons.push(`крупная сумма (${fmtAmount(inv.amount_n)} ${inv.currency})`); }\n  const late = all.filter((x) => x.client === inv.client && x.invoice_id !== inv.invoice_id && x.paid_d && x.due_d && x.paid_d > x.due_d).length;\n  if (late >= 2) { score += 1; reasons.push(`клиент уже ${late} раза платил с опозданием`); }\n  if (inv.promise_d && inv.promise_d < day) { score += 2; reasons.push(`обещание оплатить до ${inv.promise_d} не выполнено`); }\n  if (inv.stage_n >= 3) { score += 1; reasons.push(`уже ${inv.stage_n} напоминания без оплаты`); }\n  const risk = score >= 4 ? 'high' : score >= 2 ? 'medium' : 'low';\n  return { risk, reasons: reasons.length ? reasons : ['небольшая просрочка, раньше проблем не было'], overdue, late_count: late };\n}\n\nconst RISK_ORDER = { low: 0, medium: 1, high: 2 };\n\nconst TONE_RU = { friendly: 'дружеский', firm: 'деловой', escalate: 'настойчивый', final: 'последнее напоминание' };\n\n/** What the model sees about one invoice. */\nfunction factsText(p, config) {\n  const allowed = [];\n  if (config.allow_late_fee && config.late_fee_text) allowed.push(`пени по договору: ${config.late_fee_text}`);\n  if (config.allow_collection && config.collection_text && p.final_step) allowed.push(`передача долга: ${config.collection_text}`);\n  return [\n    `Счёт: ${p.invoice_id}`,\n    `Клиент: ${p.client}${p.contact_name ? ', контакт: ' + p.contact_name : ''}`,\n    `Сумма: ${p.amount_text}`,\n    `Выставлен: ${p.issued || 'не указано'}; срок оплаты: ${p.due}; просрочка: ${p.overdue} дн.`,\n    `Письмо №${p.step} из ${config.sequence.length}, тон: ${p.tone} (${TONE_RU[p.tone] || p.tone})${p.final_step ? ', последнее в последовательности' : ''}`,\n    p.broken_promise ? 'Клиент обещал оплатить к дате, которая уже прошла.' : '',\n    p.late_count ? `Раньше клиент платил с опозданием: ${p.late_count} раз(а).` : 'Раньше просрочек по другим счетам не было.',\n    `Риск по правилам: ${p.rule_risk} — ${p.rule_reasons.join('; ')}`,\n    p.notes ? `Заметки менеджера: ${p.notes}` : 'Заметок нет.',\n    allowed.length ? `Разрешено упомянуть дословно: ${allowed.join('; ')}` : 'Упоминать пени, суд, коллекторов и любые санкции нельзя.',\n  ].filter(Boolean).join('\\n');\n}\n\nconst { config, input } = $input.first().json;\nconst body = input.body || {};\nconst token = (input.headers || {})['x-preview-token'] || body.token;\nif (!config.preview_token || token !== config.preview_token) return [{ json: { route: 'deny' } }];\nconst i = body.invoice || {};\nconst header = INVOICE_COLS;\nconst history = Array.isArray(body.history) ? body.history : [];\nconst rows = [header, header.map((k) => String(i[k] ?? '')), ...history.map((h) => header.map((k) => String(h[k] ?? '')))];\nconst all = invoices(rows);\nconst inv = all[0];\nif (!inv || !inv.due_d || !inv.email) return [{ json: { route: 'bad', error: 'invoice: нужны invoice_id, email, amount, due' } }];\nconst day = parseDate(body.today) || today(config, Date.now());\nconst stop = stopReason(inv, day);\nconst step = config.sequence[Math.min(inv.stage_n, config.sequence.length - 1)];\nconst risk = ruleRisk(inv, all, day, config);\nreturn [{ json: {\n  route: 'ok', mode: 'preview', stop, invoice_id: inv.invoice_id, client: inv.client, contact_name: inv.contact_name, email: inv.email,\n  amount: inv.amount_n, amount_text: `${fmtAmount(inv.amount_n)} ${inv.currency}`.trim(), currency: inv.currency,\n  issued: parseDate(inv.issued), due: inv.due_d, overdue: daysBetween(inv.due_d, day), step: Math.min(inv.stage_n + 1, config.sequence.length),\n  tone: step.tone, final_step: inv.stage_n + 1 >= config.sequence.length, broken_promise: Boolean(inv.promise_d && inv.promise_d < day),\n  notes: String(inv.notes || '').slice(0, 500), rule_risk: risk.risk, rule_reasons: risk.reasons, late_count: risk.late_count,\n} }].map((item) => ((item.json.facts = factsText(item.json, config)), item));\n"
+      }
+    },
+    {
+      "id": "ac32337d-eee6-55ee-ac85-49d4bd58df69",
+      "name": "Preview Route",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        220,
+        160
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "81ed0748-08f2-5ea1-810b-46e98bc53edc",
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "ok",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ok"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a2ac5ffa-5bc6-5702-bf4f-b6dfde6ecf4c",
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "deny",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "deny"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2c7edeb4-ac6e-52ab-a511-2767636e1d50",
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "bad",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "bad"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c36fa2c7-4853-5016-acf1-ca4ae5889e73",
+      "name": "Assess & Draft",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        480,
+        -100
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.facts }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Ты помогаешь компании {{ $('Config').first().json.config.company }} вернуть оплату по просроченным счетам и при этом сохранить хорошие отношения с клиентом. Письма подписывает {{ $('Config').first().json.config.sender_name }}. Каждое письмо перед отправкой читает человек.\n\nПо фактам о счёте сделай две вещи.\n\n1. Оцени риск неоплаты: low, medium или high. Учитывай просрочку, сумму, историю оплат, нарушенные обещания и заметки менеджера. Риск по правилам уже посчитан — повысь его, если заметки говорят о проблемах: клиент не отвечает, сменился контакт, трудности с деньгами. Понижай, только если в заметках есть явная причина. Причины пиши коротко, по фактам, без догадок о характере клиента.\n\n2. Напиши письмо клиенту.\n   - Тон по номеру письма:\n     friendly — вежливо и легко: возможно, счёт затерялся; спросить, всё ли в порядке.\n     firm — деловито: прямо назвать просрочку, попросить оплатить или сообщить дату оплаты.\n     escalate — настойчиво, но уважительно: предложить созвон или график платежей, попросить ответ в ближайшие дни.\n     final — последнее напоминание: спокойно, коротко, без эмоций; назвать следующий шаг только если он разрешён в фактах.\n   - Обязательно: номер счёта и сумма ровно так, как в фактах.\n   - Если клиент обещал оплатить и не оплатил — упомяни это мягко, без упрёка.\n   - Обратись к контактному лицу по имени, если оно есть.\n   - Не придумывай новые даты, суммы, проценты, условия договора, скидки и рассрочки, которых нет в фактах.\n   - Не угрожай. Не упоминай суд, иски, юристов, коллекторов, пени, штрафы, кредитную историю, полицию — кроме того, что разрешено в фактах дословно.\n   - Не обвиняй и не стыди. Не пиши «вы игнорируете», «вы нарушили».\n   - Не добавляй реквизиты, ссылку на оплату, подпись и контакты — их добавит шаблон.\n   - Не цитируй заметки менеджера: они для внутреннего пользования.\n   - Длина: friendly и firm — 3–5 предложений, escalate и final — до 7.\n\nЯзык письма — русский. Тема — до 80 символов, с номером счёта.\n\nОтвет — только один JSON-объект без пояснений и без Markdown, с ключами:\nrisk — строка low, medium или high;\nreasons — массив из 1–4 коротких строк;\nsubject — тема письма;\nbody — текст письма от приветствия до последней фразы, без подписи."
+            }
+          ]
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "7458c338-993f-55ce-922f-41d51ecbaf27",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        400,
+        80
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_ME",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "id": "1c7ba55b-3b62-57b6-aeef-738fffc85ab1",
+      "name": "Anthropic Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        560,
+        80
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "claude-sonnet-5-5"
+        },
+        "options": {}
+      },
+      "credentials": {
+        "anthropicApi": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "id": "fbe14719-cb18-5a12-8734-190ee10feb34",
+      "name": "Model Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        380,
+        240
+      ],
+      "parameters": {
+        "content": "**Модель.** Подключена OpenAI (или OpenAI-совместимый API через Base URL). Для Claude протяните связь от **Anthropic Chat Model** к входу Model цепочки вместо OpenAI — docs/06-models.md.",
+        "width": 360,
+        "height": 150,
+        "color": 7
+      }
+    },
+    {
+      "id": "de2d495e-84e0-5faa-abd1-f9ddc46d1b75",
+      "name": "Check Draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        740,
+        -100
+      ],
+      "parameters": {
+        "jsCode": "// Check Draft: проверяет ответ модели. Что не прошло проверку — заменяется шаблоном,\n// риск по правилам не может понизиться, письмо получает реквизиты и подпись из Config.\n// ---- shared text helpers (inlined into Code nodes by the builder) ----\nconst STOP = new Set(('и в во не что он на я с со как а то все она так его но да ты к у же вы за бы по только ее мне было вот от меня еще нет о из ему теперь когда даже ну вдруг ли если уже или ни быть был него до вас нибудь опять уж вам ведь там потом себя ничего ей может они тут где есть надо ней для мы тебя их чем была сам чтоб без будто чего раз тоже себе под будет ж тогда кто этот того потому этого какой совсем ним здесь этом один почти мой тем чтобы нее сейчас были куда зачем всех никогда можно при наконец два об другой хоть после над больше тот через эти нас про всего них какая много разве три эту моя впрочем хорошо свою этой перед иногда лучше чуть том нельзя такой им более всегда конечно всю между это мой мою мое здравствуйте добрый день привет пожалуйста подскажите скажите хочу хотел хотела можно ли вы ваш ваша ваши the a an and or of to in on for is are be it this that with as at by from i you we my our your me do does how what can could please hi hello').split(' '));\n\nfunction stem(word) {\n  let w = word.toLowerCase().replace(/ё/g, 'е');\n  if (/^[a-z]+$/.test(w)) return w.replace(/(ing|ed|es|s)$/, '').slice(0, 7);\n  w = w.replace(/(ями|ами|иями|ией|ией|ого|ему|ому|ыми|ими|его|ая|яя|ое|ее|ие|ые|ой|ей|ий|ый|ов|ев|ам|ям|ах|ях|ом|ем|ую|юю|ть|ти|ешь|ет|ем|ете|ют|ут|ит|им|ите|ат|ят|ла|ло|ли|ся|сь|а|я|о|е|и|ы|у|ю|ь|й)$/, '');\n  return w.slice(0, 6);\n}\n\nfunction terms(text) {\n  return (String(text).toLowerCase().match(/[\\p{L}\\p{N}]+/gu) || [])\n    .filter((w) => w.length > 1 && !STOP.has(w))\n    .map(stem)\n    .filter((w) => w.length > 1);\n}\n\nfunction escapeHtml(text) {\n  return String(text ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\n\nfunction sheetRows(values) {\n  const [head = [], ...rows] = values || [];\n  const keys = head.map((h) => String(h).trim().toLowerCase());\n  return rows.map((r, i) => Object.fromEntries([['_row', i + 2], ...keys.map((k, j) => [k, String(r[j] ?? '').trim()])]));\n}\n\n// ---- счета: даты, правила остановки, риск по правилам ----\nconst DAY = 86400000;\n\nfunction today(config, now) {\n  return new Date(now + config.timezone_offset_hours * 3600000).toISOString().slice(0, 10);\n}\n\nfunction parseDate(v) {\n  const s = String(v || '').trim();\n  let m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(s);\n  if (m) return `${m[1]}-${m[2]}-${m[3]}`;\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})$/.exec(s);\n  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;\n  return '';\n}\n\nfunction daysBetween(a, b) {\n  return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / DAY);\n}\n\nfunction num(v) {\n  const n = parseFloat(String(v ?? '').replace(/[\\s ]/g, '').replace(',', '.'));\n  return Number.isFinite(n) ? n : 0;\n}\n\nfunction yesish(v) {\n  return /^(1|true|yes|да|y)$/i.test(String(v ?? '').trim());\n}\n\nfunction fmtAmount(n) {\n  const [i, d] = n.toFixed(2).split('.');\n  return i.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ' ') + (d === '00' ? '' : ',' + d);\n}\n\n/** Invoices: invoice_id | client | contact_name | email | amount | currency | issued | due | status | paid_at | promise_date | disputed | paused | last_contact | stage | notes */\nconst INVOICE_COLS = ['invoice_id', 'client', 'contact_name', 'email', 'amount', 'currency', 'issued', 'due', 'status', 'paid_at', 'promise_date', 'disputed', 'paused', 'last_contact', 'stage', 'notes'];\n\nfunction invoices(values) {\n  return sheetRows(values).filter((r) => r.invoice_id).map((r) => ({\n    ...r,\n    amount_n: num(r.amount),\n    due_d: parseDate(r.due),\n    paid_d: parseDate(r.paid_at),\n    promise_d: parseDate(r.promise_date),\n    last_d: parseDate(r.last_contact),\n    stage_n: Number(r.stage || 0),\n    closed: /^(paid|оплачен|cancelled|отменён|отменен|written.off|списан)/i.test(r.status || '') || Boolean(parseDate(r.paid_at)),\n  }));\n}\n\nfunction invoiceRow(inv) {\n  return INVOICE_COLS.map((k) => String(inv[k] ?? ''));\n}\n\n/** Why an invoice must not be chased right now; '' — can be chased. */\nfunction stopReason(inv, day) {\n  if (inv.closed) return 'оплачен или закрыт';\n  if (yesish(inv.disputed)) return 'клиент оспаривает счёт';\n  if (yesish(inv.paused)) return 'напоминания на паузе';\n  if (inv.promise_d && inv.promise_d >= day) return `клиент обещал оплатить до ${inv.promise_d}`;\n  if (!inv.email) return 'нет email';\n  if (!inv.due_d) return 'нет даты оплаты';\n  return '';\n}\n\n/** Deterministic risk: low / medium / high with reasons in words. */\nfunction ruleRisk(inv, all, day, config) {\n  const reasons = [];\n  let score = 0;\n  const overdue = daysBetween(inv.due_d, day);\n  if (overdue > 60) { score += 3; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 30) { score += 2; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 7) { score += 1; reasons.push(`просрочка ${overdue} дн.`); }\n  if (inv.amount_n >= config.high_amount) { score += 1; reasons.push(`крупная сумма (${fmtAmount(inv.amount_n)} ${inv.currency})`); }\n  const late = all.filter((x) => x.client === inv.client && x.invoice_id !== inv.invoice_id && x.paid_d && x.due_d && x.paid_d > x.due_d).length;\n  if (late >= 2) { score += 1; reasons.push(`клиент уже ${late} раза платил с опозданием`); }\n  if (inv.promise_d && inv.promise_d < day) { score += 2; reasons.push(`обещание оплатить до ${inv.promise_d} не выполнено`); }\n  if (inv.stage_n >= 3) { score += 1; reasons.push(`уже ${inv.stage_n} напоминания без оплаты`); }\n  const risk = score >= 4 ? 'high' : score >= 2 ? 'medium' : 'low';\n  return { risk, reasons: reasons.length ? reasons : ['небольшая просрочка, раньше проблем не было'], overdue, late_count: late };\n}\n\nconst RISK_ORDER = { low: 0, medium: 1, high: 2 };\n\nconst TONE_RU = { friendly: 'дружеский', firm: 'деловой', escalate: 'настойчивый', final: 'последнее напоминание' };\n\n/** What the model sees about one invoice. */\nfunction factsText(p, config) {\n  const allowed = [];\n  if (config.allow_late_fee && config.late_fee_text) allowed.push(`пени по договору: ${config.late_fee_text}`);\n  if (config.allow_collection && config.collection_text && p.final_step) allowed.push(`передача долга: ${config.collection_text}`);\n  return [\n    `Счёт: ${p.invoice_id}`,\n    `Клиент: ${p.client}${p.contact_name ? ', контакт: ' + p.contact_name : ''}`,\n    `Сумма: ${p.amount_text}`,\n    `Выставлен: ${p.issued || 'не указано'}; срок оплаты: ${p.due}; просрочка: ${p.overdue} дн.`,\n    `Письмо №${p.step} из ${config.sequence.length}, тон: ${p.tone} (${TONE_RU[p.tone] || p.tone})${p.final_step ? ', последнее в последовательности' : ''}`,\n    p.broken_promise ? 'Клиент обещал оплатить к дате, которая уже прошла.' : '',\n    p.late_count ? `Раньше клиент платил с опозданием: ${p.late_count} раз(а).` : 'Раньше просрочек по другим счетам не было.',\n    `Риск по правилам: ${p.rule_risk} — ${p.rule_reasons.join('; ')}`,\n    p.notes ? `Заметки менеджера: ${p.notes}` : 'Заметок нет.',\n    allowed.length ? `Разрешено упомянуть дословно: ${allowed.join('; ')}` : 'Упоминать пени, суд, коллекторов и любые санкции нельзя.',\n  ].filter(Boolean).join('\\n');\n}\n\nconst { config } = $('Config').first().json;\nconst plans = ($('Preview Plan').isExecuted ? $('Preview Plan') : $('Plan Invoices')).all().map((i) => i.json);\nconst answers = $input.all().map((i) => i.json);\n\n// \\b в JS не видит границу кириллического слова — поэтому (?<![а-яё]) и (?![а-яё])\nconst THREATS = [/(?<![а-яё])суд(?![а-яё])|(?<![а-яё])судеб|(?<![а-яё])иск(?![а-яё])|(?<![а-яё])исков|юрист|адвокат|коллектор|арбитраж|прокурат|полици|штраф|(?<![а-яё])пен(я|и|ю|ей|ям)(?![а-яё])|неустойк|кредитн[а-я]* истори|санкци|court|lawsuit|lawyer|attorney|collection agenc|debt collector|penalt|late fee|credit score/i];\nconst SHAMING = /(игнорир|нарушил|безответствен|недобросовест|вы обязаны немедленно)/i;\nconst DISCOUNT = /(скидк|рассрочк|списываем|прощаем|discount|write.?off)/i;\n\nfunction parse(text) {\n  const t = String(text || '').trim().replace(/^```(?:json)?\\s*/i, '').replace(/\\s*```$/, '');\n  const s = t.indexOf('{');\n  const e = t.lastIndexOf('}');\n  if (s < 0 || e <= s) return null;\n  try { return JSON.parse(t.slice(s, e + 1)); } catch { return null; }\n}\n\nfunction amountIn(body, p) {\n  const digits = String(body).replace(/[\\s ]/g, '');\n  const whole = String(Math.trunc(p.amount));\n  return digits.includes(whole) || digits.includes(fmtAmount(p.amount).replace(/\\s/g, ''));\n}\n\nfunction template(p) {\n  const hi = p.contact_name ? `${p.contact_name}, добрый день!` : 'Добрый день!';\n  const t = {\n    friendly: `Напоминаем о счёте ${p.invoice_id} на ${p.amount_text}: срок оплаты был ${p.due}. Возможно, письмо затерялось — подскажите, пожалуйста, всё ли в порядке и когда планируете оплату?`,\n    firm: `Счёт ${p.invoice_id} на ${p.amount_text} просрочен на ${p.overdue} дн. (срок был ${p.due}). Просим оплатить его или сообщить дату оплаты в ответ на это письмо.`,\n    escalate: `Счёт ${p.invoice_id} на ${p.amount_text} не оплачен уже ${p.overdue} дн. Давайте найдём решение: можем созвониться и обсудить удобный график. Пожалуйста, ответьте в ближайшие дни.`,\n    final: `Это последнее напоминание о счёте ${p.invoice_id} на ${p.amount_text}, срок оплаты которого истёк ${p.due}. Пожалуйста, оплатите счёт или свяжитесь с нами, чтобы договориться.`,\n  }[p.tone] || '';\n  return { subject: `Счёт ${p.invoice_id}: напоминание об оплате`, body: `${hi}\\n\\n${t}` };\n}\n\nconst allowedText = [config.allow_late_fee && config.late_fee_text, config.allow_collection && config.collection_text].filter(Boolean);\n\nreturn plans.map((p, i) => {\n  const flags = [];\n  const a = parse(answers[i]?.text ?? answers[i]?.output);\n  let risk = p.rule_risk;\n  let reasons = [...p.rule_reasons];\n  let subject = '';\n  let body = '';\n  if (!a) flags.push('template:not_json');\n  else {\n    if (['low', 'medium', 'high'].includes(a.risk)) {\n      if (RISK_ORDER[a.risk] > RISK_ORDER[risk]) {\n        risk = a.risk;\n        flags.push('risk_raised_by_model');\n      }\n      if (Array.isArray(a.reasons)) reasons = [...reasons, ...a.reasons.map(String).slice(0, 4).map((r) => 'модель: ' + r.slice(0, 160))];\n    } else flags.push('bad_risk');\n    subject = String(a.subject || '').replace(/\\s+/g, ' ').trim();\n    body = String(a.body || '').trim();\n    let why = '';\n    if (!subject || subject.length > 120) why = 'subject';\n    else if (!body || body.length < 40) why = 'empty';\n    else if (body.length > 2000) why = 'too_long';\n    else if (!body.includes(p.invoice_id)) why = 'no_invoice_id';\n    else if (!amountIn(body, p)) why = 'no_amount';\n    else {\n      // разрешённую формулировку из Config вырезаем перед проверкой — остальное грозить не должно\n      let check = body;\n      for (const t of allowedText) check = check.split(t).join('');\n      if (THREATS.some((r) => r.test(check + ' ' + subject))) why = 'threat';\n      else if (SHAMING.test(body)) why = 'shaming';\n      else if (DISCOUNT.test(body)) why = 'discount';\n      else if (/https?:\\/\\/|www\\./i.test(body)) why = 'link';\n    }\n    if (why) flags.push('template:' + why);\n  }\n  if (flags.some((f) => f.startsWith('template:'))) ({ subject, body } = template(p));\n  const full = [body, '', config.payment_details, '', 'С уважением,', config.sender_name, config.company].join('\\n');\n  const draft_id = 'D-' + Date.now().toString(36).toUpperCase().slice(-5) + i.toString(36).toUpperCase() + Math.floor(Math.random() * 36 ** 2).toString(36).toUpperCase().padStart(2, '0');\n  return { json: { ...p, draft_id, risk, reasons, subject, body: full, flags } };\n});\n"
+      }
+    },
+    {
+      "id": "7511c1f0-4fd2-5fca-8b4b-d961cf32f90c",
+      "name": "Mode",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        960,
+        -100
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c01c2896-3e6d-5baf-9aac-1beb3519415f",
+                    "leftValue": "={{ $json.mode }}",
+                    "rightValue": "monitor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "monitor"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "39ce1627-7ede-5ada-a694-5518bc4234a5",
+                    "leftValue": "={{ $json.mode }}",
+                    "rightValue": "preview",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "preview"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "593b45c5-496b-5938-bce7-9edceb6923ff",
+      "name": "Draft Rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        -180
+      ],
+      "parameters": {
+        "jsCode": "// Draft Rows: черновики — в лист Drafts одной записью.\n// Drafts: draft_id | created | invoice_id | step | tone | risk | reasons | to | subject | body | status | decided_at | decided_by\nconst now = new Date().toISOString();\nconst rows = $input.all().map(({ json: d }) => [d.draft_id, now, d.invoice_id, String(d.step), d.tone, d.risk, d.reasons.join('; '),\n  d.email, d.subject, d.body, 'pending', '', '']);\nreturn [{ json: { rows } }];\n"
+      }
+    },
+    {
+      "id": "695fa14d-ac07-50f1-bc44-d2189a5040f7",
+      "name": "Append Drafts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1400,
+        -180
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $('Config').first().json.config.spreadsheet_id }}/values/Drafts!A1:append",
+        "options": {},
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "valueInputOption",
+              "value": "RAW"
+            },
+            {
+              "name": "insertDataOption",
+              "value": "INSERT_ROWS"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ values: $json.rows }) }}"
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "51c82b45-e0bc-5802-9ba6-c08d831cc6f1",
+      "name": "Cards",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        -180
+      ],
+      "parameters": {
+        "jsCode": "// Cards: каждый черновик — карточка в Telegram с кнопками.\n// ---- shared text helpers (inlined into Code nodes by the builder) ----\nconst STOP = new Set(('и в во не что он на я с со как а то все она так его но да ты к у же вы за бы по только ее мне было вот от меня еще нет о из ему теперь когда даже ну вдруг ли если уже или ни быть был него до вас нибудь опять уж вам ведь там потом себя ничего ей может они тут где есть надо ней для мы тебя их чем была сам чтоб без будто чего раз тоже себе под будет ж тогда кто этот того потому этого какой совсем ним здесь этом один почти мой тем чтобы нее сейчас были куда зачем всех никогда можно при наконец два об другой хоть после над больше тот через эти нас про всего них какая много разве три эту моя впрочем хорошо свою этой перед иногда лучше чуть том нельзя такой им более всегда конечно всю между это мой мою мое здравствуйте добрый день привет пожалуйста подскажите скажите хочу хотел хотела можно ли вы ваш ваша ваши the a an and or of to in on for is are be it this that with as at by from i you we my our your me do does how what can could please hi hello').split(' '));\n\nfunction stem(word) {\n  let w = word.toLowerCase().replace(/ё/g, 'е');\n  if (/^[a-z]+$/.test(w)) return w.replace(/(ing|ed|es|s)$/, '').slice(0, 7);\n  w = w.replace(/(ями|ами|иями|ией|ией|ого|ему|ому|ыми|ими|его|ая|яя|ое|ее|ие|ые|ой|ей|ий|ый|ов|ев|ам|ям|ах|ях|ом|ем|ую|юю|ть|ти|ешь|ет|ем|ете|ют|ут|ит|им|ите|ат|ят|ла|ло|ли|ся|сь|а|я|о|е|и|ы|у|ю|ь|й)$/, '');\n  return w.slice(0, 6);\n}\n\nfunction terms(text) {\n  return (String(text).toLowerCase().match(/[\\p{L}\\p{N}]+/gu) || [])\n    .filter((w) => w.length > 1 && !STOP.has(w))\n    .map(stem)\n    .filter((w) => w.length > 1);\n}\n\nfunction escapeHtml(text) {\n  return String(text ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\n\nfunction sheetRows(values) {\n  const [head = [], ...rows] = values || [];\n  const keys = head.map((h) => String(h).trim().toLowerCase());\n  return rows.map((r, i) => Object.fromEntries([['_row', i + 2], ...keys.map((k, j) => [k, String(r[j] ?? '').trim()])]));\n}\n\n// ---- счета: даты, правила остановки, риск по правилам ----\nconst DAY = 86400000;\n\nfunction today(config, now) {\n  return new Date(now + config.timezone_offset_hours * 3600000).toISOString().slice(0, 10);\n}\n\nfunction parseDate(v) {\n  const s = String(v || '').trim();\n  let m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(s);\n  if (m) return `${m[1]}-${m[2]}-${m[3]}`;\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})$/.exec(s);\n  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;\n  return '';\n}\n\nfunction daysBetween(a, b) {\n  return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / DAY);\n}\n\nfunction num(v) {\n  const n = parseFloat(String(v ?? '').replace(/[\\s ]/g, '').replace(',', '.'));\n  return Number.isFinite(n) ? n : 0;\n}\n\nfunction yesish(v) {\n  return /^(1|true|yes|да|y)$/i.test(String(v ?? '').trim());\n}\n\nfunction fmtAmount(n) {\n  const [i, d] = n.toFixed(2).split('.');\n  return i.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ' ') + (d === '00' ? '' : ',' + d);\n}\n\n/** Invoices: invoice_id | client | contact_name | email | amount | currency | issued | due | status | paid_at | promise_date | disputed | paused | last_contact | stage | notes */\nconst INVOICE_COLS = ['invoice_id', 'client', 'contact_name', 'email', 'amount', 'currency', 'issued', 'due', 'status', 'paid_at', 'promise_date', 'disputed', 'paused', 'last_contact', 'stage', 'notes'];\n\nfunction invoices(values) {\n  return sheetRows(values).filter((r) => r.invoice_id).map((r) => ({\n    ...r,\n    amount_n: num(r.amount),\n    due_d: parseDate(r.due),\n    paid_d: parseDate(r.paid_at),\n    promise_d: parseDate(r.promise_date),\n    last_d: parseDate(r.last_contact),\n    stage_n: Number(r.stage || 0),\n    closed: /^(paid|оплачен|cancelled|отменён|отменен|written.off|списан)/i.test(r.status || '') || Boolean(parseDate(r.paid_at)),\n  }));\n}\n\nfunction invoiceRow(inv) {\n  return INVOICE_COLS.map((k) => String(inv[k] ?? ''));\n}\n\n/** Why an invoice must not be chased right now; '' — can be chased. */\nfunction stopReason(inv, day) {\n  if (inv.closed) return 'оплачен или закрыт';\n  if (yesish(inv.disputed)) return 'клиент оспаривает счёт';\n  if (yesish(inv.paused)) return 'напоминания на паузе';\n  if (inv.promise_d && inv.promise_d >= day) return `клиент обещал оплатить до ${inv.promise_d}`;\n  if (!inv.email) return 'нет email';\n  if (!inv.due_d) return 'нет даты оплаты';\n  return '';\n}\n\n/** Deterministic risk: low / medium / high with reasons in words. */\nfunction ruleRisk(inv, all, day, config) {\n  const reasons = [];\n  let score = 0;\n  const overdue = daysBetween(inv.due_d, day);\n  if (overdue > 60) { score += 3; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 30) { score += 2; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 7) { score += 1; reasons.push(`просрочка ${overdue} дн.`); }\n  if (inv.amount_n >= config.high_amount) { score += 1; reasons.push(`крупная сумма (${fmtAmount(inv.amount_n)} ${inv.currency})`); }\n  const late = all.filter((x) => x.client === inv.client && x.invoice_id !== inv.invoice_id && x.paid_d && x.due_d && x.paid_d > x.due_d).length;\n  if (late >= 2) { score += 1; reasons.push(`клиент уже ${late} раза платил с опозданием`); }\n  if (inv.promise_d && inv.promise_d < day) { score += 2; reasons.push(`обещание оплатить до ${inv.promise_d} не выполнено`); }\n  if (inv.stage_n >= 3) { score += 1; reasons.push(`уже ${inv.stage_n} напоминания без оплаты`); }\n  const risk = score >= 4 ? 'high' : score >= 2 ? 'medium' : 'low';\n  return { risk, reasons: reasons.length ? reasons : ['небольшая просрочка, раньше проблем не было'], overdue, late_count: late };\n}\n\nconst RISK_ORDER = { low: 0, medium: 1, high: 2 };\n\nconst TONE_RU = { friendly: 'дружеский', firm: 'деловой', escalate: 'настойчивый', final: 'последнее напоминание' };\n\n/** What the model sees about one invoice. */\nfunction factsText(p, config) {\n  const allowed = [];\n  if (config.allow_late_fee && config.late_fee_text) allowed.push(`пени по договору: ${config.late_fee_text}`);\n  if (config.allow_collection && config.collection_text && p.final_step) allowed.push(`передача долга: ${config.collection_text}`);\n  return [\n    `Счёт: ${p.invoice_id}`,\n    `Клиент: ${p.client}${p.contact_name ? ', контакт: ' + p.contact_name : ''}`,\n    `Сумма: ${p.amount_text}`,\n    `Выставлен: ${p.issued || 'не указано'}; срок оплаты: ${p.due}; просрочка: ${p.overdue} дн.`,\n    `Письмо №${p.step} из ${config.sequence.length}, тон: ${p.tone} (${TONE_RU[p.tone] || p.tone})${p.final_step ? ', последнее в последовательности' : ''}`,\n    p.broken_promise ? 'Клиент обещал оплатить к дате, которая уже прошла.' : '',\n    p.late_count ? `Раньше клиент платил с опозданием: ${p.late_count} раз(а).` : 'Раньше просрочек по другим счетам не было.',\n    `Риск по правилам: ${p.rule_risk} — ${p.rule_reasons.join('; ')}`,\n    p.notes ? `Заметки менеджера: ${p.notes}` : 'Заметок нет.',\n    allowed.length ? `Разрешено упомянуть дословно: ${allowed.join('; ')}` : 'Упоминать пени, суд, коллекторов и любые санкции нельзя.',\n  ].filter(Boolean).join('\\n');\n}\n\nconst { config } = $('Config').first().json;\nconst icon = { low: '🟢', medium: '🟡', high: '🔴' };\nreturn $('Check Draft').all().map(({ json: d }) => ({ json: {\n  draft_id: d.draft_id,\n  chat_id: String(config.approver_chat_ids[0]),\n  text: [\n    `<b>${icon[d.risk] || ''} ${escapeHtml(d.client)} · счёт ${escapeHtml(d.invoice_id)}</b>`,\n    `${escapeHtml(d.amount_text)} · просрочка ${d.overdue} дн. · письмо №${d.step} (${escapeHtml(TONE_RU[d.tone] || d.tone)})`,\n    `Риск: <b>${d.risk}</b> — ${escapeHtml(d.reasons.join('; '))}`,\n    d.flags.length ? `Пометки: ${escapeHtml(d.flags.join(', '))}` : '',\n    `Кому: ${escapeHtml(d.email)}`,\n    '',\n    `<b>${escapeHtml(d.subject)}</b>`,\n    escapeHtml(d.body).slice(0, 3000),\n    '',\n    `Черновик ${d.draft_id}. Чтобы изменить текст — нажмите «Изменить» или ответьте на это сообщение новым текстом.`,\n  ].filter((x) => x !== '').join('\\n'),\n} }));\n"
+      }
+    },
+    {
+      "id": "fb322b33-b174-5a6e-acbd-716fca4af985",
+      "name": "Approval Card",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1840,
+        -180
+      ],
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Отправить",
+                    "additionalFields": {
+                      "callback_data": "=send:{{ $json.draft_id }}"
+                    }
+                  },
+                  {
+                    "text": "✏️ Изменить",
+                    "additionalFields": {
+                      "callback_data": "=edit:{{ $json.draft_id }}"
+                    }
+                  },
+                  {
+                    "text": "⏭ Пропустить",
+                    "additionalFields": {
+                      "callback_data": "=skip:{{ $json.draft_id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "0f28ecce-cd88-5cbc-b9ea-d0e260c4cc8e",
+      "name": "Respond Preview",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1180,
+        20
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "options": {},
+        "responseBody": "={{ { invoice_id: $json.invoice_id, stop: $json.stop, step: $json.step, tone: $json.tone, risk: $json.risk, rule_risk: $json.rule_risk, reasons: $json.reasons, subject: $json.subject, body: $json.body, flags: $json.flags } }}"
+      }
+    },
+    {
+      "id": "122a47fa-3b58-59ae-b5e3-04de8f70f1c4",
+      "name": "Respond 401",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"error\": \"unauthorized\" } }}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    },
+    {
+      "id": "915be22c-10d7-580a-b242-1ca83c044d06",
+      "name": "Respond 400",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        440
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"error\": $json.error } }}",
+        "options": {
+          "responseCode": 400
+        }
+      }
+    },
+    {
+      "id": "ee1eb93d-89f5-51c8-8b19-e21b2fc70b70",
+      "name": "Telegram Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        700
+      ],
+      "parameters": {
+        "content": "### Решения в Telegram\nКнопки под черновиком и команды. Принимаются только из чатов в `approver_chat_ids`. Перед отправкой счёт проверяется ещё раз: оплачен, оспорен, на паузе или есть обещание — письмо не уйдёт.",
+        "width": 560,
+        "height": 170,
+        "color": 4
+      }
+    },
+    {
+      "id": "3fee9e34-860c-5b33-bac0-5c92469bf776",
+      "name": "Read for Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        900
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $('Config').first().json.config.spreadsheet_id }}/values:batchGet?ranges=Invoices!A1:P5000&ranges=Drafts!A1:M20000",
+        "options": {},
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "0131b133-68ee-5c8d-ae24-82ef2baffad5",
+      "name": "Telegram Act",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        900
+      ],
+      "parameters": {
+        "jsCode": "// Telegram Act: кнопки под черновиками и команды. Отправка — только по нажатию «Отправить»,\n// и только если счёт всё ещё не оплачен и не остановлен.\n// ---- shared text helpers (inlined into Code nodes by the builder) ----\nconst STOP = new Set(('и в во не что он на я с со как а то все она так его но да ты к у же вы за бы по только ее мне было вот от меня еще нет о из ему теперь когда даже ну вдруг ли если уже или ни быть был него до вас нибудь опять уж вам ведь там потом себя ничего ей может они тут где есть надо ней для мы тебя их чем была сам чтоб без будто чего раз тоже себе под будет ж тогда кто этот того потому этого какой совсем ним здесь этом один почти мой тем чтобы нее сейчас были куда зачем всех никогда можно при наконец два об другой хоть после над больше тот через эти нас про всего них какая много разве три эту моя впрочем хорошо свою этой перед иногда лучше чуть том нельзя такой им более всегда конечно всю между это мой мою мое здравствуйте добрый день привет пожалуйста подскажите скажите хочу хотел хотела можно ли вы ваш ваша ваши the a an and or of to in on for is are be it this that with as at by from i you we my our your me do does how what can could please hi hello').split(' '));\n\nfunction stem(word) {\n  let w = word.toLowerCase().replace(/ё/g, 'е');\n  if (/^[a-z]+$/.test(w)) return w.replace(/(ing|ed|es|s)$/, '').slice(0, 7);\n  w = w.replace(/(ями|ами|иями|ией|ией|ого|ему|ому|ыми|ими|его|ая|яя|ое|ее|ие|ые|ой|ей|ий|ый|ов|ев|ам|ям|ах|ях|ом|ем|ую|юю|ть|ти|ешь|ет|ем|ете|ют|ут|ит|им|ите|ат|ят|ла|ло|ли|ся|сь|а|я|о|е|и|ы|у|ю|ь|й)$/, '');\n  return w.slice(0, 6);\n}\n\nfunction terms(text) {\n  return (String(text).toLowerCase().match(/[\\p{L}\\p{N}]+/gu) || [])\n    .filter((w) => w.length > 1 && !STOP.has(w))\n    .map(stem)\n    .filter((w) => w.length > 1);\n}\n\nfunction escapeHtml(text) {\n  return String(text ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\n\nfunction sheetRows(values) {\n  const [head = [], ...rows] = values || [];\n  const keys = head.map((h) => String(h).trim().toLowerCase());\n  return rows.map((r, i) => Object.fromEntries([['_row', i + 2], ...keys.map((k, j) => [k, String(r[j] ?? '').trim()])]));\n}\n\n// ---- счета: даты, правила остановки, риск по правилам ----\nconst DAY = 86400000;\n\nfunction today(config, now) {\n  return new Date(now + config.timezone_offset_hours * 3600000).toISOString().slice(0, 10);\n}\n\nfunction parseDate(v) {\n  const s = String(v || '').trim();\n  let m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(s);\n  if (m) return `${m[1]}-${m[2]}-${m[3]}`;\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})$/.exec(s);\n  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;\n  return '';\n}\n\nfunction daysBetween(a, b) {\n  return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / DAY);\n}\n\nfunction num(v) {\n  const n = parseFloat(String(v ?? '').replace(/[\\s ]/g, '').replace(',', '.'));\n  return Number.isFinite(n) ? n : 0;\n}\n\nfunction yesish(v) {\n  return /^(1|true|yes|да|y)$/i.test(String(v ?? '').trim());\n}\n\nfunction fmtAmount(n) {\n  const [i, d] = n.toFixed(2).split('.');\n  return i.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ' ') + (d === '00' ? '' : ',' + d);\n}\n\n/** Invoices: invoice_id | client | contact_name | email | amount | currency | issued | due | status | paid_at | promise_date | disputed | paused | last_contact | stage | notes */\nconst INVOICE_COLS = ['invoice_id', 'client', 'contact_name', 'email', 'amount', 'currency', 'issued', 'due', 'status', 'paid_at', 'promise_date', 'disputed', 'paused', 'last_contact', 'stage', 'notes'];\n\nfunction invoices(values) {\n  return sheetRows(values).filter((r) => r.invoice_id).map((r) => ({\n    ...r,\n    amount_n: num(r.amount),\n    due_d: parseDate(r.due),\n    paid_d: parseDate(r.paid_at),\n    promise_d: parseDate(r.promise_date),\n    last_d: parseDate(r.last_contact),\n    stage_n: Number(r.stage || 0),\n    closed: /^(paid|оплачен|cancelled|отменён|отменен|written.off|списан)/i.test(r.status || '') || Boolean(parseDate(r.paid_at)),\n  }));\n}\n\nfunction invoiceRow(inv) {\n  return INVOICE_COLS.map((k) => String(inv[k] ?? ''));\n}\n\n/** Why an invoice must not be chased right now; '' — can be chased. */\nfunction stopReason(inv, day) {\n  if (inv.closed) return 'оплачен или закрыт';\n  if (yesish(inv.disputed)) return 'клиент оспаривает счёт';\n  if (yesish(inv.paused)) return 'напоминания на паузе';\n  if (inv.promise_d && inv.promise_d >= day) return `клиент обещал оплатить до ${inv.promise_d}`;\n  if (!inv.email) return 'нет email';\n  if (!inv.due_d) return 'нет даты оплаты';\n  return '';\n}\n\n/** Deterministic risk: low / medium / high with reasons in words. */\nfunction ruleRisk(inv, all, day, config) {\n  const reasons = [];\n  let score = 0;\n  const overdue = daysBetween(inv.due_d, day);\n  if (overdue > 60) { score += 3; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 30) { score += 2; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 7) { score += 1; reasons.push(`просрочка ${overdue} дн.`); }\n  if (inv.amount_n >= config.high_amount) { score += 1; reasons.push(`крупная сумма (${fmtAmount(inv.amount_n)} ${inv.currency})`); }\n  const late = all.filter((x) => x.client === inv.client && x.invoice_id !== inv.invoice_id && x.paid_d && x.due_d && x.paid_d > x.due_d).length;\n  if (late >= 2) { score += 1; reasons.push(`клиент уже ${late} раза платил с опозданием`); }\n  if (inv.promise_d && inv.promise_d < day) { score += 2; reasons.push(`обещание оплатить до ${inv.promise_d} не выполнено`); }\n  if (inv.stage_n >= 3) { score += 1; reasons.push(`уже ${inv.stage_n} напоминания без оплаты`); }\n  const risk = score >= 4 ? 'high' : score >= 2 ? 'medium' : 'low';\n  return { risk, reasons: reasons.length ? reasons : ['небольшая просрочка, раньше проблем не было'], overdue, late_count: late };\n}\n\nconst RISK_ORDER = { low: 0, medium: 1, high: 2 };\n\nconst TONE_RU = { friendly: 'дружеский', firm: 'деловой', escalate: 'настойчивый', final: 'последнее напоминание' };\n\n/** What the model sees about one invoice. */\nfunction factsText(p, config) {\n  const allowed = [];\n  if (config.allow_late_fee && config.late_fee_text) allowed.push(`пени по договору: ${config.late_fee_text}`);\n  if (config.allow_collection && config.collection_text && p.final_step) allowed.push(`передача долга: ${config.collection_text}`);\n  return [\n    `Счёт: ${p.invoice_id}`,\n    `Клиент: ${p.client}${p.contact_name ? ', контакт: ' + p.contact_name : ''}`,\n    `Сумма: ${p.amount_text}`,\n    `Выставлен: ${p.issued || 'не указано'}; срок оплаты: ${p.due}; просрочка: ${p.overdue} дн.`,\n    `Письмо №${p.step} из ${config.sequence.length}, тон: ${p.tone} (${TONE_RU[p.tone] || p.tone})${p.final_step ? ', последнее в последовательности' : ''}`,\n    p.broken_promise ? 'Клиент обещал оплатить к дате, которая уже прошла.' : '',\n    p.late_count ? `Раньше клиент платил с опозданием: ${p.late_count} раз(а).` : 'Раньше просрочек по другим счетам не было.',\n    `Риск по правилам: ${p.rule_risk} — ${p.rule_reasons.join('; ')}`,\n    p.notes ? `Заметки менеджера: ${p.notes}` : 'Заметок нет.',\n    allowed.length ? `Разрешено упомянуть дословно: ${allowed.join('; ')}` : 'Упоминать пени, суд, коллекторов и любые санкции нельзя.',\n  ].filter(Boolean).join('\\n');\n}\n\nconst { config, input } = $('Config').first().json;\nconst sheets = $input.first().json.valueRanges || [];\nconst now = new Date();\nconst day = today(config, now.getTime());\nconst all = invoices(sheets[0]?.values);\nconst drafts = sheetRows(sheets[1]?.values);\nconst approvers = config.approver_chat_ids.map(String);\n\nconst cb = input.callback_query;\nconst msg = input.message || input.edited_message;\nconst chat_id = String(cb?.message?.chat?.id ?? msg?.chat?.id ?? '');\nconst user = cb?.from || msg?.from || {};\nconst who = [user.first_name, user.last_name].filter(Boolean).join(' ') || String(user.id || '');\nconst base = { chat_id, callback_id: cb?.id || '', updates: [], activity: [], reply_text: '', action: 'reply' };\n\nif (!chat_id) return [{ json: { ...base, action: 'ignore' } }];\nif (!approvers.includes(chat_id) && !approvers.includes(String(user.id))) {\n  return [{ json: { ...base, action: cb ? 'reply' : 'ignore', reply_text: cb ? 'Нет доступа' : '' } }];\n}\n\nconst DRAFT_COLS = ['draft_id', 'created', 'invoice_id', 'step', 'tone', 'risk', 'reasons', 'to', 'subject', 'body', 'status', 'decided_at', 'decided_by'];\nconst draftRow = (d) => DRAFT_COLS.map((k) => String(d[k] ?? ''));\nconst setDraft = (d, patch) => {\n  Object.assign(d, patch);\n  base.updates.push({ range: `Drafts!A${d._row}:M${d._row}`, values: [draftRow(d)] });\n};\nconst setInvoice = (inv, patch) => {\n  Object.assign(inv, patch);\n  base.updates.push({ range: `Invoices!A${inv._row}:P${inv._row}`, values: [invoiceRow(inv)] });\n};\nconst act = (invoice_id, action, detail) => base.activity.push([now.toISOString(), invoice_id, action, String(detail).slice(0, 500), who]);\nconst cancelDrafts = (invoice_id, why) => {\n  for (const d of drafts.filter((x) => x.invoice_id === invoice_id && ['pending', 'editing'].includes(x.status))) {\n    setDraft(d, { status: 'cancelled', decided_at: now.toISOString(), decided_by: why });\n  }\n};\nconst signature = ['', config.payment_details, '', 'С уважением,', config.sender_name, config.company].join('\\n');\nconst out = (extra) => [{ json: { ...base, ...extra } }];\n\n// ---------- кнопки ----------\nif (cb) {\n  const m = /^(send|edit|skip):(D-[A-Z0-9]+)$/.exec(String(cb.data || ''));\n  const d = m && drafts.find((x) => x.draft_id === m[2]);\n  if (!d) return out({ reply_text: 'Черновик не найден' });\n  if (!['pending', 'editing'].includes(d.status)) return out({ reply_text: `Уже обработан: ${d.status}` });\n  const inv = all.find((x) => x.invoice_id === d.invoice_id);\n  if (m[1] === 'skip') {\n    setDraft(d, { status: 'skipped', decided_at: now.toISOString(), decided_by: who });\n    act(d.invoice_id, 'skipped', d.draft_id);\n    return out({ reply_text: 'Пропущено', notice: `⏭ ${d.draft_id} по счёту ${d.invoice_id} пропущен.` });\n  }\n  if (m[1] === 'edit') {\n    setDraft(d, { status: 'editing' });\n    return out({ action: 'ask_edit', reply_text: 'Пришлите новый текст ответом', draft_id: d.draft_id,\n      notice: `✏️ Черновик ${d.draft_id}. Ответьте на это сообщение новым текстом письма — без подписи и реквизитов, их добавлю сам.` });\n  }\n  // send\n  const stop = inv ? stopReason(inv, day) : 'счёт не найден в листе Invoices';\n  if (stop) {\n    setDraft(d, { status: 'cancelled', decided_at: now.toISOString(), decided_by: 'stop: ' + stop });\n    act(d.invoice_id, 'not_sent', stop);\n    return out({ reply_text: 'Не отправлено', notice: `⛔️ Не отправил ${d.draft_id}: ${stop}.` });\n  }\n  setDraft(d, { status: 'sent', decided_at: now.toISOString(), decided_by: who });\n  setInvoice(inv, { stage: String(Math.max(inv.stage_n, Number(d.step) || 0)), last_contact: day });\n  act(d.invoice_id, 'sent', `${d.draft_id} → ${d.to}`);\n  return out({ action: 'send', reply_text: 'Отправляю', draft_id: d.draft_id,\n    email: { to: d.to, subject: d.subject, text: d.body },\n    notice: `✅ Отправлено: ${d.draft_id}, счёт ${d.invoice_id} → ${d.to}` });\n}\n\n// ---------- новый текст ответом на карточку ----------\nconst text = String(msg?.text || '').trim();\nconst replied = String(msg?.reply_to_message?.text || '');\nconst ref = /Черновик (D-[A-Z0-9]+)/.exec(replied);\nif (ref && text && !text.startsWith('/')) {\n  const d = drafts.find((x) => x.draft_id === ref[1]);\n  if (!d || !['pending', 'editing'].includes(d.status)) return out({ notice: 'Этот черновик уже обработан.' });\n  setDraft(d, { body: text.slice(0, 3000) + '\\n' + signature, status: 'pending' });\n  act(d.invoice_id, 'edited', d.draft_id);\n  const inv = all.find((x) => x.invoice_id === d.invoice_id);\n  return out({ action: 'card', draft_id: d.draft_id, card: [\n    `<b>✏️ ${escapeHtml(inv?.client || '')} · счёт ${escapeHtml(d.invoice_id)} — новый текст</b>`,\n    `Кому: ${escapeHtml(d.to)}`, '', `<b>${escapeHtml(d.subject)}</b>`, escapeHtml(d.body).slice(0, 3000), '',\n    `Черновик ${d.draft_id}. Чтобы изменить текст — нажмите «Изменить» или ответьте на это сообщение новым текстом.`,\n  ].join('\\n') });\n}\n\n// ---------- команды ----------\nconst [cmd, id, ...rest] = text.split(/\\s+/);\nconst inv = id && all.find((x) => x.invoice_id.toLowerCase() === id.toLowerCase());\nconst help = [\n  'Команды:',\n  '/paid СЧЁТ [ГГГГ-ММ-ДД] — оплачен',\n  '/promise СЧЁТ ГГГГ-ММ-ДД — клиент обещал оплатить к дате',\n  '/dispute СЧЁТ [причина] — клиент оспаривает, напоминания стоп',\n  '/pause СЧЁТ, /resume СЧЁТ — пауза и снятие паузы',\n  '/status СЧЁТ — что со счётом',\n].join('\\n');\nif (!cmd || !cmd.startsWith('/') || cmd === '/help' || cmd === '/start') return out({ notice: help });\nif (!inv) return out({ notice: id ? `Счёт ${id} не найден в листе Invoices.` : help });\n\nif (cmd === '/paid') {\n  const date = parseDate(rest[0]) || day;\n  setInvoice(inv, { status: 'paid', paid_at: date });\n  cancelDrafts(inv.invoice_id, 'paid');\n  act(inv.invoice_id, 'paid', date);\n  return out({ notice: `💰 ${inv.invoice_id} отмечен оплаченным ${date}. Напоминания по нему остановлены.` });\n}\nif (cmd === '/promise') {\n  const date = parseDate(rest[0]);\n  if (!date || date < day) return out({ notice: 'Нужна будущая дата: /promise СЧЁТ ГГГГ-ММ-ДД' });\n  setInvoice(inv, { promise_date: date });\n  cancelDrafts(inv.invoice_id, 'promise');\n  act(inv.invoice_id, 'promise', date);\n  return out({ notice: `🤝 ${inv.invoice_id}: ждём оплату до ${date}. Если её не будет — напоминания продолжатся, риск вырастет.` });\n}\nif (cmd === '/dispute') {\n  const note = rest.join(' ');\n  setInvoice(inv, { disputed: 'yes', notes: [inv.notes, note && `спор: ${note}`].filter(Boolean).join('; ') });\n  cancelDrafts(inv.invoice_id, 'dispute');\n  act(inv.invoice_id, 'dispute', note || '—');\n  return out({ notice: `⚠️ ${inv.invoice_id}: спор. Напоминания остановлены, пока не выполните /resume.` });\n}\nif (cmd === '/pause') {\n  setInvoice(inv, { paused: 'yes' });\n  cancelDrafts(inv.invoice_id, 'pause');\n  act(inv.invoice_id, 'pause', '');\n  return out({ notice: `⏸ ${inv.invoice_id}: напоминания на паузе.` });\n}\nif (cmd === '/resume') {\n  setInvoice(inv, { paused: '', disputed: '' });\n  act(inv.invoice_id, 'resume', '');\n  return out({ notice: `▶️ ${inv.invoice_id}: напоминания снова включены.` });\n}\nif (cmd === '/status') {\n  const sent = drafts.filter((x) => x.invoice_id === inv.invoice_id && x.status === 'sent').length;\n  const stop = stopReason(inv, day);\n  return out({ notice: [\n    `${inv.invoice_id} · ${inv.client} · ${fmtAmount(inv.amount_n)} ${inv.currency}`,\n    `Срок: ${inv.due_d || '—'}${inv.due_d ? `, просрочка ${Math.max(0, daysBetween(inv.due_d, day))} дн.` : ''}`,\n    `Отправлено напоминаний: ${sent}`,\n    stop ? `Напоминания не идут: ${stop}` : 'Напоминания идут по графику',\n  ].join('\\n') });\n}\nreturn out({ notice: help });\n"
+      }
+    },
+    {
+      "id": "dffc7985-da59-5ef1-9fb0-47c5296a23c3",
+      "name": "Action",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        440,
+        900
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e76fb164-97ee-571c-b32a-ea652d6d0a99",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "send",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "send"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "274a4b55-5087-53a3-9aed-a2603df61b37",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "update",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "update"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "other"
+        }
+      }
+    },
+    {
+      "id": "e8475717-2b94-5234-887b-0187ecdca796",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        660,
+        800
+      ],
+      "parameters": {
+        "fromEmail": "={{ $('Config').first().json.config.email.from }}",
+        "toEmail": "={{ $json.email.to }}",
+        "subject": "={{ $json.email.subject }}",
+        "emailFormat": "text",
+        "text": "={{ $json.email.text }}",
+        "options": {
+          "appendAttribution": false,
+          "replyTo": "={{ $('Config').first().json.config.email.reply_to }}"
+        }
+      },
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_ME",
+          "name": "SMTP account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "817e8313-fb97-5f4e-ae17-e7cbb01b2b01",
+      "name": "After Send",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        800
+      ],
+      "parameters": {
+        "jsCode": "// After Send: письмо не ушло — черновик помечается failed, счёт не трогаем.\nconst a = $('Telegram Act').first().json;\nconst res = $input.first().json;\nif (!res.error) return [{ json: a }];\nconst err = String(res.error.message || res.error).slice(0, 200);\nconst updates = a.updates.filter((u) => u.range.startsWith('Drafts!')).map((u) => {\n  const row = [...u.values[0]];\n  row[10] = 'failed';\n  row[12] = 'smtp: ' + err;\n  return { range: u.range, values: [row] };\n});\nreturn [{ json: { ...a, action: 'reply', updates, activity: a.activity.map((r) => [r[0], r[1], 'send_failed', err, r[4]]),\n  notice: `❌ Не отправлено ${a.draft_id}: ${err}. Черновик помечен failed — проверьте SMTP и создайте напоминание заново завтра.` } }];\n"
+      }
+    },
+    {
+      "id": "7bc05fad-6278-50d7-98cc-7f40293f27fb",
+      "name": "Outcome",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        900
+      ],
+      "parameters": {
+        "jsCode": "return [{ json: $('After Send').isExecuted ? $('After Send').first().json : $('Telegram Act').first().json }];\n"
+      }
+    },
+    {
+      "id": "eecd944b-4ad9-5554-8972-b228f76f32fa",
+      "name": "Updates?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1320,
+        900
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0cfe70a3-7610-5c44-8c6d-01abe82f7822",
+              "leftValue": "={{ $json.updates.length > 0 }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "bc7d82dc-714e-5c03-abbb-3b78ceae8d0b",
+      "name": "Update Sheets",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        800
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $('Config').first().json.config.spreadsheet_id }}/values:batchUpdate",
+        "options": {},
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ valueInputOption: 'RAW', data: $('Outcome').first().json.updates }) }}"
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "3803a8da-70bb-51f4-9912-a16cb5d70c75",
+      "name": "Activity?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        900
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1e7e041-3e3c-5819-a935-b361955a374f",
+              "leftValue": "={{ $('Outcome').first().json.activity.length > 0 }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "d18eb909-2283-5326-bc19-9ed61fe33c92",
+      "name": "Log Activity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1980,
+        800
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $('Config').first().json.config.spreadsheet_id }}/values/Activity!A1:append",
+        "options": {},
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "valueInputOption",
+              "value": "RAW"
+            },
+            {
+              "name": "insertDataOption",
+              "value": "INSERT_ROWS"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ values: $('Outcome').first().json.activity }) }}"
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "71235e8d-3467-567e-a090-2ebc852c603a",
+      "name": "Button?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2200,
+        900
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "16981bd4-93be-5892-90b5-b655af358714",
+              "leftValue": "={{ Boolean($('Outcome').first().json.callback_id) }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "39726376-b27b-5423-8fef-293fe3753e58",
+      "name": "Answer Button",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2420,
+        800
+      ],
+      "parameters": {
+        "resource": "callback",
+        "operation": "answerQuery",
+        "queryId": "={{ $('Outcome').first().json.callback_id }}",
+        "additionalFields": {
+          "text": "={{ ($('Outcome').first().json.reply_text || '').slice(0, 190) }}"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "0f898660-d6db-5600-9c7e-3825a6352412",
+      "name": "Reply Kind",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2640,
+        900
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "115b5ec0-3886-53ca-a77c-199e768e420d",
+                    "leftValue": "={{ $('Outcome').first().json.action === 'card' ? 'card' : $('Outcome').first().json.action === 'ask_edit' ? 'ask_edit' : ($('Outcome').first().json.notice ? 'notice' : 'none') }}",
+                    "rightValue": "card",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "card"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1bfd2ee0-3586-545f-af6b-1d59c98e0b00",
+                    "leftValue": "={{ $('Outcome').first().json.action === 'card' ? 'card' : $('Outcome').first().json.action === 'ask_edit' ? 'ask_edit' : ($('Outcome').first().json.notice ? 'notice' : 'none') }}",
+                    "rightValue": "ask_edit",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ask_edit"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "de739539-06cd-5230-966d-6240314f520c",
+                    "leftValue": "={{ $('Outcome').first().json.action === 'card' ? 'card' : $('Outcome').first().json.action === 'ask_edit' ? 'ask_edit' : ($('Outcome').first().json.notice ? 'notice' : 'none') }}",
+                    "rightValue": "notice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "notice"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "0ba512c5-424d-521b-bc97-9b237d04c32b",
+      "name": "Card Again",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2860,
+        760
+      ],
+      "parameters": {
+        "chatId": "={{ $('Outcome').first().json.chat_id }}",
+        "text": "={{ $('Outcome').first().json.card }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Отправить",
+                    "additionalFields": {
+                      "callback_data": "=send:{{ $('Outcome').first().json.draft_id }}"
+                    }
+                  },
+                  {
+                    "text": "✏️ Изменить",
+                    "additionalFields": {
+                      "callback_data": "=edit:{{ $('Outcome').first().json.draft_id }}"
+                    }
+                  },
+                  {
+                    "text": "⏭ Пропустить",
+                    "additionalFields": {
+                      "callback_data": "=skip:{{ $('Outcome').first().json.draft_id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "eaed27de-fc42-5563-87a6-88bc69a12954",
+      "name": "Ask Edit",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2860,
+        900
+      ],
+      "parameters": {
+        "chatId": "={{ $('Outcome').first().json.chat_id }}",
+        "text": "={{ $('Outcome').first().json.notice }}",
+        "replyMarkup": "forceReply",
+        "forceReply": {
+          "force_reply": true
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "a45c3bf0-efd4-55f5-b9df-a84584a7d5c0",
+      "name": "Notice",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2860,
+        1040
+      ],
+      "parameters": {
+        "chatId": "={{ $('Outcome').first().json.chat_id }}",
+        "text": "={{ $('Outcome').first().json.notice }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "f99623b5-0dc8-5273-b163-7704c550e52f",
+      "name": "Read for Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        1400
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $('Config').first().json.config.spreadsheet_id }}/values:batchGet?ranges=Invoices!A1:P5000&ranges=Drafts!A1:M20000&ranges=Activity!A1:E50000",
+        "options": {},
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api"
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "410b5c24-a1fe-5f51-a0f9-1736af0fda15",
+      "name": "Weekly Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        1400
+      ],
+      "parameters": {
+        "jsCode": "// Weekly Report: сколько просрочено, что вернулось за неделю, что ждёт решения.\n// ---- shared text helpers (inlined into Code nodes by the builder) ----\nconst STOP = new Set(('и в во не что он на я с со как а то все она так его но да ты к у же вы за бы по только ее мне было вот от меня еще нет о из ему теперь когда даже ну вдруг ли если уже или ни быть был него до вас нибудь опять уж вам ведь там потом себя ничего ей может они тут где есть надо ней для мы тебя их чем была сам чтоб без будто чего раз тоже себе под будет ж тогда кто этот того потому этого какой совсем ним здесь этом один почти мой тем чтобы нее сейчас были куда зачем всех никогда можно при наконец два об другой хоть после над больше тот через эти нас про всего них какая много разве три эту моя впрочем хорошо свою этой перед иногда лучше чуть том нельзя такой им более всегда конечно всю между это мой мою мое здравствуйте добрый день привет пожалуйста подскажите скажите хочу хотел хотела можно ли вы ваш ваша ваши the a an and or of to in on for is are be it this that with as at by from i you we my our your me do does how what can could please hi hello').split(' '));\n\nfunction stem(word) {\n  let w = word.toLowerCase().replace(/ё/g, 'е');\n  if (/^[a-z]+$/.test(w)) return w.replace(/(ing|ed|es|s)$/, '').slice(0, 7);\n  w = w.replace(/(ями|ами|иями|ией|ией|ого|ему|ому|ыми|ими|его|ая|яя|ое|ее|ие|ые|ой|ей|ий|ый|ов|ев|ам|ям|ах|ях|ом|ем|ую|юю|ть|ти|ешь|ет|ем|ете|ют|ут|ит|им|ите|ат|ят|ла|ло|ли|ся|сь|а|я|о|е|и|ы|у|ю|ь|й)$/, '');\n  return w.slice(0, 6);\n}\n\nfunction terms(text) {\n  return (String(text).toLowerCase().match(/[\\p{L}\\p{N}]+/gu) || [])\n    .filter((w) => w.length > 1 && !STOP.has(w))\n    .map(stem)\n    .filter((w) => w.length > 1);\n}\n\nfunction escapeHtml(text) {\n  return String(text ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\n\nfunction sheetRows(values) {\n  const [head = [], ...rows] = values || [];\n  const keys = head.map((h) => String(h).trim().toLowerCase());\n  return rows.map((r, i) => Object.fromEntries([['_row', i + 2], ...keys.map((k, j) => [k, String(r[j] ?? '').trim()])]));\n}\n\n// ---- счета: даты, правила остановки, риск по правилам ----\nconst DAY = 86400000;\n\nfunction today(config, now) {\n  return new Date(now + config.timezone_offset_hours * 3600000).toISOString().slice(0, 10);\n}\n\nfunction parseDate(v) {\n  const s = String(v || '').trim();\n  let m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(s);\n  if (m) return `${m[1]}-${m[2]}-${m[3]}`;\n  m = /^(\\d{1,2})[./](\\d{1,2})[./](\\d{4})$/.exec(s);\n  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;\n  return '';\n}\n\nfunction daysBetween(a, b) {\n  return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / DAY);\n}\n\nfunction num(v) {\n  const n = parseFloat(String(v ?? '').replace(/[\\s ]/g, '').replace(',', '.'));\n  return Number.isFinite(n) ? n : 0;\n}\n\nfunction yesish(v) {\n  return /^(1|true|yes|да|y)$/i.test(String(v ?? '').trim());\n}\n\nfunction fmtAmount(n) {\n  const [i, d] = n.toFixed(2).split('.');\n  return i.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ' ') + (d === '00' ? '' : ',' + d);\n}\n\n/** Invoices: invoice_id | client | contact_name | email | amount | currency | issued | due | status | paid_at | promise_date | disputed | paused | last_contact | stage | notes */\nconst INVOICE_COLS = ['invoice_id', 'client', 'contact_name', 'email', 'amount', 'currency', 'issued', 'due', 'status', 'paid_at', 'promise_date', 'disputed', 'paused', 'last_contact', 'stage', 'notes'];\n\nfunction invoices(values) {\n  return sheetRows(values).filter((r) => r.invoice_id).map((r) => ({\n    ...r,\n    amount_n: num(r.amount),\n    due_d: parseDate(r.due),\n    paid_d: parseDate(r.paid_at),\n    promise_d: parseDate(r.promise_date),\n    last_d: parseDate(r.last_contact),\n    stage_n: Number(r.stage || 0),\n    closed: /^(paid|оплачен|cancelled|отменён|отменен|written.off|списан)/i.test(r.status || '') || Boolean(parseDate(r.paid_at)),\n  }));\n}\n\nfunction invoiceRow(inv) {\n  return INVOICE_COLS.map((k) => String(inv[k] ?? ''));\n}\n\n/** Why an invoice must not be chased right now; '' — can be chased. */\nfunction stopReason(inv, day) {\n  if (inv.closed) return 'оплачен или закрыт';\n  if (yesish(inv.disputed)) return 'клиент оспаривает счёт';\n  if (yesish(inv.paused)) return 'напоминания на паузе';\n  if (inv.promise_d && inv.promise_d >= day) return `клиент обещал оплатить до ${inv.promise_d}`;\n  if (!inv.email) return 'нет email';\n  if (!inv.due_d) return 'нет даты оплаты';\n  return '';\n}\n\n/** Deterministic risk: low / medium / high with reasons in words. */\nfunction ruleRisk(inv, all, day, config) {\n  const reasons = [];\n  let score = 0;\n  const overdue = daysBetween(inv.due_d, day);\n  if (overdue > 60) { score += 3; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 30) { score += 2; reasons.push(`просрочка ${overdue} дн.`); }\n  else if (overdue > 7) { score += 1; reasons.push(`просрочка ${overdue} дн.`); }\n  if (inv.amount_n >= config.high_amount) { score += 1; reasons.push(`крупная сумма (${fmtAmount(inv.amount_n)} ${inv.currency})`); }\n  const late = all.filter((x) => x.client === inv.client && x.invoice_id !== inv.invoice_id && x.paid_d && x.due_d && x.paid_d > x.due_d).length;\n  if (late >= 2) { score += 1; reasons.push(`клиент уже ${late} раза платил с опозданием`); }\n  if (inv.promise_d && inv.promise_d < day) { score += 2; reasons.push(`обещание оплатить до ${inv.promise_d} не выполнено`); }\n  if (inv.stage_n >= 3) { score += 1; reasons.push(`уже ${inv.stage_n} напоминания без оплаты`); }\n  const risk = score >= 4 ? 'high' : score >= 2 ? 'medium' : 'low';\n  return { risk, reasons: reasons.length ? reasons : ['небольшая просрочка, раньше проблем не было'], overdue, late_count: late };\n}\n\nconst RISK_ORDER = { low: 0, medium: 1, high: 2 };\n\nconst TONE_RU = { friendly: 'дружеский', firm: 'деловой', escalate: 'настойчивый', final: 'последнее напоминание' };\n\n/** What the model sees about one invoice. */\nfunction factsText(p, config) {\n  const allowed = [];\n  if (config.allow_late_fee && config.late_fee_text) allowed.push(`пени по договору: ${config.late_fee_text}`);\n  if (config.allow_collection && config.collection_text && p.final_step) allowed.push(`передача долга: ${config.collection_text}`);\n  return [\n    `Счёт: ${p.invoice_id}`,\n    `Клиент: ${p.client}${p.contact_name ? ', контакт: ' + p.contact_name : ''}`,\n    `Сумма: ${p.amount_text}`,\n    `Выставлен: ${p.issued || 'не указано'}; срок оплаты: ${p.due}; просрочка: ${p.overdue} дн.`,\n    `Письмо №${p.step} из ${config.sequence.length}, тон: ${p.tone} (${TONE_RU[p.tone] || p.tone})${p.final_step ? ', последнее в последовательности' : ''}`,\n    p.broken_promise ? 'Клиент обещал оплатить к дате, которая уже прошла.' : '',\n    p.late_count ? `Раньше клиент платил с опозданием: ${p.late_count} раз(а).` : 'Раньше просрочек по другим счетам не было.',\n    `Риск по правилам: ${p.rule_risk} — ${p.rule_reasons.join('; ')}`,\n    p.notes ? `Заметки менеджера: ${p.notes}` : 'Заметок нет.',\n    allowed.length ? `Разрешено упомянуть дословно: ${allowed.join('; ')}` : 'Упоминать пени, суд, коллекторов и любые санкции нельзя.',\n  ].filter(Boolean).join('\\n');\n}\n\nconst { config } = $('Config').first().json;\nconst sheets = $input.first().json.valueRanges || [];\nconst now = Date.now();\nconst day = today(config, now);\nconst weekAgo = new Date(Date.parse(day) - 7 * DAY).toISOString().slice(0, 10);\nconst all = invoices(sheets[0]?.values);\nconst drafts = sheetRows(sheets[1]?.values);\nconst activity = sheetRows(sheets[2]?.values);\n\nconst open = all.filter((i) => !i.closed && i.due_d && daysBetween(i.due_d, day) >= 1);\nconst sum = (list) => list.reduce((a, i) => a + i.amount_n, 0);\nconst cur = [...new Set(all.map((i) => i.currency).filter(Boolean))];\nconst money = (n) => `${fmtAmount(n)} ${cur.length === 1 ? cur[0] : ''}`.trim();\nconst bucket = (lo, hi) => open.filter((i) => { const d = daysBetween(i.due_d, day); return d >= lo && d <= hi; });\nconst chased = new Set(drafts.filter((d) => d.status === 'sent').map((d) => d.invoice_id));\nconst recovered = all.filter((i) => i.paid_d && i.paid_d > weekAgo && i.paid_d <= day && chased.has(i.invoice_id));\nconst sentWeek = activity.filter((a) => a.action === 'sent' && String(a.time).slice(0, 10) > weekAgo).length;\nconst pending = drafts.filter((d) => ['pending', 'editing'].includes(d.status)).length;\nconst promises = all.filter((i) => !i.closed && i.promise_d && i.promise_d >= day && daysBetween(day, i.promise_d) <= 7);\nconst broken = all.filter((i) => !i.closed && i.promise_d && i.promise_d < day);\nconst disputed = open.filter((i) => yesish(i.disputed));\nconst top = [...open].map((i) => ({ i, r: ruleRisk(i, all, day, config) })).sort((a, b) => RISK_ORDER[b.r.risk] - RISK_ORDER[a.r.risk] || b.i.amount_n - a.i.amount_n).slice(0, 5);\n\nconst lines = [\n  `<b>📊 Дебиторка за неделю · ${day}</b>`,\n  '',\n  `Просрочено: <b>${money(sum(open))}</b> в ${open.length} счетах`,\n  `  1–30 дн.: ${money(sum(bucket(1, 30)))} · 31–60: ${money(sum(bucket(31, 60)))} · 61–90: ${money(sum(bucket(61, 90)))} · 90+: ${money(sum(bucket(91, 100000)))}`,\n  `Вернулось после напоминаний за 7 дней: <b>${money(sum(recovered))}</b> (${recovered.length} счетов)`,\n  `Отправлено напоминаний: ${sentWeek} · ждут решения: ${pending}`,\n  promises.length ? `Обещали оплатить на этой неделе: ${promises.map((i) => `${escapeHtml(i.invoice_id)} (${i.promise_d})`).join(', ')}` : '',\n  broken.length ? `Обещание не выполнено: ${broken.map((i) => escapeHtml(i.invoice_id)).join(', ')}` : '',\n  disputed.length ? `Спорные: ${disputed.map((i) => escapeHtml(i.invoice_id)).join(', ')}` : '',\n  top.length ? '\\n<b>Самые рискованные:</b>' : '',\n  ...top.map(({ i, r }) => `${{ low: '🟢', medium: '🟡', high: '🔴' }[r.risk]} ${escapeHtml(i.invoice_id)} · ${escapeHtml(i.client)} · ${fmtAmount(i.amount_n)} ${escapeHtml(i.currency)} · ${daysBetween(i.due_d, day)} дн.`),\n].filter((x) => x !== '');\nreturn [{ json: { chat_id: String(config.approver_chat_ids[0]), text: lines.join('\\n'),\n  totals: { overdue: sum(open), overdue_count: open.length, recovered: sum(recovered), recovered_count: recovered.length, sent: sentWeek, pending } } }];\n"
+      }
+    },
+    {
+      "id": "39b9506d-504d-56cb-b5e7-4e9e69666473",
+      "name": "Send Report",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        1400
+      ],
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_ME",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "stopWorkflow"
+    }
+  ],
+  "connections": {
+    "Every Day 9:00": {
+      "main": [
+        [
+          {
+            "node": "Monitor Tick",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every Monday 9:30": {
+      "main": [
+        [
+          {
+            "node": "Report Tick",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monitor Tick": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report Tick": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preview Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Kind",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kind": {
+      "main": [
+        [
+          {
+            "node": "Read Invoices",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Read for Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Read for Report",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preview Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Invoices": {
+      "main": [
+        [
+          {
+            "node": "Plan Invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preview Plan": {
+      "main": [
+        [
+          {
+            "node": "Preview Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan Invoices": {
+      "main": [
+        [
+          {
+            "node": "Assess & Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preview Route": {
+      "main": [
+        [
+          {
+            "node": "Assess & Draft",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 401",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 400",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Assess & Draft",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess & Draft": {
+      "main": [
+        [
+          {
+            "node": "Check Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Draft": {
+      "main": [
+        [
+          {
+            "node": "Mode",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mode": {
+      "main": [
+        [
+          {
+            "node": "Draft Rows",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Preview",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft Rows": {
+      "main": [
+        [
+          {
+            "node": "Append Drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Drafts": {
+      "main": [
+        [
+          {
+            "node": "Cards",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cards": {
+      "main": [
+        [
+          {
+            "node": "Approval Card",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read for Telegram": {
+      "main": [
+        [
+          {
+            "node": "Telegram Act",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Act": {
+      "main": [
+        [
+          {
+            "node": "Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Action": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "main": [
+        [
+          {
+            "node": "After Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "After Send": {
+      "main": [
+        [
+          {
+            "node": "Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outcome": {
+      "main": [
+        [
+          {
+            "node": "Updates?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Updates?": {
+      "main": [
+        [
+          {
+            "node": "Update Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Activity?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Sheets": {
+      "main": [
+        [
+          {
+            "node": "Activity?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Activity?": {
+      "main": [
+        [
+          {
+            "node": "Log Activity",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Button?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Activity": {
+      "main": [
+        [
+          {
+            "node": "Button?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Button?": {
+      "main": [
+        [
+          {
+            "node": "Answer Button",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Kind",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer Button": {
+      "main": [
+        [
+          {
+            "node": "Reply Kind",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reply Kind": {
+      "main": [
+        [
+          {
+            "node": "Card Again",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ask Edit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read for Report": {
+      "main": [
+        [
+          {
+            "node": "Weekly Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weekly Report": {
+      "main": [
+        [
+          {
+            "node": "Send Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

@@ -1,0 +1,25 @@
+{
+ "knowledge": [
+  {
+   "name": "База знаний поддержки",
+   "data_source_id": "ВСТАВЬТЕ_ID_ИСТОЧНИКА_ДАННЫХ",
+   "text_properties": ["Ответ", "Теги"]
+  }
+ ],
+ "target": {
+  "name": "Заявки от агента",
+  "data_source_id": "ВСТАВЬТЕ_ID_ИСТОЧНИКА_ДАННЫХ",
+  "columns": {
+   "Название": {"required": true, "max_length": 200},
+   "Тема": {"required": true},
+   "Email": {},
+   "Комментарий": {"max_length": 2000},
+   "Статус": {"fixed": "Новая"}
+  },
+  "dedupe_column": "Название"
+ },
+ "min_score": 0.3,
+ "max_rows_per_source": 500,
+ "cache_minutes": 5,
+ "page_chars": 6000
+}

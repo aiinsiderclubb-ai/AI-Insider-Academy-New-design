@@ -1,0 +1,6 @@
+invoice_id,client,contact_name,email,amount,currency,issued,due,status,paid_at,promise_date,disputed,paused,last_contact,stage,notes
+INV-2026-041,ООО Альфа,Ольга,olga@alpha.example,1200,EUR,2026-10-01,2026-10-31,open,,,,,,0,
+INV-2026-042,Бета Студио,Игорь,igor@beta.example,3400,EUR,2026-09-20,2026-10-20,open,,,,,2026-10-28,1,обычно платит в конце месяца
+INV-2026-043,Зета Групп,Марк,mark@zeta.example,8000,EUR,2026-08-15,2026-09-15,open,,2026-10-30,,,2026-10-25,2,обещал оплатить после сделки
+INV-2026-044,Гамма,,billing@gamma.example,500,EUR,2026-09-01,2026-10-01,paid,2026-10-12,,,,,1,
+INV-2026-045,Дельта,Сергей,s@delta.example,700,EUR,2026-09-10,2026-10-10,open,,,yes,,,1,не согласны с объёмом работ

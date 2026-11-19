@@ -1,0 +1,202 @@
+[
+  {
+    "name": "find_order",
+    "description": "Найти активные заказы клиента по номеру телефона: дата и интервал доставки, адрес, статус. Вызывай в начале каждого разговора о заказе.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customer_phone": {
+          "type": "string",
+          "description": "Телефон клиента цифрами, как он его продиктовал. При исходящем звонке — номер, на который звоним."
+        },
+        "order_id": {
+          "type": "string",
+          "description": "Номер заказа, если клиент его назвал."
+        }
+      },
+      "required": [
+        "customer_phone"
+      ]
+    }
+  },
+  {
+    "name": "confirm_delivery",
+    "description": "Отметить, что клиент подтвердил дату, интервал и адрес доставки. Только после явного «да».",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "description": "Номер заказа из ответа find_order."
+        },
+        "customer_phone": {
+          "type": "string",
+          "description": "Телефон клиента цифрами, как он его продиктовал. При исходящем звонке — номер, на который звоним."
+        },
+        "consent": {
+          "type": "boolean",
+          "description": "true — только после того, как клиент подтвердил повторённые тобой данные."
+        }
+      },
+      "required": [
+        "order_id",
+        "customer_phone",
+        "consent"
+      ]
+    }
+  },
+  {
+    "name": "update_address",
+    "description": "Изменить или уточнить адрес доставки. Передавай только то, что меняется. Новую улицу — вместе с номером дома, город — только из зоны доставки.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "description": "Номер заказа из ответа find_order."
+        },
+        "customer_phone": {
+          "type": "string",
+          "description": "Телефон клиента цифрами, как он его продиктовал. При исходящем звонке — номер, на который звоним."
+        },
+        "city": {
+          "type": "string",
+          "description": "Город, если меняется."
+        },
+        "address": {
+          "type": "string",
+          "description": "Улица и дом, если меняются: «проспект Победы, 12»."
+        },
+        "apartment": {
+          "type": "string",
+          "description": "Квартира или офис."
+        },
+        "entrance": {
+          "type": "string",
+          "description": "Подъезд."
+        },
+        "floor": {
+          "type": "string",
+          "description": "Этаж."
+        },
+        "intercom": {
+          "type": "string",
+          "description": "Код домофона."
+        },
+        "courier_note": {
+          "type": "string",
+          "description": "Подсказка курьеру словами клиента: «позвонить за 15 минут», «вход со двора»."
+        },
+        "consent": {
+          "type": "boolean",
+          "description": "true — только после того, как клиент подтвердил повторённые тобой данные."
+        }
+      },
+      "required": [
+        "order_id",
+        "customer_phone",
+        "consent"
+      ]
+    }
+  },
+  {
+    "name": "check_windows",
+    "description": "Найти свободные интервалы доставки на дату. Вызывай перед тем, как предлагать время. Никогда не называй интервал без этого вызова.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "description": "Номер заказа из ответа find_order."
+        },
+        "customer_phone": {
+          "type": "string",
+          "description": "Телефон клиента цифрами, как он его продиктовал. При исходящем звонке — номер, на который звоним."
+        },
+        "date": {
+          "type": "string",
+          "description": "Дата: ГГГГ-ММ-ДД, либо today, tomorrow, день недели (mon, tue, wed, thu, fri, sat, sun), либо +N дней. Не вычисляй дату сам."
+        }
+      },
+      "required": [
+        "order_id",
+        "customer_phone",
+        "date"
+      ]
+    }
+  },
+  {
+    "name": "change_window",
+    "description": "Перенести доставку на другую дату или интервал. Сначала check_windows, затем повтори клиенту выбор и получи «да».",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "description": "Номер заказа из ответа find_order."
+        },
+        "customer_phone": {
+          "type": "string",
+          "description": "Телефон клиента цифрами, как он его продиктовал. При исходящем звонке — номер, на который звоним."
+        },
+        "date": {
+          "type": "string",
+          "description": "date выбранного интервала из ответа check_windows."
+        },
+        "window_id": {
+          "type": "string",
+          "description": "window_id выбранного интервала из ответа check_windows."
+        },
+        "consent": {
+          "type": "boolean",
+          "description": "true — только после того, как клиент подтвердил повторённые тобой данные."
+        }
+      },
+      "required": [
+        "order_id",
+        "customer_phone",
+        "date",
+        "window_id",
+        "consent"
+      ]
+    }
+  },
+  {
+    "name": "request_callback",
+    "description": "Передать оператору: изменить состав заказа, отменить заказ, оплата и возврат, жалоба, адрес вне зоны доставки, сбой, вопрос без ответа.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customer_name": {
+          "type": "string",
+          "description": "Имя клиента."
+        },
+        "customer_phone": {
+          "type": "string",
+          "description": "Телефон клиента цифрами, как он его продиктовал. При исходящем звонке — номер, на который звоним."
+        },
+        "order_id": {
+          "type": "string",
+          "description": "Номер заказа, если известен."
+        },
+        "topic": {
+          "type": "string",
+          "description": "О чём просят, одной фразой: «добавить товар», «отменить заказ»."
+        },
+        "urgency": {
+          "type": "string",
+          "description": "Срочность словами: сегодня, до доставки, не срочно."
+        },
+        "details": {
+          "type": "string",
+          "description": "Что важно знать оператору до звонка."
+        }
+      },
+      "required": [
+        "customer_name",
+        "customer_phone",
+        "topic"
+      ]
+    }
+  }
+]

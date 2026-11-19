@@ -1,0 +1,72 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "fetch_page",
+      "description": "Открывает страницу сайта лида и возвращает заголовок, описание, текст и ссылки. Только сайт самого лида.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Полный адрес страницы на сайте лида: главная или страница о компании, услугах, команде"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "submit_assessment",
+      "description": "Сдаёт оценку лида. Вызови один раз со всеми полями; если вернулись ошибки — исправь и вызови снова.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "fit": {
+            "type": "string",
+            "description": "high, medium или low — насколько похож на идеального клиента"
+          },
+          "intent": {
+            "type": "string",
+            "description": "high, medium или low — насколько ясна задача и готовность купить"
+          },
+          "company_size": {
+            "type": "string",
+            "description": "1, 2-10, 11-50, 51-200, 201-1000, 1000+ или unknown"
+          },
+          "urgency": {
+            "type": "string",
+            "description": "now, quarter, later или unknown"
+          },
+          "summary": {
+            "type": "string",
+            "description": "1–3 предложения для менеджера"
+          },
+          "questions": {
+            "type": "string",
+            "description": "До трёх вопросов для первого звонка через точку с запятой; пустая строка, если всё ясно"
+          },
+          "red_flags": {
+            "type": "string",
+            "description": "Через запятую: spam, job_seeker, student, competitor, vendor_pitch, out_of_area, existing_customer, test; пустая строка, если нет"
+          }
+        },
+        "required": [
+          "fit",
+          "intent",
+          "company_size",
+          "urgency",
+          "summary",
+          "questions",
+          "red_flags"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+]

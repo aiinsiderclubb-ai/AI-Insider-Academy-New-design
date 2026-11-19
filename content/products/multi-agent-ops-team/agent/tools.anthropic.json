@@ -1,0 +1,252 @@
+{
+  "orchestrator": [
+    {
+      "name": "email_triage_agent",
+      "description": "Разбирает входящее письмо: категория, срочность, суть, черновик ответа. Только для канала «почта».",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "Самодостаточная задача для агента: что спросил или написал клиент и всё, что о нём известно"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "leads_agent",
+      "description": "Квалифицирует потенциального клиента и сохраняет лида: задача, бюджет, сроки, кто решает, контакт.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "Самодостаточная задача для агента: что спросил или написал клиент и всё, что о нём известно"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "support_agent",
+      "description": "Отвечает на вопросы клиентов по базе знаний и создаёт обращения для сотрудников.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "Самодостаточная задача для агента: что спросил или написал клиент и всё, что о нём известно"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "reports_agent",
+      "description": "Готовит отчёт по цифрам из журналов за вчера, неделю или месяц. Только для команды и расписания.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "Самодостаточная задача для агента: что спросил или написал клиент и всё, что о нём известно"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "handoff_to_human",
+      "description": "Передаёт диалог менеджеру и уведомляет команду. Для денег, жалоб, просьбы позвать человека и всего, что агенты не решают.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Почему нужен человек, одной фразой"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Суть вопроса и что уже выяснено"
+          },
+          "urgency": {
+            "type": "string",
+            "description": "low, normal или high"
+          }
+        },
+        "required": [
+          "reason",
+          "summary",
+          "urgency"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "email_triage_agent": [
+    {
+      "name": "save_email_triage",
+      "description": "Сохраняет разбор письма в лист Inbox с черновиком ответа; о срочных и важных письмах сообщает команде. Вызывай один раз на письмо.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "lead, support, billing, partner, spam или other"
+          },
+          "priority": {
+            "type": "string",
+            "description": "low, normal, high или urgent"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Суть письма в 1–2 предложениях"
+          },
+          "draft_reply": {
+            "type": "string",
+            "description": "Черновик ответа; пустая строка для spam"
+          }
+        },
+        "required": [
+          "category",
+          "priority",
+          "summary",
+          "draft_reply"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "leads_agent": [
+    {
+      "name": "save_lead",
+      "description": "Сохраняет потенциального клиента в лист Leads, считает балл по правилам и сообщает команде о горячем лиде.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Имя клиента; пустая строка, если неизвестно"
+          },
+          "contact": {
+            "type": "string",
+            "description": "Email, телефон или Telegram клиента"
+          },
+          "company": {
+            "type": "string",
+            "description": "Компания; пустая строка, если неизвестна"
+          },
+          "need": {
+            "type": "string",
+            "description": "Что нужно клиенту, конкретно, его словами"
+          },
+          "budget_eur": {
+            "type": "number",
+            "description": "Бюджет в евро, если клиент назвал; 0, если нет"
+          },
+          "timeline": {
+            "type": "string",
+            "description": "now, month, quarter, later или unknown"
+          },
+          "decision_maker": {
+            "type": "string",
+            "description": "yes, no или unknown"
+          }
+        },
+        "required": [
+          "name",
+          "contact",
+          "company",
+          "need",
+          "budget_eur",
+          "timeline",
+          "decision_maker"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "support_agent": [
+    {
+      "name": "search_knowledge",
+      "description": "Ищет ответ в базе знаний компании. Вызывай перед любым ответом по существу. Возвращает до трёх статей или found=false.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Вопрос клиента ключевыми словами на его языке"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "create_ticket",
+      "description": "Создаёт обращение для сотрудника, когда вопрос требует действий человека, но не срочный. Возвращает номер обращения.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "Тема в 3–7 словах"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Суть: что случилось, что клиент сообщил, чего хочет"
+          },
+          "priority": {
+            "type": "string",
+            "description": "low, normal, high или urgent"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email клиента; пустая строка, если неизвестен"
+          }
+        },
+        "required": [
+          "topic",
+          "summary",
+          "priority",
+          "email"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "reports_agent": [
+    {
+      "name": "get_metrics",
+      "description": "Цифры для отчёта из журналов: диалоги, лиды, обращения, почта, вызовы агентов.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "type": "string",
+            "description": "yesterday, 7d или 30d"
+          }
+        },
+        "required": [
+          "period"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

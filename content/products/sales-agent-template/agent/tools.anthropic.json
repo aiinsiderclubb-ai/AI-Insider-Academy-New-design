@@ -1,0 +1,179 @@
+[
+  {
+    "name": "search_catalog",
+    "description": "Ищет товары и услуги в каталоге: название, описание, цена, наличие, есть ли онлайн-оплата. Цены и условия — только отсюда.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Задача или товар клиента ключевыми словами"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_sales_facts",
+    "description": "Одобренные ответы на возражения и вопросы о гарантиях, сроках, кейсах, сравнении с конкурентами. Вызывай перед ответом на возражение.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string",
+          "description": "Суть возражения или вопроса: дорого, гарантия, сроки внедрения, сравнение с конкурентом"
+        }
+      },
+      "required": [
+        "topic"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "save_lead",
+    "description": "Сохраняет то, что известно о клиенте, считает баллы квалификации и говорит, чего не хватает. Вызывай каждый раз, когда узнал новое.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Имя клиента или пустая строка"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email или пустая строка"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Телефон или пустая строка"
+        },
+        "need": {
+          "type": "string",
+          "description": "Какую задачу решает клиент, его словами; пустая строка, если не известно"
+        },
+        "budget": {
+          "type": "string",
+          "description": "Бюджет, как назвал клиент: «около 2 тыс €»; пустая строка, если не известно"
+        },
+        "timeline": {
+          "type": "string",
+          "description": "Когда нужно: «в этом месяце», «через квартал»; пустая строка, если не известно"
+        },
+        "authority": {
+          "type": "string",
+          "description": "Кто решает: «я», «с партнёром», «руководитель»; пустая строка, если не известно"
+        },
+        "product_id": {
+          "type": "string",
+          "description": "product_id из каталога, который обсуждаете; пустая строка, если нет"
+        },
+        "stage": {
+          "type": "string",
+          "description": "new, qualifying, offer_sent, call_booked, won или lost; пустая строка — не менять"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Важное для менеджера: возражения, детали; пустая строка, если нечего"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "phone",
+        "need",
+        "budget",
+        "timeline",
+        "authority",
+        "product_id",
+        "stage",
+        "notes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "send_offer",
+    "description": "Следующий шаг по товару: kind=payment — ссылка на оплату из каталога; kind=quote — запрос коммерческого предложения менеджеру.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "description": "product_id из search_catalog"
+        },
+        "kind": {
+          "type": "string",
+          "description": "payment или quote"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email клиента для КП; пустая строка для payment"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Что важно учесть в КП; пустая строка, если ничего"
+        }
+      },
+      "required": [
+        "product_id",
+        "kind",
+        "email",
+        "notes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "book_call",
+    "description": "Ссылка, по которой клиент сам выберет время звонка с менеджером; команда получает сигнал.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string",
+          "description": "О чём звонок, одной фразой"
+        },
+        "preferred_time": {
+          "type": "string",
+          "description": "Когда клиенту удобно, если сказал; иначе пустая строка"
+        }
+      },
+      "required": [
+        "topic",
+        "preferred_time"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "handoff_to_human",
+    "description": "Передаёт диалог менеджеру: крупная сделка, особые условия, просьба позвать человека, недовольство.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "Почему нужен человек, одной фразой"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Суть и что уже выяснено, чтобы менеджеру не перечитывать переписку"
+        },
+        "urgency": {
+          "type": "string",
+          "description": "low, normal или high"
+        }
+      },
+      "required": [
+        "reason",
+        "summary",
+        "urgency"
+      ],
+      "additionalProperties": false
+    }
+  }
+]

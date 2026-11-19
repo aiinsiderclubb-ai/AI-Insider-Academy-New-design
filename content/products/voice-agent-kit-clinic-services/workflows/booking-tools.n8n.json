@@ -301,9 +301,10 @@
     {
       "parameters": {
         "chatId": "={{ $('Config').first().json.staff_chat_id }}",
-        "text": "={{ $json.staff_message }}",
+        "text": "={{ String($json.staff_message).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
         "additionalFields": {
-          "appendAttribution": false
+          "appendAttribution": false,
+          "parse_mode": "HTML"
         }
       },
       "id": "3aa0cc67-f81f-5ff6-8c2f-2471da67ba9d",
@@ -322,7 +323,8 @@
           "id": "REPLACE_ME",
           "name": "Telegram bot"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {

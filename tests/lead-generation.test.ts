@@ -94,6 +94,12 @@ describe("Lead Generation kit", () => {
     expect(webflow.parsed.lead).toMatchObject({ name: "Марта", source: "webflow", form: "Contact Form" });
   });
 
+  it("reads UTM tags from the page address without the URL global", () => {
+    const lead = submit({ token: "tok_123", phone: "0501231231", page: "https://site.com/p?utm_source=ig&utm_medium=cpc%20ads#top" }).parsed.lead;
+    expect(lead.utm_source).toBe("ig");
+    expect(lead.utm_medium).toBe("cpc ads");
+  });
+
   it("reminds once, escalates later, and stays quiet outside working hours", () => {
     const read = () => sheets.handle({ method: "GET", url: `https://sheets.googleapis.com/v4/spreadsheets/sheet1/values/${encodeURIComponent("'Leads'!A1:U")}` });
     const at = (now: string) => runCode(code["Find Overdue"], { Config: { ...cfg, now_override: now } }, read());

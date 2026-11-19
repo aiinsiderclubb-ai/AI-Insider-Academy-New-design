@@ -1,0 +1,151 @@
+{
+  "name": "Telegram Inbox — разбор чата",
+  "nodes": [
+    {
+      "id": "694cbc88-421f-516f-869b-c6a57eaade30",
+      "name": "Read Me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -380
+      ],
+      "parameters": {
+        "content": "## Разбор рабочего чата каждые 15 минут\nАгент забирает новые сообщения через MCP-сервер Telegram Inbox, заводит лиды, передаёт спорное менеджеру.\n\n1. Запустите сервер в режиме HTTP рядом с n8n (docs/03-clients.md).\n2. **inbox** — его адрес и Bearer-токен = `MCP_HTTP_TOKEN`.\n3. **OpenAI Chat Model** — ваш ключ.\n4. Опубликуйте. Расписание — в узле **Every 15 minutes**.",
+        "width": 560,
+        "height": 300,
+        "color": 5
+      }
+    },
+    {
+      "id": "3fac2af3-5ca4-5eb2-980a-47a5b2c36d26",
+      "name": "Every 15 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -520,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "e8d65e1a-8893-56c9-8273-83ecbec2d01a",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -220,
+        0
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "Разбери новые сообщения рабочего Telegram-чата.\n\n1. Вызови fetch_new_messages, затем list_messages.\n2. Для каждого сообщения со статусом new реши, что это:\n   а) обращение клиента с контактом (телефон или email есть в тексте) и понятной потребностью → create_lead.\n      Имя — как клиент представился, need — суть запроса в 1–2 предложениях своими словами,\n      amount — только если клиент сам назвал сумму. Если клиент написал несколькими сообщениями подряд —\n      передай все их id одним вызовом.\n   б) у сообщения есть escalation_hints (жалоба, возврат, срочно, крупный клиент) → escalate,\n      даже если контакт есть. Лид в этом случае не заводи — решит менеджер.\n   в) клиент интересуется, но контакта в тексте нет → escalate с причиной «нет контакта».\n   г) внутреннее общение команды, приветствия, «спасибо», реклама → mark_messages со статусом ignored.\n3. Не придумывай телефоны, email, суммы и имена. Не заводи лид по сообщению сотрудника.\n4. В конце дай короткий отчёт: сколько лидов заведено (с номерами CRM), что передано менеджеру и почему,\n   что пропущено. Если сообщений не было — так и скажи одной строкой.",
+        "options": {
+          "systemMessage": "Ты разбираешь рабочий чат продаж. Действуешь только через инструменты Telegram Inbox и строго по заданию.",
+          "maxIterations": 25
+        }
+      }
+    },
+    {
+      "id": "71e570bc-f8c4-50a5-8940-3eaba5ffd073",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -300,
+        240
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_ME",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "id": "82b8953d-33e2-5f91-b02a-0c88ef53b57a",
+      "name": "inbox",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        -100,
+        240
+      ],
+      "parameters": {
+        "endpointUrl": "http://telegram-inbox:8765/mcp",
+        "serverTransport": "httpStreamable",
+        "authentication": "bearerAuth",
+        "include": "all",
+        "options": {}
+      },
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "REPLACE_ME",
+          "name": "inbox"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 15 minutes": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "inbox": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

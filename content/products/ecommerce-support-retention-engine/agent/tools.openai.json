@@ -1,0 +1,157 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "search_policies",
+      "description": "Ищет в правилах магазина: доставка, оплата, сроки, гарантия, размеры, возвраты, контакты. Вызывай перед любым ответом о правилах. Возвращает до трёх статей или found=false.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Вопрос клиента ключевыми словами, например: сроки доставки Польша"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_order",
+      "description": "Статус заказа, состав, отслеживание. Нужны номер заказа и email, указанный при оформлении. Данные вернутся, только если email совпадает с заказом.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Номер заказа, как его написал клиент"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email клиента из заказа; пустая строка, если клиент его не назвал"
+          }
+        },
+        "required": [
+          "order_id",
+          "email"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "check_return",
+      "description": "Проверяет по правилам магазина, можно ли вернуть товары из заказа. Ничего не создаёт и денег не возвращает. Итог: eligible, ineligible или needs_human с причинами.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Номер заказа"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email клиента из заказа"
+          },
+          "items": {
+            "type": "string",
+            "description": "Какие товары вернуть, через запятую; «все» — весь заказ"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Причина возврата словами клиента"
+          },
+          "condition": {
+            "type": "string",
+            "description": "unused — не использовался, used — использовался, damaged — брак или повреждение, unknown — неизвестно"
+          }
+        },
+        "required": [
+          "order_id",
+          "email",
+          "items",
+          "reason",
+          "condition"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_return_request",
+      "description": "Создаёт заявку на возврат для менеджера, если правила это допускают. Вызывай только после check_return и согласия клиента. Деньги не возвращает. Возвращает номер заявки.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Номер заказа"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email клиента из заказа"
+          },
+          "items": {
+            "type": "string",
+            "description": "Какие товары вернуть, через запятую; «все» — весь заказ"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Причина возврата словами клиента"
+          },
+          "condition": {
+            "type": "string",
+            "description": "unused, used, damaged или unknown"
+          }
+        },
+        "required": [
+          "order_id",
+          "email",
+          "items",
+          "reason",
+          "condition"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "handoff_to_human",
+      "description": "Передаёт диалог менеджеру и уведомляет команду. Для денег, жалоб, споров о возврате, просьбы позвать человека.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Почему нужен человек, одной фразой"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Суть: номер заказа, номер заявки, что уже выяснено"
+          },
+          "urgency": {
+            "type": "string",
+            "description": "low, normal или high"
+          }
+        },
+        "required": [
+          "reason",
+          "summary",
+          "urgency"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+]

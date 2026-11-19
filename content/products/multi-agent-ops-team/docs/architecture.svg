@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="14">
+  <title>Multi-Agent Ops Team — архитектура</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#475569"/>
+    </marker>
+    <style>
+      .box{fill:#fff;stroke:#334155;stroke-width:1.5;rx:10}
+      .in{fill:#eff6ff;stroke:#3b82f6}
+      .guard{fill:#fef3c7;stroke:#d97706}
+      .orch{fill:#ede9fe;stroke:#7c3aed}
+      .agent{fill:#ecfdf5;stroke:#059669}
+      .tool{fill:#f8fafc;stroke:#94a3b8}
+      .out{fill:#fdf2f8;stroke:#db2777}
+      .t{fill:#0f172a}
+      .s{fill:#475569;font-size:12px}
+      .l{stroke:#475569;stroke-width:1.5;fill:none;marker-end:url(#a)}
+      .d{stroke:#94a3b8;stroke-width:1.2;fill:none;stroke-dasharray:4 4;marker-end:url(#a)}
+    </style>
+  </defs>
+  <rect width="1000" height="700" fill="#ffffff"/>
+
+  <text x="20" y="34" font-size="20" font-weight="600" class="t">Multi-Agent Ops Team</text>
+  <text x="20" y="56" class="s">Один воркфлоу n8n: входы → защита → оркестратор → агенты → инструменты → журнал и ответ</text>
+
+  <!-- inputs -->
+  <g>
+    <rect x="20" y="90" width="170" height="44" class="box in"/><text x="34" y="117" class="t">Webhook: сайт, CRM</text>
+    <rect x="20" y="144" width="170" height="44" class="box in"/><text x="34" y="171" class="t">Telegram</text>
+    <rect x="20" y="198" width="170" height="44" class="box in"/><text x="34" y="225" class="t">Почта (IMAP)</text>
+    <rect x="20" y="252" width="170" height="44" class="box in"/><text x="34" y="279" class="t">Расписание 9:00</text>
+    <rect x="20" y="306" width="170" height="44" class="box in"/><text x="34" y="333" class="t">Webhook: команда</text>
+  </g>
+
+  <!-- guard in -->
+  <rect x="240" y="150" width="170" height="140" class="box guard"/>
+  <text x="256" y="176" font-weight="600" class="t">Guard In</text>
+  <text x="256" y="198" class="s">токены, лимиты</text>
+  <text x="256" y="216" class="s">номер карты, инъекции</text>
+  <text x="256" y="234" class="s">«позовите человека»</text>
+  <text x="256" y="252" class="s">кого можно звать:</text>
+  <text x="256" y="270" class="s">канал + дневной лимит</text>
+  <path d="M190 112 C215 112 215 190 240 190" class="l"/>
+  <path d="M190 166 C215 166 215 200 240 200" class="l"/>
+  <path d="M190 220 L240 220" class="l"/>
+  <path d="M190 274 C215 274 215 240 240 240" class="l"/>
+  <path d="M190 328 C215 328 215 260 240 260" class="l"/>
+
+  <!-- orchestrator -->
+  <rect x="460" y="150" width="200" height="140" class="box orch"/>
+  <text x="476" y="176" font-weight="600" class="t">Оркестратор</text>
+  <text x="476" y="198" class="s">AI Agent + память диалога</text>
+  <text x="476" y="216" class="s">понимает запрос</text>
+  <text x="476" y="234" class="s">ставит задачу агентам</text>
+  <text x="476" y="252" class="s">собирает ответ</text>
+  <text x="476" y="270" class="s">handoff_to_human</text>
+  <path d="M410 220 L460 220" class="l"/>
+
+  <!-- agents -->
+  <g>
+    <rect x="720" y="80" width="250" height="56" class="box agent"/><text x="736" y="104" font-weight="600" class="t">email_triage_agent</text><text x="736" y="124" class="s">категория, срочность, черновик</text>
+    <rect x="720" y="150" width="250" height="56" class="box agent"/><text x="736" y="174" font-weight="600" class="t">leads_agent</text><text x="736" y="194" class="s">квалификация, балл по правилам</text>
+    <rect x="720" y="220" width="250" height="56" class="box agent"/><text x="736" y="244" font-weight="600" class="t">support_agent</text><text x="736" y="264" class="s">база знаний, обращения</text>
+    <rect x="720" y="290" width="250" height="56" class="box agent"/><text x="736" y="314" font-weight="600" class="t">reports_agent</text><text x="736" y="334" class="s">только команда и расписание</text>
+  </g>
+  <path d="M660 190 C690 190 690 108 720 108" class="l"/>
+  <path d="M660 205 C690 205 690 178 720 178" class="l"/>
+  <path d="M660 235 C690 235 690 248 720 248" class="l"/>
+  <path d="M660 250 C690 250 690 318 720 318" class="l"/>
+
+  <!-- tools -->
+  <rect x="720" y="380" width="250" height="150" class="box tool"/>
+  <text x="736" y="404" font-weight="600" class="t">Инструменты (ветки воркфлоу)</text>
+  <text x="736" y="426" class="s">save_email_triage → Inbox</text>
+  <text x="736" y="444" class="s">save_lead → Leads, 🔥 в Telegram</text>
+  <text x="736" y="462" class="s">search_knowledge ← Knowledge</text>
+  <text x="736" y="480" class="s">create_ticket → Tickets</text>
+  <text x="736" y="498" class="s">get_metrics ← все журналы</text>
+  <text x="736" y="516" class="s">сбой таблицы → сигнал команде</text>
+  <path d="M845 346 L845 380" class="d"/>
+
+  <!-- guard out -->
+  <rect x="460" y="380" width="200" height="120" class="box guard"/>
+  <text x="476" y="406" font-weight="600" class="t">Guard Out</text>
+  <text x="476" y="428" class="s">трасса: агент → задача</text>
+  <text x="476" y="446" class="s">счёт лимитов агентов</text>
+  <text x="476" y="464" class="s">обещания, утечка, пустой</text>
+  <text x="476" y="482" class="s">недоступный агент → сигнал</text>
+  <path d="M560 290 L560 380" class="l"/>
+
+  <!-- outputs -->
+  <rect x="240" y="400" width="170" height="44" class="box out"/><text x="256" y="427" class="t">Telegram команды</text>
+  <rect x="240" y="460" width="170" height="44" class="box out"/><text x="256" y="487" class="t">Лист Log (трасса)</text>
+  <rect x="240" y="520" width="170" height="44" class="box out"/><text x="256" y="547" class="t">Ответ клиенту</text>
+  <path d="M460 430 L410 422" class="l"/>
+  <path d="M460 450 L410 482" class="l"/>
+  <path d="M460 470 C435 500 435 540 410 542" class="l"/>
+
+  <text x="20" y="620" class="s">Специалисты не видят переписку: оркестратор передаёт им самодостаточную задачу.</text>
+  <text x="20" y="640" class="s">Агент вне списка «можно звать» получает инструкцию-заглушку и не работает; лимиты — на сутки (UTC), по каждому агенту.</text>
+  <text x="20" y="660" class="s">Письма не отправляются автоматически: черновики — в листе Inbox, срочные — в Telegram команды.</text>
+</svg>

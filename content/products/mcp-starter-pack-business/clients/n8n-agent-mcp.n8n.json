@@ -1,0 +1,235 @@
+{
+  "name": "Агент с MCP: база, GitHub, HubSpot",
+  "nodes": [
+    {
+      "id": "15f16e49-652b-5807-8a85-3bd3c89fdd14",
+      "name": "Read Me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -380
+      ],
+      "parameters": {
+        "content": "## Агент с MCP: база, GitHub, HubSpot\n1. **OpenAI Chat Model** — ваш ключ.\n2. **db** (Postgres через DBHub) — адрес вашего DBHub в режиме HTTP и Bearer-токен из `--auth-token` (docs/06-n8n.md).\n3. **github** — Bearer = fine-grained PAT. Адрес `/mcp/readonly` — только чтение.\n4. **hubspot** — ключ MCP OAuth2 с client id/secret вашего MCP-коннектора HubSpot.\nЛишний сервер просто удалите. Имя узла становится приставкой к инструментам (`db_execute_sql`) — держите имена короткими.\nОткрывайте чат кнопкой **Open chat**.",
+        "width": 560,
+        "height": 340,
+        "color": 5
+      }
+    },
+    {
+      "id": "c5da5154-a3b7-5b3d-864c-8761c7b8c235",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -520,
+        0
+      ],
+      "parameters": {
+        "options": {}
+      },
+      "webhookId": "ce2d4b4c-769e-5138-b465-e67fd0bf3b59"
+    },
+    {
+      "id": "8fa6f9a3-8c96-509c-a602-5b3ae10669aa",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -220,
+        0
+      ],
+      "parameters": {
+        "options": {
+          "systemMessage": "Ты — рабочий ассистент компании. У тебя есть доступ к базе данных (только чтение), к GitHub (только чтение) и к HubSpot CRM.\n- Перед SQL-запросом посмотри схему через search_objects; не угадывай названия таблиц и колонок.\n- Запросы к базе — только SELECT, с LIMIT. Не показывай целиком персональные данные клиентов, если об этом не просили.\n- В HubSpot сначала покажи, что собираешься изменить, и меняй только после явного «да» пользователя.\n- Если данных не хватает — так и скажи, не придумывай цифры.",
+          "maxIterations": 10
+        }
+      }
+    },
+    {
+      "id": "cadf5487-2b46-5125-8b6f-33454c82dcdb",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -380,
+        240
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_ME",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "id": "a8032978-aa54-5fda-8d7f-ecd2e5d75a2f",
+      "name": "Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -220,
+        240
+      ],
+      "parameters": {
+        "contextWindowLength": 10
+      }
+    },
+    {
+      "id": "d7877d74-e7d9-5301-ad57-83191d7bc214",
+      "name": "db",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        -60,
+        240
+      ],
+      "parameters": {
+        "endpointUrl": "http://dbhub:8080/mcp",
+        "serverTransport": "httpStreamable",
+        "authentication": "bearerAuth",
+        "include": "all",
+        "options": {}
+      },
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "REPLACE_ME",
+          "name": "db"
+        }
+      }
+    },
+    {
+      "id": "9ee78250-ab35-56eb-ae63-cfbc46850c0d",
+      "name": "github",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        100,
+        240
+      ],
+      "parameters": {
+        "endpointUrl": "https://api.githubcopilot.com/mcp/readonly",
+        "serverTransport": "httpStreamable",
+        "authentication": "bearerAuth",
+        "include": "all",
+        "options": {}
+      },
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "REPLACE_ME",
+          "name": "github"
+        }
+      }
+    },
+    {
+      "id": "9f23d8ae-2757-5b34-9753-2aa023971771",
+      "name": "hubspot",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        260,
+        240
+      ],
+      "parameters": {
+        "endpointUrl": "https://mcp.hubspot.com",
+        "serverTransport": "httpStreamable",
+        "authentication": "mcpOAuth2Api",
+        "include": "all",
+        "options": {}
+      },
+      "credentials": {
+        "mcpOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "hubspot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "db": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "github": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "hubspot": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

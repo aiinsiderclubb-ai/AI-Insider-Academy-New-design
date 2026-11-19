@@ -13,7 +13,7 @@ export const ukr: Dictionary = {
     plans: "Підписки",
     community: "Спільнота",
     catalog: "Каталог курсів",
-    accelerator: "Accelerator",
+    accelerator: "Знайди своє в AI",
     bundles: "Пакети",
     vault: "Vault",
     creators: "Креатори",

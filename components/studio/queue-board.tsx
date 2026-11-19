@@ -211,7 +211,7 @@ function ApplicationQueue({
       <EmptyState
         icon={<Inbox className="h-5 w-5" aria-hidden />}
         title={pick(locale, "Заявок нет", "No applications")}
-        body={pick(locale, "Новые заявки Accelerator появятся здесь.", "New Accelerator applications appear here.")}
+        body={pick(locale, "Новые заявки на «Найди своё в AI» появятся здесь.", "New Find Your Path in AI applications appear here.")}
       />
     );
   }

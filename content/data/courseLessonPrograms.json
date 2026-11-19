@@ -842,97 +842,97 @@
   },
   "ai-insider-accelerator": {
    "duration": {
-    "ru": "30–45 мин",
-    "en": "30–45 min"
+    "ru": "12–20 мин",
+    "en": "12–20 min"
    },
    "countLabel": {
-    "ru": "12 уроков · intake",
-    "en": "12 lessons · intake"
+    "ru": "12 уроков · по заявке",
+    "en": "12 lessons · by application"
    },
    "lessons": [
     {
      "num": 1,
-     "titleRu": "Карта AI-индустрии 2026",
-     "titleEn": "AI industry map 2026",
-     "descRu": "Обзор рынка и ключевых направлений.",
-     "descEn": "Market overview and key tracks."
+     "titleRu": "Как устроен курс и куда вообще можно пойти в AI",
+     "titleEn": "How the course works and where you can go in AI",
+     "descRu": "Девять направлений AI, учебный бизнес на весь курс и Карта интереса.",
+     "descEn": "The nine AI directions, a practice business for the whole course and your Interest Map."
     },
     {
      "num": 2,
-     "titleRu": "AI для контента и маркетинга",
-     "titleEn": "AI for content and marketing",
-     "descRu": "Как AI меняет контент и продвижение.",
-     "descEn": "How AI transforms content and marketing."
+     "titleRu": "Минус час в день: AI в обычной работе",
+     "titleEn": "An hour back every day: AI in everyday work",
+     "descRu": "Формула промпта «Контекст → Задача → Формат → Проверка» и два сценария под себя.",
+     "descEn": "The Context → Task → Format → Check prompt formula and two workflows of your own."
     },
     {
      "num": 3,
-     "titleRu": "Автоматизации и n8n",
-     "titleEn": "Automations and n8n",
-     "descRu": "Логика workflow и первые сценарии.",
-     "descEn": "Workflow logic and first scenarios."
+     "titleRu": "Пост из одной идеи: текст и картинка",
+     "titleEn": "A post from one idea: text and image",
+     "descRu": "Мини-Brand Brain и пост с визуалом для учебного бизнеса.",
+     "descEn": "A one-page Brand Brain and a post with visuals for your practice business."
     },
     {
      "num": 4,
-     "titleRu": "Чат-боты для бизнеса",
-     "titleEn": "Chatbots for business",
-     "descRu": "Где боты приносят деньги.",
-     "descEn": "Where bots drive revenue."
+     "titleRu": "Видео из фотографии",
+     "titleEn": "Video from a photo",
+     "descRu": "Короткий вертикальный ролик 9:16 из AI-клипов с текстом и музыкой.",
+     "descEn": "A short vertical 9:16 video built from AI clips, with text and music."
     },
     {
      "num": 5,
-     "titleRu": "Голосовые AI-агенты",
-     "titleEn": "Voice AI agents",
-     "descRu": "Сценарии voice agents в продажах и поддержке.",
-     "descEn": "Voice agent use cases in sales and support."
+     "titleRu": "Первая автоматизация: отзывы клиентов",
+     "titleEn": "First automation: customer reviews",
+     "descRu": "Workflow в n8n: отзыв → AI → таблица → уведомление в Telegram.",
+     "descEn": "An n8n workflow: review → AI → table → Telegram alert."
     },
     {
      "num": 6,
-     "titleRu": "AI-агенты и RAG",
-     "titleEn": "AI agents and RAG",
-     "descRu": "От чатбота к автономному агенту.",
-     "descEn": "From chatbot to autonomous agent."
+     "titleRu": "Чат-бот, который отвечает клиентам",
+     "titleEn": "A chatbot that answers customers",
+     "descRu": "Telegram-бот, который отвечает по базе знаний и передаёт сложное администратору.",
+     "descEn": "A Telegram bot that answers from a knowledge base and hands the rest to a human."
     },
     {
      "num": 7,
-     "titleRu": "Prompt Engineering Pro",
-     "titleEn": "Prompt Engineering Pro",
-     "descRu": "Профессиональные промпты под задачи.",
-     "descEn": "Professional prompts for real tasks."
+     "titleRu": "Голосовой администратор",
+     "titleEn": "A voice receptionist",
+     "descRu": "Голосовой агент, с которым можно поговорить: отвечает и собирает заявку на запись.",
+     "descEn": "A voice agent you can talk to: it answers questions and takes booking requests."
     },
     {
      "num": 8,
-     "titleRu": "AI для продаж и лидов",
-     "titleEn": "AI for sales and leads",
-     "descRu": "Автоматизация коммуникаций и CRM.",
-     "descEn": "Automating comms and CRM."
+     "titleRu": "AI-агент: бот, который действует сам",
+     "titleEn": "AI agent: a bot that acts on its own",
+     "descRu": "Агент с памятью и инструментами, который сам находит окно и записывает клиента.",
+     "descEn": "An agent with memory and tools that finds a free slot and books the client itself."
     },
     {
      "num": 9,
-     "titleRu": "Монетизация AI-навыков",
-     "titleEn": "Monetizing AI skills",
-     "descRu": "Как зарабатывать на AI-услугах.",
-     "descEn": "How to earn from AI services."
+     "titleRu": "Лендинг без программиста",
+     "titleEn": "A landing page without a developer",
+     "descRu": "Опубликованный одностраничный сайт с кнопкой записи в Telegram-бота.",
+     "descEn": "A published one-page site with a booking button that opens your Telegram bot."
     },
     {
      "num": 10,
-     "titleRu": "Intake-тест и анкета",
-     "titleEn": "Intake test and application",
-     "descRu": "Диагностика уровня и целей.",
-     "descEn": "Level and goals assessment."
+     "titleRu": "Как продать то, что вы собрали",
+     "titleEn": "How to sell what you have built",
+     "descRu": "Разбор бизнеса, предложение в одну фразу, цена, первое сообщение и план созвона.",
+     "descEn": "A business teardown, a one-line offer, a price, a first message and a call plan."
     },
     {
      "num": 11,
-     "titleRu": "Выбор специализации",
-     "titleEn": "Choosing your track",
-     "descRu": "Подбор Pro-курса под вашу цель.",
-     "descEn": "Matching a Pro track to your goal."
+     "titleRu": "Финальный проект: AI-система для бизнеса",
+     "titleEn": "Final project: an AI system for a business",
+     "descRu": "Связанная система, описание на одну страницу, демо-видео и сквозная проверка.",
+     "descEn": "A connected system, a one-page description, a demo video and an end-to-end check."
     },
     {
      "num": 12,
-     "titleRu": "Финальный проект",
-     "titleEn": "Capstone project",
-     "descRu": "Персональная AI-система для работы или бизнеса.",
-     "descEn": "Personal AI system for work or business."
+     "titleRu": "Выбор направления и что дальше",
+     "titleEn": "Choosing your direction and what comes next",
+     "descRu": "Выбранное направление, проверка на ловушки и план на месяц по неделям.",
+     "descEn": "Your chosen direction, a check against common traps and a week-by-week plan for the month."
     }
    ]
   },

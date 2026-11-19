@@ -13,7 +13,7 @@ export const en: Dictionary = {
     plans: "Plans",
     community: "Community",
     catalog: "Course catalogue",
-    accelerator: "Accelerator",
+    accelerator: "Find Your Path in AI",
     bundles: "Bundles",
     vault: "Vault",
     creators: "Creators",

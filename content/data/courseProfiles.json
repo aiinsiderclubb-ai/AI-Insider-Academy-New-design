@@ -119,44 +119,44 @@
    "finalProjectEn": "Working n8n workflow with an AI step and notifications."
   },
   "ai-insider-accelerator": {
-   "shortDescription": "Intake-программа: все AI-направления, тест и выбор специализации. Подача заявки.",
-   "shortDescriptionEn": "Intake program: all AI tracks, test and specialization choice. Apply to enroll.",
-   "fullDescription": "AI Insider Accelerator — открытый набор для тех, кто хочет выбрать свой путь в AI. За 12 уроков вы пройдёте контент, автоматизации, чат-ботов, голосовых агентов, AI-агентов и монетизацию, сдадите intake-тест и выберете специализацию под себя.",
-   "fullDescriptionEn": "AI Insider Accelerator is an open intake for choosing your AI path. In 12 lessons you explore content, automation, chatbots, voice agents, AI agents and monetization, pass the intake test and pick your track.",
-   "courseIdea": "AI Insider Accelerator — открытый набор для тех, кто хочет выбрать свой путь в AI. За 12 уроков вы пройдёте контент, автоматизации, чат-ботов, голосовых агентов, AI-агентов и монетизацию, сдадите intake-тест и выберете специализацию под себя.",
-   "courseIdeaEn": "AI Insider Accelerator is an open intake for choosing your AI path. In 12 lessons you explore content, automation, chatbots, voice agents, AI agents and monetization, pass the intake test and pick your track.",
+   "shortDescription": "Девять направлений AI на практике — от контента до голосовых агентов. В конце — ваш путь и проект в портфолио.",
+   "shortDescriptionEn": "Nine AI directions in practice, from content to voice agents. You finish with your path chosen and a portfolio project.",
+   "fullDescription": "12 уроков, 9 направлений и одно решение — куда идти дальше. Бесплатно, по заявке. Вы пробуете каждое направление руками, а не смотрите обзоры, и весь курс работаете с одним бизнесом — к финалу у вас готовая AI-система. Куратор проверяет каждое задание.",
+   "fullDescriptionEn": "12 lessons, 9 directions and one decision: where to go next. Free, by application. You try every direction hands-on instead of watching overviews, and work with one business all course long, so you finish with a working AI system. A curator reviews every assignment.",
+   "courseIdea": "12 уроков, 9 направлений и одно решение — куда идти дальше. Бесплатно, по заявке. Вы пробуете каждое направление руками, а не смотрите обзоры, и весь курс работаете с одним бизнесом — к финалу у вас готовая AI-система. Куратор проверяет каждое задание.",
+   "courseIdeaEn": "12 lessons, 9 directions and one decision: where to go next. Free, by application. You try every direction hands-on instead of watching overviews, and work with one business all course long, so you finish with a working AI system. A curator reviews every assignment.",
    "forAudience": [
-    "Тех, кто выбирает карьеру в AI",
-    "Выпускников бесплатных курсов Academy",
-    "Предпринимателей перед выбором Pro-трека",
-    "Фрилансеров в поиске ниши",
-    "Новичков, готовых к структурированному intake"
+    "Тем, кто хочет в AI, но не знает, с чего начать",
+    "Тем, кто уже смотрел курсы и не понял, какое направление своё",
+    "Фрилансерам и специалистам, которые ищут новую нишу",
+    "Владельцам малого бизнеса, которые хотят понять, что AI может сделать для них"
    ],
    "forAudienceEn": [
-    "People choosing an AI career path",
-    "Free course graduates",
-    "Entrepreneurs before picking a Pro track",
-    "Freelancers finding their niche",
-    "Beginners ready for structured intake"
+    "People who want to get into AI but don't know where to start",
+    "People who have watched courses and still can't tell which direction is theirs",
+    "Freelancers and specialists looking for a new niche",
+    "Small business owners who want to see what AI can do for them"
    ],
    "goals": [
-    "Пройдёт все ключевые направления AI",
-    "Поймёт, какой трек подходит лично вам",
-    "Сдаст intake-тест и анкету",
-    "Выберет специализацию",
-    "Соберёт capstone-проект",
-    "Получит доступ к выбранному Pro-курсу"
+    "Писать промпты, которые дают рабочий результат с первого раза",
+    "Делать посты, визуал и короткие видео с AI в стиле бренда",
+    "Собирать автоматизации в n8n без кода",
+    "Делать Telegram-бота и AI-агента, который записывает клиентов",
+    "Настраивать голосового администратора",
+    "Собирать сайт без программиста",
+    "Формулировать и оценивать AI-услугу для клиента"
    ],
    "goalsEn": [
-    "Explore all key AI tracks",
-    "Find which track fits you",
-    "Complete intake test and application",
-    "Choose your specialization",
-    "Complete the capstone project",
-    "Unlock your chosen Pro path"
+    "Write prompts that give a usable result the first time",
+    "Make posts, visuals and short videos with AI in a brand's voice",
+    "Build automations in n8n without code",
+    "Build a Telegram bot and an AI agent that books clients",
+    "Set up a voice receptionist",
+    "Build a website without a developer",
+    "Shape and price an AI service for a client"
    ],
-   "finalProject": "Персональная AI-система и выбранная специализация для продолжения обучения.",
-   "finalProjectEn": "Personal AI system and chosen specialization for your next program."
+   "finalProject": "AI-система для реального бизнеса и ваше направление: минимум три связанных решения, описание на одну страницу и демо на две минуты.",
+   "finalProjectEn": "An AI system for a real business and your chosen direction: at least three connected solutions, a one-page description and a two-minute demo."
   },
   "ai-user-pro": {
    "shortDescription": "10 уроков: ChatGPT, Claude, Gemini, Perplexity, промпты, бизнес и личный AI-стек.",

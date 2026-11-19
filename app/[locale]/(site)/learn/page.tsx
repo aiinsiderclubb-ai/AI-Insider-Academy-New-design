@@ -247,8 +247,8 @@ export default async function LearnPage({
               title={pick(locale, "Открытый набор", "Open intake")}
               body={pick(
                 locale,
-                "Анкета, отборочный тест и выбор специализации — чтобы не гадать, с чего начинать.",
-                "An application, an intake test and a specialisation choice — so you don't have to guess where to start.",
+                "12 уроков, 9 направлений и одно решение — куда идти дальше. Бесплатно, по заявке.",
+                "12 lessons, 9 directions and one decision: where to go next. Free, by application.",
               )}
               as="h2"
             />

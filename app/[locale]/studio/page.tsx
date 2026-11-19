@@ -54,7 +54,7 @@ export default async function StudioPulsePage({ params }: { params: Promise<{ lo
             note={pick(locale, "ждут проверки куратора", "waiting on a curator")}
           />
           <QueueTile
-            label={pick(locale, "Заявки Accelerator", "Accelerator applications")}
+            label={pick(locale, "Заявки на «Найди своё в AI»", "Find Your Path in AI applications")}
             count={counts.applications}
             href={p("/studio/queue?tab=applications")}
             note={pick(locale, "ждут решения по набору", "waiting on an intake decision")}

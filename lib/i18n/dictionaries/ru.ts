@@ -15,7 +15,7 @@ export const ru = {
     plans: "Подписки",
     community: "Сообщество",
     catalog: "Каталог курсов",
-    accelerator: "Accelerator",
+    accelerator: "Найди своё в AI",
     bundles: "Пакеты",
     vault: "Vault",
     creators: "Креаторы",

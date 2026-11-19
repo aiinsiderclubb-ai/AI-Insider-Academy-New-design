@@ -23,6 +23,7 @@ export function configOf(flow: J): J {
 
 export function runCode(code: string, nodes: J, input: J): J[] {
   const $ = (name: string) => ({
+    isExecuted: name in nodes,
     first: () => {
       if (!(name in nodes)) throw new Error(`node ${name} has not run`);
       return { json: nodes[name] };

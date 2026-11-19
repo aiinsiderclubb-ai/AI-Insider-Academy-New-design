@@ -1,0 +1,100 @@
+[
+  {
+    "name": "search_knowledge",
+    "description": "Ищет ответ в базе знаний компании: товары, услуги, цены, оплата, доставка, возвраты, правила. Вызывай перед любым ответом по существу. Возвращает до трёх статей или found=false.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Вопрос клиента ключевыми словами на его языке, например: сроки доставки Польша"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_order_status",
+    "description": "Статус конкретного заказа. Нужны номер заказа и email, указанный при оформлении. Данные вернутся, только если email совпадает с заказом.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "description": "Номер заказа, как его написал клиент"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email клиента, указанный при оформлении заказа; пустая строка, если клиент его не назвал"
+        }
+      },
+      "required": [
+        "order_id",
+        "email"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "create_ticket",
+    "description": "Создаёт обращение для сотрудника, когда вопрос требует действий человека, но не срочный. Возвращает номер обращения.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string",
+          "description": "Тема в 3–7 словах"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Суть: что случилось, что клиент уже сообщил, чего он хочет"
+        },
+        "priority": {
+          "type": "string",
+          "description": "low, normal, high или urgent"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email клиента для ответа; пустая строка, если неизвестен"
+        }
+      },
+      "required": [
+        "topic",
+        "summary",
+        "priority",
+        "email"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "handoff_to_human",
+    "description": "Передаёт диалог менеджеру и уведомляет команду. Для денег, жалоб, просьбы позвать человека и всего, что агент решить не может.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "Почему нужен человек, одной фразой"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Суть вопроса и что уже выяснено, чтобы менеджеру не перечитывать переписку"
+        },
+        "urgency": {
+          "type": "string",
+          "description": "low, normal или high"
+        }
+      },
+      "required": [
+        "reason",
+        "summary",
+        "urgency"
+      ],
+      "additionalProperties": false
+    }
+  }
+]

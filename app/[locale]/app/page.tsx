@@ -149,8 +149,8 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
             title={pick(locale, "Пока нет открытых курсов", "No open courses yet")}
             body={pick(
               locale,
-              "Три программы доступны бесплатно сразу после регистрации — начните с них.",
-              "Three programmes are free the moment you register — start there.",
+              "Две программы доступны бесплатно сразу после регистрации — начните с них.",
+              "Two programmes are free the moment you register — start there.",
             )}
             action={
               <ButtonLink href={path("/learn?tab=free", locale)} size="sm">

@@ -116,9 +116,13 @@
   --shadow-glow: 0 0 0 1px color-mix(in oklab, #ef6a0a 26%, transparent), 0 16px 40px -16px color-mix(in oklab, #ef6a0a 42%, transparent);
 }
 
-/* Always-dark island: cinematic blocks keep their own ground in both themes. */
-.on-dark,
-.ch-ink {
+/* Dark island: cinematic blocks (hero, course chapters, footer) stand on the
+   dark ground in the dark theme. In the light theme they follow the page, so
+   a light visitor never meets a slab of near-black between paper sections.
+   `.keep-dark` is the one exception — a frame that must stay dark in both
+   themes (the sign-in poster). */
+.keep-dark,
+:root:not([data-theme="light"]) :is(.on-dark, .ch-ink) {
   color-scheme: dark;
   --ground: #0a0908;
   --ground-deep: #050504;
@@ -363,6 +367,21 @@
     background:
       linear-gradient(180deg, rgb(10 9 8 / 0.86) 0%, rgb(10 9 8 / 0.35) 38%, rgb(10 9 8 / 0.72) 78%, rgb(10 9 8 / 0.96) 100%),
       linear-gradient(90deg, rgb(10 9 8 / 0.92) 0%, rgb(10 9 8 / 0.45) 48%, rgb(10 9 8 / 0.15) 100%);
+  }
+  /* On paper the same scrim is warm paper, so the photo becomes a texture
+     behind dark type instead of a black block. */
+  :root[data-theme="light"] .scrim {
+    background:
+      linear-gradient(180deg, rgb(244 242 238 / 0.9) 0%, rgb(244 242 238 / 0.55) 38%, rgb(244 242 238 / 0.8) 78%, rgb(244 242 238 / 1) 100%),
+      linear-gradient(90deg, rgb(244 242 238 / 0.97) 0%, rgb(244 242 238 / 0.7) 48%, rgb(244 242 238 / 0.35) 100%);
+  }
+
+  /* Veil over the photo in the closing call-to-action panel. */
+  .panel-veil {
+    background: linear-gradient(180deg, rgb(10 9 8 / 0.9) 0%, rgb(10 9 8 / 0.78) 45%, rgb(10 9 8 / 0.94) 100%);
+  }
+  :root[data-theme="light"] .panel-veil {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.92) 0%, rgb(255 255 255 / 0.8) 45%, rgb(255 255 255 / 0.95) 100%);
   }
 
   .hairline-grid {

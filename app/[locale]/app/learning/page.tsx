@@ -61,8 +61,8 @@ export default async function LearningPage({ params }: { params: Promise<{ local
           title={pick(locale, "Здесь появятся ваши курсы", "Your courses will appear here")}
           body={pick(
             locale,
-            "Три программы открываются бесплатно сразу после регистрации.",
-            "Three programmes open for free the moment you register.",
+            "Две программы открываются бесплатно сразу после регистрации.",
+            "Two programmes open for free the moment you register.",
           )}
           action={
             <ButtonLink href={path("/learn?tab=free", locale)} size="sm">

@@ -224,8 +224,8 @@ export default async function LearnPage({
               title={pick(locale, "Начните без оплаты", "Start without paying")}
               body={pick(
                 locale,
-                "Три программы открываются сразу после регистрации — с домашними заданиями и прогрессом.",
-                "Three programmes open the moment you register — assignments and progress included.",
+                "Две программы открываются сразу после регистрации — с домашними заданиями и прогрессом.",
+                "Two programmes open the moment you register — assignments and progress included.",
               )}
               as="h2"
             />

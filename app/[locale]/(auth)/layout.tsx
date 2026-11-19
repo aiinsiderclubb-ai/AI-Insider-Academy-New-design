@@ -60,7 +60,7 @@ export default async function AuthLayout({
       </div>
 
       {/* ------------------------------ showcase ------------------------------ */}
-      <aside className="on-dark relative hidden min-h-dvh border-l border-line lg:sticky lg:top-0 lg:block lg:h-dvh">
+      <aside className="keep-dark relative hidden min-h-dvh border-l border-line lg:sticky lg:top-0 lg:block lg:h-dvh">
         <AuthPoster locale={locale} />
       </aside>
     </div>

@@ -151,7 +151,7 @@
    "finalProject": "Личная дорожная карта AI-специалиста и настроенный AI-помощник под ваши задачи.",
    "finalProjectEn": "Personal AI learning roadmap and an assistant configured for your tasks.",
    "hasHomework": false,
-   "catalogHidden": false,
+   "catalogHidden": true,
    "goals": [
     "Поймёт, что такое AI и как он меняет рынок",
     "Создаст первые запросы в ChatGPT",

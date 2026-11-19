@@ -74,7 +74,7 @@ export function Hero({
         fill
         priority
         sizes="100vw"
-        className="object-cover object-center saturate-[0.55] brightness-[0.78]"
+        className="object-cover object-center saturate-[0.55] brightness-[0.78] light:opacity-35 light:saturate-[0.3] light:brightness-110"
       />
       <div className="scrim absolute inset-0" aria-hidden />
       <div

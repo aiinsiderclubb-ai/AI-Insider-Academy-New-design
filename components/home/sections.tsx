@@ -257,14 +257,7 @@ export function Closing({
             sizes="(max-width: 1024px) 100vw, 1400px"
             className="object-cover opacity-30 saturate-[0.35]"
           />
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(180deg, rgb(10 9 8 / 0.9) 0%, rgb(10 9 8 / 0.78) 45%, rgb(10 9 8 / 0.94) 100%)",
-            }}
-          />
+          <div aria-hidden className="panel-veil absolute inset-0" />
           {/* The ember. It drifts, so the panel is never quite the same twice. */}
           <div
             aria-hidden

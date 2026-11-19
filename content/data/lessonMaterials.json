@@ -39,6 +39,14 @@
    ],
    "fn2": [
     {
+     "kind": "file",
+     "title": "Готовый workflow из урока (JSON)",
+     "titleEn": "The workflow from the lesson (JSON)",
+     "note": "Весь сценарий урока одним файлом: Webhook → AI Agent → Code → Google Sheets → Telegram. В n8n: меню ⋯ → Import from File. После импорта подключите свои ключи OpenAI, Google и Telegram — подсказки на жёлтой заметке над узлами.",
+     "noteEn": "The whole lesson in one file: Webhook → AI Agent → Code → Google Sheets → Telegram. In n8n: ⋯ menu → Import from File. Then connect your own OpenAI, Google and Telegram keys — the yellow note above the nodes says where.",
+     "href": "/materials/first-automation-n8n/lesson-2-workflow.json"
+    },
+    {
      "kind": "copy",
      "title": "Промпт для AI Agent: классификация заявки",
      "titleEn": "Prompt for the AI Agent: classifying a lead",

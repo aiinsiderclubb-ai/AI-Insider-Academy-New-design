@@ -1,0 +1,278 @@
+{
+  "name": "Урок 2 · Первая AI-автоматизация: заявка → AI → Sheets → Telegram",
+  "nodes": [
+    {
+      "id": "a1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "6f1c2a4e-1d1b-4c55-9a1e-0f1c2a4e1d1b",
+      "parameters": {
+        "path": "new-lead",
+        "options": {}
+      }
+    },
+    {
+      "id": "a2",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты — AI-классификатор входящих заявок потенциальных клиентов.\n\nПроанализируй ТОЛЬКО заявку ниже.\n\nТекст заявки:\n{{ $json.query.message }}\n\nОпредели:\n- category — одна из: Sales, Support, Partnership, Other\n- priority — одно из: LOW, MEDIUM, HIGH\n- summary — краткое резюме заявки в одном предложении\n\nНе объясняй свои рассуждения.\nНе давай рекомендации.\nНе описывай правила классификации.\nНе добавляй дополнительный текст.\nВерни исключительно JSON в формате:\n{\"category\": \"...\", \"priority\": \"...\", \"summary\": \"...\"}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a3",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        220,
+        220
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      }
+    },
+    {
+      "id": "a4",
+      "name": "Code in JavaScript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const raw = $json.output;\n\nlet data;\n\ntry {\n  data = JSON.parse(raw);\n} catch (error) {\n  throw new Error(\n    'AI вернул ответ не в формате JSON. Получено: ' + raw\n  );\n}\n\nif (!data.category) {\n  throw new Error('В ответе AI отсутствует поле category');\n}\n\nif (!data.priority) {\n  throw new Error('В ответе AI отсутствует поле priority');\n}\n\nif (!data.summary) {\n  throw new Error('В ответе AI отсутствует поле summary');\n}\n\nreturn [{ json: data }];"
+      }
+    },
+    {
+      "id": "a5",
+      "name": "Append row in sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        760,
+        0
+      ],
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Дата": "={{ $now.format('dd.MM.yyyy HH:mm') }}",
+            "Имя": "={{ $('Webhook').item.json.query.name }}",
+            "Email": "={{ $('Webhook').item.json.query.email }}",
+            "Телефон": "={{ $('Webhook').item.json.query.phone }}",
+            "Сообщение": "={{ $('Webhook').item.json.query.message }}",
+            "Категория": "={{ $('Code in JavaScript').item.json.category }}",
+            "Приоритет": "={{ $('Code in JavaScript').item.json.priority }}",
+            "Резюме": "={{ $('Code in JavaScript').item.json.summary }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Имя",
+              "displayName": "Имя",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Телефон",
+              "displayName": "Телефон",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сообщение",
+              "displayName": "Сообщение",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Категория",
+              "displayName": "Категория",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Приоритет",
+              "displayName": "Приоритет",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Резюме",
+              "displayName": "Резюме",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a6",
+      "name": "Send a text message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        980,
+        0
+      ],
+      "parameters": {
+        "chatId": "ВАШ_CHAT_ID",
+        "text": "=🔔 Новая заявка\n\nИмя: {{ $('Webhook').item.json.query.name }}\nПриоритет: {{ $('Code in JavaScript').item.json.priority }}\nКатегория: {{ $('Code in JavaScript').item.json.category }}\nКонтакт: {{ $('Webhook').item.json.query.phone }} · {{ $('Webhook').item.json.query.email }}\n\n{{ $('Code in JavaScript').item.json.summary }}\n\nСообщение клиента:\n{{ $('Webhook').item.json.query.message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      }
+    },
+    {
+      "id": "a7",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -260
+      ],
+      "parameters": {
+        "width": 1200,
+        "height": 220,
+        "content": "## Урок 2 · Первая AI-автоматизация\nФорма → Webhook → AI Agent → Code (проверка JSON) → Google Sheets → Telegram.\n\nПосле импорта:\n1. OpenAI Chat Model — выберите свой ключ OpenAI.\n2. Append row in sheet — подключите Google, вставьте ссылку на таблицу и выберите лист (заголовки — из материалов урока).\n3. Send a text message — подключите бота от BotFather и замените ВАШ_CHAT_ID на свой chat id.\n4. Тест: откройте Webhook → Test URL и добавьте ?name=Анна&email=a@mail.com&phone=%2B380000000&message=Нужна автоматизация заявок"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

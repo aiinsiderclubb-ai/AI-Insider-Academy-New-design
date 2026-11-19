@@ -9,7 +9,7 @@ import { Headline } from "@/components/motion/headline";
 import { Magnetic } from "@/components/motion/pointer";
 import { Reveal } from "@/components/motion/reveal";
 import { CourseTrailer } from "@/components/catalog/course-trailer";
-import { toModules } from "@/content/catalog";
+import { groupLessons } from "@/content/catalog";
 import { courseTrailer } from "@/content/covers";
 import { pick } from "@/content/locale";
 import type { Course } from "@/lib/api/catalog";
@@ -45,7 +45,7 @@ export function CourseHero({
   const soon = course.status === "in-development";
   /* `durationLabel` already opens with the lesson count, so showing it here
      would print the same number twice. Modules say something it does not. */
-  const moduleCount = toModules(course.lessons).length;
+  const moduleCount = groupLessons(course.lessons, course.modulePlan).length;
 
   const moduleForms: [string, string, string] =
     locale === "en"
@@ -138,9 +138,11 @@ export function CourseHero({
                 <p className="mt-2 text-[12.5px] text-muted">
                   {owned
                     ? pick(locale, "Доступ открыт", "Access is open")
-                    : course.isFree
-                      ? pick(locale, "после регистрации", "after signing up")
-                      : d.common.forever}
+                    : course.isIntake
+                      ? pick(locale, "по заявке", "by application")
+                      : course.isFree
+                        ? pick(locale, "после регистрации", "after signing up")
+                        : d.common.forever}
                 </p>
               </div>
 
@@ -149,25 +151,35 @@ export function CourseHero({
                   href={
                     owned
                       ? path(`/study/${course.slug}/1`, locale)
-                      : course.isFree
-                        ? path(`/register?next=/learn/${course.slug}`, locale)
-                        : soon
-                          ? "#access"
-                          : path(`/learn/${course.slug}/buy`, locale)
+                      : course.isIntake
+                        ? path(`/learn/${course.slug}/apply`, locale)
+                        : course.isFree
+                          ? path(`/register?next=/learn/${course.slug}`, locale)
+                          : soon
+                            ? "#access"
+                            : path(`/learn/${course.slug}/buy`, locale)
                   }
                   size="lg"
                   className="group"
                 >
                   {owned
                     ? d.common.continue
-                    : course.isFree
-                      ? d.learn.startFree
-                      : soon
-                        ? d.study.notifyMe
-                        : d.learn.buyCourse}
+                    : course.isIntake
+                      ? d.learn.apply
+                      : course.isFree
+                        ? d.learn.startFree
+                        : soon
+                          ? d.study.notifyMe
+                          : d.learn.buyCourse}
                   <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                 </ButtonLink>
               </Magnetic>
+
+              {course.isIntake && !owned && (
+                <p className="max-w-[17rem] text-[12.5px] leading-snug text-muted">
+                  {pick(locale, "Первый урок открыт всем — посмотрите до заявки.", "The first lesson is open to everyone — watch it before you apply.")}
+                </p>
+              )}
 
               <Link
                 href="#curriculum"

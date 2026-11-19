@@ -1,7 +1,7 @@
 import "server-only";
 import coursesContent from "@/content/data/courses.json";
 import { CLUB_INCLUDED_PAID_IDS, DIFFICULTY, HIDDEN_COURSE_IDS, PRO_ONLY_COURSE_IDS } from "@/content/site";
-import { programFor, toModules } from "@/content/catalog";
+import { groupLessons, programFor } from "@/content/catalog";
 import { field, pick } from "@/content/locale";
 import type { Locale } from "@/lib/i18n/config";
 import { tryApi } from "./http";
@@ -55,6 +55,8 @@ export interface Course {
   hasHomework: boolean;
   contentLocked: boolean;
   lessons: Lesson[];
+  /** Named modules from the course program, or null to split in fives. */
+  modulePlan: { title: string; size: number }[] | null;
   faq: { q: string; a: string }[];
 }
 
@@ -134,6 +136,9 @@ function mergeCourse(content: ContentCourse, live: ApiCourse | undefined, locale
     hasHomework: Boolean(content.hasHomework) || !isFree,
     contentLocked: live?.contentLocked ?? !isFree,
     lessons: toLessons(lessonsSource, locale, isFree),
+    modulePlan:
+      program?.modules?.map((item) => ({ title: locale === "en" ? item.titleEn : item.titleRu, size: item.size })) ??
+      null,
     faq: Array.isArray(content.faq)
       ? (content.faq as { q: string; qEn?: string; a: string; aEn?: string }[]).map((entry) => ({
           q: locale === "en" ? (entry.qEn ?? entry.q) : entry.q,
@@ -190,7 +195,7 @@ export function groupCourses(courses: Course[]): CatalogGroups {
   };
 }
 
-/** Course modules for the curriculum accordion. */
+/** Course modules for the curriculum accordion: named ones when the program has them. */
 export function courseModules(course: Course) {
-  return toModules(course.lessons);
+  return groupLessons(course.lessons, course.modulePlan);
 }

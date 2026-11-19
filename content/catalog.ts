@@ -100,10 +100,19 @@ export interface ProgramLesson {
   descEn: string;
 }
 
+/** A named module of a fixed length, for a course written in modules. */
+export interface ProgramModule {
+  size: number;
+  titleRu: string;
+  titleEn: string;
+}
+
 export interface LessonProgram {
   duration: { ru: string; en: string };
   countLabel: { ru: string; en: string };
   lessons: ProgramLesson[];
+  /** When present, lessons are split by these sizes instead of in fives. */
+  modules?: ProgramModule[];
 }
 
 const lessonPrograms = programs.LESSON_PROGRAMS as unknown as Record<string, LessonProgram>;
@@ -137,6 +146,35 @@ export function toModules<T>(lessons: T[], size = 5): T[][] {
     modules.at(-1)?.push(...last);
   }
   return modules;
+}
+
+export interface ModuleGroup<T> {
+  /** The module's own name, or null for courses split mechanically. */
+  title: string | null;
+  lessons: T[];
+}
+
+/**
+ * Split lessons the way the course itself is written. A course whose program
+ * names its modules gets exactly those modules; every other course falls back
+ * to `toModules`. A plan that does not add up to the lesson count — lessons
+ * added since it was written — is ignored rather than trusted, so nothing is
+ * dropped or doubled.
+ */
+export function groupLessons<T>(
+  lessons: T[],
+  plan: { title: string; size: number }[] | null | undefined,
+): ModuleGroup<T>[] {
+  const total = plan?.reduce((sum, item) => sum + item.size, 0) ?? 0;
+  if (!plan?.length || total !== lessons.length) {
+    return toModules(lessons).map((group) => ({ title: null, lessons: group }));
+  }
+  let start = 0;
+  return plan.map((item) => {
+    const group = { title: item.title, lessons: lessons.slice(start, start + item.size) };
+    start += item.size;
+    return group;
+  });
 }
 
 /* --------------------------------- homework -------------------------------- */

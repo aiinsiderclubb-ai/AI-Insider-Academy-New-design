@@ -934,6 +934,23 @@
      "descRu": "Выбранное направление, проверка на ловушки и план на месяц по неделям.",
      "descEn": "Your chosen direction, a check against common traps and a week-by-week plan for the month."
     }
+   ],
+   "modules": [
+    {
+     "size": 4,
+     "titleRu": "Делаю сам быстрее",
+     "titleEn": "Doing it faster myself"
+    },
+    {
+     "size": 5,
+     "titleRu": "Строю системы",
+     "titleEn": "Building systems"
+    },
+    {
+     "size": 3,
+     "titleRu": "Продаю и выбираю",
+     "titleEn": "Selling and choosing"
+    }
    ]
   },
   "ai-saas-builder": {

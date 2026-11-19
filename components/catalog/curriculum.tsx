@@ -2,7 +2,7 @@ import { Lock, Play } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Reveal } from "@/components/motion/reveal";
 import { ScrollRail } from "@/components/motion/rail";
-import { toModules } from "@/content/catalog";
+import { groupLessons } from "@/content/catalog";
 import type { Course } from "@/lib/api/catalog";
 import { lessonCount, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,7 @@ export function Curriculum({
   /** Lessons below this index render as open; the rest show a lock. */
   unlockedUpTo?: number;
 }) {
-  const modules = toModules(course.lessons);
+  const modules = groupLessons(course.lessons, course.modulePlan);
   if (!course.lessons.length) return null;
 
   return (
@@ -36,7 +36,7 @@ export function Curriculum({
       <ScrollRail className="left-0 sm:left-1" />
 
       <ol className="flex flex-col">
-        {modules.map((lessons, moduleIndex) => (
+        {modules.map(({ title, lessons }, moduleIndex) => (
           <Reveal as="li" key={moduleIndex} delay={Math.min(moduleIndex, 5) * 60}>
             <details
               name="curriculum"
@@ -49,7 +49,7 @@ export function Curriculum({
                     {String(moduleIndex + 1).padStart(2, "0")}
                   </span>
                   <span className="font-display text-[clamp(1.15rem,2.1vw,1.6rem)] leading-tight font-extrabold tracking-[-0.03em] text-ink transition-colors group-hover:text-accent">
-                    {d.learn.module} {moduleIndex + 1}
+                    {title ?? `${d.learn.module} ${moduleIndex + 1}`}
                   </span>
                 </span>
                 <span className="flex shrink-0 items-center gap-4">

@@ -246,7 +246,9 @@ export default async function CoursePage({
                 ? pick(locale, "Два способа пройти курс", "Two ways to take it")
                 : owned
                   ? pick(locale, "Курс уже ваш", "Already yours")
-                  : pick(locale, "Как начать", "How to start"),
+                  : course.isIntake
+                    ? pick(locale, "Как попасть в поток", "How to join the cohort")
+                    : pick(locale, "Как начать", "How to start"),
             ]}
             body={
               twoTiers
@@ -448,11 +450,23 @@ export default async function CoursePage({
                   </p>
                   <Magnetic className="mt-5">
                     <ButtonLink
-                      href={course.isFree || soon ? path("/learn", locale) : path(`/learn/${course.slug}/buy`, locale)}
+                      href={
+                        course.isIntake
+                          ? path(`/learn/${course.slug}/apply`, locale)
+                          : course.isFree || soon
+                            ? path("/learn", locale)
+                            : path(`/learn/${course.slug}/buy`, locale)
+                      }
                       size="lg"
                       className="group"
                     >
-                      {course.isFree ? d.learn.startFree : soon ? d.study.notifyMe : d.learn.buyCourse}
+                      {course.isIntake
+                        ? d.learn.apply
+                        : course.isFree
+                          ? d.learn.startFree
+                          : soon
+                            ? d.study.notifyMe
+                            : d.learn.buyCourse}
                       <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                     </ButtonLink>
                   </Magnetic>

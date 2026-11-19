@@ -66,21 +66,33 @@ export function AccessTiers({
             <p className="mt-4 text-[14.5px] leading-relaxed text-ink-2">
               {soon
                 ? d.study.videoSoonBody
-                : pick(
-                    locale,
-                    "Регистрация занимает минуту — уроки открываются сразу.",
-                    "Registration takes a minute and the lessons open immediately.",
-                  )}
+                : course.isIntake
+                  ? pick(
+                      locale,
+                      "Курс бесплатный, но места ограничены — куратор проверяет каждую работу. Заполните короткую анкету, ответ придёт на почту.",
+                      "The course is free, but places are limited: a curator reviews every assignment. Fill in a short application and we will reply by email.",
+                    )
+                  : pick(
+                      locale,
+                      "Регистрация занимает минуту — уроки открываются сразу.",
+                      "Registration takes a minute and the lessons open immediately.",
+                    )}
             </p>
           </div>
           <Magnetic>
             <ButtonLink
-              href={soon ? path("/learn", locale) : path(`/register?next=/learn/${course.slug}`, locale)}
+              href={
+                soon
+                  ? path("/learn", locale)
+                  : course.isIntake
+                    ? path(`/learn/${course.slug}/apply`, locale)
+                    : path(`/register?next=/learn/${course.slug}`, locale)
+              }
               variant={soon ? "secondary" : "primary"}
               size="lg"
               className="group"
             >
-              {soon ? d.study.notifyMe : d.learn.startFree}
+              {soon ? d.study.notifyMe : course.isIntake ? d.learn.apply : d.learn.startFree}
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
             </ButtonLink>
           </Magnetic>

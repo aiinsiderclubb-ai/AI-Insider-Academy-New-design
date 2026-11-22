@@ -21,8 +21,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string; doc: string }>;
 }): Promise<Metadata> {
-  const { doc } = await params;
-  const document = legalDocument(doc);
+  const { doc, locale } = await params;
+  const document = legalDocument(doc, locale as Locale);
   if (!document) return {};
   return { title: document.title, description: document.subtitle };
 }
@@ -36,17 +36,22 @@ export default async function LegalPage({
   const locale = raw as Locale;
   const d = getDictionary(locale);
 
-  const document = legalDocument(doc);
+  const document = legalDocument(doc, locale);
   if (!document) notFound();
 
+  // Required rows show "not provided" until filled; a sole trader may have no
+  // registration or tax number, so those rows appear only when they exist.
+  const optional = (value: string) => (value.trim() ? legalValue(value) : undefined);
   const requisites: { label: string; value: string | null }[] = [
-    { label: pick(locale, "Продавец", "Seller"), value: legalValue(legalEntity.legalName) },
+    { label: pick(locale, "Продавец", "Seller"), value: legalValue(pick(locale, legalEntity.legalName, legalEntity.legalNameEn)) },
     { label: pick(locale, "Страна", "Country"), value: legalValue(legalEntity.registrationCountry) },
-    { label: pick(locale, "Регистрация", "Registration"), value: legalValue(legalEntity.registrationNumber) },
-    { label: pick(locale, "Налоговый номер", "Tax ID"), value: legalValue(legalEntity.taxId) },
     { label: pick(locale, "Адрес", "Address"), value: legalValue(legalEntity.address) },
-    { label: "IBAN", value: legalValue(legalEntity.iban) },
+    ...[
+      { label: pick(locale, "Регистрация", "Registration"), value: optional(legalEntity.registrationNumber) },
+      { label: pick(locale, "Налоговый номер", "Tax ID"), value: optional(legalEntity.taxId) },
+    ].filter((row): row is { label: string; value: string | null } => row.value !== undefined),
     { label: pick(locale, "Применимое право", "Governing law"), value: legalValue(legalEntity.governingLaw) },
+    { label: pick(locale, "Продавец по заказам (Merchant of Record)", "Merchant of Record"), value: "Paddle.com Market Limited" },
   ];
 
   return (

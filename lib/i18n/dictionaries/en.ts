@@ -522,7 +522,7 @@ export const en: Dictionary = {
     learning: "Learning",
     company: "Company",
     legal: "Legal",
-    offer: "Public offer",
+    offer: "Terms of Service",
     privacy: "Privacy policy",
     refund: "Refund policy",
     impressum: "Impressum",

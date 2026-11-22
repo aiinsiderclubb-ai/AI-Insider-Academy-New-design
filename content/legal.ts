@@ -1,4 +1,5 @@
 import legal from "./data/legal.json";
+import type { Locale } from "@/lib/i18n";
 
 export interface LegalSection {
   id: string;
@@ -14,25 +15,37 @@ export interface LegalDocument {
   sections: LegalSection[];
 }
 
+interface Meta {
+  title: string;
+  subtitle: string;
+}
+
+/** Russian text, and an English one where it exists; Ukrainian readers get the Russian. */
 const DOCS = {
-  offer: { data: legal.offer, meta: legal.offerMeta },
-  privacy: { data: legal.privacy, meta: legal.privacyMeta },
-  refund: { data: legal.refund, meta: legal.refundMeta },
-  impressum: { data: legal.impressum, meta: legal.impressumMeta },
-  "giveaway-rules": { data: legal.giveawayRules, meta: legal.giveawayRulesMeta },
+  offer: { ru: legal.offer, ruMeta: legal.offerMeta, en: legal.offerEn, enMeta: legal.offerEnMeta },
+  privacy: { ru: legal.privacy, ruMeta: legal.privacyMeta, en: legal.privacyEn, enMeta: legal.privacyEnMeta },
+  refund: { ru: legal.refund, ruMeta: legal.refundMeta, en: legal.refundEn, enMeta: legal.refundEnMeta },
+  impressum: { ru: legal.impressum, ruMeta: legal.impressumMeta, en: legal.impressumEn, enMeta: legal.impressumEnMeta },
+  "giveaway-rules": { ru: legal.giveawayRules, ruMeta: legal.giveawayRulesMeta, en: null, enMeta: null },
 } as const;
+
+/** Other addresses people (and payment providers' reviewers) try for the same document. */
+const ALIASES: Record<string, keyof typeof DOCS> = { terms: "offer", refunds: "refund" };
 
 export type LegalSlug = keyof typeof DOCS;
 
-export const legalSlugs = Object.keys(DOCS) as LegalSlug[];
+export const legalSlugs = [...Object.keys(DOCS), ...Object.keys(ALIASES)];
 
-export function legalDocument(slug: string): LegalDocument | null {
-  const entry = DOCS[slug as LegalSlug];
+export function legalDocument(slug: string, locale: Locale = "ru"): LegalDocument | null {
+  const key = (ALIASES[slug] ?? slug) as LegalSlug;
+  const entry = DOCS[key];
   if (!entry) return null;
+  const english = locale === "en" && entry.en;
+  const meta = (english ? entry.enMeta : entry.ruMeta) as Meta | null;
   return {
-    slug,
-    title: entry.meta?.title ?? slug,
-    subtitle: entry.meta?.subtitle ?? "",
-    sections: (entry.data ?? []) as unknown as LegalSection[],
+    slug: key,
+    title: meta?.title ?? key,
+    subtitle: meta?.subtitle ?? "",
+    sections: ((english ? entry.en : entry.ru) ?? []) as unknown as LegalSection[],
   };
 }

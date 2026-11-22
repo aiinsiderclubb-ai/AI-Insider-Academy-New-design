@@ -1,19 +1,19 @@
 {
   "LEGAL_ENTITY": {
     "draft": true,
-    "legalName": "TODO: Полное юридическое имя (например, Vladyslav Katash / GmbH / ФОП)",
-    "legalNameEn": "TODO: Full legal name",
-    "registrationCountry": "TODO: страна регистрации",
-    "registrationNumber": "TODO: Handelsregister / ЄДРПОУ / Company ID",
-    "taxId": "TODO: USt-IdNr / Steuernummer / ІПН",
-    "address": "TODO: улица, индекс, город, страна",
+    "legalName": "TODO: имя и фамилия продавца",
+    "legalNameEn": "TODO: seller's full name",
+    "registrationCountry": "TODO: country",
+    "registrationNumber": "",
+    "taxId": "",
+    "address": "TODO: contact address",
     "emailClaims": "info@myinsideracademy.com",
     "emailPrivacy": "info@myinsideracademy.com",
     "telegram": "@vladyslavarcher",
-    "bankName": "TODO: банк",
-    "iban": "TODO: IBAN",
-    "bic": "TODO: SWIFT/BIC",
-    "governingLaw": "TODO: применимое право и суд",
-    "updatedAt": "2026-09-07"
+    "bankName": "",
+    "iban": "",
+    "bic": "",
+    "governingLaw": "TODO: law of the seller's country",
+    "updatedAt": "2026-11-22"
   }
 }

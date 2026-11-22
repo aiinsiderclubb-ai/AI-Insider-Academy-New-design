@@ -24,12 +24,19 @@ describe("legal copy before live sales", () => {
     expect(legalJson).not.toMatch(/Stripe/);
     expect(legalJson).not.toMatch(/LiqPay/);
 
-    const offer = legalDocument("offer");
-    expect(offer?.sections.some((section) => section.id === "withdrawal")).toBe(true);
-    expect(offer?.sections.flatMap((section) => section.paragraphs).join(" ")).toMatch(/Tribute/);
+    expect(legalJson).not.toMatch(/Tribute/);
 
-    const privacy = legalDocument("privacy");
-    expect(privacy?.sections.flatMap((section) => section.paragraphs).join(" ")).toMatch(/Tribute/);
-    expect(privacy?.sections.flatMap((section) => section.paragraphs).join(" ")).not.toMatch(/Stripe/);
+    // Paddle sells every order; its reviewers look for this sentence in the terms.
+    for (const locale of ["ru", "en"] as const) {
+      const offer = legalDocument("offer", locale);
+      const text = (doc: ReturnType<typeof legalDocument>) => doc?.sections.flatMap((section) => [...section.paragraphs, ...(section.items ?? [])]).join(" ") ?? "";
+      expect(text(offer)).toMatch(/Paddle\.com/);
+      expect(text(offer)).toMatch(/Merchant of Record/);
+      expect(text(legalDocument("refund", locale))).toMatch(/14/);
+      expect(text(legalDocument("privacy", locale))).toMatch(/Paddle/);
+    }
+    expect(legalDocument("offer", "en")?.title).toBe("Terms of Service");
+    expect(legalDocument("terms", "en")?.slug).toBe("offer");
+    expect(legalDocument("offer", "ukr")?.title).toBe(legalDocument("offer", "ru")?.title);
   });
 });

@@ -2,143 +2,261 @@
   "offer": [
     {
       "id": "general",
-      "title": "1. Общие положения",
+      "title": "1. Кто мы",
       "paragraphs": [
-        "Настоящая публичная оферта (далее — «Оферта») определяет условия, на которых AI Insider Academy (сайт myinsideracademy.com, далее — «Платформа») предоставляет доступ к образовательным материалам в цифровом виде.",
-        "Продавец — лицо, указанное в Impressum и в блоке реквизитов на этой странице. Пока регистрационные данные продавца не опубликованы, продажа курсов на Платформе не ведётся.",
-        "Акцепт Оферты — оплата выбранного курса и отметка на странице оплаты о немедленном предоставлении доступа. Договор заключается в электронной форме.",
-        "Контакт по договору, претензиям и персональным данным: info@myinsideracademy.com. Telegram: @vladyslavarcher.",
-        "Для потребителей в Европейском союзе и ЕЭЗ сохраняются императивные нормы страны проживания. Они имеют приоритет над этой Офертой, если закон не позволяет от них отступить."
+        "AI Insider Academy («мы») ведёт сайт https://myinsideracademy.com («Платформа») и сама создаёт онлайн-курсы и цифровые продукты, которые на нём продаются. Кто стоит за AI Insider Academy, указано в реквизитах продавца внизу этой страницы и в Impressum.",
+        "Эти условия действуют для каждой покупки на Платформе и для пользования аккаунтом. Создавая аккаунт или оформляя заказ, вы их принимаете.",
+        "Контакт: info@myinsideracademy.com, Telegram @vladyslavarcher."
       ]
     },
     {
-      "id": "services",
-      "title": "2. Предмет договора",
+      "id": "reseller",
+      "title": "2. Paddle — продавец по заказам",
       "paragraphs": [
-        "Продавец предоставляет доступ к выбранному онлайн-курсу: видеоуроки, материалы урока и связанные функции кабинета в объёме, описанном на странице курса на момент оплаты.",
-        "Это цифровой контент. Физическая доставка не осуществляется. Доступ открывается в аккаунте Academy после подтверждения оплаты.",
-        "Marketplace, Vault, подписки Club/Pro и пакеты курсов этой Офертой не продаются, пока для них не опубликован отдельный оффер и способ оплаты."
+        "Заказы на нашем сайте оформляет наш онлайн-реселлер Paddle.com. Paddle.com — продавец по всем нашим заказам (Merchant of Record). Paddle отвечает на вопросы об оплате и оформляет возвраты.",
+        "При покупке договор купли-продажи заключается с Paddle, и к оплате применяются условия Paddle для покупателей (https://www.paddle.com/legal/checkout-buyer-terms). Paddle списывает деньги с карты или другим способом, считает и уплачивает НДС или налог с продаж и выдаёт чек или счёт.",
+        "За сам продукт отвечаем мы: за его содержание, доступ к нему и качество, описанное на его странице."
       ]
     },
     {
-      "id": "payment",
-      "title": "3. Стоимость и оплата",
+      "id": "products",
+      "title": "3. Что мы продаём",
       "paragraphs": [
-        "Цены указаны в евро (EUR) на странице курса, включая применимый налог, если он указан. Итоговая сумма к оплате совпадает с ценой карточки в Tribute.",
-        "Оплата проходит через Tribute (Telegram): карта, СБП, Stars или TON — в зависимости от того, что доступно в Tribute на момент платежа.",
-        "Чтобы доступ открылся автоматически, в Tribute нужно указать ту же электронную почту, что у аккаунта на myinsideracademy.com. Иначе оплату придётся сопоставить вручную через поддержку.",
-        "Доступ открывается после подтверждения платежа вебхуком Tribute. Пока продажа закрыта (prelaunch) или реквизиты продавца не опубликованы, кнопка оплаты на сайте недоступна."
+        "Все продукты на Платформе цифровые и созданы нами. Физических товаров и сторонних продавцов нет."
+      ],
+      "items": [
+        "Онлайн-курсы: видеоуроки, материалы уроков и связанные функции кабинета.",
+        "Товары магазина: n8n-воркфлоу для скачивания, наборы AI-агентов и голосовых агентов, конфигурации MCP-серверов, библиотеки промптов, шаблоны и инструкции — как описано на странице каждого товара.",
+        "Хранилища и наборы: несколько товаров магазина по одной цене."
       ]
     },
     {
-      "id": "access",
-      "title": "4. Срок доступа",
+      "id": "prices",
+      "title": "4. Цены и оплата",
       "paragraphs": [
-        "Разовый курс, оплаченный отдельно, остаётся в аккаунте без ограничения по времени (пожизненный доступ), включая обновления этого курса на Платформе.",
-        "Платформа может заменить технический способ доставки видео (хостинг, плеер), не уменьшая объём купленного курса."
+        "Цены указаны в евро (EUR) на странице каждого продукта и включают НДС, где он применяется; на странице оплаты Paddle может показать сумму в вашей валюте.",
+        "Все покупки — разовые платежи. Подписок сейчас нет; если они появятся, условия продления и отмены будут описаны здесь до первой продажи подписки.",
+        "Оплату принимает Paddle на странице оплаты: карта, PayPal, Apple Pay, Google Pay или другой способ, который Paddle предлагает в вашей стране."
       ]
     },
     {
-      "id": "withdrawal",
-      "title": "5. Право отказа (14 дней) и цифровой контент",
+      "id": "delivery",
+      "title": "5. Получение и доступ",
       "paragraphs": [
-        "Потребитель в ЕС/ЕЭЗ вправе отказаться от договора, заключённого дистанционно, в течение 14 дней без указания причин — пока доступ к курсу ещё не предоставлен.",
-        "Курс — цифровой контент не на материальном носителе. Если на странице оплаты вы явно требуете открыть доступ сразу и подтверждаете, что теряете право отказа, это право прекращается, как только курс открыт в кабинете. Это соответствует правилам дистанционной продажи цифрового контента в ЕС.",
-        "Отказ от 14-дневного права не лишает права на возврат, если доступ так и не открылся, если деньги списали дважды или если Платформа существенно не исполнила договор. Подробности — в политике возврата."
+        "Доступ открывается в кабинете автоматически, как только Paddle подтвердит оплату, обычно за минуту. Курсы — в разделе «Мои курсы», товары магазина — в Библиотеке, где можно скачать каждый файл и его новые версии.",
+        "Купленный курс остаётся в аккаунте, пока работает Платформа, вместе с обновлениями этого курса. Мы можем сменить способ хранения или показа видео, не уменьшая купленного.",
+        "Если доступ не открылся в течение часа после оплаты, напишите на info@myinsideracademy.com с email вашего аккаунта."
       ]
     },
     {
-      "id": "rights",
-      "title": "6. Лицензия и ограничения",
+      "id": "license",
+      "title": "6. Лицензия",
       "paragraphs": [
-        "Вы получаете неисключительную лицензию на личное использование материалов курса и на применение навыков в своей работе, включая коммерческие проекты.",
-        "Нельзя перепродавать курс как товар, выкладывать исходные видео и файлы в открытый доступ и передавать доступ к аккаунту третьим лицам в массовом порядке.",
-        "Платформа может ограничить доступ при нарушении этих правил."
+        "Вы получаете неисключительную лицензию без права передачи: использовать купленное в своей работе, в том числе в коммерческих проектах для клиентов, в рамках уровня лицензии, выбранного при оплате (личная, клиентская или агентская — как описано на странице товара).",
+        "Нельзя перепродавать или раздавать курсы и файлы в исходном виде, публиковать их и пользоваться одним аккаунтом нескольким людям.",
+        "При явном нарушении этих правил мы можем приостановить доступ; уже сделанные возвраты остаются в силе."
       ]
     },
     {
-      "id": "contacts",
-      "title": "7. Контакты",
+      "id": "refunds",
+      "title": "7. Возврат",
       "paragraphs": [
-        "Договор, претензии, возврат: info@myinsideracademy.com.",
-        "Персональные данные: info@myinsideracademy.com.",
-        "Telegram: @vladyslavarcher.",
-        "Реквизиты продавца (имя, адрес, налоговый номер, банк) публикуются в Impressum и в блоке реквизитов ниже, как только будут заполнены. До этого момента продажа не ведётся."
+        "Полный возврат возможен в течение 14 дней после покупки. Подробности — в политике возврата: https://myinsideracademy.com/ru/legal/refund. Возврат оформляет Paddle на тот же способ оплаты."
+      ]
+    },
+    {
+      "id": "account",
+      "title": "8. Аккаунт",
+      "paragraphs": [
+        "Не передавайте данные для входа другим людям; за действия в аккаунте отвечаете вы. Удалить аккаунт можно в любой момент — напишите на info@myinsideracademy.com."
+      ]
+    },
+    {
+      "id": "liability",
+      "title": "9. Ответственность",
+      "paragraphs": [
+        "Курсы и наборы учат и помогают в вашей собственной работе; конкретный бизнес-результат мы не гарантируем. Ничто в этих условиях не ограничивает ответственность, которую закон ограничивать не позволяет, в том числе ваши права потребителя."
+      ]
+    },
+    {
+      "id": "changes",
+      "title": "10. Изменения и право",
+      "paragraphs": [
+        "Мы можем обновлять эти условия; к заказу применяется редакция, опубликованная на этой странице в момент заказа.",
+        "Условия регулируются правом, указанным в реквизитах продавца ниже. Если вы потребитель, за вами сохраняется защита императивных норм страны, где вы живёте."
       ]
     }
   ],
   "offerMeta": {
-    "title": "Публичная оферта",
-    "subtitle": "Условия доступа к курсам AI Insider Academy. Оплата — Tribute. Продажа открывается после публикации реквизитов продавца."
+    "title": "Условия использования (оферта)",
+    "subtitle": "На каких условиях AI Insider Academy продаёт онлайн-курсы и цифровые продукты. Заказы оформляет Paddle.com — продавец по нашим заказам (Merchant of Record)."
+  },
+  "offerEn": [
+    {
+      "id": "general",
+      "title": "1. Who we are",
+      "paragraphs": [
+        "AI Insider Academy (“we”, “us”) runs the website https://myinsideracademy.com (the “Platform”) and creates the online courses and digital products offered on it. The person behind AI Insider Academy is named in the seller details at the end of this page and in the Impressum.",
+        "These Terms apply to every purchase on the Platform and to the use of your account. By creating an account or placing an order you agree to them.",
+        "Contact: info@myinsideracademy.com, Telegram @vladyslavarcher."
+      ]
+    },
+    {
+      "id": "reseller",
+      "title": "2. Paddle is the Merchant of Record",
+      "paragraphs": [
+        "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.",
+        "When you buy, the contract of sale is with Paddle, and Paddle’s Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) apply to the payment. Paddle charges your card or other payment method, calculates and collects any VAT or sales tax, and issues the receipt or invoice.",
+        "We remain responsible for the product itself: its content, your access to it and the quality described on its page."
+      ]
+    },
+    {
+      "id": "products",
+      "title": "3. What we sell",
+      "paragraphs": [
+        "All products on the Platform are digital and created by us. There are no physical goods and no third-party sellers."
+      ],
+      "items": [
+        "Online courses: video lessons, lesson materials and the related features of your account.",
+        "Store products: downloadable n8n workflows, AI agent and voice agent kits, MCP server configurations, prompt libraries, templates and guides, as described on each product page.",
+        "Vaults and bundles: sets of store products sold together at one price."
+      ]
+    },
+    {
+      "id": "prices",
+      "title": "4. Prices and payment",
+      "paragraphs": [
+        "Prices are shown in euros (EUR) on each product page and include VAT where it applies; Paddle may show the amount in your local currency at checkout.",
+        "All purchases are one-time payments. We do not sell subscriptions at this time; if we introduce them, these Terms will describe renewal and cancellation before the first subscription is sold.",
+        "Payment is taken by Paddle at checkout by card, PayPal, Apple Pay, Google Pay or another method Paddle offers in your country."
+      ]
+    },
+    {
+      "id": "delivery",
+      "title": "5. Delivery and access",
+      "paragraphs": [
+        "Access opens automatically in your account as soon as Paddle confirms the payment, usually within a minute. Courses appear under “My courses”; store products in your Library, where you can download every file and its later versions.",
+        "A course you buy stays in your account for as long as the Platform operates, including updates to that course. We may change how videos are hosted or played without reducing what you bought.",
+        "If access does not open within one hour of payment, write to info@myinsideracademy.com with the email of your account."
+      ]
+    },
+    {
+      "id": "license",
+      "title": "6. License",
+      "paragraphs": [
+        "You receive a non-exclusive, non-transferable license to use what you buy in your own work, including commercial work for your clients, within the license tier chosen at checkout (personal, client or agency, as described on the product page).",
+        "You may not resell or give away the courses or files as they are, publish them, or share one account among several people.",
+        "We may suspend access where these rules are clearly broken; refunds already issued remain refunded."
+      ]
+    },
+    {
+      "id": "refunds",
+      "title": "7. Refunds",
+      "paragraphs": [
+        "You can get a full refund within 14 days of purchase. The details are in our Refund Policy at https://myinsideracademy.com/en/legal/refund. Refunds are processed by Paddle to the original payment method."
+      ]
+    },
+    {
+      "id": "account",
+      "title": "8. Your account",
+      "paragraphs": [
+        "Keep your login details private; you are responsible for activity in your account. You can delete your account at any time by writing to info@myinsideracademy.com."
+      ]
+    },
+    {
+      "id": "liability",
+      "title": "9. Liability",
+      "paragraphs": [
+        "Our courses and kits teach and support your own work; we do not guarantee any particular business result. Nothing in these Terms limits liability that cannot be limited by law, including your statutory rights as a consumer."
+      ]
+    },
+    {
+      "id": "changes",
+      "title": "10. Changes and law",
+      "paragraphs": [
+        "We may update these Terms; the version on this page at the time of your order applies to that order.",
+        "These Terms are governed by the law stated in the seller details below. If you are a consumer, you also keep the protection of the mandatory laws of the country where you live."
+      ]
+    }
+  ],
+  "offerEnMeta": {
+    "title": "Terms of Service",
+    "subtitle": "The terms on which AI Insider Academy sells online courses and digital products. Orders are processed by Paddle.com, our Merchant of Record."
   },
   "privacy": [
     {
       "id": "controller",
-      "title": "1. Кто обрабатывает данные",
+      "title": "1. Кто отвечает за данные",
       "paragraphs": [
-        "Оператор персональных данных — продавец AI Insider Academy, контакт: info@myinsideracademy.com. Telegram: @vladyslavarcher.",
-        "Полные регистрационные данные оператора публикуются в Impressum. Пока они не заполнены, публичные продажи на Платформе выключены.",
-        "Сайт: https://myinsideracademy.com."
+        "Оператор ваших персональных данных — продавец, указанный в реквизитах внизу этой страницы и в Impressum, работающий под названием AI Insider Academy. Контакт: info@myinsideracademy.com, Telegram @vladyslavarcher.",
+        "Paddle.com, продавец по нашим заказам (Merchant of Record), обрабатывает платёжные данные как самостоятельный оператор по своей политике: https://www.paddle.com/legal/privacy."
       ]
     },
     {
       "id": "data",
       "title": "2. Какие данные мы собираем",
-      "paragraphs": [
-        "При регистрации и оплате: имя, email, данные аккаунта, история покупок и прогресс обучения.",
-        "Технические данные: IP-адрес, cookies, данные браузера и устройства — для входа, безопасности и диагностики.",
-        "При подключении Telegram: идентификатор чата для уведомлений, если вы сами связываете бота."
+      "paragraphs": [],
+      "items": [
+        "Аккаунт: имя, email, хеш пароля или сервис, через который вы вошли (Google, Apple), язык.",
+        "Покупки: что, когда и за сколько куплено, номер транзакции Paddle. Данные карты мы не видим и не храним.",
+        "Обучение: прогресс по курсам, присланные домашние задания, отзывы.",
+        "Технические данные: IP-адрес, данные браузера и устройства, cookies для входа в аккаунт.",
+        "По желанию: ID чата в Telegram, если вы подключили бота уведомлений; вопросы, которые вы задаёте ассистенту на сайте."
       ]
     },
     {
       "id": "purposes",
-      "title": "3. Зачем обрабатываем",
+      "title": "3. Зачем",
       "paragraphs": [
-        "Чтобы создать аккаунт, принять оплату, открыть курс, ответить на обращения, выполнить законные обязанности (учёт, претензии) и защитить сервис от злоупотреблений.",
-        "Письма о продукте (подтверждение, доступ, восстановление пароля) нужны для договора. Маркетинговые рассылки — только если вы на них согласились и можете отписаться."
+        "Чтобы вести ваш аккаунт и выдать купленное; отвечать на обращения; защищать Платформу и предотвращать мошенничество; выполнять требования закона, например бухгалтерские; и — только с вашего согласия — присылать новости, от которых можно отписаться в любой момент."
       ]
     },
     {
-      "id": "legal-basis",
+      "id": "bases",
       "title": "4. Правовые основания (GDPR)",
-      "paragraphs": [
-        "Исполнение договора (ст. 6 (1)(b) GDPR): аккаунт, оплата, доступ к курсу.",
-        "Законный интерес (ст. 6 (1)(f)): безопасность, предотвращение мошенничества, базовая диагностика.",
-        "Согласие (ст. 6 (1)(a)): маркетинговые письма и необязательные cookies.",
-        "Юридическая обязанность (ст. 6 (1)(c)): хранение данных об оплате в пределах требований бухучёта и претензий."
+      "paragraphs": [],
+      "items": [
+        "Договор (ст. 6(1)(b)): аккаунт, покупки, доступ, поддержка.",
+        "Законный интерес (ст. 6(1)(f)): безопасность, защита от мошенничества, базовая диагностика.",
+        "Согласие (ст. 6(1)(a)): рассылки, необязательные cookies, ассистент на сайте.",
+        "Юридическая обязанность (ст. 6(1)(c)): хранение сведений о покупках."
       ]
     },
     {
-      "id": "sharing",
-      "title": "5. Кто ещё видит данные",
+      "id": "processors",
+      "title": "5. Кто ещё обрабатывает данные",
       "paragraphs": [
-        "Данные передаются только тем, без кого услуга не работает, и только в нужном объёме.",
-        "Сейчас это: Vercel (сайт), Render (API и база), Microsoft 365 / smtp.office365.com (письма с info@myinsideracademy.com), Tribute (оплата в Telegram).",
-        "Если появится другой платёжный провайдер, список на этой странице обновят до включения оплаты через него."
+        "Только сервисы, без которых Платформа не работает, и только в нужном им объёме:"
+      ],
+      "items": [
+        "Paddle (оплата, налоги, возвраты) — самостоятельный оператор.",
+        "Vercel (сайт), Render (сервер приложения и база данных), Cloudflare R2 (видео уроков).",
+        "Microsoft 365 (письма с info@myinsideracademy.com).",
+        "Google и Apple (только если вы входите через них).",
+        "OpenAI (только вопросы, которые вы задаёте ассистенту на сайте, и контекст страницы для ответа).",
+        "Telegram (только если вы подключили бота).",
+        "Часть этих сервисов обрабатывает данные за пределами ЕС/ЕЭЗ — на основании стандартных договорных условий Еврокомиссии или решения о достаточности защиты."
       ]
     },
     {
       "id": "retention",
-      "title": "6. Срок хранения",
+      "title": "6. Сколько храним",
       "paragraphs": [
-        "Данные аккаунта хранятся, пока аккаунт активен, и разумный срок после удаления — если закон требует сохранить сведения об оплате.",
-        "Запрос на удаление: info@myinsideracademy.com. Мы удалим то, что не обязаны хранить."
+        "Данные аккаунта — пока аккаунт существует. Сведения о покупках — сколько требуют налоговое и бухгалтерское право. Вопросы ассистенту мы не храним; OpenAI может хранить их до 30 дней для защиты от злоупотреблений по своим правилам API. После удаления аккаунта мы стираем всё, что не обязаны хранить."
       ]
     },
     {
       "id": "rights",
       "title": "7. Ваши права",
       "paragraphs": [
-        "Вы можете запросить доступ, исправление, удаление, ограничение обработки, перенос данных и отзыв согласия — через info@myinsideracademy.com или Telegram @vladyslavarcher.",
-        "Жалобу можно подать в надзорный орган по месту жительства. Для Германии это, как правило, уполномоченный по защите данных вашей федеральной земли; для ЕС — орган по GDPR в вашей стране."
+        "Вы можете запросить доступ к данным, исправление, удаление, ограничение обработки, копию данных, возразить против обработки или отозвать согласие — напишите на info@myinsideracademy.com. Также можно подать жалобу в орган по защите данных по месту жительства."
       ]
     },
     {
       "id": "cookies",
       "title": "8. Cookies",
       "paragraphs": [
-        "Нужные cookies: вход в аккаунт и язык интерфейса. Без них сайт не может вас узнать после логина.",
-        "Аналитические cookies не ставим, пока вы на них явно не согласитесь."
+        "Мы используем только cookies, нужные для входа в аккаунт и запоминания языка. Аналитических и рекламных cookies без вашего согласия не ставим. Страница оплаты Paddle ставит свои cookies, когда вы платите."
       ]
     }
   ],
@@ -146,103 +264,260 @@
     "title": "Политика конфиденциальности",
     "subtitle": "Как AI Insider Academy обрабатывает персональные данные. Контакт: info@myinsideracademy.com."
   },
+  "privacyEn": [
+    {
+      "id": "controller",
+      "title": "1. Who is responsible",
+      "paragraphs": [
+        "The controller of your personal data is the seller named in the seller details at the end of this page and in the Impressum, trading as AI Insider Academy. Contact: info@myinsideracademy.com, Telegram @vladyslavarcher.",
+        "Paddle.com, our Merchant of Record, processes payment data as an independent controller under its own privacy policy: https://www.paddle.com/legal/privacy."
+      ]
+    },
+    {
+      "id": "data",
+      "title": "2. What we collect",
+      "paragraphs": [],
+      "items": [
+        "Account: name, email address, password hash or the sign-in provider you used (Google, Apple), language.",
+        "Purchases: what you bought, when, the amount and Paddle’s transaction reference. We never see or store your card details.",
+        "Learning: course progress, homework you submit, reviews you write.",
+        "Technical: IP address, browser and device data, cookies needed to keep you signed in.",
+        "Optional: your Telegram chat ID if you connect our notification bot; questions you type into the site assistant."
+      ]
+    },
+    {
+      "id": "purposes",
+      "title": "3. Why we use it",
+      "paragraphs": [
+        "To run your account and give you what you bought; to answer your messages; to keep the Platform secure and prevent fraud; to meet legal obligations such as bookkeeping; and, only if you agreed, to send you news, which you can stop at any time."
+      ]
+    },
+    {
+      "id": "bases",
+      "title": "4. Legal bases (GDPR)",
+      "paragraphs": [],
+      "items": [
+        "Contract (Art. 6(1)(b)): account, purchases, access, support.",
+        "Legitimate interests (Art. 6(1)(f)): security, fraud prevention, basic diagnostics.",
+        "Consent (Art. 6(1)(a)): marketing emails, optional cookies, the site assistant.",
+        "Legal obligation (Art. 6(1)(c)): keeping purchase records."
+      ]
+    },
+    {
+      "id": "processors",
+      "title": "5. Who else processes data",
+      "paragraphs": [
+        "Only providers we need to run the service, and only to the extent they need:"
+      ],
+      "items": [
+        "Paddle (payments, tax, refunds) — independent controller.",
+        "Vercel (website hosting), Render (application server and database), Cloudflare R2 (lesson videos).",
+        "Microsoft 365 (email from info@myinsideracademy.com).",
+        "Google and Apple (only if you choose to sign in with them).",
+        "OpenAI (only the questions you type into the site assistant and the page context needed to answer them).",
+        "Telegram (only if you connect our bot).",
+        "Some of these providers process data outside the EU/EEA; they do so under the European Commission’s standard contractual clauses or an adequacy decision."
+      ]
+    },
+    {
+      "id": "retention",
+      "title": "6. How long we keep it",
+      "paragraphs": [
+        "Account data: while your account exists. Purchase records: as long as tax and accounting law requires. We do not keep the questions you ask the site assistant; OpenAI may retain them for up to 30 days for abuse monitoring under its API terms. When you delete your account we erase everything we are not required to keep."
+      ]
+    },
+    {
+      "id": "rights",
+      "title": "7. Your rights",
+      "paragraphs": [
+        "You can ask for access, correction, deletion, restriction, a copy of your data, and object to processing or withdraw consent — write to info@myinsideracademy.com. You can also complain to the data protection authority where you live."
+      ]
+    },
+    {
+      "id": "cookies",
+      "title": "8. Cookies",
+      "paragraphs": [
+        "We use only the cookies needed to sign you in and remember your language. We set no analytics or advertising cookies without your consent. Paddle’s checkout sets its own cookies when you pay."
+      ]
+    }
+  ],
+  "privacyEnMeta": {
+    "title": "Privacy Policy",
+    "subtitle": "How AI Insider Academy handles personal data. Contact: info@myinsideracademy.com."
+  },
   "refund": [
     {
-      "id": "general",
-      "title": "1. Общие условия",
+      "id": "guarantee",
+      "title": "1. Возврат за 14 дней",
       "paragraphs": [
-        "Эта политика применяется к разовым курсам AI Insider Academy, оплаченным через Tribute на myinsideracademy.com.",
-        "Подписки Club/Pro, пакеты и Marketplace этой политикой не покрываются, пока они не продаются на Платформе."
+        "Если курс или цифровой продукт вам не подошёл, вы можете запросить полный возврат в течение 14 дней с даты покупки. Объяснять причину не нужно.",
+        "Это относится к любой покупке на myinsideracademy.com: курсам, товарам магазина, хранилищам и наборам."
       ]
     },
     {
-      "id": "withdrawal",
-      "title": "2. 14 дней для потребителей ЕС",
+      "id": "how",
+      "title": "2. Как запросить возврат",
       "paragraphs": [
-        "Пока доступ к курсу не открыт, потребитель в ЕС/ЕЭЗ может отказаться от покупки в течение 14 дней без объяснения причин. Напишите на info@myinsideracademy.com с email аккаунта.",
-        "На оплате вы можете потребовать открыть курс сразу. Тогда вы подтверждаете, что теряете 14-дневное право отказа с момента открытия доступа. Бесплатный превью-урок на сайте отказом не считается.",
-        "Право на возврат остаётся, если курс не открылся, если Tribute списал оплату дважды или если мы не можем предоставить купленный контент."
+        "Напишите на info@myinsideracademy.com с email вашего аккаунта, укажите продукт и дату покупки — или обратитесь напрямую в Paddle на https://paddle.net, где заказ находится по email, указанному при оплате.",
+        "Paddle, продавец по нашим заказам, возвращает деньги на тот же способ оплаты. Мы подтверждаем возврат в течение 5 рабочих дней; когда деньги дойдут, зависит от вашего банка или платёжного сервиса."
       ]
     },
     {
-      "id": "goodwill",
-      "title": "3. Если доступ уже открыт",
+      "id": "after",
+      "title": "3. После возврата",
       "paragraphs": [
-        "После открытия курса законный отказ для цифрового контента, как правило, не применяется — вы сами просили начать исполнение сразу.",
-        "Если вы не смотрели уроки сверх бесплатного превью и написали в течение 14 дней после оплаты, мы можем вернуть деньги по добровольному решению поддержки. Это не обязанность и не отменяет пункт 2.",
-        "Возврат не делается, если материалы перепродавали, передавали доступ третьим лицам или многократно запрашивают возврат после просмотра курса."
+        "Доступ к курсу или продукту, за который вернули деньги, из аккаунта убирается, и лицензия на его файлы прекращается.",
+        "Мы можем отказать, если тому же покупателю уже возвращали деньги за этот же продукт."
       ]
     },
     {
-      "id": "process",
-      "title": "4. Как вернуть деньги",
+      "id": "problems",
+      "title": "4. Ошибки оплаты",
       "paragraphs": [
-        "Напишите на info@myinsideracademy.com или в Telegram @vladyslavarcher: email аккаунта Academy, курс, дата оплаты, если есть — id платежа Tribute.",
-        "Возврат идёт тем же путём, которым платили в Tribute, после одобрения. Срок со нашей стороны — до 14 календарных дней; зачисление зависит от Tribute и банка.",
-        "Реквизиты продавца для бухгалтерии — в Impressum и в блоке реквизитов. Пока они не опубликованы, продажи нет, возвращать с Платформы нечего."
+        "Если деньги списали дважды, списали, а доступ не открылся, или списали не ту сумму, напишите нам в любое время — не только в течение 14 дней, — и мы исправим или вернём оплату.",
+        "Эта политика не ограничивает ваши права потребителя по закону."
       ]
     }
   ],
   "refundMeta": {
-    "title": "Возврат средств",
-    "subtitle": "14 дней до открытия доступа; после немедленного доступа — только если курс не выдали или списали дважды."
+    "title": "Политика возврата",
+    "subtitle": "Полный возврат в течение 14 дней после покупки. Возвраты оформляет Paddle.com — продавец по нашим заказам."
+  },
+  "refundEn": [
+    {
+      "id": "guarantee",
+      "title": "1. 14-day refund",
+      "paragraphs": [
+        "If you are not satisfied with a course or a digital product, you can request a full refund within 14 days of the purchase date. You do not need to give a reason.",
+        "This applies to every purchase on myinsideracademy.com: courses, store products, vaults and bundles."
+      ]
+    },
+    {
+      "id": "how",
+      "title": "2. How to request a refund",
+      "paragraphs": [
+        "Write to info@myinsideracademy.com from the email of your account, with the product and the date of purchase — or contact Paddle directly at https://paddle.net, where you can find your order by the email you used at checkout.",
+        "Paddle, our Merchant of Record, processes the refund to your original payment method. We confirm it within 5 business days; when the money reaches you depends on your bank or payment provider."
+      ]
+    },
+    {
+      "id": "after",
+      "title": "3. After a refund",
+      "paragraphs": [
+        "Access to the refunded course or product is removed from your account, and the license to use its files ends.",
+        "We may decline a refund where the same customer has already been refunded for the same product before."
+      ]
+    },
+    {
+      "id": "problems",
+      "title": "4. Payment problems",
+      "paragraphs": [
+        "If you were charged twice, charged without receiving access, or charged a wrong amount, write to us at any time — not only within 14 days — and we will fix or refund it.",
+        "Your statutory rights as a consumer are not affected by this policy."
+      ]
+    }
+  ],
+  "refundEnMeta": {
+    "title": "Refund Policy",
+    "subtitle": "A full refund within 14 days of purchase. Refunds are handled by Paddle.com, our Merchant of Record."
   },
   "impressum": [
     {
       "id": "service",
       "title": "1. Сервис",
       "paragraphs": [
-        "AI Insider Academy — онлайн-школа на https://myinsideracademy.com.",
-        "Этот Impressum — сведения, которые должны быть у онлайн-сервиса в ЕС/ЕЭЗ: кто продаёт, как связаться, где жалоба."
+        "AI Insider Academy — онлайн-курсы и цифровые продукты по AI-автоматизации на https://myinsideracademy.com."
       ]
     },
     {
       "id": "seller",
       "title": "2. Продавец",
       "paragraphs": [
-        "Юридическое имя, адрес, регистрационный и налоговый номер публикуются в блоке реквизитов на этой странице, как только продавец их заполнит.",
-        "До публикации этих данных продажа курсов на Платформе выключена. Мы не подставляем вымышленные GmbH, ФОП или Steuernummer.",
-        "Торговое имя сервиса: AI Insider Academy."
+        "AI Insider Academy ведёт частное лицо (индивидуальный предприниматель), указанное в реквизитах ниже. Регистрационный и налоговый номера указаны там же, если они есть."
       ]
     },
     {
       "id": "contact",
       "title": "3. Контакт",
       "paragraphs": [
-        "Email (договор, претензии, данные): info@myinsideracademy.com.",
-        "Telegram: @vladyslavarcher (https://t.me/vladyslavarcher).",
-        "Ответ на письменное обращение — в разумный срок, как правило в течение нескольких рабочих дней."
+        "Email: info@myinsideracademy.com — заказы, возвраты, запросы по данным и претензии. Telegram: @vladyslavarcher. Обычно отвечаем в течение двух рабочих дней."
       ]
     },
     {
-      "id": "vat",
-      "title": "4. Налог",
+      "id": "payments",
+      "title": "4. Оплата",
       "paragraphs": [
-        "Статус НДС / USt-IdNr / Kleinunternehmer (§ 19 UStG) будет указан вместе с налоговым номером в реквизитах.",
-        "Цены на курсах в евро. Если налог должен быть выделен в инвойсе, это появится после публикации налогового статуса."
+        "Заказы на нашем сайте оформляет наш онлайн-реселлер Paddle.com. Paddle.com — продавец по всем нашим заказам (Merchant of Record). Paddle отвечает на вопросы об оплате и оформляет возвраты.",
+        "Paddle.com Market Limited, 30 Old Bailey, London EC4M 7AU, United Kingdom."
       ]
     },
     {
       "id": "hosting",
-      "title": "5. Хостинг и оплата",
+      "title": "5. Хостинг",
       "paragraphs": [
-        "Сайт: Vercel. API и база: Render. Письма: Microsoft 365 (info@myinsideracademy.com).",
-        "Оплата курсов: Tribute (tribute.tg / web.tribute.tg)."
+        "Сайт: Vercel Inc. Сервер приложения и база данных: Render Services, Inc. Хранение видео: Cloudflare, Inc. Почта: Microsoft 365."
       ]
     },
     {
-      "id": "dispute",
+      "id": "disputes",
       "title": "6. Споры",
       "paragraphs": [
-        "Потребители в ЕС могут обратиться на платформу ODR Европейской комиссии: https://ec.europa.eu/consumers/odr/",
-        "Мы не обязаны участвовать в процедуре перед потребительским арбитражем, если закон этого не требует.",
-        "Применимое право и суд будут указаны в реквизитах продавца. Императивные права потребителя в стране проживания сохраняются."
+        "Мы не обязаны и не готовы участвовать в процедурах урегулирования споров в потребительской арбитражной комиссии. Пожалуйста, сначала напишите нам — большинство вопросов решается по почте."
       ]
     }
   ],
   "impressumMeta": {
     "title": "Impressum",
-    "subtitle": "Кто стоит за AI Insider Academy, как связаться и через кого идёт оплата. Полные реквизиты — в блоке ниже."
+    "subtitle": "Кто ведёт AI Insider Academy и как с нами связаться."
+  },
+  "impressumEn": [
+    {
+      "id": "service",
+      "title": "1. Service",
+      "paragraphs": [
+        "AI Insider Academy — online courses and digital products for AI automation at https://myinsideracademy.com."
+      ]
+    },
+    {
+      "id": "seller",
+      "title": "2. Seller",
+      "paragraphs": [
+        "AI Insider Academy is run by the individual named in the seller details below, a sole trader. The registration and tax details appear there where they exist."
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "3. Contact",
+      "paragraphs": [
+        "Email: info@myinsideracademy.com — orders, refunds, data requests and complaints. Telegram: @vladyslavarcher. We usually answer within two business days."
+      ]
+    },
+    {
+      "id": "payments",
+      "title": "4. Payments",
+      "paragraphs": [
+        "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.",
+        "Paddle.com Market Limited, 30 Old Bailey, London EC4M 7AU, United Kingdom."
+      ]
+    },
+    {
+      "id": "hosting",
+      "title": "5. Hosting",
+      "paragraphs": [
+        "Website: Vercel Inc. Application server and database: Render Services, Inc. Video storage: Cloudflare, Inc. Email: Microsoft 365."
+      ]
+    },
+    {
+      "id": "disputes",
+      "title": "6. Disputes",
+      "paragraphs": [
+        "We are not obliged and not willing to take part in dispute resolution proceedings before a consumer arbitration board. Please write to us first — most issues are solved by email."
+      ]
+    }
+  ],
+  "impressumEnMeta": {
+    "title": "Impressum",
+    "subtitle": "Who runs AI Insider Academy and how to reach us."
   },
   "giveawayRules": [
     {

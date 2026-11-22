@@ -610,7 +610,8 @@
      "titleRu": "Как устроен курс и куда вообще можно пойти в AI",
      "titleEn": "How the course works and where you can go in AI",
      "descRu": "Девять направлений AI, учебный бизнес на весь курс и Карта интереса.",
-     "descEn": "The nine AI directions, a practice business for the whole course and your Interest Map."
+     "descEn": "The nine AI directions, a practice business for the whole course and your Interest Map.",
+     "videoUrl": "ai-path-finder/fn1-vlad.mp4"
     },
     {
      "num": 2,
@@ -638,28 +639,32 @@
      "titleRu": "Первая автоматизация: отзывы клиентов",
      "titleEn": "First automation: customer reviews",
      "descRu": "Workflow в n8n: отзыв → AI → таблица → уведомление в Telegram.",
-     "descEn": "An n8n workflow: review → AI → table → Telegram alert."
+     "descEn": "An n8n workflow: review → AI → table → Telegram alert.",
+     "videoUrl": "ai-path-finder/fn5-dima.mp4"
     },
     {
      "num": 6,
      "titleRu": "Чат-бот, который отвечает клиентам",
      "titleEn": "A chatbot that answers customers",
      "descRu": "Telegram-бот, который отвечает по базе знаний и передаёт сложное администратору.",
-     "descEn": "A Telegram bot that answers from a knowledge base and hands the rest to a human."
+     "descEn": "A Telegram bot that answers from a knowledge base and hands the rest to a human.",
+     "videoUrl": "ai-path-finder/fn6-dima.mp4"
     },
     {
      "num": 7,
      "titleRu": "Голосовой администратор",
      "titleEn": "A voice receptionist",
      "descRu": "Голосовой агент, с которым можно поговорить: отвечает и собирает заявку на запись.",
-     "descEn": "A voice agent you can talk to: it answers questions and takes booking requests."
+     "descEn": "A voice agent you can talk to: it answers questions and takes booking requests.",
+     "videoUrl": "ai-path-finder/fn7-dima.mp4"
     },
     {
      "num": 8,
      "titleRu": "AI-агент: бот, который действует сам",
      "titleEn": "AI agent: a bot that acts on its own",
      "descRu": "Агент с памятью и инструментами, который сам находит окно и записывает клиента.",
-     "descEn": "An agent with memory and tools that finds a free slot and books the client itself."
+     "descEn": "An agent with memory and tools that finds a free slot and books the client itself.",
+     "videoUrl": "ai-path-finder/fn8-dima.mp4"
     },
     {
      "num": 9,
@@ -680,14 +685,16 @@
      "titleRu": "Финальный проект: AI-система для бизнеса",
      "titleEn": "Final project: an AI system for a business",
      "descRu": "Связанная система, описание на одну страницу, демо-видео и сквозная проверка.",
-     "descEn": "A connected system, a one-page description, a demo video and an end-to-end check."
+     "descEn": "A connected system, a one-page description, a demo video and an end-to-end check.",
+     "videoUrl": "ai-path-finder/fn11-vlad.mp4"
     },
     {
      "num": 12,
      "titleRu": "Выбор направления и что дальше",
      "titleEn": "Choosing your direction and what comes next",
      "descRu": "Выбранное направление, проверка на ловушки и план на месяц по неделям.",
-     "descEn": "Your chosen direction, a check against common traps and a week-by-week plan for the month."
+     "descEn": "Your chosen direction, a check against common traps and a week-by-week plan for the month.",
+     "videoUrl": "ai-path-finder/fn12-vlad.mp4"
     }
    ],
    "modules": [

@@ -44,8 +44,8 @@ export function RevokeOrderButton({
     const reason = window.prompt(
       pick(
         locale,
-        `Забрать доступ по заказу «${label}»? Деньги вернутся только после возврата в кабинете Paddle. Причина:`,
-        `Revoke access for "${label}"? The money is refunded only in the Paddle dashboard. Reason:`,
+        `Забрать доступ по заказу «${label}»? Деньги вернутся только после возврата в кабинете провайдера (Gumroad). Причина:`,
+        `Revoke access for "${label}"? The money is refunded only in the provider dashboard (Gumroad). Reason:`,
       ),
       pick(locale, "возврат", "refund"),
     );

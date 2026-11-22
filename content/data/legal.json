@@ -11,10 +11,10 @@
     },
     {
       "id": "reseller",
-      "title": "2. Paddle — продавец по заказам",
+      "title": "2. Gumroad — продавец по заказам",
       "paragraphs": [
-        "Заказы на нашем сайте оформляет наш онлайн-реселлер Paddle.com. Paddle.com — продавец по всем нашим заказам (Merchant of Record). Paddle отвечает на вопросы об оплате и оформляет возвраты.",
-        "При покупке договор купли-продажи заключается с Paddle, и к оплате применяются условия Paddle для покупателей (https://www.paddle.com/legal/checkout-buyer-terms). Paddle списывает деньги с карты или другим способом, считает и уплачивает НДС или налог с продаж и выдаёт чек или счёт.",
+        "Оплату на нашем сайте принимает Gumroad, Inc. (gumroad.com) — продавец по всем нашим заказам (Merchant of Record): он продаёт вам заказ, списывает оплату, удерживает НДС или налог с продаж и выдаёт чек.",
+        "При покупке к оплате применяются условия Gumroad (https://gumroad.com/terms). Gumroad списывает деньги с карты или другим способом, считает и уплачивает НДС или налог с продаж и выдаёт чек.",
         "За сам продукт отвечаем мы: за его содержание, доступ к нему и качество, описанное на его странице."
       ]
     },
@@ -34,16 +34,16 @@
       "id": "prices",
       "title": "4. Цены и оплата",
       "paragraphs": [
-        "Цены указаны в евро (EUR) на странице каждого продукта и включают НДС, где он применяется; на странице оплаты Paddle может показать сумму в вашей валюте.",
+        "Цены указаны в евро (EUR) на странице каждого продукта и включают НДС, где он применяется; на странице оплаты Gumroad может показать сумму в вашей валюте.",
         "Все покупки — разовые платежи. Подписок сейчас нет; если они появятся, условия продления и отмены будут описаны здесь до первой продажи подписки.",
-        "Оплату принимает Paddle на странице оплаты: карта, PayPal, Apple Pay, Google Pay или другой способ, который Paddle предлагает в вашей стране."
+        "Оплату принимает Gumroad на странице оплаты: карта, PayPal, Apple Pay, Google Pay или другой способ, который Gumroad предлагает в вашей стране. Платите с email вашего аккаунта Academy — тогда покупка появится в нём."
       ]
     },
     {
       "id": "delivery",
       "title": "5. Получение и доступ",
       "paragraphs": [
-        "Доступ открывается в кабинете автоматически, как только Paddle подтвердит оплату, обычно за минуту. Курсы — в разделе «Мои курсы», товары магазина — в Библиотеке, где можно скачать каждый файл и его новые версии.",
+        "Доступ открывается в кабинете автоматически, как только Gumroad подтвердит оплату, обычно за минуту. Курсы — в разделе «Мои курсы», товары магазина — в Библиотеке, где можно скачать каждый файл и его новые версии.",
         "Купленный курс остаётся в аккаунте, пока работает Платформа, вместе с обновлениями этого курса. Мы можем сменить способ хранения или показа видео, не уменьшая купленного.",
         "Если доступ не открылся в течение часа после оплаты, напишите на info@myinsideracademy.com с email вашего аккаунта."
       ]
@@ -61,7 +61,7 @@
       "id": "refunds",
       "title": "7. Возврат",
       "paragraphs": [
-        "Полный возврат возможен в течение 14 дней после покупки. Подробности — в политике возврата: https://myinsideracademy.com/ru/legal/refund. Возврат оформляет Paddle на тот же способ оплаты."
+        "Полный возврат возможен в течение 14 дней после покупки. Подробности — в политике возврата: https://myinsideracademy.com/ru/legal/refund. Возврат оформляет Gumroad на тот же способ оплаты."
       ]
     },
     {
@@ -89,7 +89,7 @@
   ],
   "offerMeta": {
     "title": "Условия использования (оферта)",
-    "subtitle": "На каких условиях AI Insider Academy продаёт онлайн-курсы и цифровые продукты. Заказы оформляет Paddle.com — продавец по нашим заказам (Merchant of Record)."
+    "subtitle": "На каких условиях AI Insider Academy продаёт онлайн-курсы и цифровые продукты. Заказы оформляет Gumroad — продавец по нашим заказам (Merchant of Record)."
   },
   "offerEn": [
     {
@@ -103,10 +103,10 @@
     },
     {
       "id": "reseller",
-      "title": "2. Paddle is the Merchant of Record",
+      "title": "2. Gumroad is the Merchant of Record",
       "paragraphs": [
-        "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.",
-        "When you buy, the contract of sale is with Paddle, and Paddle’s Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) apply to the payment. Paddle charges your card or other payment method, calculates and collects any VAT or sales tax, and issues the receipt or invoice.",
+        "Payments on our site are processed by Gumroad, Inc. (gumroad.com), which acts as the Merchant of Record for all our orders: it sells to you, charges your payment method, collects VAT or sales tax and issues the receipt.",
+        "When you buy, Gumroad’s terms (https://gumroad.com/terms) apply to the payment. Gumroad charges your card or other payment method, calculates and collects any VAT or sales tax, and issues the receipt.",
         "We remain responsible for the product itself: its content, your access to it and the quality described on its page."
       ]
     },
@@ -126,16 +126,16 @@
       "id": "prices",
       "title": "4. Prices and payment",
       "paragraphs": [
-        "Prices are shown in euros (EUR) on each product page and include VAT where it applies; Paddle may show the amount in your local currency at checkout.",
+        "Prices are shown in euros (EUR) on each product page and include VAT where it applies; Gumroad may show the amount in your local currency at checkout.",
         "All purchases are one-time payments. We do not sell subscriptions at this time; if we introduce them, these Terms will describe renewal and cancellation before the first subscription is sold.",
-        "Payment is taken by Paddle at checkout by card, PayPal, Apple Pay, Google Pay or another method Paddle offers in your country."
+        "Payment is taken by Gumroad at checkout by card, PayPal, Apple Pay, Google Pay or another method Gumroad offers in your country. Buy with the email of your Academy account so the purchase lands in it."
       ]
     },
     {
       "id": "delivery",
       "title": "5. Delivery and access",
       "paragraphs": [
-        "Access opens automatically in your account as soon as Paddle confirms the payment, usually within a minute. Courses appear under “My courses”; store products in your Library, where you can download every file and its later versions.",
+        "Access opens automatically in your account as soon as Gumroad confirms the payment, usually within a minute. Courses appear under “My courses”; store products in your Library, where you can download every file and its later versions.",
         "A course you buy stays in your account for as long as the Platform operates, including updates to that course. We may change how videos are hosted or played without reducing what you bought.",
         "If access does not open within one hour of payment, write to info@myinsideracademy.com with the email of your account."
       ]
@@ -153,7 +153,7 @@
       "id": "refunds",
       "title": "7. Refunds",
       "paragraphs": [
-        "You can get a full refund within 14 days of purchase. The details are in our Refund Policy at https://myinsideracademy.com/en/legal/refund. Refunds are processed by Paddle to the original payment method."
+        "You can get a full refund within 14 days of purchase. The details are in our Refund Policy at https://myinsideracademy.com/en/legal/refund. Refunds are processed by Gumroad to the original payment method."
       ]
     },
     {
@@ -181,7 +181,7 @@
   ],
   "offerEnMeta": {
     "title": "Terms of Service",
-    "subtitle": "The terms on which AI Insider Academy sells online courses and digital products. Orders are processed by Paddle.com, our Merchant of Record."
+    "subtitle": "The terms on which AI Insider Academy sells online courses and digital products. Orders are processed by Gumroad, our Merchant of Record."
   },
   "privacy": [
     {
@@ -189,7 +189,7 @@
       "title": "1. Кто отвечает за данные",
       "paragraphs": [
         "Оператор ваших персональных данных — продавец, указанный в реквизитах внизу этой страницы и в Impressum, работающий под названием AI Insider Academy. Контакт: info@myinsideracademy.com, Telegram @vladyslavarcher.",
-        "Paddle.com, продавец по нашим заказам (Merchant of Record), обрабатывает платёжные данные как самостоятельный оператор по своей политике: https://www.paddle.com/legal/privacy."
+        "Gumroad, продавец по нашим заказам (Merchant of Record), обрабатывает платёжные данные как самостоятельный оператор по своей политике: https://gumroad.com/privacy."
       ]
     },
     {
@@ -198,7 +198,7 @@
       "paragraphs": [],
       "items": [
         "Аккаунт: имя, email, хеш пароля или сервис, через который вы вошли (Google, Apple), язык.",
-        "Покупки: что, когда и за сколько куплено, номер транзакции Paddle. Данные карты мы не видим и не храним.",
+        "Покупки: что, когда и за сколько куплено, номер продажи Gumroad. Данные карты мы не видим и не храним.",
         "Обучение: прогресс по курсам, присланные домашние задания, отзывы.",
         "Технические данные: IP-адрес, данные браузера и устройства, cookies для входа в аккаунт.",
         "По желанию: ID чата в Telegram, если вы подключили бота уведомлений; вопросы, которые вы задаёте ассистенту на сайте."
@@ -229,7 +229,7 @@
         "Только сервисы, без которых Платформа не работает, и только в нужном им объёме:"
       ],
       "items": [
-        "Paddle (оплата, налоги, возвраты) — самостоятельный оператор.",
+        "Gumroad (оплата, налоги, возвраты) — самостоятельный оператор.",
         "Vercel (сайт), Render (сервер приложения и база данных), Cloudflare R2 (видео уроков).",
         "Microsoft 365 (письма с info@myinsideracademy.com).",
         "Google и Apple (только если вы входите через них).",
@@ -256,7 +256,7 @@
       "id": "cookies",
       "title": "8. Cookies",
       "paragraphs": [
-        "Мы используем только cookies, нужные для входа в аккаунт и запоминания языка. Аналитических и рекламных cookies без вашего согласия не ставим. Страница оплаты Paddle ставит свои cookies, когда вы платите."
+        "Мы используем только cookies, нужные для входа в аккаунт и запоминания языка. Аналитических и рекламных cookies без вашего согласия не ставим. Страница оплаты Gumroad ставит свои cookies, когда вы платите."
       ]
     }
   ],
@@ -270,7 +270,7 @@
       "title": "1. Who is responsible",
       "paragraphs": [
         "The controller of your personal data is the seller named in the seller details at the end of this page and in the Impressum, trading as AI Insider Academy. Contact: info@myinsideracademy.com, Telegram @vladyslavarcher.",
-        "Paddle.com, our Merchant of Record, processes payment data as an independent controller under its own privacy policy: https://www.paddle.com/legal/privacy."
+        "Gumroad, our Merchant of Record, processes payment data as an independent controller under its own privacy policy: https://gumroad.com/privacy."
       ]
     },
     {
@@ -279,7 +279,7 @@
       "paragraphs": [],
       "items": [
         "Account: name, email address, password hash or the sign-in provider you used (Google, Apple), language.",
-        "Purchases: what you bought, when, the amount and Paddle’s transaction reference. We never see or store your card details.",
+        "Purchases: what you bought, when, the amount and Gumroad’s sale reference. We never see or store your card details.",
         "Learning: course progress, homework you submit, reviews you write.",
         "Technical: IP address, browser and device data, cookies needed to keep you signed in.",
         "Optional: your Telegram chat ID if you connect our notification bot; questions you type into the site assistant."
@@ -310,7 +310,7 @@
         "Only providers we need to run the service, and only to the extent they need:"
       ],
       "items": [
-        "Paddle (payments, tax, refunds) — independent controller.",
+        "Gumroad (payments, tax, refunds) — independent controller.",
         "Vercel (website hosting), Render (application server and database), Cloudflare R2 (lesson videos).",
         "Microsoft 365 (email from info@myinsideracademy.com).",
         "Google and Apple (only if you choose to sign in with them).",
@@ -337,7 +337,7 @@
       "id": "cookies",
       "title": "8. Cookies",
       "paragraphs": [
-        "We use only the cookies needed to sign you in and remember your language. We set no analytics or advertising cookies without your consent. Paddle’s checkout sets its own cookies when you pay."
+        "We use only the cookies needed to sign you in and remember your language. We set no analytics or advertising cookies without your consent. Gumroad’s checkout sets its own cookies when you pay."
       ]
     }
   ],
@@ -358,8 +358,8 @@
       "id": "how",
       "title": "2. Как запросить возврат",
       "paragraphs": [
-        "Напишите на info@myinsideracademy.com с email вашего аккаунта, укажите продукт и дату покупки — или обратитесь напрямую в Paddle на https://paddle.net, где заказ находится по email, указанному при оплате.",
-        "Paddle, продавец по нашим заказам, возвращает деньги на тот же способ оплаты. Мы подтверждаем возврат в течение 5 рабочих дней; когда деньги дойдут, зависит от вашего банка или платёжного сервиса."
+        "Напишите на info@myinsideracademy.com с email вашего аккаунта, укажите продукт и дату покупки — или ответьте на чек Gumroad.",
+        "Gumroad, продавец по нашим заказам, возвращает деньги на тот же способ оплаты. Мы подтверждаем возврат в течение 5 рабочих дней; когда деньги дойдут, зависит от вашего банка или платёжного сервиса."
       ]
     },
     {
@@ -381,7 +381,7 @@
   ],
   "refundMeta": {
     "title": "Политика возврата",
-    "subtitle": "Полный возврат в течение 14 дней после покупки. Возвраты оформляет Paddle.com — продавец по нашим заказам."
+    "subtitle": "Полный возврат в течение 14 дней после покупки. Возвраты оформляет Gumroad — продавец по нашим заказам."
   },
   "refundEn": [
     {
@@ -396,8 +396,8 @@
       "id": "how",
       "title": "2. How to request a refund",
       "paragraphs": [
-        "Write to info@myinsideracademy.com from the email of your account, with the product and the date of purchase — or contact Paddle directly at https://paddle.net, where you can find your order by the email you used at checkout.",
-        "Paddle, our Merchant of Record, processes the refund to your original payment method. We confirm it within 5 business days; when the money reaches you depends on your bank or payment provider."
+        "Write to info@myinsideracademy.com from the email of your account, with the product and the date of purchase — or reply to your Gumroad receipt.",
+        "Gumroad, our Merchant of Record, returns the money to your original payment method. We confirm it within 5 business days; when the money reaches you depends on your bank or payment provider."
       ]
     },
     {
@@ -419,7 +419,7 @@
   ],
   "refundEnMeta": {
     "title": "Refund Policy",
-    "subtitle": "A full refund within 14 days of purchase. Refunds are handled by Paddle.com, our Merchant of Record."
+    "subtitle": "A full refund within 14 days of purchase. Refunds are processed by Gumroad, our Merchant of Record."
   },
   "impressum": [
     {
@@ -447,8 +447,8 @@
       "id": "payments",
       "title": "4. Оплата",
       "paragraphs": [
-        "Заказы на нашем сайте оформляет наш онлайн-реселлер Paddle.com. Paddle.com — продавец по всем нашим заказам (Merchant of Record). Paddle отвечает на вопросы об оплате и оформляет возвраты.",
-        "Paddle.com Market Limited, 30 Old Bailey, London EC4M 7AU, United Kingdom."
+        "Оплату на нашем сайте принимает Gumroad, Inc. (gumroad.com) — продавец по всем нашим заказам (Merchant of Record): он продаёт вам заказ, списывает оплату, удерживает НДС или налог с продаж и выдаёт чек.",
+        "Gumroad, Inc., United States — https://gumroad.com."
       ]
     },
     {
@@ -496,8 +496,8 @@
       "id": "payments",
       "title": "4. Payments",
       "paragraphs": [
-        "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.",
-        "Paddle.com Market Limited, 30 Old Bailey, London EC4M 7AU, United Kingdom."
+        "Payments on our site are processed by Gumroad, Inc. (gumroad.com), which acts as the Merchant of Record for all our orders: it sells to you, charges your payment method, collects VAT or sales tax and issues the receipt.",
+        "Gumroad, Inc., United States — https://gumroad.com."
       ]
     },
     {

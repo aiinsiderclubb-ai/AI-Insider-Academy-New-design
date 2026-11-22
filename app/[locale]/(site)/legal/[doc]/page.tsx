@@ -51,7 +51,7 @@ export default async function LegalPage({
       { label: pick(locale, "Налоговый номер", "Tax ID"), value: optional(legalEntity.taxId) },
     ].filter((row): row is { label: string; value: string | null } => row.value !== undefined),
     { label: pick(locale, "Применимое право", "Governing law"), value: legalValue(pick(locale, legalEntity.governingLaw, legalEntity.governingLawEn ?? legalEntity.governingLaw)) },
-    { label: pick(locale, "Продавец по заказам (Merchant of Record)", "Merchant of Record"), value: "Paddle.com Market Limited" },
+    { label: pick(locale, "Продавец по заказам (Merchant of Record)", "Merchant of Record"), value: "Gumroad, Inc." },
   ];
 
   return (

@@ -64,6 +64,7 @@ export default async function BuyCoursePage({
 
   const providerLabels: Record<ProviderId, { name: string; note: string }> = {
     paddle: { name: pick(locale, "Карта, PayPal, Apple Pay", "Card, PayPal, Apple Pay"), note: pick(locale, "Оплата через Paddle — он продаёт заказ и выдаёт чек", "Paid through Paddle, which sells the order and issues the receipt") },
+    gumroad: { name: pick(locale, "Карта, PayPal, Apple Pay", "Card, PayPal, Apple Pay"), note: pick(locale, "Оплата на Gumroad — он продаёт заказ и выдаёт чек; доступ откроется в кабинете", "Paid on Gumroad, which sells the order and issues the receipt; access opens in your cabinet") },
     stripe: { name: "Stripe", note: "Visa · Mastercard" },
     liqpay: { name: "LiqPay", note: pick(locale, "Украина", "Ukraine") },
     tribute: { name: "Tribute", note: pick(locale, "Карта, СБП, Stars, TON", "Card, SBP, Stars, TON") },

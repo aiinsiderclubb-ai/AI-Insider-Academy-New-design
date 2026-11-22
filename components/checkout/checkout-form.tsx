@@ -24,6 +24,7 @@ export interface CheckoutTier {
 
 const PROVIDER_META: Record<ProviderId, { icon: React.ElementType; endpoint: string }> = {
   paddle: { icon: ShieldCheck, endpoint: "/api/payments/paddle/checkout" },
+  gumroad: { icon: ShieldCheck, endpoint: "/api/payments/gumroad/checkout" },
   stripe: { icon: CreditCard, endpoint: "/api/payments/stripe/checkout" },
   liqpay: { icon: Landmark, endpoint: "/api/payments/liqpay/create" },
   tribute: { icon: Send, endpoint: "/api/payments/tribute/checkout" },
@@ -144,15 +145,16 @@ export function CheckoutForm({
     setError(null);
 
     try {
-      const paddleStore = provider === "paddle" && storeItem;
-      const response = await fetch(paddleStore ? "/api/payments/paddle/marketplace" : PROVIDER_META[provider].endpoint, {
+      const ours = provider === "paddle" || provider === "gumroad";
+      const storeQuote = ours && storeItem;
+      const response = await fetch(storeQuote ? `/api/payments/${provider}/marketplace` : PROVIDER_META[provider].endpoint, {
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          ...(paddleStore ? { productId: tier.itemId, licenseTier: tier.id } : { courseId: tier.itemId }),
+          ...(storeQuote ? { productId: tier.itemId, licenseTier: tier.id } : { courseId: tier.itemId }),
           promoCode: promoState.status === "ok" ? promo.trim() : undefined,
-          referralCode: provider === "paddle" ? referralFromCookie() : undefined,
+          referralCode: ours ? referralFromCookie() : undefined,
           locale,
         }),
       });
@@ -162,6 +164,7 @@ export function CheckoutForm({
         code?: string;
         error?: string;
         transactionId?: string;
+        checkoutUrl?: string;
         successUrl?: string;
       };
 
@@ -178,6 +181,12 @@ export function CheckoutForm({
           }
         });
         await openPaddleCheckout({ transactionId: payload.transactionId, successUrl: payload.successUrl, locale, email });
+        return;
+      }
+
+      if (payload.checkoutUrl) {
+        // Gumroad's own checkout; the ping reaches the API and opens access.
+        window.location.href = payload.checkoutUrl;
         return;
       }
 
@@ -274,7 +283,7 @@ export function CheckoutForm({
         </Field>
       </form>
 
-      {referred && providers.includes("paddle") && (
+      {referred && (providers.includes("paddle") || providers.includes("gumroad")) && (
         <p className="mt-3 rounded-md border border-accent/30 bg-accent-soft px-3.5 py-2.5 text-[12.5px] leading-relaxed text-ink-2">
           {locale === "en"
             ? "You came by a friend's link: 10% off your first purchase is applied at payment, unless a promo code gives you more."

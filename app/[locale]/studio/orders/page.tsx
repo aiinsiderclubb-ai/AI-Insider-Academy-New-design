@@ -54,8 +54,8 @@ export default async function StudioOrdersPage({
       title={title}
       body={pick(
         locale,
-        "Все оплаты с любого провайдера. «Забрать доступ» отзывает выданное; деньги возвращаются в кабинете Paddle.",
-        "Every payment from any provider. “Revoke” takes back what was granted; money is refunded in the Paddle dashboard.",
+        "Все оплаты с любого провайдера. «Забрать доступ» отзывает выданное; деньги возвращаются в кабинете провайдера (Gumroad).",
+        "Every payment from any provider. “Revoke” takes back what was granted; money is refunded in the provider dashboard (Gumroad).",
       )}
     >
       <form className="mb-6 grid gap-3 rounded-lg border border-line bg-surface p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_auto] lg:items-end">

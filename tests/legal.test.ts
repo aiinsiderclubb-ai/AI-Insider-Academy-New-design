@@ -11,7 +11,7 @@ describe("legal copy before live sales", () => {
     expect(legalEntity.draft).toBe(false);
     expect(legalEntity.legalNameEn.trim().length).toBeGreaterThan(3);
     expect(Object.values(legalEntity).filter((value) => typeof value === "string" && value.startsWith("TODO:"))).toEqual([]);
-    // Paddle pays out; bank details are not published.
+    // Gumroad pays out; bank details are not published.
     expect(legalEntity.iban).toBe("");
   });
 
@@ -30,14 +30,14 @@ describe("legal copy before live sales", () => {
 
     expect(legalJson).not.toMatch(/Tribute/);
 
-    // Paddle sells every order; its reviewers look for this sentence in the terms.
+    // Gumroad sells every order as Merchant of Record.
     for (const locale of ["ru", "en"] as const) {
       const offer = legalDocument("offer", locale);
       const text = (doc: ReturnType<typeof legalDocument>) => doc?.sections.flatMap((section) => [...section.paragraphs, ...(section.items ?? [])]).join(" ") ?? "";
-      expect(text(offer)).toMatch(/Paddle\.com/);
+      expect(text(offer)).toMatch(/Gumroad/);
       expect(text(offer)).toMatch(/Merchant of Record/);
       expect(text(legalDocument("refund", locale))).toMatch(/14/);
-      expect(text(legalDocument("privacy", locale))).toMatch(/Paddle/);
+      expect(text(legalDocument("privacy", locale))).toMatch(/Gumroad/);
     }
     expect(legalDocument("offer", "en")?.title).toBe("Terms of Service");
     expect(legalDocument("terms", "en")?.slug).toBe("offer");

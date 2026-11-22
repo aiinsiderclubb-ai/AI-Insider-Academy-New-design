@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AdminLogin } from "@/components/studio/admin-login";
 import { StudioShell, type StudioNavItem } from "@/components/studio/studio-shell";
 import { adminSignIn, adminSignOut } from "@/lib/auth/actions";
-import { getStudioDashboard, hasAdminSession, queueCounts } from "@/lib/api/studio";
+import { canOpen, getStudioDashboard, hasAdminSession, queueCounts, type StudioSection } from "@/lib/api/studio";
 import { pick } from "@/content/locale";
 import { getDictionary, path, type Locale } from "@/lib/i18n";
 
@@ -29,7 +29,7 @@ export default async function StudioLayout({
   const counts = queueCounts(dashboard);
   const p = (href: string) => path(href, locale);
 
-  const groups: { title: string; items: StudioNavItem[] }[] = [
+  const all: { title: string; items: (StudioNavItem & { id: StudioSection })[] }[] = [
     {
       title: pick(locale, "Обзор", "Overview"),
       items: [
@@ -41,26 +41,32 @@ export default async function StudioLayout({
       title: pick(locale, "Люди и деньги", "People and money"),
       items: [
         { id: "learners", label: pick(locale, "Ученики", "Learners"), href: p("/studio/learners") },
+        { id: "orders", label: pick(locale, "Заказы", "Orders"), href: p("/studio/orders") },
         { id: "revenue", label: pick(locale, "Выручка", "Revenue"), href: p("/studio/revenue") },
+        { id: "support", label: pick(locale, "Поддержка", "Support"), href: p("/studio/support") },
       ],
     },
     {
       title: pick(locale, "Каталоги", "Catalogues"),
       items: [
         { id: "courses", label: pick(locale, "Курсы", "Courses"), href: p("/studio/courses") },
-        { id: "store", label: "Marketplace", href: p("/studio/store") },
+        { id: "store", label: pick(locale, "Магазин", "Store"), href: p("/studio/store") },
         { id: "content", label: pick(locale, "Контент", "Content"), href: p("/studio/content") },
       ],
     },
     {
       title: pick(locale, "Операции", "Operations"),
       items: [
-        { id: "growth", label: pick(locale, "Рост", "Growth"), href: p("/studio/growth") },
+        { id: "growth", label: pick(locale, "Рост и промокоды", "Growth and promos"), href: p("/studio/growth") },
         { id: "mail", label: pick(locale, "Письма", "Mail"), href: p("/studio/mail") },
         { id: "ops", label: pick(locale, "Инфраструктура", "Infrastructure"), href: p("/studio/ops") },
       ],
     },
   ];
+  // Each role sees only the sections it can open; a direct link still lands on a "no access" page.
+  const groups: { title: string; items: StudioNavItem[] }[] = all
+    .map((group) => ({ ...group, items: group.items.filter((item) => canOpen(dashboard.role, item.id)) }))
+    .filter((group) => group.items.length > 0);
 
   async function handleSignOut() {
     "use server";

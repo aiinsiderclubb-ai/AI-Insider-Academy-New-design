@@ -1,16 +1,31 @@
+import Link from "next/link";
 import { StudioPage } from "@/components/studio/studio-shell";
+import { NoAccess } from "@/components/studio/no-access";
+import { Button } from "@/components/primitives/button";
+import { Input } from "@/components/primitives/field";
 import { Cell, DataTable, Panel, Row, StatTile } from "@/components/studio/tiles";
 import { Badge } from "@/components/primitives/badge";
 import { pick } from "@/content/locale";
-import { getStudioDashboard } from "@/lib/api/studio";
-import { formatDate, formatNumber, type Locale } from "@/lib/i18n";
+import { canOpen, getStudioDashboard, searchUsers } from "@/lib/api/studio";
+import { formatDate, formatNumber, formatPrice, path, type Locale } from "@/lib/i18n";
 
-export default async function StudioLearnersPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function StudioLearnersPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ q?: string }>;
+}) {
   const { locale: raw } = await params;
   const locale = raw as Locale;
+  const title = pick(locale, "Ученики", "Learners");
 
   const dashboard = await getStudioDashboard();
   if (!dashboard) return null;
+  if (!canOpen(dashboard.role, "learners")) return <NoAccess locale={locale} title={title} role={dashboard.role} />;
+
+  const q = ((await searchParams).q ?? "").trim();
+  const found = await searchUsers(q);
 
   const users = dashboard.users ?? [];
   const verified = users.filter((user) => user.emailVerified).length;
@@ -19,11 +34,11 @@ export default async function StudioLearnersPage({ params }: { params: Promise<{
 
   return (
     <StudioPage
-      title={pick(locale, "Ученики", "Learners")}
+      title={title}
       body={pick(
         locale,
-        "Аккаунты, подтверждение почты, привязка Telegram и корпоративные команды.",
-        "Accounts, email confirmation, Telegram links and corporate teams.",
+        "Найдите человека, чтобы увидеть его покупки, доступы, рефералов и коды — и выдать или забрать доступ.",
+        "Find a person to see their purchases, access, referrals and codes — and grant or revoke access.",
       )}
     >
       <section className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -38,33 +53,48 @@ export default async function StudioLearnersPage({ params }: { params: Promise<{
         <StatTile label={pick(locale, "Команд", "Teams")} value={formatNumber(teams.length, locale)} />
       </section>
 
-      <Panel title={pick(locale, "Последние аккаунты", "Latest accounts")} className="mb-6">
+      <form className="mb-4 flex max-w-xl gap-2">
+        <Input name="q" defaultValue={q} placeholder={pick(locale, "Email, имя или ID ученика", "Email, name or learner ID")} aria-label={pick(locale, "Поиск", "Search")} />
+        <Button type="submit">{pick(locale, "Найти", "Search")}</Button>
+      </form>
+
+      <Panel title={q ? pick(locale, `Найдено: ${found.users.length}`, `Found: ${found.users.length}`) : pick(locale, "Последние аккаунты", "Latest accounts")} className="mb-6">
         <DataTable
-          caption={pick(locale, "Ученики", "Learners")}
+          caption={title}
           columns={[
             { key: "name", label: pick(locale, "Имя", "Name") },
             { key: "email", label: "Email" },
             { key: "id", label: "ID" },
             { key: "state", label: pick(locale, "Статус", "State") },
-            { key: "last", label: pick(locale, "Последний вход", "Last seen"), align: "right" },
+            { key: "bought", label: pick(locale, "Покупки", "Purchases"), align: "right" },
+            { key: "since", label: pick(locale, "С нами с", "Joined"), align: "right" },
           ]}
-          empty={pick(locale, "Аккаунтов пока нет", "No accounts yet")}
+          empty={q ? pick(locale, "Никого не нашли", "Nobody found") : pick(locale, "Аккаунтов пока нет", "No accounts yet")}
         >
-          {users.slice(0, 60).map((user) => (
+          {found.users.map((user) => (
             <Row key={user.id}>
-              <Cell strong>{user.name || "—"}</Cell>
-              <Cell mono>{user.email}</Cell>
+              <Cell strong>
+                <Link href={path(`/studio/learners/${user.id}`, locale)} className="underline-offset-4 hover:underline">
+                  {user.name || "—"}
+                </Link>
+              </Cell>
+              <Cell mono>
+                <Link href={path(`/studio/learners/${user.id}`, locale)} className="underline-offset-4 hover:underline">
+                  {user.email}
+                </Link>
+              </Cell>
               <Cell mono>{user.personalId ?? "—"}</Cell>
               <Cell>
-                <span className="flex flex-wrap gap-1.5">
-                  <Badge tone={user.emailVerified ? "success" : "warning"}>
-                    {user.emailVerified ? pick(locale, "подтверждён", "verified") : pick(locale, "не подтверждён", "unverified")}
-                  </Badge>
-                  {user.telegramChatId && <Badge tone="neutral">TG</Badge>}
-                </span>
+                <Badge tone={user.emailVerified ? "success" : "warning"}>
+                  {user.emailVerified ? pick(locale, "подтверждён", "verified") : pick(locale, "не подтверждён", "unverified")}
+                </Badge>
               </Cell>
               <Cell align="right" mono>
-                {user.lastLoginAt ? formatDate(user.lastLoginAt, locale, { day: "numeric", month: "short" }) : "—"}
+                {user.purchases}
+                {user.paid ? ` · ${formatPrice(user.paid, locale)}` : ""}
+              </Cell>
+              <Cell align="right" mono>
+                {user.createdAt ? formatDate(user.createdAt, locale, { day: "numeric", month: "short", year: "2-digit" }) : "—"}
               </Cell>
             </Row>
           ))}

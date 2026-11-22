@@ -2,6 +2,10 @@ import "server-only";
 import { cache } from "react";
 import { readAdminToken } from "@/lib/auth/cookies";
 import { api, tryApi } from "./http";
+import { getCourses } from "./catalog";
+import { getStoreCatalog } from "./store";
+import { courseBundles } from "@/content/catalog";
+import type { Locale } from "@/lib/i18n";
 
 export type AdminRole = "admin" | "editor" | "moderator";
 
@@ -25,7 +29,7 @@ export interface StudioHomework {
   lessonIndex: number;
   lessonTitle: string;
   content: string;
-  status: "pending" | "accepted" | "rework" | string;
+  status: "pending" | "accepted" | "resubmit" | string;
   grade?: string | null;
   fileName?: string | null;
   date: string;
@@ -88,7 +92,41 @@ export interface StudioDashboard {
   applications?: StudioApplication[];
   teams?: { id: number; name: string; invite_code: string; created_at: string }[];
   webhookLog?: { id: string; event_name: string; status: string; created_at: string }[];
-  settings?: { tributeWebhookUrl: string; tributeEnabled: boolean };
+  settings?: {
+    paddleEnabled?: boolean;
+    paddleEnvironment?: string;
+    paddleWebhookUrl?: string;
+    tributeWebhookUrl?: string;
+    tributeEnabled?: boolean;
+  };
+}
+
+/* ---------------------------------- roles ---------------------------------- */
+
+/**
+ * Which Studio sections each role may open. The API enforces the same split;
+ * this only decides what the navigation offers and when a page says
+ * "no access" instead of rendering empty panels.
+ */
+export const STUDIO_ACCESS = {
+  pulse: ["admin", "editor", "moderator"],
+  queue: ["admin", "moderator"],
+  learners: ["admin", "moderator"],
+  support: ["admin", "moderator"],
+  orders: ["admin"],
+  revenue: ["admin"],
+  courses: ["admin", "editor", "moderator"],
+  store: ["admin", "editor"],
+  content: ["admin", "editor"],
+  growth: ["admin"],
+  mail: ["admin", "editor", "moderator"],
+  ops: ["admin"],
+} as const satisfies Record<string, readonly AdminRole[]>;
+
+export type StudioSection = keyof typeof STUDIO_ACCESS;
+
+export function canOpen(role: AdminRole | undefined, section: StudioSection) {
+  return Boolean(role && (STUDIO_ACCESS[section] as readonly AdminRole[]).includes(role));
 }
 
 export async function hasAdminSession() {
@@ -114,11 +152,12 @@ export const getAuditLog = cache(async () =>
 
 export interface AuditEntry {
   id: number | string;
-  actor?: string;
+  actorEmail?: string | null;
   action: string;
-  target?: string;
+  targetType?: string | null;
+  targetId?: string | null;
+  meta?: Record<string, unknown>;
   createdAt?: string;
-  created_at?: string;
 }
 
 export const getDataHealth = cache(async () =>
@@ -154,12 +193,137 @@ export const getEmailOverview = cache(async () =>
   tryApi<EmailOverview | null>("/admin/email/overview", { admin: true, soft: true }, null),
 );
 
-export const getCreatorPayouts = cache(async () =>
-  tryApi<{ payouts?: unknown[] } | unknown[]>("/admin/creator-payouts", { admin: true, soft: true }, []),
+/* ------------------------------ money and people ----------------------------- */
+
+export interface StudioPayment {
+  id: string;
+  userId: number | null;
+  email: string;
+  itemId: string;
+  itemTitle: string;
+  itemKind: string;
+  amount: number;
+  currency: string;
+  provider: string;
+  externalId: string | null;
+  status: string;
+  createdAt: string;
+  completedAt: string | null;
+}
+
+export interface StudioRevenue {
+  days: number;
+  revenue: number;
+  orders: number;
+  averageOrder: number;
+  refunds: { count: number; amount: number };
+  byProvider: { provider: string; orders: number; revenue: number }[];
+  byItem: { label: string; value: number }[];
+  daily: { date: string; value: number }[];
+  recent: StudioPayment[];
+}
+
+export const getRevenue = cache(async (days = 30) =>
+  tryApi<StudioRevenue | null>(`/admin/revenue?days=${days}`, { admin: true, soft: true }, null),
 );
 
-export const getGovernance = cache(async () =>
-  tryApi<Record<string, unknown>>("/governance/dashboard", { admin: true, soft: true }, {}),
+export interface StudioPaddle {
+  enabled: boolean;
+  environment: string;
+  webhookSecretSet: boolean;
+  webhookUrl: string;
+  events: { id: string; event: string; status: string; payload: Record<string, unknown>; createdAt: string }[];
+}
+
+export const getPaddleStatus = cache(async () =>
+  tryApi<StudioPaddle | null>("/admin/paddle", { admin: true, soft: true }, null),
+);
+
+export interface StudioOrder extends StudioPayment {
+  licenseTier: string | null;
+  granted: { courses: string[]; products: { productId: string; status: string }[] };
+}
+
+export async function getOrders(filters: { provider?: string; status?: string; from?: string; to?: string; q?: string }) {
+  const qs = new URLSearchParams(Object.entries(filters).filter(([, v]) => v) as [string, string][]).toString();
+  return tryApi<{ orders: StudioOrder[]; providers: string[] }>(`/admin/orders${qs ? `?${qs}` : ""}`, { admin: true, soft: true }, { orders: [], providers: [] });
+}
+
+export interface StudioUserRow {
+  id: number;
+  email: string;
+  name: string | null;
+  personalId: string | null;
+  emailVerified: boolean;
+  createdAt: string;
+  purchases: number;
+  paid: number;
+}
+
+export async function searchUsers(q: string) {
+  return tryApi<{ users: StudioUserRow[] }>(`/admin/users?q=${encodeURIComponent(q)}`, { admin: true, soft: true }, { users: [] });
+}
+
+export interface StudioUserCard {
+  user: { id: number; email: string; name: string | null; personalId: string | null; emailVerified: boolean; createdAt: string; authProvider?: string | null };
+  purchases: { id: number; itemId: string; title: string; kind: string; provider: string | null; paymentRef: string | null; purchasedAt: string }[];
+  entitlements: { id: string; productId: string; title: string; licenseTier: string; sourceType: string; sourceId: string | null; status: string; grantedAt: string }[];
+  payments: StudioPayment[];
+  referral: {
+    invitedBy: { email: string; code: string; converted: boolean; date: string } | null;
+    invited: { email: string; converted: boolean; date: string }[];
+  };
+  rewards: { code: string; percent: number; kind: string; validFrom: string | null; validUntil: string | null; status: string }[];
+  supportMessages: number;
+}
+
+export async function getUserCard(id: string) {
+  return tryApi<StudioUserCard | null>(`/admin/users/${encodeURIComponent(id)}`, { admin: true, soft: true }, null);
+}
+
+export interface CodeTally {
+  issued: number;
+  active: number;
+  pending: number;
+  used: number;
+  expired: number;
+  cancelled: number;
+}
+
+export interface StudioReferrals {
+  invited: number;
+  converted: number;
+  friendCodes: CodeTally;
+  nextCodes: CodeTally;
+  reviewCodes: CodeTally;
+  topReferrers: { email: string; invited: number; converted: number }[];
+}
+
+export const getReferralStats = cache(async () =>
+  tryApi<StudioReferrals | null>("/admin/referrals", { admin: true, soft: true }, null),
+);
+
+export interface SupportMessage {
+  id: string;
+  userId: number | null;
+  email: string;
+  name: string | null;
+  message: string;
+  reply: string | null;
+  status: string;
+  date: string;
+}
+
+export const getSupportInbox = cache(async () =>
+  tryApi<{ messages: SupportMessage[] }>("/admin/support", { admin: true, soft: true }, { messages: [] }),
+);
+
+export const getStoreStats = cache(async () =>
+  tryApi<{ orders: Record<string, { count: number; revenue: number }>; grants: Record<string, number> }>(
+    "/admin/store-stats",
+    { admin: true, soft: true },
+    { orders: {}, grants: {} },
+  ),
 );
 
 /* -------------------------------------------------------------------------- */
@@ -182,19 +346,25 @@ export function visitSeries(dashboard: StudioDashboard | null, days = 30) {
   return entries.slice(-days);
 }
 
-export function revenueSeries(dashboard: StudioDashboard | null, days = 30) {
-  const byDate = new Map<string, number>();
-  for (const purchase of dashboard?.purchases ?? []) {
-    const day = purchase.date?.slice(0, 10);
-    if (!day) continue;
-    byDate.set(day, (byDate.get(day) ?? 0) + Number(purchase.amount || 0));
-  }
-  return [...byDate.entries()]
-    .map(([date, value]) => ({ date, value }))
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(-days);
-}
-
 export async function adminAction(path: string, body?: unknown, method: "POST" | "PATCH" | "PUT" | "DELETE" = "POST") {
   return api(path, { admin: true, method, body });
+}
+
+/* ------------------------------ item choices ------------------------------- */
+
+export interface StudioItemOption {
+  id: string;
+  title: string;
+  group: "course" | "pack" | "bundle" | "product";
+}
+
+/** Everything that can be granted or put in a promo code's scope, grouped for a picker. */
+export async function studioItemOptions(locale: Locale): Promise<StudioItemOption[]> {
+  const [courses, catalog] = await Promise.all([getCourses(locale, { preview: true }), getStoreCatalog(locale)]);
+  return [
+    ...courses.filter((course) => course.priceEur > 0).map((course) => ({ id: course.id, title: course.title, group: "course" as const })),
+    ...courseBundles.map((pack) => ({ id: pack.id, title: pack.title, group: "pack" as const })),
+    ...catalog.bundles.map((bundle) => ({ id: bundle.id, title: bundle.title, group: "bundle" as const })),
+    ...catalog.products.map((product) => ({ id: product.id, title: product.title, group: "product" as const })),
+  ];
 }

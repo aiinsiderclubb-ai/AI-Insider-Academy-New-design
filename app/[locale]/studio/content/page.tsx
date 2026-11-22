@@ -6,7 +6,8 @@ import { Note } from "@/components/primitives/states";
 import { pick } from "@/content/locale";
 import { legalEntity, legalIsDraft, legalValue } from "@/content/site";
 import { getAllBlogPosts, getCalendar } from "@/lib/api/public";
-import { getStudioDashboard } from "@/lib/api/studio";
+import { canOpen, getStudioDashboard } from "@/lib/api/studio";
+import { NoAccess } from "@/components/studio/no-access";
 import { formatDate, formatNumber, type Locale } from "@/lib/i18n";
 
 export default async function StudioContentPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -19,6 +20,7 @@ export default async function StudioContentPage({ params }: { params: Promise<{ 
     getCalendar(locale),
   ]);
   if (!dashboard) return null;
+  if (!canOpen(dashboard.role, "content")) return <NoAccess locale={locale} title={pick(locale, "Контент", "Content")} role={dashboard.role} />;
 
   const ru = posts.filter((post) => post.lang === "ru").length;
   const ukr = posts.filter((post) => post.lang === "ukr").length;

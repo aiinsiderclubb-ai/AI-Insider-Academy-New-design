@@ -25,7 +25,7 @@ export default async function SupportPage({ params }: { params: Promise<{ locale
         "Ask here — the thread stays in your account and is mirrored to Telegram.",
       )}
     >
-      <SupportPanel locale={locale} d={d} initial={thread as SupportMessage[]} telegramUrl={links.support} />
+      <SupportPanel locale={locale} d={d} initial={thread satisfies SupportMessage[]} telegramUrl={links.support} />
     </AppPage>
   );
 }

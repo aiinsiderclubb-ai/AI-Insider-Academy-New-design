@@ -296,7 +296,7 @@ export function ReferralPanel({
 /* ================================= support ================================= */
 
 export interface SupportMessage {
-  id: number;
+  id: number | string;
   body: string;
   fromSupport?: boolean;
   createdAt: string;

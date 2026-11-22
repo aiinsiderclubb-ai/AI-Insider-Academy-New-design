@@ -1,31 +1,57 @@
 import { StudioPage } from "@/components/studio/studio-shell";
 import { Cell, DataTable, Panel, Row, StatTile } from "@/components/studio/tiles";
 import { FeatureFlagList } from "@/components/studio/ops-controls";
+import { NoAccess } from "@/components/studio/no-access";
 import { Badge } from "@/components/primitives/badge";
 import { Note } from "@/components/primitives/states";
 import { pick } from "@/content/locale";
 import { API_ORIGIN } from "@/lib/api/http";
-import { getAuditLog, getDataHealth, getFeatureFlagsAdmin, getStudioDashboard, type AuditEntry } from "@/lib/api/studio";
+import { canOpen, getAuditLog, getDataHealth, getFeatureFlagsAdmin, getPaddleStatus, getStudioDashboard, type AuditEntry } from "@/lib/api/studio";
 import { setFeatureFlag } from "@/lib/api/studio-actions";
 import { formatRelative, getDictionary, type Locale } from "@/lib/i18n";
+
+function healthValue(value: unknown) {
+  return value && typeof value === "object"
+    ? Object.entries(value as Record<string, unknown>).map(([k, v]) => `${k}: ${String(v)}`).join(" · ")
+    : String(value);
+}
 
 export default async function StudioOpsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params;
   const locale = raw as Locale;
   const d = getDictionary(locale);
 
-  const [dashboard, flags, auditPayload, health] = await Promise.all([
-    getStudioDashboard(),
+  const title = pick(locale, "Инфраструктура", "Infrastructure");
+  const dashboard = await getStudioDashboard();
+  if (!dashboard) return null;
+  if (!canOpen(dashboard.role, "ops")) return <NoAccess locale={locale} title={title} role={dashboard.role} />;
+
+  const [flags, auditPayload, health, paddle] = await Promise.all([
     getFeatureFlagsAdmin(),
     getAuditLog(),
     getDataHealth(),
+    getPaddleStatus(),
   ]);
-  if (!dashboard) return null;
 
   const audit = (Array.isArray(auditPayload) ? auditPayload : (auditPayload.entries ?? [])) as AuditEntry[];
   const webhooks = dashboard.webhookLog ?? [];
-  const failing = webhooks.filter((entry) => entry.status !== "ok").length;
-  const healthRows = Object.entries(health ?? {});
+  const failing = webhooks.filter((entry) => entry.status === "error").length;
+  const healthLabels: Record<string, string> = {
+    db: pick(locale, "База данных", "Database"),
+    users: pick(locale, "Аккаунтов", "Accounts"),
+    registrations: pick(locale, "Регистраций", "Registrations"),
+    withPersonalId: pick(locale, "С личным ID", "With a personal ID"),
+    telegramLinked: pick(locale, "Привязан Telegram", "Telegram linked"),
+    homework: pick(locale, "Домашних заданий", "Assignments"),
+    reviews: pick(locale, "Отзывы", "Reviews"),
+    purchases: pick(locale, "Записей в старом логе покупок", "Legacy purchase log rows"),
+    certificates: pick(locale, "Сертификатов", "Certificates"),
+    referrals: pick(locale, "Рефералов", "Referrals"),
+    applications: pick(locale, "Заявок", "Applications"),
+    supportMessages: pick(locale, "Сообщений в поддержку", "Support messages"),
+    passwordChanges: pick(locale, "Меняли пароль", "Changed password"),
+  };
+  const healthRows = Object.entries(health ?? {}).filter(([key]) => key !== "ok" && key !== "note");
 
   async function handleFlag(key: string, value: boolean) {
     "use server";
@@ -34,7 +60,7 @@ export default async function StudioOpsPage({ params }: { params: Promise<{ loca
 
   return (
     <StudioPage
-      title={pick(locale, "Инфраструктура", "Infrastructure")}
+      title={title}
       body={pick(
         locale,
         "Флаги, журнал действий, здоровье данных и вебхуки платёжных провайдеров.",
@@ -63,32 +89,56 @@ export default async function StudioOpsPage({ params }: { params: Promise<{ loca
               <ul className="flex flex-col gap-2 text-[13px]">
                 {healthRows.map(([key, value]) => (
                   <li key={key} className="flex items-center justify-between gap-3">
-                    <span className="font-mono text-[12px] text-ink-2">{key}</span>
-                    <span className="font-mono text-[12.5px] tabular-nums text-ink">
-                      {typeof value === "object" ? JSON.stringify(value) : String(value)}
-                    </span>
+                    <span className="text-[13px] text-ink-2">{healthLabels[key] ?? key}</span>
+                    <span className="font-mono text-[12.5px] tabular-nums text-ink">{healthValue(value)}</span>
                   </li>
                 ))}
               </ul>
             </Panel>
           )}
 
-          {dashboard.settings && (
-            <Panel title="Tribute">
+          {paddle && (
+            <Panel title="Paddle">
               <ul className="flex flex-col gap-2 text-[13px]">
                 <li className="flex items-center justify-between gap-3">
-                  <span className="text-ink-2">{pick(locale, "Подключён", "Enabled")}</span>
-                  <Badge tone={dashboard.settings.tributeEnabled ? "success" : "neutral"}>
-                    {String(dashboard.settings.tributeEnabled)}
+                  <span className="text-ink-2">{pick(locale, "Ключ API", "API key")}</span>
+                  <Badge tone={paddle.enabled ? "success" : "warning"}>
+                    {paddle.enabled ? pick(locale, "задан", "set") : pick(locale, "не задан", "missing")}
+                  </Badge>
+                </li>
+                <li className="flex items-center justify-between gap-3">
+                  <span className="text-ink-2">{pick(locale, "Окружение", "Environment")}</span>
+                  <Badge tone={paddle.environment === "production" ? "accent" : "neutral"}>{paddle.environment}</Badge>
+                </li>
+                <li className="flex items-center justify-between gap-3">
+                  <span className="text-ink-2">{pick(locale, "Секрет вебхука", "Webhook secret")}</span>
+                  <Badge tone={paddle.webhookSecretSet ? "success" : "warning"}>
+                    {paddle.webhookSecretSet ? pick(locale, "задан", "set") : pick(locale, "не задан", "missing")}
                   </Badge>
                 </li>
                 <li className="flex flex-col gap-1">
                   <span className="text-ink-2">Webhook URL</span>
                   <code className="scroll-x rounded-md border border-line bg-surface-2 px-2.5 py-2 font-mono text-[11.5px] text-ink-3">
-                    {dashboard.settings.tributeWebhookUrl}
+                    {paddle.webhookUrl}
                   </code>
                 </li>
               </ul>
+              <p className="mt-4 eyebrow">{pick(locale, "Последние события Paddle", "Latest Paddle events")}</p>
+              {paddle.events.length ? (
+                <ul className="mt-2 flex flex-col gap-1.5">
+                  {paddle.events.slice(0, 8).map((event) => (
+                    <li key={event.id} className="flex items-center justify-between gap-3 text-[12px]">
+                      <span className="min-w-0 truncate font-mono text-ink-2">{event.event}</span>
+                      <span className="flex items-center gap-2">
+                        <Badge tone={event.status === "ok" ? "success" : event.status === "ignored" ? "neutral" : "danger"}>{event.status}</Badge>
+                        <span className="font-mono text-muted">{formatRelative(event.createdAt, locale)}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-[12.5px] text-muted">{pick(locale, "Событий пока не было", "No events yet")}</p>
+              )}
             </Panel>
           )}
         </div>
@@ -108,12 +158,10 @@ export default async function StudioOpsPage({ params }: { params: Promise<{ loca
               {audit.slice(0, 30).map((entry) => (
                 <Row key={entry.id}>
                   <Cell strong>{entry.action}</Cell>
-                  <Cell mono>{entry.actor ?? "—"}</Cell>
-                  <Cell mono>{entry.target ?? "—"}</Cell>
+                  <Cell mono>{entry.actorEmail ?? "—"}</Cell>
+                  <Cell mono>{[entry.targetType, entry.targetId].filter(Boolean).join(" · ") || "—"}</Cell>
                   <Cell align="right" mono>
-                    {entry.createdAt || entry.created_at
-                      ? formatRelative((entry.createdAt ?? entry.created_at) as string, locale)
-                      : "—"}
+                    {entry.createdAt ? formatRelative(entry.createdAt, locale) : "—"}
                   </Cell>
                 </Row>
               ))}
@@ -136,7 +184,7 @@ export default async function StudioOpsPage({ params }: { params: Promise<{ loca
                     {entry.event_name}
                   </Cell>
                   <Cell>
-                    <Badge tone={entry.status === "ok" ? "success" : "danger"}>{entry.status}</Badge>
+                    <Badge tone={entry.status === "ok" ? "success" : entry.status === "ignored" ? "neutral" : "danger"}>{entry.status}</Badge>
                   </Cell>
                   <Cell align="right" mono>
                     {formatRelative(entry.created_at, locale)}

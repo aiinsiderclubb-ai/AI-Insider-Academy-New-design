@@ -4,6 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  LifeBuoy,
+  Receipt,
   Activity,
   BookOpen,
   ExternalLink,
@@ -31,6 +33,8 @@ const ICONS: Record<string, React.ElementType> = {
   queue: Inbox,
   learners: Users,
   revenue: Wallet,
+  orders: Receipt,
+  support: LifeBuoy,
   courses: BookOpen,
   store: Package,
   growth: Sparkles,

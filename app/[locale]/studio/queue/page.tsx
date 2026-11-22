@@ -1,7 +1,8 @@
 import { StudioPage } from "@/components/studio/studio-shell";
 import { QueueBoard } from "@/components/studio/queue-board";
 import { pick } from "@/content/locale";
-import { getStudioDashboard } from "@/lib/api/studio";
+import { canOpen, getStudioDashboard } from "@/lib/api/studio";
+import { NoAccess } from "@/components/studio/no-access";
 import { decideApplication, moderateReview, reviewHomework } from "@/lib/api/studio-actions";
 import { getDictionary, type Locale } from "@/lib/i18n";
 
@@ -19,6 +20,7 @@ export default async function StudioQueuePage({
 
   const dashboard = await getStudioDashboard();
   if (!dashboard) return null;
+  if (!canOpen(dashboard.role, "queue")) return <NoAccess locale={locale} title={pick(locale, "Очереди решений", "Decision queues")} role={dashboard.role} />;
 
   const homework = (dashboard.homework ?? []).filter((item) => item.status === "pending");
   const applications = (dashboard.applications ?? []).filter(

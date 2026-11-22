@@ -72,9 +72,10 @@ export async function moderateReview(
 
 /* --------------------------------- access ---------------------------------- */
 
-export async function grantCourse(locale: string, email: string, courseId: string): Promise<ActionResult> {
+/** Gives a course, pack, vault, bundle or store product to a learner by hand. */
+export async function grantItem(locale: string, userId: number, itemId: string, licenseTier?: string): Promise<ActionResult> {
   try {
-    await api("/admin/grant-course", { admin: true, method: "POST", body: { email, courseId } });
+    await api("/admin/entitlements", { admin: true, method: "POST", body: { userId, itemId, licenseTier } });
     refresh(locale);
     return { ok: true };
   } catch (error) {
@@ -82,14 +83,44 @@ export async function grantCourse(locale: string, email: string, courseId: strin
   }
 }
 
-export async function unlockLesson(
+export async function revokeGrant(
   locale: string,
-  email: string,
-  courseId: string,
-  lessonIndex: number,
+  userId: number,
+  target: { purchaseId?: number; entitlementId?: string },
 ): Promise<ActionResult> {
   try {
-    await api("/admin/unlock-lesson", { admin: true, method: "POST", body: { email, courseId, lessonIndex } });
+    await api("/admin/entitlements/revoke", { admin: true, method: "POST", body: { userId, ...target } });
+    refresh(locale);
+    return { ok: true };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+export async function deleteLearner(locale: string, userId: number): Promise<ActionResult> {
+  try {
+    await api("/admin/users/delete", { admin: true, method: "POST", body: { userId } });
+    refresh(locale);
+    return { ok: true };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+/** Takes back what an order gave. The money is refunded in the provider's dashboard. */
+export async function revokeOrder(locale: string, paymentId: string, reason?: string): Promise<ActionResult> {
+  try {
+    await api(`/admin/orders/${encodeURIComponent(paymentId)}/revoke`, { admin: true, method: "POST", body: { reason } });
+    refresh(locale);
+    return { ok: true };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+export async function replySupport(locale: string, id: string, reply: string): Promise<ActionResult> {
+  try {
+    await api(`/admin/support/${encodeURIComponent(id)}/reply`, { admin: true, method: "POST", body: { reply } });
     refresh(locale);
     return { ok: true };
   } catch (error) {
@@ -99,10 +130,17 @@ export async function unlockLesson(
 
 /* -------------------------------- promo codes ------------------------------ */
 
-export async function createPromoCode(
-  locale: string,
-  input: { code: string; percent?: number; amountEur?: number; courseId?: string; maxUses?: number; expiresAt?: string },
-): Promise<ActionResult> {
+export interface PromoInput {
+  code: string;
+  discountPercent?: number | null;
+  discountEur?: number | null;
+  maxUses?: number | null;
+  validFrom?: string | null;
+  validUntil?: string | null;
+  courseIds?: string[];
+}
+
+export async function createPromoCode(locale: string, input: PromoInput): Promise<ActionResult> {
   try {
     await api("/admin/promo-codes", { admin: true, method: "POST", body: input });
     refresh(locale);

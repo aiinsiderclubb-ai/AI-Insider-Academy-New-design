@@ -110,13 +110,21 @@ export interface Rewards {
 /** Referral link code, who came by it, and the discount codes this person holds. */
 export const getRewards = cache(async () => tryApi<Rewards | null>("/me/rewards", { auth: true, soft: true }, null));
 
-export const getSupportThread = cache(async () =>
-  tryApi<{ id: number; body: string; fromSupport?: boolean; createdAt: string }[]>(
+/**
+ * The API stores a question and the team's reply on one row; the thread shows
+ * them as separate bubbles, the reply right after its question.
+ */
+export const getSupportThread = cache(async () => {
+  const rows = await tryApi<{ id: string; message: string; reply?: string | null; date: string }[]>(
     "/me/support",
     { auth: true, soft: true },
     [],
-  ),
-);
+  );
+  return (Array.isArray(rows) ? rows : []).flatMap((row) => [
+    { id: row.id, body: row.message, fromSupport: false, createdAt: row.date },
+    ...(row.reply ? [{ id: `${row.id}-reply`, body: row.reply, fromSupport: true, createdAt: row.date }] : []),
+  ]);
+});
 
 /** Marketplace entitlements are optional: the endpoint can fail independently. */
 export const getEntitlements = cache(async () => {

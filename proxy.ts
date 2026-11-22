@@ -3,6 +3,20 @@ import { defaultLocale, isLocale, locales, matchLocale } from "@/lib/i18n/config
 import { coursesPublic, isCourseOnlyPath } from "@/lib/visibility";
 
 const LOCALE_COOKIE = "aia-locale";
+/** A friend's referral code from `?ref=`, kept for checkout — see components/checkout. */
+export const REF_COOKIE = "aia-ref";
+const REF_PATTERN = /^[A-Za-z0-9-]{4,32}$/;
+
+/**
+ * Remembers who sent the visitor. The first link wins for 30 days, so a later
+ * link from someone else does not take over a referral already made.
+ */
+function rememberReferral(request: NextRequest, response: NextResponse) {
+  const ref = request.nextUrl.searchParams.get("ref");
+  if (!ref || !REF_PATTERN.test(ref) || request.cookies.get(REF_COOKIE)?.value) return response;
+  response.cookies.set(REF_COOKIE, ref.toUpperCase(), { path: "/", maxAge: 60 * 60 * 24 * 30, sameSite: "lax" });
+  return response;
+}
 
 /** Old routes that people already have bookmarked or indexed. */
 const legacyRedirects: Record<string, string> = {
@@ -32,6 +46,10 @@ function resolveLocale(request: NextRequest) {
 }
 
 export function proxy(request: NextRequest) {
+  return rememberReferral(request, route(request));
+}
+
+function route(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   const segments = pathname.split("/").filter(Boolean);

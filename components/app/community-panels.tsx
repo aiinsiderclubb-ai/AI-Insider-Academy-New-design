@@ -166,31 +166,47 @@ export function ReferralPanel({
   locale,
   d,
   link,
-  discountPercent,
-  friendBonus = 5,
+  rewards,
 }: {
   locale: Locale;
   d: Dictionary;
   link: string;
-  discountPercent: number;
-  friendBonus?: number;
+  rewards: {
+    friendPercent: number;
+    referrerPercent: number;
+    nextPercent: number;
+    invited: number;
+    purchased: number;
+    friendDiscount: number;
+    codes: { code: string; percent: number; kind: "next" | "referrer"; validFrom: string | null; validUntil: string | null; status: string }[];
+  };
 }) {
   const { push } = useToast();
+  const en = locale === "en";
+  const date = (value: string | null) =>
+    value ? new Date(value).toLocaleDateString(en ? "en-GB" : locale === "ukr" ? "uk-UA" : "ru-RU", { day: "numeric", month: "long" }) : "";
 
   const steps = [
-    locale === "en" ? "Copy your link" : "Скопируйте ссылку",
-    locale === "en" ? "Send it to a friend" : "Отправьте другу",
-    locale === "en" ? "Both of you save" : "Оба получаете выгоду",
+    en ? "Copy your link" : "Скопируйте ссылку",
+    en ? `Your friend gets ${rewards.friendPercent}% off their first purchase` : `Друг получает −${rewards.friendPercent}% на первую покупку`,
+    en ? `You get a ${rewards.referrerPercent}% code once it settles` : `Вы получаете код −${rewards.referrerPercent}% после его покупки`,
   ];
+
+  const statusLabel: Record<string, string> = en
+    ? { active: "active", pending: "starts soon", used: "used", expired: "expired", cancelled: "cancelled" }
+    : { active: "действует", pending: "скоро включится", used: "использован", expired: "истёк", cancelled: "отменён" };
+
+  const live = rewards.codes.filter((code) => code.status === "active" || code.status === "pending");
+  const past = rewards.codes.filter((code) => code.status !== "active" && code.status !== "pending");
 
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
       <section className="rounded-lg border border-line bg-surface p-6">
         <h2 className="text-[17px]">{d.app.referrals}</h2>
         <p className="mt-2.5 max-w-lg text-[13.5px] leading-relaxed text-ink-3">
-          {locale === "en"
-            ? `Your friend gets ${friendBonus}% off their first purchase; you build credit towards your next one.`
-            : `Друг получает скидку ${friendBonus}% на первую покупку, вы копите бонус на следующую.`}
+          {en
+            ? `Share your link. A friend who buys through it pays ${rewards.friendPercent}% less on their first purchase, and you get a single-use ${rewards.referrerPercent}% code. It switches on 14 days after their purchase, when the refund window closes.`
+            : `Поделитесь ссылкой. Друг, который купит по ней, заплатит на ${rewards.friendPercent}% меньше за первую покупку, а вы получите одноразовый код −${rewards.referrerPercent}%. Он включится через 14 дней после покупки друга, когда закончится срок возврата.`}
         </p>
 
         <div className="mt-5 flex items-center gap-2 rounded-md border border-line bg-surface-2 px-3.5 py-2.5">
@@ -211,25 +227,67 @@ export function ReferralPanel({
         <ol className="mt-6 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
           {steps.map((step, index) => (
             <li key={step} className="bg-surface p-4">
-              <span className="font-mono text-[12px] tracking-[0.12em] text-accent">
-                {String(index + 1).padStart(2, "0")}
-              </span>
+              <span className="font-mono text-[12px] tracking-[0.12em] text-accent">{String(index + 1).padStart(2, "0")}</span>
               <p className="mt-2 text-[13.5px] leading-snug text-ink-2">{step}</p>
             </li>
           ))}
         </ol>
+
+        <h3 className="mt-8 text-[15px]">{en ? "Your discount codes" : "Ваши коды на скидку"}</h3>
+        {rewards.codes.length === 0 ? (
+          <p className="mt-2 text-[13px] leading-relaxed text-ink-3">
+            {en
+              ? `After each purchase you get a ${rewards.nextPercent}% code for the next one, valid 14 days. Codes for invited friends appear here too.`
+              : `После каждой покупки приходит код −${rewards.nextPercent}% на следующую, на 14 дней. Коды за приглашённых друзей тоже появятся здесь.`}
+          </p>
+        ) : (
+          <ul className="mt-3 flex flex-col divide-y divide-line rounded-lg border border-line">
+            {[...live, ...past].map((code) => (
+              <li key={code.code} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                  <code className="font-mono text-[14px] font-semibold text-ink">{code.code}</code>
+                  <p className="mt-0.5 text-[12.5px] text-ink-3">
+                    −{code.percent}% · {code.kind === "referrer" ? (en ? "for a friend's purchase" : "за покупку друга") : (en ? "next purchase" : "на следующую покупку")}
+                    {code.status === "pending" && code.validFrom ? ` · ${en ? "from" : "с"} ${date(code.validFrom)}` : ""}
+                    {code.status === "active" && code.validUntil ? ` · ${en ? "until" : "до"} ${date(code.validUntil)}` : ""}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge tone={code.status === "active" ? "success" : "outline"}>{statusLabel[code.status] ?? code.status}</Badge>
+                  {code.status === "active" && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        void navigator.clipboard.writeText(code.code);
+                        push({ tone: "success", title: d.common.copied });
+                      }}
+                    >
+                      <Copy className="h-3.5 w-3.5" aria-hidden />
+                    </Button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
-      <section className="rounded-lg border border-accent/35 bg-accent-soft p-6">
-        <p className="eyebrow text-accent-ink">{d.checkout.discount}</p>
-        <p className="mt-3 font-display text-[3rem] leading-none font-extrabold tabular-nums text-ink">
-          {discountPercent}%
-        </p>
-        <p className="mt-3 text-[12.5px] leading-relaxed text-ink-2">
-          {locale === "en"
-            ? "Applied automatically at checkout on your next purchase."
-            : "Применяется автоматически при следующей покупке."}
-        </p>
+      <section className="flex flex-col gap-4">
+        <div className="rounded-lg border border-accent/35 bg-accent-soft p-6">
+          <p className="eyebrow text-accent-ink">{en ? "Friends invited" : "Пришли по ссылке"}</p>
+          <p className="mt-3 font-display text-[3rem] leading-none font-extrabold tabular-nums text-ink">{rewards.invited}</p>
+          <p className="mt-3 text-[12.5px] leading-relaxed text-ink-2">
+            {en ? `${rewards.purchased} of them bought` : `Из них купили: ${rewards.purchased}`}
+          </p>
+        </div>
+        {rewards.friendDiscount > 0 && (
+          <div className="rounded-lg border border-line bg-surface p-5 text-[13px] leading-relaxed text-ink-2">
+            {en
+              ? `You came by a friend's link: ${rewards.friendDiscount}% off applies automatically to your first purchase.`
+              : `Вы пришли по ссылке друга: скидка ${rewards.friendDiscount}% применится к первой покупке автоматически.`}
+          </div>
+        )}
       </section>
     </div>
   );

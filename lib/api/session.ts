@@ -87,6 +87,29 @@ export const getTeam = cache(async () =>
   ),
 );
 
+export interface RewardCode {
+  code: string;
+  percent: number;
+  kind: "next" | "referrer";
+  validFrom: string | null;
+  validUntil: string | null;
+  status: "active" | "pending" | "used" | "expired" | "cancelled";
+}
+
+export interface Rewards {
+  referralCode: string | null;
+  friendPercent: number;
+  referrerPercent: number;
+  nextPercent: number;
+  invited: number;
+  purchased: number;
+  friendDiscount: number;
+  codes: RewardCode[];
+}
+
+/** Referral link code, who came by it, and the discount codes this person holds. */
+export const getRewards = cache(async () => tryApi<Rewards | null>("/me/rewards", { auth: true, soft: true }, null));
+
 export const getSupportThread = cache(async () =>
   tryApi<{ id: number; body: string; fromSupport?: boolean; createdAt: string }[]>(
     "/me/support",

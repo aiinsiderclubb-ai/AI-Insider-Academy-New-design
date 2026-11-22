@@ -30,6 +30,15 @@ const PROVIDER_META: Record<ProviderId, { icon: React.ElementType; endpoint: str
   demo: { icon: TestTube2, endpoint: "/api/payments/demo" },
 };
 
+/** The friend's code `proxy.ts` kept from a `?ref=` link, if any. */
+function referralFromCookie(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const match = /(?:^|;\s*)aia-ref=([A-Za-z0-9-]{4,32})/.exec(document.cookie);
+  return match?.[1];
+}
+
+const noSubscription = () => () => {};
+
 /** Maps a server error code onto copy the reader can act on. */
 function messageFor(code: string, status: number, d: Dictionary): string {
   if (code === "PRELAUNCH_MODE" || status === 423) return d.errors.prelaunch;
@@ -73,6 +82,12 @@ export function CheckoutForm({
   const [tierId, setTierId] = React.useState(defaultTier ?? tiers[0]?.id);
   const [provider, setProvider] = React.useState<ProviderId | null>(providers[0] ?? null);
   const [promo, setPromo] = React.useState("");
+  // The server render has no cookie to agree with, so it renders without the note.
+  const referred = React.useSyncExternalStore(
+    noSubscription,
+    () => Boolean(referralFromCookie()),
+    () => false,
+  );
   const [promoState, setPromoState] = React.useState<
     { status: "idle" } | { status: "checking" } | { status: "ok"; finalEur: number } | { status: "error"; message: string }
   >({ status: "idle" });
@@ -134,11 +149,12 @@ export function CheckoutForm({
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "include",
-        body: JSON.stringify(
-          paddleStore
-            ? { productId: tier.itemId, licenseTier: tier.id, locale }
-            : { courseId: tier.itemId, promoCode: promoState.status === "ok" ? promo.trim() : undefined, locale },
-        ),
+        body: JSON.stringify({
+          ...(paddleStore ? { productId: tier.itemId, licenseTier: tier.id } : { courseId: tier.itemId }),
+          promoCode: promoState.status === "ok" ? promo.trim() : undefined,
+          referralCode: provider === "paddle" ? referralFromCookie() : undefined,
+          locale,
+        }),
       });
 
       const payload = (await response.json().catch(() => ({}))) as {
@@ -257,6 +273,14 @@ export function CheckoutForm({
           </div>
         </Field>
       </form>
+
+      {referred && providers.includes("paddle") && (
+        <p className="mt-3 rounded-md border border-accent/30 bg-accent-soft px-3.5 py-2.5 text-[12.5px] leading-relaxed text-ink-2">
+          {locale === "en"
+            ? "You came by a friend's link: 10% off your first purchase is applied at payment, unless a promo code gives you more."
+            : "Вы пришли по ссылке друга: −10% на первую покупку применится при оплате, если промокод не даёт больше."}
+        </p>
+      )}
 
       {/* -------------------------------- summary ------------------------------- */}
       <dl className="mt-5 flex flex-col gap-2 border-t border-line pt-4 text-[13.5px]">

@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { getDictionary, htmlLang, isLocale, locales } from "@/lib/i18n";
 import { resolveSiteUrl } from "@/lib/api/origin";
 import { ToastProvider } from "@/components/primitives/toast";
+import { ThemeBootstrap } from "@/components/theme/theme-bootstrap";
 import "../globals.css";
 
 /*
@@ -86,17 +87,6 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-/**
- * Runs before first paint, hence inline:
- *
- * 1. drops `no-js`, which is what keeps scroll-reveal elements visible when
- *    scripting never arrives — without it a failed hydration leaves the page
- *    blank at `opacity: 0`;
- * 2. applies the stored theme, so a light-mode visitor never sees a dark
- *    flash, and moves the `theme-color` tag with it.
- */
-const themeBootstrap = `(function(){var d=document.documentElement;d.classList.remove("no-js");try{var t=localStorage.getItem("aia-theme");if(t==="dark"||t==="light"){d.setAttribute("data-theme",t);if(t==="light"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content","#f4f2ee")}}}catch(e){}})()`;
-
 export default async function LocaleLayout({
   children,
   params,
@@ -120,7 +110,7 @@ export default async function LocaleLayout({
       className={`no-js ${display.variable} ${sans.variable} ${mono.variable}`}
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        <ThemeBootstrap />
       </head>
       <body>
         <a

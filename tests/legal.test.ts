@@ -6,9 +6,13 @@ import { legalEntity, legalIsDraft, links } from "@/content/site";
 const legalJson = readFileSync(new URL("../content/data/legal.json", import.meta.url), "utf8");
 
 describe("legal copy before live sales", () => {
-  it("keeps the seller in draft until real registration data exists", () => {
-    expect(legalIsDraft).toBe(true);
-    expect(legalEntity.draft).toBe(true);
+  it("names a real seller and leaves no placeholder behind", () => {
+    expect(legalIsDraft).toBe(false);
+    expect(legalEntity.draft).toBe(false);
+    expect(legalEntity.legalNameEn.trim().length).toBeGreaterThan(3);
+    expect(Object.values(legalEntity).filter((value) => typeof value === "string" && value.startsWith("TODO:"))).toEqual([]);
+    // Paddle pays out; bank details are not published.
+    expect(legalEntity.iban).toBe("");
   });
 
   it("routes claims and privacy to the Academy mailbox, not the old hello@ alias", () => {

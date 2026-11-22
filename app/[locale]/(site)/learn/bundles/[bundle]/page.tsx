@@ -3,16 +3,17 @@ import { notFound } from "next/navigation";
 import { Check, Gift } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs } from "@/components/primitives/navigation";
-import { ButtonLink } from "@/components/primitives/button";
 import { Container, SectionHead } from "@/components/primitives/surface";
 import { Reveal } from "@/components/motion/reveal";
 import { CourseCard } from "@/components/catalog/course-card";
 import { bundleById, courseBundles } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
+import { CheckoutForm } from "@/components/checkout/checkout-form";
+import { getCheckoutStatus, type ProviderId } from "@/lib/api/checkout";
+import { getSession } from "@/lib/api/session";
 import { formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
 
-export const revalidate = 600;
 
 export function generateStaticParams() {
   return courseBundles.map((bundle) => ({ bundle: bundle.id }));
@@ -41,7 +42,7 @@ export default async function BundlePage({
   const bundle = bundleById(id);
   if (!bundle) notFound();
 
-  const courses = await getCourses(locale);
+  const [courses, status, user] = await Promise.all([getCourses(locale), getCheckoutStatus(), getSession()]);
   const included = bundle.courseIds
     .map((courseId) => courses.find((course) => course.id === courseId))
     .filter((course): course is NonNullable<typeof course> => Boolean(course));
@@ -49,6 +50,13 @@ export default async function BundlePage({
   const separately = included.reduce((sum, course) => sum + course.priceEur, 0);
   const saving = Math.max(0, separately - bundle.priceEur);
   const bonuses = pick(locale, bundle.bonusRu, bundle.bonusEn);
+  const providerLabels: Record<ProviderId, { name: string; note: string }> = {
+    paddle: { name: pick(locale, "Карта, PayPal, Apple Pay", "Card, PayPal, Apple Pay"), note: pick(locale, "Оплата через Paddle — он продаёт заказ и выдаёт чек", "Paid through Paddle, which sells the order and issues the receipt") },
+    stripe: { name: "Stripe", note: "Visa · Mastercard" },
+    liqpay: { name: "LiqPay", note: pick(locale, "Украина", "Ukraine") },
+    tribute: { name: "Tribute", note: pick(locale, "Карта, СБП, Stars, TON", "Card, SBP, Stars, TON") },
+    demo: { name: "Demo", note: pick(locale, "Тестовая оплата", "Test payment") },
+  };
   const lessons = included.reduce((sum, course) => sum + course.lessonCount, 0);
 
   return (
@@ -102,6 +110,13 @@ export default async function BundlePage({
                     </li>
                   ))}
                 </ul>
+                <p className="mt-4 text-[12.5px] leading-relaxed text-ink-3">
+                  {pick(
+                    locale,
+                    "Бонусы появятся в Библиотеке кабинета сразу после оплаты — вместе с курсами пакета.",
+                    "The bonuses appear in your Library right after payment, together with the bundle's courses.",
+                  )}
+                </p>
               </section>
             )}
           </div>
@@ -130,10 +145,22 @@ export default async function BundlePage({
                 ))}
               </ul>
 
-              <ButtonLink href={path(`/learn/${included[0]?.slug ?? ""}/buy`, locale)} size="lg" className="mt-5" full>
-                {d.common.buy}
-              </ButtonLink>
               <p className="mt-3 text-center text-[12px] text-muted">{d.checkout.instantAccess}</p>
+            </div>
+
+            {/* The pack itself is the item: paying opens its courses and hands over its bonuses. */}
+            <div className="mt-4">
+              <CheckoutForm
+                locale={locale}
+                d={d}
+                tiers={[{ id: "pack", label: bundle.title, priceEur: bundle.priceEur, itemId: bundle.id }]}
+                providers={status.providers}
+                prelaunch={status.prelaunch}
+                signedIn={Boolean(user)}
+                successHref={path("/app/learning", locale)}
+                providerLabels={providerLabels}
+                email={user?.email}
+              />
             </div>
           </aside>
         </div>

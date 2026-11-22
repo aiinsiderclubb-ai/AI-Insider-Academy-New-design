@@ -63,6 +63,7 @@ export default async function BuyCoursePage({
   ];
 
   const providerLabels: Record<ProviderId, { name: string; note: string }> = {
+    paddle: { name: pick(locale, "Карта, PayPal, Apple Pay", "Card, PayPal, Apple Pay"), note: pick(locale, "Оплата через Paddle — он продаёт заказ и выдаёт чек", "Paid through Paddle, which sells the order and issues the receipt") },
     stripe: { name: "Stripe", note: "Visa · Mastercard" },
     liqpay: { name: "LiqPay", note: pick(locale, "Украина", "Ukraine") },
     tribute: { name: "Tribute", note: pick(locale, "Карта, СБП, Stars, TON", "Card, SBP, Stars, TON") },
@@ -213,6 +214,7 @@ export default async function BuyCoursePage({
             signedIn={Boolean(user)}
             successHref={path(`/learn/${course.slug}`, locale)}
             providerLabels={providerLabels}
+            email={user?.email}
           />
 
           <ul className="mt-4 flex flex-col gap-2 px-1">

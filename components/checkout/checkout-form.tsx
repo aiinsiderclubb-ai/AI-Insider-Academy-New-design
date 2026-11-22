@@ -3,12 +3,13 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, CreditCard, Landmark, Loader2, Send, TestTube2 } from "lucide-react";
+import { AlertTriangle, CreditCard, Landmark, Loader2, Send, ShieldCheck, TestTube2 } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Button } from "@/components/primitives/button";
 import { Field, Input } from "@/components/primitives/field";
 import { useToast } from "@/components/primitives/toast";
 import type { ProviderId } from "@/lib/api/checkout";
+import { onPaddleEvent, openPaddleCheckout } from "@/lib/paddle-client";
 import { formatPrice, path, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +23,7 @@ export interface CheckoutTier {
 }
 
 const PROVIDER_META: Record<ProviderId, { icon: React.ElementType; endpoint: string }> = {
+  paddle: { icon: ShieldCheck, endpoint: "/api/payments/paddle/checkout" },
   stripe: { icon: CreditCard, endpoint: "/api/payments/stripe/checkout" },
   liqpay: { icon: Landmark, endpoint: "/api/payments/liqpay/create" },
   tribute: { icon: Send, endpoint: "/api/payments/tribute/checkout" },
@@ -48,6 +50,8 @@ export function CheckoutForm({
   signedIn,
   successHref,
   providerLabels,
+  storeItem = false,
+  email,
 }: {
   locale: Locale;
   d: Dictionary;
@@ -58,6 +62,10 @@ export function CheckoutForm({
   signedIn: boolean;
   successHref: string;
   providerLabels: Record<ProviderId, { name: string; note: string }>;
+  /** A store product: Paddle prices it by license through the marketplace quote. */
+  storeItem?: boolean;
+  /** Prefills Paddle's checkout. */
+  email?: string;
 }) {
   const router = useRouter();
   const { push } = useToast();
@@ -121,17 +129,39 @@ export function CheckoutForm({
     setError(null);
 
     try {
-      const response = await fetch(PROVIDER_META[provider].endpoint, {
+      const paddleStore = provider === "paddle" && storeItem;
+      const response = await fetch(paddleStore ? "/api/payments/paddle/marketplace" : PROVIDER_META[provider].endpoint, {
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ courseId: tier.itemId, promoCode: promoState.status === "ok" ? promo.trim() : undefined, locale }),
+        body: JSON.stringify(
+          paddleStore
+            ? { productId: tier.itemId, licenseTier: tier.id, locale }
+            : { courseId: tier.itemId, promoCode: promoState.status === "ok" ? promo.trim() : undefined, locale },
+        ),
       });
 
-      const payload = (await response.json().catch(() => ({}))) as { url?: string; code?: string; error?: string };
+      const payload = (await response.json().catch(() => ({}))) as {
+        url?: string;
+        code?: string;
+        error?: string;
+        transactionId?: string;
+        successUrl?: string;
+      };
 
       if (!response.ok) {
         setError(messageFor(payload.code ?? "", response.status, d));
+        return;
+      }
+
+      if (payload.transactionId) {
+        // Access opens when Paddle's webhook reaches the API; the overlay only takes the money.
+        onPaddleEvent((event) => {
+          if (event.name === "checkout.completed") {
+            push({ tone: "success", title: d.checkout.successTitle, body: d.checkout.successBody });
+          }
+        });
+        await openPaddleCheckout({ transactionId: payload.transactionId, successUrl: payload.successUrl, locale, email });
         return;
       }
 

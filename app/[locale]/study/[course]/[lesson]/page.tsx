@@ -5,7 +5,7 @@ import type { StudyMaterial } from "@/components/study/lesson-materials";
 import { defaultHomework, lessonHomework, lessonMaterials, type HomeworkSpec } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import { getCourse } from "@/lib/api/catalog";
-import { canOpenLesson, getAccess, getMe } from "@/lib/api/session";
+import { canOpenLesson, demoState, getAccess, getMe } from "@/lib/api/session";
 import { getDictionary, path, type Locale } from "@/lib/i18n";
 import { lessonVideoUrl } from "@/lib/video/r2";
 
@@ -54,6 +54,7 @@ export default async function StudyPage({
   });
 
   const current = lessons[index];
+  const demo = demoState(access, course);
 
   const localised = (spec: HomeworkSpec, selfCheck: boolean): StudyHomework => ({
     tasks: pick(locale, spec.tasks, spec.tasksEn),
@@ -99,6 +100,10 @@ export default async function StudyPage({
       homework={homework}
       materials={materials}
       watched={access.progress[course.id]?.watched ?? []}
+      progress={{ ...access.progress[course.id] }}
+      demo={demo}
+      /* The demo clock starts on the server's time, not on whatever the learner's device says. */
+      demoStartAt={new Date().toISOString()}
       canSubmitHomework={current.unlocked && !access.prelaunch}
     />
   );

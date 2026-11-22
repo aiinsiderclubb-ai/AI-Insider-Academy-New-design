@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ListVideo } from "lucide-react";
+import { ArrowRight, ListVideo, Play } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs } from "@/components/primitives/navigation";
 import { ButtonLink } from "@/components/primitives/button";
@@ -10,6 +10,7 @@ import { Magnetic } from "@/components/motion/pointer";
 import { Reveal } from "@/components/motion/reveal";
 import { CourseTrailer } from "@/components/catalog/course-trailer";
 import { groupLessons } from "@/content/catalog";
+import type { DemoState } from "@/lib/api/session";
 import { courseTrailer } from "@/content/covers";
 import { pick } from "@/content/locale";
 import type { Course } from "@/lib/api/catalog";
@@ -33,6 +34,7 @@ export function CourseHero({
   average,
   count,
   owned,
+  demo = { kind: "none" },
 }: {
   course: Course;
   locale: Locale;
@@ -41,6 +43,8 @@ export function CourseHero({
   average: number;
   count: number;
   owned: boolean;
+  /** The learner's standing with the free first lesson; computed by the page from their access. */
+  demo?: DemoState;
 }) {
   const soon = course.status === "in-development";
   /* `durationLabel` already opens with the lesson count, so showing it here
@@ -179,6 +183,24 @@ export function CourseHero({
                 <p className="max-w-[17rem] text-[12.5px] leading-snug text-muted">
                   {pick(locale, "Первый урок открыт всем — посмотрите до заявки.", "The first lesson is open to everyone — watch it before you apply.")}
                 </p>
+              )}
+
+              {!owned && !course.isFree && !soon && demo.kind !== "none" && (
+                demo.kind === "expired" ? (
+                  <p className="max-w-[17rem] text-[12.5px] leading-snug text-muted">
+                    {pick(locale, "Бесплатный урок вы уже посмотрели — дальше в полном курсе.", "You have already had the free lesson — the rest is in the full course.")}
+                  </p>
+                ) : (
+                  <Link
+                    href={path(`/study/${course.slug}/1`, locale)}
+                    className="inline-flex items-center gap-2 text-[13.5px] font-medium text-ink transition-colors hover:text-accent"
+                  >
+                    <Play className="h-4 w-4 text-accent" aria-hidden />
+                    {demo.kind === "active"
+                      ? pick(locale, `Бесплатный урок — открыт ещё ${demo.hoursLeft} ч`, `Free lesson — open ${demo.hoursLeft} more h`)
+                      : pick(locale, "Смотреть бесплатный урок", "Watch the free lesson")}
+                  </Link>
+                )
               )}
 
               <Link

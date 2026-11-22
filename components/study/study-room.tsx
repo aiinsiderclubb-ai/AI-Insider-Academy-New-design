@@ -32,6 +32,8 @@ import { LessonAssistant } from "@/components/assistant/lesson-assistant";
 import { LessonMaterials, type StudyMaterial } from "@/components/study/lesson-materials";
 import type { Dictionary } from "@/lib/i18n";
 import { path, type Locale } from "@/lib/i18n/config";
+import { DEMO_HOURS } from "@/lib/demo";
+import { pick } from "@/content/locale";
 import { cn, timecode } from "@/lib/utils";
 
 export interface StudyLesson {
@@ -59,6 +61,13 @@ export interface StudyNote {
   createdAt: string;
 }
 
+/** Where the learner stands with the course's free demo lesson; computed on the server. */
+export type StudyDemo =
+  | { kind: "none" }
+  | { kind: "unused" }
+  | { kind: "active"; hoursLeft: number }
+  | { kind: "expired" };
+
 type Panel = "notes" | "assistant" | "resources" | null;
 type Tab = "lesson" | "homework" | "materials" | "discussion";
 
@@ -73,6 +82,9 @@ export function StudyRoom({
   homework,
   materials,
   watched,
+  progress,
+  demo,
+  demoStartAt,
   canSubmitHomework,
 }: {
   locale: Locale;
@@ -83,6 +95,11 @@ export function StudyRoom({
   homework: StudyHomework | null;
   materials: StudyMaterial[];
   watched: number[];
+  /** The course's whole progress record, so a save keeps the fields it does not change. */
+  progress: Record<string, unknown>;
+  demo: StudyDemo;
+  /** Server time to stamp the demo start with. */
+  demoStartAt: string;
   canSubmitHomework: boolean;
 }) {
   const router = useRouter();
@@ -96,6 +113,40 @@ export function StudyRoom({
   const [shortcutsOpen, setShortcutsOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [saving, setSaving] = React.useState(false);
+
+  /* ------------------------------- demo lesson ------------------------------ */
+
+  /*
+   * Saves replace the course's progress record wholesale, so every write goes
+   * out with the fields it is not changing — otherwise marking a lesson done
+   * would wipe the demo start and hand the learner a fresh demo.
+   */
+  const progressRef = React.useRef<Record<string, unknown>>(progress);
+  const [demoView, setDemoView] = React.useState<StudyDemo>(demo);
+  const demoStartSent = React.useRef(false);
+
+  React.useEffect(() => {
+    progressRef.current = progress;
+    setDemoView(demo);
+  }, [progress, demo]);
+
+  /* The first time the demo lesson is actually opened, its 72-hour window starts. */
+  React.useEffect(() => {
+    if (demo.kind !== "unused" || current.index !== 0 || !current.unlocked || demoStartSent.current) return;
+    demoStartSent.current = true;
+    const data = { ...progressRef.current, demoStartedAt: demoStartAt };
+    fetch(`/api/me/progress/${encodeURIComponent(course.id)}`, {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ data }),
+    })
+      .then((response) => {
+        if (!response.ok) return; // prelaunch or offline: the demo just stays open
+        progressRef.current = data;
+        setDemoView({ kind: "active", hoursLeft: DEMO_HOURS });
+      })
+      .catch(() => {});
+  }, [demo.kind, current.index, current.unlocked, course.id, demoStartAt]);
 
   /* The tab is remembered between lessons; one that this lesson lacks falls back. */
   const activeTab: Tab =
@@ -191,9 +242,10 @@ export function StudyRoom({
       const response = await fetch(`/api/me/progress/${encodeURIComponent(course.id)}`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ data: { watched: nextDone } }),
+        body: JSON.stringify({ data: { ...progressRef.current, watched: nextDone } }),
       });
       if (!response.ok) throw new Error("failed");
+      progressRef.current = { ...progressRef.current, watched: nextDone };
       if (!isDone && next) push({ tone: "success", title: d.study.done, body: next.title });
     } catch {
       setDone(done);
@@ -396,6 +448,29 @@ export function StudyRoom({
 
         <main id="main" className="min-w-0 flex-1 overflow-y-auto">
           <div className={cn("mx-auto w-full px-4 py-6 sm:px-8 sm:py-9", focus ? "max-w-3xl" : "max-w-4xl")}>
+            {/* ------------------------------ demo note ----------------------------- */}
+            {current.index === 0 && current.unlocked && (demoView.kind === "unused" || demoView.kind === "active") && (
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent/30 bg-accent-soft px-4 py-3">
+                <p className="text-[13.5px] leading-snug text-ink-2">
+                  <span className="font-semibold text-ink">{pick(locale, "Бесплатный демо-урок.", "Free demo lesson.")}</span>{" "}
+                  {demoView.kind === "active"
+                    ? pick(
+                        locale,
+                        `Открыт ещё ${demoView.hoursLeft} ч — потом остальное в полном курсе.`,
+                        `Open for ${demoView.hoursLeft} more h — the rest is in the full course.`,
+                      )
+                    : pick(
+                        locale,
+                        `Открыт ${DEMO_HOURS} часа с первого просмотра.`,
+                        `Open for ${DEMO_HOURS} hours from the first view.`,
+                      )}
+                </p>
+                <ButtonLink href={path(`/learn/${course.slug}/buy`, locale)} size="sm" variant="secondary">
+                  {d.learn.buyCourse}
+                </ButtonLink>
+              </div>
+            )}
+
             {/* ------------------------------ player ------------------------------ */}
             {current.unlocked ? (
               current.videoUrl && videoFailedFor !== current.id ? (
@@ -443,8 +518,18 @@ export function StudyRoom({
                   <Lock className="h-5 w-5" aria-hidden />
                 </span>
                 <div className="max-w-md">
-                  <p className="font-display text-lg font-extrabold tracking-tight">{d.study.locked}</p>
-                  <p className="mt-2 text-[13.5px] leading-relaxed text-ink-3">{d.study.lockedBody}</p>
+                  <p className="font-display text-lg font-extrabold tracking-tight">
+                    {current.index === 0 ? pick(locale, "Демо-урок закончился", "Your demo has ended") : d.study.locked}
+                  </p>
+                  <p className="mt-2 text-[13.5px] leading-relaxed text-ink-3">
+                    {current.index === 0
+                      ? pick(
+                          locale,
+                          `Первый урок был открыт ${DEMO_HOURS} часа. Купите курс, чтобы вернуться к нему и пройти остальные.`,
+                          `The first lesson was open for ${DEMO_HOURS} hours. Buy the course to come back to it and take the rest.`,
+                        )
+                      : d.study.lockedBody}
+                  </p>
                 </div>
                 <ButtonLink href={path(`/learn/${course.slug}/buy`, locale)} size="sm">
                   {d.learn.buyCourse}

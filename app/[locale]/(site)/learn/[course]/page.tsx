@@ -23,7 +23,7 @@ import { courseCover, courseTrailer } from "@/content/covers";
 import { pick } from "@/content/locale";
 import { getCourse, getCourses } from "@/lib/api/catalog";
 import { getCourseReviews } from "@/lib/api/public";
-import { getAccess } from "@/lib/api/session";
+import { demoState, getAccess } from "@/lib/api/session";
 import { formatDate, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -79,6 +79,7 @@ export default async function CoursePage({
   const hasMedia = Boolean(image || courseTrailer(course.slug));
   const grading = gradingStandard[locale === "en" ? "en" : "ru"];
   const owned = access.courseIds.has(course.id);
+  const demo = demoState(access, course);
   const soon = course.status === "in-development";
   const prerequisites = (pick(locale, profile?.prerequisites, profile?.prerequisitesEn) ?? []) as string[];
   const instructor = instructorFor(course.id);
@@ -105,6 +106,7 @@ export default async function CoursePage({
         average={average}
         count={count}
         owned={owned}
+        demo={demo}
       />
 
       {/* ================================ profile =============================== */}
@@ -205,7 +207,7 @@ export default async function CoursePage({
             </div>
 
             <div>
-              <Curriculum course={course} locale={locale} d={d} unlockedUpTo={owned ? course.lessonCount : 0} />
+              <Curriculum course={course} locale={locale} d={d} unlockedUpTo={owned ? course.lessonCount : 0} demoExpired={demo.kind === "expired"} />
 
               {course.finalProject && (
                 <Reveal>

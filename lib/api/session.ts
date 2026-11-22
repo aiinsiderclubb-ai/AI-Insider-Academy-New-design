@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { DEMO_HOURS } from "@/lib/demo";
 import { tryApi } from "./http";
 import type { ApiCertificate, ApiNotification, ApiUser } from "./types";
 
@@ -10,6 +11,8 @@ export interface CourseProgress {
   homeworkChecked: number[];
   lastLessonIndex?: number;
   updatedAt?: string;
+  /** When the learner first opened the free demo lesson of a course they do not own. */
+  demoStartedAt?: string;
 }
 
 export interface Purchase {
@@ -160,17 +163,44 @@ export const getAccess = cache(async (): Promise<Access> => {
   };
 });
 
-export function canOpenLesson(
-  access: Access,
-  course: { id: string; isFree: boolean; isProOnly: boolean; inClub: boolean },
-  lessonIndex: number,
-): boolean {
-  if (course.isFree) return true;
-  if (lessonIndex === 0) return true; // the first lesson is always a free sample
+type AccessCourse = { id: string; isFree: boolean; isProOnly: boolean; inClub: boolean };
+
+/** Every lesson of the course is open to this person: bought, or covered by their plan. */
+function hasFullAccess(access: Access, course: AccessCourse): boolean {
   if (!access.signedIn) return false;
   if (access.courseIds.has(course.id)) return true;
   if (access.tier === "pro") return true;
   if (access.tier === "club") return course.inClub && !course.isProOnly;
+  return false;
+}
+
+/**
+ * Where a learner stands with a paid course's free demo lesson.
+ *
+ * "One demo per course per account" is a window rather than a single view: the
+ * clock starts the first time lesson 1 is opened and runs for DEMO_HOURS, so a
+ * closed tab does not cost anyone their demo. The start is kept in the
+ * course's progress record on the API, which follows the account across
+ * devices. During prelaunch the API neither stores nor returns progress, so the
+ * clock never starts and the demo simply stays open.
+ */
+export type DemoState =
+  | { kind: "none" } // free course, or the learner already has the whole course
+  | { kind: "unused" }
+  | { kind: "active"; hoursLeft: number }
+  | { kind: "expired" };
+
+export function demoState(access: Access, course: AccessCourse, now = Date.now()): DemoState {
+  if (course.isFree || hasFullAccess(access, course)) return { kind: "none" };
+  const started = Date.parse(access.progress[course.id]?.demoStartedAt ?? "");
+  if (!Number.isFinite(started)) return { kind: "unused" };
+  const left = started + DEMO_HOURS * 3_600_000 - now;
+  return left > 0 ? { kind: "active", hoursLeft: Math.max(1, Math.ceil(left / 3_600_000)) } : { kind: "expired" };
+}
+
+export function canOpenLesson(access: Access, course: AccessCourse, lessonIndex: number): boolean {
+  if (course.isFree || hasFullAccess(access, course)) return true;
+  if (lessonIndex === 0) return demoState(access, course).kind !== "expired";
   return false;
 }
 

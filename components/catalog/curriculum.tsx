@@ -21,12 +21,15 @@ export function Curriculum({
   locale,
   d,
   unlockedUpTo = 0,
+  demoExpired = false,
 }: {
   course: Course;
   locale: Locale;
   d: Dictionary;
   /** Lessons below this index render as open; the rest show a lock. */
   unlockedUpTo?: number;
+  /** The learner's 72-hour window on the free first lesson has run out. */
+  demoExpired?: boolean;
 }) {
   const modules = groupLessons(course.lessons, course.modulePlan);
   if (!course.lessons.length) return null;
@@ -67,7 +70,8 @@ export function Curriculum({
 
               <ol className="pb-4">
                 {lessons.map((lesson) => {
-                  const unlocked = lesson.free || lesson.index < unlockedUpTo;
+                  const demoOver = demoExpired && lesson.index === 0 && !course.isFree;
+                  const unlocked = (lesson.free && !demoOver) || lesson.index < unlockedUpTo;
                   return (
                     <li
                       key={lesson.id}
@@ -92,7 +96,7 @@ export function Curriculum({
                             </span>
                             {lesson.title}
                           </span>
-                          {lesson.free && lesson.index === 0 && <Badge tone="success">{d.learn.firstLessonFree}</Badge>}
+                          {lesson.free && lesson.index === 0 && !demoOver && <Badge tone="success">{d.learn.firstLessonFree}</Badge>}
                         </span>
                         {lesson.description && (
                           <span className="mt-1 block text-[13px] leading-snug text-ink-3">{lesson.description}</span>

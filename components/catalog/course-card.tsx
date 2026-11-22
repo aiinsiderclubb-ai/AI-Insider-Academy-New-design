@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Lock } from "lucide-react";
+import { ArrowUpRight, Lock, Play } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { courseCover } from "@/content/covers";
+import { pick } from "@/content/locale";
 import type { Course } from "@/lib/api/catalog";
 import { formatPrice, lessonCount, path, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -117,6 +118,17 @@ export function CourseCard({
         </h3>
 
         <p className="line-clamp-2 text-[13.5px] leading-relaxed text-ink-3">{course.description || course.summary}</p>
+
+        {/* Sits above the card-wide link so it can lead straight into the demo lesson. */}
+        {!course.isFree && !soon && (
+          <Link
+            href={path(`/study/${course.slug}/1`, locale)}
+            className="relative z-10 inline-flex w-fit items-center gap-1.5 text-[13px] font-medium text-accent-ink underline-offset-4 hover:underline"
+          >
+            <Play className="h-3.5 w-3.5" aria-hidden />
+            {pick(locale, "Смотреть бесплатный урок", "Watch the free lesson")}
+          </Link>
+        )}
 
         <div className="mt-auto flex items-end justify-between gap-4 pt-3">
           <Price course={course} locale={locale} d={d} />

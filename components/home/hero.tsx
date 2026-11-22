@@ -127,12 +127,6 @@ export function Hero({
               </ButtonLink>
             </div>
           </Reveal>
-
-          <Reveal delay={320}>
-            <p className="mt-6 font-mono text-2xs tracking-[0.18em] text-faint uppercase">
-              {pick(locale, "Доступно на русском, украинском и английском", "Available in Russian, Ukrainian and English")}
-            </p>
-          </Reveal>
         </div>
       </Container>
 

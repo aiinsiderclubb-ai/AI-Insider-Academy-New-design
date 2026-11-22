@@ -4,7 +4,6 @@ import { resolveSiteUrl } from "@/lib/api/origin";
 import { legalSlugs } from "@/content/legal";
 import { courseBundles } from "@/content/catalog";
 import { giveawayList } from "@/content/community";
-import { creatorList } from "@/content/site";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
 import { getAllBlogPosts } from "@/lib/api/public";
@@ -25,7 +24,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "", priority: 1, changeFrequency: "weekly" as const },
     { path: "/learn", priority: 0.9, changeFrequency: "weekly" as const },
     { path: "/store", priority: 0.9, changeFrequency: "weekly" as const },
-    { path: "/store/creators", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/store/tools", priority: 0.5, changeFrequency: "monthly" as const },
     { path: "/plans", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/community/forum", priority: 0.7, changeFrequency: "daily" as const },
@@ -40,7 +38,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...courses.map((course) => ({ path: `/learn/${course.slug}`, priority: 0.8, changeFrequency: "weekly" as const })),
     ...(open ? courseBundles : []).map((bundle) => ({ path: `/learn/bundles/${bundle.id}`, priority: 0.7, changeFrequency: "monthly" as const })),
     ...catalog.products.map((product) => ({ path: `/store/${product.slug}`, priority: 0.75, changeFrequency: "weekly" as const })),
-    ...creatorList.map((creator) => ({ path: `/store/creators/${creator.slug}`, priority: 0.5, changeFrequency: "monthly" as const })),
     ...giveawayList.map((giveaway) => ({ path: `/community/giveaways/${giveaway.slug}`, priority: 0.6, changeFrequency: "weekly" as const })),
     ...posts.map((post) => ({ path: `/community/blog/${post.slug}`, priority: 0.65, changeFrequency: "monthly" as const, lastModified: post.date })),
     ...legalSlugs.map((slug) => ({ path: `/legal/${slug}`, priority: 0.3, changeFrequency: "yearly" as const })),

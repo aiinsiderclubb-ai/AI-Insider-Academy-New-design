@@ -92,7 +92,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       points: [
         pick(locale, "Курсы Academy, пока подписка активна", "Academy courses while the subscription runs"),
         pick(locale, "Новое сразу после выхода", "New material the day it ships"),
-        pick(locale, "Скидка в Marketplace", "A discount in the store"),
+        pick(locale, "Скидка в магазине", "A discount in the store"),
       ],
       footnote: d.plans.oneTimeNote,
       href: path("/plans", locale),
@@ -106,7 +106,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     { id: "start", label: pick(locale, "Начало", "Start") },
     { id: "entrances", label: pick(locale, "Четыре входа", "Four entrances") },
     { id: "programmes", label: pick(locale, "Программы", "Programmes") },
-    { id: "store", label: "Marketplace" },
+    { id: "store", label: pick(locale, "Магазин", "Store") },
     { id: "access", label: pick(locale, "Доступ", "Access") },
     { id: "path", label: pick(locale, "Маршрут", "Route") },
     { id: "voices", label: pick(locale, "Отзывы", "Reviews") },

@@ -45,7 +45,7 @@ export default async function LibraryPage({ params }: { params: Promise<{ locale
       title={pick(locale, "Файлы и материалы", "Files and resources")}
       body={pick(
         locale,
-        "Материалы курсов, купленные системы Marketplace и все версии файлов в одном месте.",
+        "Материалы курсов, купленные в магазине товары и все версии файлов в одном месте.",
         "Course resources, purchased marketplace systems and every file version in one place.",
       )}
     >

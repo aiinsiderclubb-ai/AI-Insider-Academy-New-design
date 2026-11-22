@@ -176,7 +176,7 @@ export const ukr: Dictionary = {
   },
 
   home: {
-    heroKicker: "Курси · Marketplace · Club",
+    heroKicker: "Курси · Магазин · Club",
     heroTitle: "AI складний.\nВаш шлях — ні.",
     heroBody:
       "Курси з перевіркою домашніх завдань, готові системи для впровадження та підписка з оновленнями — в одному акаунті.",
@@ -204,7 +204,7 @@ export const ukr: Dictionary = {
     ctaPanelTitle: "Відкривається одразу",
     ctaPanelNote: "Прогрес, домашні завдання та покупки живуть в одному акаунті трьома мовами.",
     ctaPoint1: "Безкоштовні уроки та вступні модулі",
-    ctaPoint2: "Демоматеріали Marketplace",
+    ctaPoint2: "Демоматеріали з магазину",
     ctaPoint3: "Форум, івенти та розіграші спільноти",
   },
 
@@ -311,7 +311,7 @@ export const ukr: Dictionary = {
   },
 
   store: {
-    title: "Marketplace",
+    title: "Магазин",
     subtitle: "Готові AI-системи",
     body: "Перевірені агенти, автоматизації та робочі шаблони — з файлами, інструкціями та оновленнями.",
     searchPlaceholder: "Знайдіть агента, workflow або шаблон",

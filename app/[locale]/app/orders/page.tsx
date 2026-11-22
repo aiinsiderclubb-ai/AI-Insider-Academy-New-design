@@ -109,7 +109,7 @@ export default async function OrdersPage({ params }: { params: Promise<{ locale:
               title={pick(locale, "Заказов пока нет", "No orders yet")}
               body={pick(
                 locale,
-                "Разовые покупки и товары Marketplace будут перечислены здесь с чеками.",
+                "Разовые покупки и товары из магазина будут перечислены здесь с чеками.",
                 "One-off purchases and marketplace items will be listed here with receipts.",
               )}
               action={

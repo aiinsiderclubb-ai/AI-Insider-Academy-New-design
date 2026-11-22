@@ -176,7 +176,7 @@ export const en: Dictionary = {
   },
 
   home: {
-    heroKicker: "Courses · Marketplace · Club",
+    heroKicker: "Courses · Store · Club",
     heroTitle: "AI is complicated.\nYour path isn't.",
     heroBody:
       "Courses with reviewed assignments, ready-to-ship systems and a subscription that keeps updating — all in one account.",
@@ -204,7 +204,7 @@ export const en: Dictionary = {
     ctaPanelTitle: "Unlocks right away",
     ctaPanelNote: "Progress, assignments and purchases live in one account across all three languages.",
     ctaPoint1: "Free lessons and opening modules",
-    ctaPoint2: "Marketplace demo material",
+    ctaPoint2: "Store demo material",
     ctaPoint3: "Forum, events and community giveaways",
   },
 
@@ -311,7 +311,7 @@ export const en: Dictionary = {
   },
 
   store: {
-    title: "Marketplace",
+    title: "Store",
     subtitle: "Ready-made AI systems",
     body: "Vetted agents, automations and working templates — with files, instructions and updates.",
     searchPlaceholder: "Find an agent, workflow or template",

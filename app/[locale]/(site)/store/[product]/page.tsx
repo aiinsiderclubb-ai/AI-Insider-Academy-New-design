@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BadgeCheck, Check, Clock, Download, FileArchive, ListChecks, Lock, Package, Wallet } from "lucide-react";
+import { Check, Clock, Download, FileArchive, ListChecks, Lock, Package, Wallet } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/navigation";
 import { Container, SectionHead } from "@/components/primitives/surface";
@@ -310,33 +310,6 @@ export default async function ProductPage({
               />
             )}
 
-            {product.creator && (
-              <div className="rounded-lg border border-line bg-surface p-5">
-                <p className="eyebrow">{d.store.author}</p>
-                <div className="mt-3 flex items-center gap-3">
-                  <span
-                    className="h-10 w-10 shrink-0 rounded-full border border-line"
-                    style={{ background: product.creator.gradient }}
-                    aria-hidden
-                  />
-                  <div className="min-w-0">
-                    <p className="flex items-center gap-1.5 text-[14px] font-semibold text-ink">
-                      {product.creator.name}
-                      {product.creator.verified && <BadgeCheck className="h-4 w-4 text-accent" aria-hidden />}
-                    </p>
-                    <p className="text-[12.5px] text-muted">
-                      {product.creator.verified ? d.store.verifiedCreator : d.store.author}
-                    </p>
-                  </div>
-                </div>
-                <Link
-                  href={path(`/store/creators/${product.creator.slug}`, locale)}
-                  className="mt-4 inline-block text-[13px] font-medium text-accent-ink underline-offset-4 hover:underline"
-                >
-                  {d.common.showAll}
-                </Link>
-              </div>
-            )}
 
             {!discount && (
               <Note>

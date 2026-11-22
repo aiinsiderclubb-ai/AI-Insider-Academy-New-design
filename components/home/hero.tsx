@@ -21,17 +21,17 @@ export interface HeroStats {
 /** The hero before launch: nothing about courses, an account to wait in. */
 const PRELAUNCH = {
   ru: {
-    kicker: "Marketplace · Сообщество · Academy скоро",
+    kicker: "Магазин · Сообщество · Academy скоро",
     body: "Готовые AI-системы, шаблоны и сообщество практиков — уже сейчас. Обучение Academy откроется совсем скоро.",
     primary: "Создать аккаунт",
   },
   ukr: {
-    kicker: "Marketplace · Спільнота · Academy незабаром",
+    kicker: "Магазин · Спільнота · Academy незабаром",
     body: "Готові AI-системи, шаблони та спільнота практиків — уже зараз. Навчання Academy відкриється зовсім скоро.",
     primary: "Створити акаунт",
   },
   en: {
-    kicker: "Marketplace · Community · Academy soon",
+    kicker: "Store · Community · Academy soon",
     body: "Ready-made AI systems, templates and a community of practitioners — available now. Academy learning opens very soon.",
     primary: "Create an account",
   },

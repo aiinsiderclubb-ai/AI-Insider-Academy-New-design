@@ -45,8 +45,6 @@ export function SiteFooter({ locale, d }: { locale: Locale; d: Dictionary }) {
       links: [
         { label: d.nav.store, href: p("/store") },
         { label: d.nav.vault, href: p("/store?collection=vault") },
-        { label: d.nav.creators, href: p("/store/creators") },
-        { label: d.store.becomeCreator, href: p("/store/creators#apply") },
       ],
     },
     {

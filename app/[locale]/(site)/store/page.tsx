@@ -11,7 +11,6 @@ import { ProductCard } from "@/components/store/product-card";
 import { ProductCover } from "@/components/store/product-cover";
 import { StoreFacets, StoreSearch, StoreSort } from "@/components/store/store-controls";
 import { pick } from "@/content/locale";
-import { revenueShare } from "@/content/site";
 import { tierDiscount } from "@/content/store";
 import {
   categoryFacets,
@@ -111,7 +110,6 @@ export default async function StorePage({
           <RevealGroup step={70} as="dl" className="grid grid-cols-2 gap-x-6 gap-y-6 self-end">
             <Stat value={catalog.products.length} label={d.home.statsProducts} />
             <Stat value={storeCategories.length} label={d.store.categories} />
-            <Stat value={`${Math.round(revenueShare.creator * 100)}%`} label={pick(locale, "креатору с продажи", "to the creator")} />
             <Stat value={`−${Math.round(tierDiscount.pro * 100)}%`} label={pick(locale, "по подписке Pro", "with a Pro plan")} />
           </RevealGroup>
         </div>

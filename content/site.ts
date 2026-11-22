@@ -27,6 +27,7 @@ export interface LegalEntity {
   legalName: string;
   legalNameEn: string;
   registrationCountry: string;
+  registrationCountryEn?: string;
   registrationNumber: string;
   taxId: string;
   address: string;
@@ -37,6 +38,7 @@ export interface LegalEntity {
   iban: string;
   bic: string;
   governingLaw: string;
+  governingLawEn?: string;
 }
 
 export const legalEntity = legal.LEGAL_ENTITY as LegalEntity;

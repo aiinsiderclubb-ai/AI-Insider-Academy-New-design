@@ -44,13 +44,13 @@ export default async function LegalPage({
   const optional = (value: string) => (value.trim() ? legalValue(value) : undefined);
   const requisites: { label: string; value: string | null }[] = [
     { label: pick(locale, "Продавец", "Seller"), value: legalValue(pick(locale, legalEntity.legalName, legalEntity.legalNameEn)) },
-    { label: pick(locale, "Страна", "Country"), value: legalValue(legalEntity.registrationCountry) },
-    { label: pick(locale, "Адрес", "Address"), value: legalValue(legalEntity.address) },
+    { label: pick(locale, "Страна", "Country"), value: legalValue(pick(locale, legalEntity.registrationCountry, legalEntity.registrationCountryEn ?? legalEntity.registrationCountry)) },
     ...[
+      { label: pick(locale, "Адрес", "Address"), value: optional(legalEntity.address) },
       { label: pick(locale, "Регистрация", "Registration"), value: optional(legalEntity.registrationNumber) },
       { label: pick(locale, "Налоговый номер", "Tax ID"), value: optional(legalEntity.taxId) },
     ].filter((row): row is { label: string; value: string | null } => row.value !== undefined),
-    { label: pick(locale, "Применимое право", "Governing law"), value: legalValue(legalEntity.governingLaw) },
+    { label: pick(locale, "Применимое право", "Governing law"), value: legalValue(pick(locale, legalEntity.governingLaw, legalEntity.governingLawEn ?? legalEntity.governingLaw)) },
     { label: pick(locale, "Продавец по заказам (Merchant of Record)", "Merchant of Record"), value: "Paddle.com Market Limited" },
   ];
 

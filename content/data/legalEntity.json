@@ -1,19 +1,21 @@
 {
   "LEGAL_ENTITY": {
-    "draft": true,
-    "legalName": "TODO: имя и фамилия продавца",
-    "legalNameEn": "TODO: seller's full name",
-    "registrationCountry": "TODO: country",
+    "draft": false,
+    "legalName": "Vladyslav Katash",
+    "legalNameEn": "Vladyslav Katash",
+    "registrationCountry": "Катар",
     "registrationNumber": "",
     "taxId": "",
-    "address": "TODO: contact address",
+    "address": "",
     "emailClaims": "info@myinsideracademy.com",
     "emailPrivacy": "info@myinsideracademy.com",
     "telegram": "@vladyslavarcher",
     "bankName": "",
     "iban": "",
     "bic": "",
-    "governingLaw": "TODO: law of the seller's country",
-    "updatedAt": "2026-11-22"
+    "governingLaw": "Право Государства Катар",
+    "updatedAt": "2026-11-22",
+    "registrationCountryEn": "Qatar",
+    "governingLawEn": "Laws of the State of Qatar"
   }
 }

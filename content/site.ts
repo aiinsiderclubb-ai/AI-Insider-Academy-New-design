@@ -58,7 +58,6 @@ export function legalValue(value: string): string | null {
 
 /* ---------------------------------- taxonomy ------------------------------ */
 
-export const MENTOR_SURCHARGE_EUR = difficulty.MENTOR_SURCHARGE_EUR as number;
 
 export const DIFFICULTY = difficulty.DIFFICULTY as Record<string, { stars: number; ru: string; en: string }>;
 

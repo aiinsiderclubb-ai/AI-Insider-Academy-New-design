@@ -10,7 +10,6 @@ import { ButtonLink } from "@/components/primitives/button";
 import { Container, SectionHead } from "@/components/primitives/surface";
 import { courseBundles } from "@/content/catalog";
 import { pick } from "@/content/locale";
-import { MENTOR_SURCHARGE_EUR } from "@/content/site";
 import { planByTier } from "@/content/plans";
 import { getCourses, groupCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
@@ -40,7 +39,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   ]);
 
   const groups = groupCourses(courses);
-  const paidPrices = groups.paid.map((course) => course.priceEur).filter(Boolean);
+  const paidPrices = groups.paid.flatMap((course) => [course.priceEur, course.mentorPriceEur]).filter(Boolean);
   const cheapestBundle = [...courseBundles].sort((a, b) => a.priceEur - b.priceEur)[0];
   const club = planByTier("club");
 
@@ -54,13 +53,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       priceNote: d.common.forever,
       points: [
         pick(locale, "Все уроки и материалы курса", "Every lesson and resource in the course"),
-        pick(locale, "Домашние задания с проверкой", "Assignments with review"),
+        pick(locale, "Домашние задания: самопроверка или проверка ментором", "Assignments: self-check or mentor review"),
         pick(locale, "Именной сертификат", "A named certificate"),
       ],
       footnote: pick(
         locale,
-        `Менторское сопровождение добавляется отдельно: +${MENTOR_SURCHARGE_EUR} €.`,
-        `Mentor support is added separately: +${MENTOR_SURCHARGE_EUR} €.`,
+        "Два тарифа: самостоятельно или с ментором — с проверкой заданий, примерно вдвое дороже.",
+        "Two plans: on your own, or with a mentor who reviews your work — about twice the price.",
       ),
       href: path("/learn", locale),
       cta: d.home.heroPrimary,

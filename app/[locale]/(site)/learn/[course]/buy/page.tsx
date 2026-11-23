@@ -11,11 +11,11 @@ import { CheckoutForm, type CheckoutTier } from "@/components/checkout/checkout-
 import { buyFaq, bundlesWithCourse } from "@/content/catalog";
 import { courseCover } from "@/content/covers";
 import { pick } from "@/content/locale";
-import { MENTOR_SURCHARGE_EUR, legalIsDraft } from "@/content/site";
+import { legalIsDraft } from "@/content/site";
 import { planByTier } from "@/content/plans";
 import { getCourse } from "@/lib/api/catalog";
 import { getCheckoutStatus, type ProviderId } from "@/lib/api/checkout";
-import { getSession } from "@/lib/api/session";
+import { getAccess, getSession, hasReview, onSelfPlan } from "@/lib/api/session";
 import { formatPrice, getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
 
 export async function generateMetadata({
@@ -43,24 +43,43 @@ export default async function BuyCoursePage({
   const course = await getCourse(slug, locale);
   if (!course || course.isFree) notFound();
 
-  const [status, user] = await Promise.all([getCheckoutStatus(), getSession()]);
+  const [status, user, access] = await Promise.all([getCheckoutStatus(), getSession(), getAccess()]);
 
-  const tiers: CheckoutTier[] = [
-    {
-      id: "access",
-      label: pick(locale, "Доступ к курсу", "Course access"),
-      note: pick(locale, "Все уроки, материалы и сертификат — навсегда", "Every lesson, resource and the certificate — for good"),
-      priceEur: course.priceEur,
-      itemId: course.id,
-    },
-    {
-      id: "mentor",
-      label: d.learn.withMentor,
-      note: d.learn.mentorNote,
-      priceEur: course.priceEur + MENTOR_SURCHARGE_EUR,
-      itemId: course.id,
-    },
-  ];
+  /*
+   * Two plans. Self-study is every lesson with assignments the learner checks
+   * on their own; the mentor plan adds review and a mentor. Someone who owns
+   * the self-study plan is offered only the step up, at the difference — the
+   * API charges the same.
+   */
+  const upgrading = onSelfPlan(access, course);
+  const ownsAll = access.courseIds.has(course.id) && hasReview(access, course);
+  const selfTier: CheckoutTier = {
+    id: "self",
+    plan: "self",
+    label: pick(locale, "Самостоятельно", "On your own"),
+    note: pick(
+      locale,
+      "Все уроки и материалы навсегда. Задания для самопроверки — без проверки и ментора.",
+      "Every lesson and resource for good. Assignments to check yourself — no review, no mentor.",
+    ),
+    priceEur: course.priceEur,
+    itemId: course.id,
+  };
+  const mentorTier: CheckoutTier = {
+    id: "mentor",
+    plan: "mentor",
+    label: upgrading ? pick(locale, "Перейти на тариф с ментором", "Move up to the mentor plan") : d.learn.withMentor,
+    note: upgrading
+      ? pick(locale, "Доплата разницы: проверка домашних заданий и ментор.", "You pay the difference: assignment review and a mentor.")
+      : pick(
+          locale,
+          "Всё из самостоятельного + проверка каждого задания, приёмка финального проекта и ментор.",
+          "Everything in self-study + every assignment reviewed, the final project signed off, and a mentor.",
+        ),
+    priceEur: upgrading ? course.mentorPriceEur - course.priceEur : course.mentorPriceEur,
+    itemId: course.id,
+  };
+  const tiers: CheckoutTier[] = upgrading ? [mentorTier] : [selfTier, mentorTier];
 
   const providerLabels: Record<ProviderId, { name: string; note: string }> = {
     paddle: { name: pick(locale, "Карта, PayPal, Apple Pay", "Card, PayPal, Apple Pay"), note: pick(locale, "Оплата через Paddle — он продаёт заказ и выдаёт чек", "Paid through Paddle, which sells the order and issues the receipt") },
@@ -79,7 +98,7 @@ export default async function BuyCoursePage({
   const comparison = [
     {
       label: pick(locale, "Этот курс", "This course"),
-      price: formatPrice(course.priceEur, locale),
+      price: `${formatPrice(course.priceEur, locale)} / ${formatPrice(course.mentorPriceEur, locale)}`,
       note: d.common.forever,
       href: null,
       current: true,
@@ -142,9 +161,9 @@ export default async function BuyCoursePage({
           <section className="mt-8 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
             {[
               pick(locale, "Пожизненный доступ ко всем урокам", "Lifetime access to every lesson"),
-              pick(locale, "Проверка домашних заданий", "Assignments reviewed"),
-              pick(locale, "Именной сертификат", "A named certificate"),
               pick(locale, "Готовые шаблоны и материалы", "Templates and resources included"),
+              pick(locale, "Задания к урокам и критерии самопроверки", "Lesson assignments with self-check criteria"),
+              pick(locale, "С ментором: проверка заданий и ответы на вопросы", "With a mentor: assignments reviewed, questions answered"),
             ].map((item) => (
               <p key={item} className="flex items-start gap-2.5 bg-surface p-4 text-[14px] leading-snug text-ink-2">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden />
@@ -205,11 +224,19 @@ export default async function BuyCoursePage({
 
         {/* ------------------------------ order panel ----------------------------- */}
         <aside className="lg:sticky lg:top-24 lg:self-start">
+          {ownsAll ? (
+            <Note tone="accent">
+              {pick(locale, "Этот курс у вас уже есть со всеми возможностями.", "You already have this course with everything included.")}{" "}
+              <Link href={path(`/study/${course.slug}/1`, locale)} className="font-medium underline underline-offset-2">
+                {d.common.continue}
+              </Link>
+            </Note>
+          ) : (
           <CheckoutForm
             locale={locale}
             d={d}
             tiers={tiers}
-            defaultTier={requestedTier === "mentor" ? "mentor" : "access"}
+            defaultTier={upgrading || requestedTier === "mentor" ? "mentor" : "self"}
             providers={status.providers}
             prelaunch={status.prelaunch}
             signedIn={Boolean(user)}
@@ -217,6 +244,7 @@ export default async function BuyCoursePage({
             providerLabels={providerLabels}
             email={user?.email}
           />
+          )}
 
           <ul className="mt-4 flex flex-col gap-2 px-1">
             <li className="flex items-center gap-2 text-[12.5px] text-ink-3">

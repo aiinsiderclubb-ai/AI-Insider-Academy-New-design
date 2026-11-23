@@ -133,6 +133,11 @@ export function CourseHero({
                   <span className="font-display text-[clamp(2.25rem,4vw,3.25rem)] leading-none font-extrabold tracking-tight tabular-nums text-ink">
                     {owned ? "—" : course.isFree ? d.common.free : formatPrice(course.priceEur, locale)}
                   </span>
+                  {!owned && !course.isFree && (
+                    <span className="font-mono text-[13px] text-muted tabular-nums">
+                      {pick(locale, `с ментором ${formatPrice(course.mentorPriceEur, locale)}`, `with a mentor ${formatPrice(course.mentorPriceEur, locale)}`)}
+                    </span>
+                  )}
                   {!owned && course.oldPriceEur && (
                     <span className="font-mono text-[15px] text-faint line-through tabular-nums">
                       {formatPrice(course.oldPriceEur, locale)}

@@ -20,6 +20,8 @@ export interface CheckoutTier {
   priceEur: number;
   /** Sent to the API as the purchasable item id. */
   itemId: string;
+  /** For a course: which plan is bought. The API prices it and records it. */
+  plan?: "self" | "mentor";
 }
 
 const PROVIDER_META: Record<ProviderId, { icon: React.ElementType; endpoint: string }> = {
@@ -41,8 +43,19 @@ function referralFromCookie(): string | undefined {
 const noSubscription = () => () => {};
 
 /** Maps a server error code onto copy the reader can act on. */
-function messageFor(code: string, status: number, d: Dictionary): string {
+function messageFor(code: string, status: number, d: Dictionary, locale: Locale): string {
   if (code === "PRELAUNCH_MODE" || status === 423) return d.errors.prelaunch;
+  if (code === "ALREADY_OWNED") {
+    return locale === "en" ? "You already have this course in this plan." : locale === "ukr" ? "Цей курс у вас уже є в цьому тарифі." : "Этот курс у вас уже есть в этом тарифе.";
+  }
+  /* Tribute's fixed products and Gumroad sell one price, so they turn the mentor plan away. */
+  if (code === "PLAN_NOT_AVAILABLE" || status === 409) {
+    return locale === "en"
+      ? "This payment method does not take the mentor plan yet — choose another method, or write to support."
+      : locale === "ukr"
+        ? "Цей спосіб оплати поки не приймає тариф з ментором — оберіть інший або напишіть у підтримку."
+        : "Этот способ оплаты пока не принимает тариф с ментором — выберите другой или напишите в поддержку.";
+  }
   if (status === 401 || status === 403) return d.errors.unauthorized;
   if (status === 404) return d.errors.providerDisabled;
   if (status === 429) return d.errors.rateLimited;
@@ -152,7 +165,7 @@ export function CheckoutForm({
         headers: { "content-type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          ...(storeQuote ? { productId: tier.itemId, licenseTier: tier.id } : { courseId: tier.itemId }),
+          ...(storeQuote ? { productId: tier.itemId, licenseTier: tier.id } : { courseId: tier.itemId, plan: tier.plan }),
           promoCode: promoState.status === "ok" ? promo.trim() : undefined,
           referralCode: ours ? referralFromCookie() : undefined,
           locale,
@@ -169,7 +182,7 @@ export function CheckoutForm({
       };
 
       if (!response.ok) {
-        setError(messageFor(payload.code ?? "", response.status, d));
+        setError(messageFor(payload.code ?? "", response.status, d, locale));
         return;
       }
 

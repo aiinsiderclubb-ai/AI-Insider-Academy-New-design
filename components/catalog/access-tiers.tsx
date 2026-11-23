@@ -4,7 +4,6 @@ import { ButtonLink } from "@/components/primitives/button";
 import { Reveal } from "@/components/motion/reveal";
 import { Magnetic } from "@/components/motion/pointer";
 import { pick } from "@/content/locale";
-import { MENTOR_SURCHARGE_EUR } from "@/content/site";
 import type { Course } from "@/lib/api/catalog";
 import { formatPrice, path, type Dictionary, type Locale } from "@/lib/i18n";
 
@@ -20,14 +19,18 @@ export function AccessTiers({
   locale,
   d,
   owned,
+  selfPlan,
 }: {
   course: Course;
   locale: Locale;
   d: Dictionary;
   owned?: boolean;
+  /** Owned in the self-study plan: offer the step up to the mentor plan. */
+  selfPlan?: boolean;
 }) {
   const discount = course.oldPriceEur ? course.oldPriceEur - course.priceEur : 0;
-  const mentorPrice = course.priceEur + MENTOR_SURCHARGE_EUR;
+  const mentorPrice = course.mentorPriceEur;
+  const mentorExtra = course.mentorPriceEur - course.priceEur;
   const soon = course.status === "in-development";
 
   if (owned) {
@@ -42,6 +45,18 @@ export function AccessTiers({
             <p className="mt-2 text-[15px] text-ink-2">
               {pick(locale, "Продолжайте с того места, где остановились.", "Pick up where you left off.")}
             </p>
+            {selfPlan && (
+              <p className="mt-3 text-[14px] leading-relaxed text-ink-3">
+                {pick(locale, "Тариф «Самостоятельно». Проверка заданий и ментор — доплата ", "Self-study plan. Assignment review and a mentor: add ")}
+                <a
+                  href={path(`/learn/${course.slug}/buy?tier=mentor`, locale)}
+                  className="font-medium text-accent-ink underline underline-offset-4"
+                >
+                  {formatPrice(mentorExtra, locale)}
+                </a>
+                .
+              </p>
+            )}
           </div>
           <Magnetic>
             <ButtonLink href={path(`/study/${course.slug}/1`, locale)} size="lg" className="group">
@@ -127,7 +142,8 @@ export function AccessTiers({
             {[
               pick(locale, "Все уроки и материалы курса", "Every lesson and resource"),
               pick(locale, "Доступ навсегда, без подписки", "Lifetime access, no subscription"),
-              pick(locale, "Обновления курса включены", "Course updates included"),
+              pick(locale, "Задания с критериями для самопроверки", "Assignments with self-check criteria"),
+              pick(locale, "Без проверки заданий и ментора", "No assignment review, no mentor"),
             ].map((item) => (
               <li key={item} className="flex gap-2.5 text-[14px] leading-snug text-ink-2">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden />
@@ -136,7 +152,7 @@ export function AccessTiers({
             ))}
           </ul>
 
-          <ButtonLink href={path(`/learn/${course.slug}/buy`, locale)} variant="secondary" size="lg" className="mt-7" full>
+          <ButtonLink href={path(`/learn/${course.slug}/buy?tier=self`, locale)} variant="secondary" size="lg" className="mt-7" full>
             {d.learn.buyCourse}
           </ButtonLink>
 
@@ -176,13 +192,14 @@ export function AccessTiers({
               {formatPrice(mentorPrice, locale)}
             </span>
             <span className="font-mono text-[14px] tabular-nums opacity-70">
-              +{formatPrice(MENTOR_SURCHARGE_EUR, locale)}
+              +{formatPrice(mentorExtra, locale)}
             </span>
           </p>
           <p className="relative mt-2 text-[13px] opacity-75">{d.learn.mentorNote}</p>
 
           <ul className="relative mt-7 flex flex-1 flex-col gap-2.5 border-t border-on-accent/20 pt-6">
             {[
+              pick(locale, "Всё из самостоятельного тарифа", "Everything in self-study"),
               pick(locale, "Проверка каждой домашней работы", "Every assignment reviewed"),
               pick(locale, "Приёмка финального проекта", "Final project signed off"),
               pick(locale, "Вопросы ментору весь курс", "Ask your mentor throughout"),

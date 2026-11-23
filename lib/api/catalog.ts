@@ -37,7 +37,10 @@ export interface Course {
   difficultyLabel: string;
   status: "published" | "in-development";
   stage: string;
+  /** The self-study plan: every lesson, assignments checked by the learner. */
   priceEur: number;
+  /** The plan with assignment review and a mentor, about twice the self-study price. */
+  mentorPriceEur: number;
   oldPriceEur: number | null;
   isFree: boolean;
   isIntake: boolean;
@@ -115,6 +118,7 @@ function mergeCourse(content: ContentCourse, live: ApiCourse | undefined, locale
     status: (content.status as Course["status"]) ?? (lessonsSource.length ? "published" : "in-development"),
     stage: String(content.stage ?? ""),
     priceEur,
+    mentorPriceEur: Number(content.mentorPriceEur) > 0 ? Number(content.mentorPriceEur) : priceEur * 2,
     oldPriceEur: content.oldPriceEur ? Number(content.oldPriceEur) : null,
     isFree,
     isIntake,

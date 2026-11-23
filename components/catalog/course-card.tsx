@@ -30,6 +30,7 @@ function Price({ course, locale, d }: { course: Course; locale: Locale; d: Dicti
   return (
     <span className="flex items-baseline gap-2">
       <span className="font-mono text-[17px] leading-none font-medium tabular-nums text-ink">
+        <span className="text-[12px] font-normal text-muted">{pick(locale, "от ", "from ")}</span>
         {formatPrice(course.priceEur, locale)}
       </span>
       {course.oldPriceEur && (
@@ -162,7 +163,7 @@ export function CourseRow({ course, locale, d }: { course: Course; locale: Local
         </span>
       </span>
       <span className="font-mono text-[13px] tabular-nums text-ink-2">
-        {course.isFree ? d.common.free : formatPrice(course.priceEur, locale)}
+        {course.isFree ? d.common.free : `${pick(locale, "от", "from")} ${formatPrice(course.priceEur, locale)}`}
       </span>
     </Link>
   );

@@ -15,9 +15,17 @@ export interface CourseProgress {
   demoStartedAt?: string;
 }
 
+/**
+ * A paid course is bought in one of two plans: `self` (every lesson, the
+ * learner checks their own assignments) or `mentor` (assignments reviewed,
+ * a mentor to ask). Purchases from before plans existed count as `mentor`.
+ */
+export type CoursePlan = "self" | "mentor";
+
 export interface Purchase {
   id: string;
   purchasedAt: string;
+  plan?: CoursePlan;
 }
 
 export interface Achievement {
@@ -153,6 +161,8 @@ export interface Access {
   signedIn: boolean;
   tier: "guest" | "free" | "club" | "pro";
   courseIds: Set<string>;
+  /** Owned courses bought in the self-study plan: no assignment review, no mentor. */
+  selfPlanIds: Set<string>;
   productIds: Set<string>;
   progress: Record<string, CourseProgress>;
   /** True while the platform is in prelaunch: purchases are frozen API-side. */
@@ -164,6 +174,7 @@ const GUEST: Access = {
   signedIn: false,
   tier: "guest",
   courseIds: new Set(),
+  selfPlanIds: new Set(),
   productIds: new Set(),
   progress: {},
   prelaunch: false,
@@ -187,6 +198,7 @@ export const getAccess = cache(async (): Promise<Access> => {
     signedIn: true,
     tier,
     courseIds: new Set(me.purchases.map((purchase) => purchase.id)),
+    selfPlanIds: new Set(me.purchases.filter((purchase) => purchase.plan === "self").map((purchase) => purchase.id)),
     productIds: new Set(entitlements.map((item) => item.productId)),
     progress: me.progress,
     prelaunch: me.prelaunch,
@@ -227,6 +239,22 @@ export function demoState(access: Access, course: AccessCourse, now = Date.now()
   if (!Number.isFinite(started)) return { kind: "unused" };
   const left = started + DEMO_HOURS * 3_600_000 - now;
   return left > 0 ? { kind: "active", hoursLeft: Math.max(1, Math.ceil(left / 3_600_000)) } : { kind: "expired" };
+}
+
+/**
+ * Whether this learner's assignments go to a reviewer. Free courses and
+ * memberships keep review; a paid course bought in the self-study plan does not.
+ */
+export function hasReview(access: Access, course: AccessCourse): boolean {
+  if (!access.signedIn) return false;
+  if (course.isFree) return true;
+  if (access.tier === "pro" || (access.tier === "club" && course.inClub && !course.isProOnly)) return true;
+  return access.courseIds.has(course.id) && !access.selfPlanIds.has(course.id);
+}
+
+/** The learner owns the course in the self-study plan and could move up to the mentor plan. */
+export function onSelfPlan(access: Access, course: AccessCourse): boolean {
+  return access.courseIds.has(course.id) && access.selfPlanIds.has(course.id) && !hasReview(access, course);
 }
 
 export function canOpenLesson(access: Access, course: AccessCourse, lessonIndex: number): boolean {

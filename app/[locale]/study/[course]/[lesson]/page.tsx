@@ -5,8 +5,8 @@ import type { StudyMaterial } from "@/components/study/lesson-materials";
 import { defaultHomework, lessonHomework, lessonMaterials, type HomeworkSpec } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import { getCourse } from "@/lib/api/catalog";
-import { canOpenLesson, demoState, getAccess, getMe } from "@/lib/api/session";
-import { getDictionary, path, type Locale } from "@/lib/i18n";
+import { canOpenLesson, demoState, getAccess, getMe, onSelfPlan } from "@/lib/api/session";
+import { formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
 import { lessonVideoUrl } from "@/lib/video/r2";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -70,11 +70,28 @@ export default async function StudyPage({
    * first is the free sample and has never carried one.
    */
   const own = lessonHomework(course.id, current.id);
+  /* The self-study plan has no review: its assignments are checked against the criteria. */
+  const selfPlan = onSelfPlan(access, course);
   const homework: StudyHomework | null = own
     ? localised(own, true)
     : course.hasHomework && index > 0
-      ? localised(defaultHomework, false)
+      ? localised(defaultHomework, selfPlan)
       : null;
+  if (homework && selfPlan) {
+    homework.upgrade = {
+      href: path(`/learn/${course.slug}/buy?tier=mentor`, locale),
+      text: pick(
+        locale,
+        "Тариф «Самостоятельно»: сверьте работу с критериями сами. Проверка ментором и ответы на вопросы — в тарифе с ментором.",
+        "Self-study plan: check your work against the criteria yourself. Mentor review and answers come with the mentor plan.",
+      ),
+      cta: pick(
+        locale,
+        `Добавить за ${formatPrice(course.mentorPriceEur - course.priceEur, locale)}`,
+        `Add it for ${formatPrice(course.mentorPriceEur - course.priceEur, locale)}`,
+      ),
+    };
+  }
 
   /* Each entry is narrowed to the one shape its kind needs, in the learner's language. */
   const materials: StudyMaterial[] = lessonMaterials(course.id, current.id).flatMap((item): StudyMaterial[] => {
@@ -104,7 +121,7 @@ export default async function StudyPage({
       demo={demo}
       /* The demo clock starts on the server's time, not on whatever the learner's device says. */
       demoStartAt={new Date().toISOString()}
-      canSubmitHomework={current.unlocked && !access.prelaunch}
+      canSubmitHomework={current.unlocked && !access.prelaunch && !selfPlan}
     />
   );
 }

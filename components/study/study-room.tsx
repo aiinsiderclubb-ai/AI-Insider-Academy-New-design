@@ -52,6 +52,8 @@ export interface StudyHomework {
   criteria: string[];
   /** Practice the learner checks themselves: no submission form, no review. */
   selfCheck: boolean;
+  /** Self-study plan: where to move up to the plan with review, and what to say. */
+  upgrade?: { href: string; text: string; cta: string };
 }
 
 export interface StudyNote {
@@ -624,7 +626,14 @@ export function StudyRoom({
                     </div>
                   ))}
 
-                  {homework.selfCheck ? (
+                  {homework.upgrade ? (
+                    <Note>
+                      {homework.upgrade.text}{" "}
+                      <a href={homework.upgrade.href} className="font-medium text-accent-ink underline underline-offset-4">
+                        {homework.upgrade.cta}
+                      </a>
+                    </Note>
+                  ) : homework.selfCheck ? (
                     <Note>{d.study.homeworkSelfCheck}</Note>
                   ) : canSubmitHomework ? (
                     <HomeworkForm course={course} lesson={current} d={d} />

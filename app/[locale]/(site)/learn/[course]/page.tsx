@@ -23,7 +23,7 @@ import { courseCover, courseTrailer } from "@/content/covers";
 import { pick } from "@/content/locale";
 import { getCourse, getCourses } from "@/lib/api/catalog";
 import { getCourseReviews } from "@/lib/api/public";
-import { demoState, getAccess } from "@/lib/api/session";
+import { demoState, getAccess, onSelfPlan } from "@/lib/api/session";
 import { formatDate, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -263,7 +263,7 @@ export default async function CoursePage({
             }
             className="mb-10"
           />
-          <AccessTiers course={course} locale={locale} d={d} owned={owned} />
+          <AccessTiers course={course} locale={locale} d={d} owned={owned} selfPlan={onSelfPlan(access, course)} />
         </Container>
       </section>
 

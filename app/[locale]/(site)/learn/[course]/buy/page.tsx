@@ -8,15 +8,14 @@ import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/n
 import { Container } from "@/components/primitives/surface";
 import { Note } from "@/components/primitives/states";
 import { CheckoutForm, type CheckoutTier } from "@/components/checkout/checkout-form";
-import { buyFaq, bundlesWithCourse } from "@/content/catalog";
+import { buyFaq } from "@/content/catalog";
 import { courseCover } from "@/content/covers";
 import { pick } from "@/content/locale";
 import { legalIsDraft } from "@/content/site";
-import { planByTier } from "@/content/plans";
 import { getCourse } from "@/lib/api/catalog";
 import { getCheckoutStatus, type ProviderId } from "@/lib/api/checkout";
 import { getAccess, getSession, hasReview, onSelfPlan } from "@/lib/api/session";
-import { formatPrice, getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
+import { getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
 
 export async function generateMetadata({
   params,
@@ -91,41 +90,6 @@ export default async function BuyCoursePage({
   };
 
   const image = courseCover(course.image, course.slug);
-  const bundles = bundlesWithCourse(course.id);
-  const club = planByTier("club");
-  const pro = planByTier("pro");
-
-  const comparison = [
-    {
-      label: pick(locale, "Этот курс", "This course"),
-      price: `${formatPrice(course.priceEur, locale)} / ${formatPrice(course.mentorPriceEur, locale)}`,
-      note: d.common.forever,
-      href: null,
-      current: true,
-    },
-    ...bundles.map((bundle) => ({
-      label: bundle.title,
-      price: formatPrice(bundle.priceEur, locale),
-      note: `${bundle.courseIds.length} ${pick(locale, "курса в пакете", "courses in the bundle")}`,
-      href: path(`/learn/bundles/${bundle.id}`, locale),
-      current: false,
-    })),
-    club && {
-      label: club.name,
-      price: formatPrice(club.priceEur, locale),
-      note: d.common.perMonth,
-      href: path("/plans", locale),
-      current: false,
-    },
-    pro && {
-      label: pro.name,
-      price: formatPrice(pro.priceEur, locale),
-      note: d.common.perMonth,
-      href: path("/plans", locale),
-      current: false,
-    },
-  ].filter(Boolean) as { label: string; price: string; note: string; href: string | null; current: boolean }[];
-
   return (
     <Container size="wide" className="pt-8 pb-20">
       <Breadcrumbs
@@ -170,43 +134,6 @@ export default async function BuyCoursePage({
                 {item}
               </p>
             ))}
-          </section>
-
-          {/* ------------------------------ comparison ---------------------------- */}
-          <section className="mt-10">
-            <h2 className="text-[19px]">{d.checkout.comparePrices}</h2>
-            <p className="mt-2 text-[13.5px] leading-relaxed text-ink-3">
-              {pick(
-                locale,
-                "Разовая покупка, пакеты с этим курсом и подписки — одним взглядом.",
-                "The one-off purchase, the bundles that include it, and the subscriptions — at a glance.",
-              )}
-            </p>
-            <ul className="mt-5 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
-              {comparison.map((option) => (
-                <li
-                  key={option.label}
-                  className={option.current ? "bg-accent-soft p-4" : "bg-surface p-4 transition-colors hover:bg-surface-2"}
-                >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="text-[14px] font-medium text-ink">{option.label}</span>
-                    {option.current && <Badge tone="accent">{d.checkout.yourChoice}</Badge>}
-                  </div>
-                  <p className="mt-2 flex items-baseline gap-2">
-                    <span className="font-mono text-[18px] font-medium tabular-nums text-ink">{option.price}</span>
-                    <span className="text-[12.5px] text-muted">{option.note}</span>
-                  </p>
-                  {option.href && (
-                    <Link
-                      href={option.href}
-                      className="mt-2 inline-block text-[13px] font-medium text-accent-ink underline-offset-4 hover:underline"
-                    >
-                      {d.common.more}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
           </section>
 
           {/* --------------------------------- faq -------------------------------- */}

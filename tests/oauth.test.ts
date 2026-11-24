@@ -70,12 +70,18 @@ function jwt(claims: Record<string, unknown>) {
 
 const ATTEMPT: OAuthAttempt = { provider: "google", state: "state-123", nonce: "nonce-456", next: "/en/learn", locale: "en" };
 
-function answer(fields: Record<string, string>, attempt: OAuthAttempt | null = ATTEMPT, provider = "google") {
+function answer(
+  fields: Record<string, string>,
+  attempt: OAuthAttempt | null = ATTEMPT,
+  provider = "google",
+  extraCookie = "",
+) {
+  const cookies = [attempt ? `${OAUTH_COOKIE}=${encodeAttempt(attempt)}` : "", extraCookie].filter(Boolean).join("; ");
   const request = new NextRequest(`https://myinsideracademy.com/api/oauth/${provider}/callback`, {
     method: "POST",
     headers: {
       "content-type": "application/x-www-form-urlencoded",
-      ...(attempt ? { cookie: `${OAUTH_COOKIE}=${encodeAttempt(attempt)}` } : {}),
+      ...(cookies ? { cookie: cookies } : {}),
     },
     body: new URLSearchParams(fields).toString(),
   });
@@ -200,8 +206,15 @@ describe("POST /api/oauth/[provider]/callback", () => {
     expect(response.cookies.get("aia_session")?.value).toBe("session-jwt");
     expect(response.cookies.get(OAUTH_COOKIE)?.value).toBe("");
     expect(apiMock.calls).toEqual([
-      ["/auth/oauth", { method: "POST", body: { provider: "google", idToken, fullName: null } }],
+      ["/auth/oauth", { method: "POST", body: { provider: "google", idToken, fullName: null, source: null, locale: "en" } }],
     ]);
+  });
+
+  it("passes on where a new visitor first came from", async () => {
+    apiMock.impl = async () => ({ token: "session-jwt", isNew: true });
+    const idToken = jwt({ nonce: "nonce-456" });
+    await answer({ state: "state-123", id_token: idToken }, ATTEMPT, "google", "aia-src=l.instagram.com");
+    expect(apiMock.calls[0][1]).toMatchObject({ body: { source: "l.instagram.com" } });
   });
 
   it("sends a brand-new account to onboarding", async () => {

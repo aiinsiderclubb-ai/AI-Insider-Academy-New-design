@@ -5,6 +5,7 @@ import { getDictionary, htmlLang, isLocale, locales } from "@/lib/i18n";
 import { resolveSiteUrl } from "@/lib/api/origin";
 import { ToastProvider } from "@/components/primitives/toast";
 import { ThemeBootstrap } from "@/components/theme/theme-bootstrap";
+import { PageViewBeacon } from "@/components/analytics/page-view-beacon";
 import "../globals.css";
 
 /*
@@ -120,6 +121,7 @@ export default async function LocaleLayout({
           {d.nav.skipToContent}
         </a>
         <ToastProvider>{children}</ToastProvider>
+        <PageViewBeacon locale={locale} />
       </body>
     </html>
   );

@@ -1,11 +1,13 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { api, ApiError } from "@/lib/api/http";
 import { clearAdminToken, clearSessionToken, writeAdminToken, writeSessionToken } from "./cookies";
 import { safeNext } from "./redirects";
 import type { ApiUser } from "@/lib/api/types";
 import { defaultLocale, isLocale, type Locale } from "@/lib/i18n/config";
+import { SOURCE_COOKIE } from "@/lib/attribution";
 
 export interface AuthResult {
   ok: boolean;
@@ -69,7 +71,8 @@ export async function signUp(_prev: AuthResult | null, formData: FormData): Prom
   const locale = localeOf(formData.get("locale"));
 
   try {
-    await api("/auth/register", { method: "POST", body: { email, password, name, locale } });
+    const source = (await cookies()).get(SOURCE_COOKIE)?.value;
+    await api("/auth/register", { method: "POST", body: { email, password, name, locale, source } });
   } catch (error) {
     return { ...describe(error), email };
   }

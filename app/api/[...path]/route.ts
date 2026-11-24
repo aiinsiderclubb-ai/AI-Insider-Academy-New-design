@@ -22,6 +22,9 @@ async function forward(request: NextRequest, segments: string[]) {
   const contentType = request.headers.get("content-type");
   if (contentType) headers.set("content-type", contentType);
   headers.set("accept", request.headers.get("accept") ?? "application/json");
+  // Page-view counting tells people from crawlers, and apart, by their browser.
+  const userAgent = request.headers.get("user-agent");
+  if (userAgent) headers.set("user-agent", userAgent);
 
   // `scopeFor` decides which credential this path may carry — and withholds
   // both when the path looks privileged but is not a known admin router.

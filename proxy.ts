@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale, isLocale, locales, matchLocale } from "@/lib/i18n/config";
 import { coursesPublic, isCourseOnlyPath } from "@/lib/visibility";
+import { SOURCE_COOKIE, SOURCE_MAX_AGE, firstTouchSource } from "@/lib/attribution";
 
 const LOCALE_COOKIE = "aia-locale";
 /** A friend's referral code from `?ref=`, kept for checkout — see components/checkout. */
@@ -45,8 +46,20 @@ function resolveLocale(request: NextRequest) {
   return matchLocale(request.headers.get("accept-language"));
 }
 
+/** The first outside source of a visit, for crediting a later sign-up — see lib/attribution. */
+function rememberSource(request: NextRequest, response: NextResponse) {
+  if (request.cookies.get(SOURCE_COOKIE)?.value) return response;
+  const source = firstTouchSource(
+    request.nextUrl.searchParams.get("utm_source"),
+    request.headers.get("referer"),
+    request.nextUrl.host,
+  );
+  if (source) response.cookies.set(SOURCE_COOKIE, source, { path: "/", maxAge: SOURCE_MAX_AGE, sameSite: "lax" });
+  return response;
+}
+
 export function proxy(request: NextRequest) {
-  return rememberReferral(request, route(request));
+  return rememberSource(request, rememberReferral(request, route(request)));
 }
 
 function route(request: NextRequest) {

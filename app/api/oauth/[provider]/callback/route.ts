@@ -13,6 +13,7 @@ import {
 } from "@/lib/auth/oauth";
 import { attemptCookie, loginWithError } from "@/lib/auth/oauth-routes";
 import { defaultLocale } from "@/lib/i18n/config";
+import { SOURCE_COOKIE } from "@/lib/attribution";
 
 type Ctx = { params: Promise<{ provider: string }> };
 
@@ -63,6 +64,9 @@ async function finish(request: NextRequest, provider: string, field: (name: stri
         provider,
         idToken,
         fullName: provider === "apple" ? appleFullName(field("user")) : null,
+        // Only read for a new account: where the visitor first came from, and their language.
+        source: request.cookies.get(SOURCE_COOKIE)?.value ?? null,
+        locale,
       },
     });
   } catch (err) {

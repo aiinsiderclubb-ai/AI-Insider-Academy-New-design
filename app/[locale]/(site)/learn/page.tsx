@@ -184,7 +184,8 @@ export default async function LearnPage({
       )}
 
       {/* ------------------------------- paid ------------------------------- */}
-      {!sort && (tab === "all" || tab === "paid") && (
+      {/* With every paid course still being recorded, the overview skips the empty shelf. */}
+      {!sort && (tab === "paid" || (tab === "all" && groups.paid.length > 0)) && (
         <Container size="wide" className="pb-16">
           <Reveal>
             <SectionHead

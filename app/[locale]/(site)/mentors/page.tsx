@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, ClipboardCheck, MessagesSquare, Send, Upload } from "lucide-react";
+import { ArrowRight, Check, Send } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { ButtonLink } from "@/components/primitives/button";
 import { Breadcrumbs } from "@/components/primitives/navigation";
 import { Container } from "@/components/primitives/surface";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
-import { MentorPortrait } from "@/components/mentors/mentor-portrait";
+import { MentorFaces, MentorPortrait } from "@/components/mentors/mentor-portrait";
+import { MentorConstellation } from "@/components/mentors/mentor-constellation";
+import { MentorLink } from "@/components/mentors/mentor-link";
+import { ReviewFlow, ReviewFlowHead } from "@/components/mentors/review-flow";
+import { LaunchButton } from "@/components/catalog/launch-button";
 import { pick } from "@/content/locale";
 import { coursesTaughtBy, mentors } from "@/content/mentors";
 import { getCourses } from "@/lib/api/catalog";
@@ -33,35 +38,6 @@ export default async function MentorsPage({ params }: { params: Promise<{ locale
   const d = getDictionary(locale);
   const courses = await getCourses(locale);
 
-  const steps = [
-    {
-      icon: Upload,
-      title: pick(locale, "Сдаёте задание", "You hand in the assignment"),
-      body: pick(
-        locale,
-        "Каждый урок заканчивается практикой. Работу отправляете прямо из кабинета.",
-        "Every lesson ends in practice. You submit your work straight from your cabinet.",
-      ),
-    },
-    {
-      icon: ClipboardCheck,
-      title: pick(locale, "Ментор проверяет", "A mentor reviews it"),
-      body: pick(
-        locale,
-        "Разбор по критериям Стандарта проверки Академии — что работает, что доделать и почему.",
-        "A review against the Academy grading standard: what works, what to finish, and why.",
-      ),
-    },
-    {
-      icon: MessagesSquare,
-      title: pick(locale, "Доводите до результата", "You take it to the finish"),
-      body: pick(
-        locale,
-        "Вопросы по ходу курса и приёмка финального проекта — до готовой системы, а не до галочки.",
-        "Questions along the way and a sign-off on your final project — until the system works, not until a box is ticked.",
-      ),
-    },
-  ];
 
   return (
     <>
@@ -125,31 +101,22 @@ export default async function MentorsPage({ params }: { params: Promise<{ locale
           </Reveal>
 
           <Reveal>
-            <div className="mentor-trio relative mx-auto grid max-w-[560px] grid-cols-3 px-6 py-6">
-              {mentors.map((mentor, i) => (
-                <MentorPortrait
-                  key={mentor.id}
-                  src={mentor.photo}
-                  alt={pick(locale, mentor.nameRu, mentor.name)}
-                  priority={i === 1}
-                  sizes="(min-width: 1024px) 200px, 33vw"
-                />
-              ))}
-            </div>
+            <MentorConstellation mentors={mentors} locale={locale} />
           </Reveal>
         </Container>
       </section>
 
       {/* ================================ mentors ================================= */}
       <section className="chapter ch-paper">
-        <Container size="wide" className="flex flex-col gap-24 lg:gap-32">
+        <Container size="wide" className="flex flex-col gap-6 lg:gap-4">
           {mentors.map((mentor, i) => {
             const name = pick(locale, mentor.nameRu, mentor.name);
             const taught = coursesTaughtBy(mentor, courses);
             const flip = i % 2 === 1;
             return (
+              <Fragment key={mentor.id}>
+              {i > 0 && <MentorLink from={i % 2 === 1 ? "left" : "right"} index={i} />}
               <article
-                key={mentor.id}
                 id={mentor.id}
                 className={cn(
                   "grid scroll-mt-28 items-center gap-10 lg:gap-16",
@@ -250,61 +217,46 @@ export default async function MentorsPage({ params }: { params: Promise<{ locale
                   )}
                 </Reveal>
               </article>
+              </Fragment>
             );
           })}
         </Container>
       </section>
 
       {/* ============================== how review works ============================== */}
-      <section className="chapter">
+      <section className="chapter review-section relative overflow-hidden">
         <Container size="wide">
-          <Reveal>
-            <p className="eyebrow flex items-center gap-3">
-              <span className="rule-accent inline-block w-7" aria-hidden />
-              {pick(locale, "Тариф «С ментором»", "The mentor plan")}
-            </p>
-            <h2 className="mt-5 max-w-3xl font-display text-[clamp(2rem,4.4vw,3.25rem)] leading-[0.98] font-extrabold tracking-[-0.03em]">
-              {pick(locale, "Как проходит проверка", "How the review works")}
-            </h2>
-          </Reveal>
-          <RevealGroup step={90} className="mt-12 grid gap-4 md:grid-cols-3">
-            {steps.map(({ icon: Icon, title, body }, i) => (
-              <div
-                key={title}
-                className="mentor-card relative flex h-full flex-col rounded-[24px] border border-line-2 p-7 transition-transform duration-300 hover:-translate-y-1"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-accent text-on-accent shadow-glow">
-                    <Icon className="h-5 w-5" aria-hidden />
-                  </span>
-                  <span className="font-display text-[44px] leading-none font-extrabold text-line-3 tabular-nums">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-                <h3 className="mt-8 text-[19px] leading-tight">{title}</h3>
-                <p className="mt-3 text-[14.5px] leading-relaxed text-ink-3">{body}</p>
-              </div>
-            ))}
-          </RevealGroup>
+          <ReviewFlowHead locale={locale} />
+          <div className="mt-16">
+            <ReviewFlow locale={locale} />
+          </div>
 
           <Reveal>
-            <div className="mt-16 flex flex-wrap items-center justify-between gap-6 rounded-[26px] border border-accent/35 bg-accent-soft p-7 sm:p-9">
-              <div className="max-w-xl">
-                <p className="font-display text-[clamp(1.5rem,3vw,2rem)] leading-tight font-extrabold">
-                  {pick(locale, "Начните с бесплатного курса", "Start with a free course")}
-                </p>
-                <p className="mt-2 text-[14.5px] leading-relaxed text-ink-2">
-                  {pick(
-                    locale,
-                    "Регистрация занимает минуту — уроки открываются сразу.",
-                    "Registration takes a minute and the lessons open immediately.",
-                  )}
-                </p>
+            <div className="free-start mt-20">
+              <div className="free-start-inner relative">
+                <div className="relative z-10 flex flex-wrap items-center justify-between gap-8 p-7 sm:p-10">
+                  <div className="flex max-w-xl items-center gap-5">
+                    <MentorFaces people={mentors.map((m) => ({ photo: m.photo, name: pick(locale, m.nameRu, m.name) }))} size={44} />
+                    <div>
+                      <p className="font-display text-[clamp(1.5rem,3vw,2.1rem)] leading-tight font-extrabold tracking-[-0.02em]">
+                        {pick(locale, "Начните с бесплатного курса", "Start with a free course")}
+                      </p>
+                      <p className="mt-2 text-[14.5px] leading-relaxed text-ink-2">
+                        {pick(
+                          locale,
+                          "Регистрация занимает минуту — уроки открываются сразу.",
+                          "Registration takes a minute and the lessons open immediately.",
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <LaunchButton
+                    href={path("/learn?tab=free", locale)}
+                    label={d.learn.startFree}
+                    pendingLabel={pick(locale, "Открываем…", "Opening…")}
+                  />
+                </div>
               </div>
-              <ButtonLink href={path("/learn?tab=free", locale)} size="lg" className="group">
-                {d.learn.startFree}
-                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
-              </ButtonLink>
             </div>
           </Reveal>
         </Container>

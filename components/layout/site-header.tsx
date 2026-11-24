@@ -177,17 +177,12 @@ export function SiteHeader({
                               <Link
                                 key={link.href}
                                 href={link.href}
-                                className="group/item flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-surface-2"
+                                className="group/item flex items-baseline gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-surface-2"
                               >
-                                <span className="mt-0.5 font-mono text-[10.5px] tabular-nums text-faint">
+                                <span className="font-mono text-[10.5px] tabular-nums text-faint">
                                   {String(index + 1).padStart(2, "0")}
                                 </span>
-                                <span className="min-w-0">
-                                  <span className="block text-[14px] font-medium text-ink">{link.label}</span>
-                                  {link.note && (
-                                    <span className="mt-0.5 block line-clamp-1 text-[12.5px] text-muted">{link.note}</span>
-                                  )}
-                                </span>
+                                <span className="min-w-0 text-[14px] font-medium text-ink">{link.label}</span>
                               </Link>
                             ))}
                           </div>
@@ -204,7 +199,6 @@ export function SiteHeader({
                             <p className="mt-3 font-display text-[17px] leading-tight font-extrabold tracking-tight text-ink">
                               {section.feature.title}
                             </p>
-                            <p className="mt-2 text-[12.5px] leading-relaxed text-ink-3">{section.feature.body}</p>
                           </div>
                           <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-accent-ink">
                             {section.feature.cta}

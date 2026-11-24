@@ -913,6 +913,53 @@
   100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0); opacity: 0; }
 }
 
+/* ==========================================================================
+   Mentors — lit portraits and the "who teaches" card
+   ========================================================================== */
+
+.mentor-card {
+  background:
+    radial-gradient(40rem 28rem at 12% 30%, color-mix(in oklab, var(--accent) 13%, transparent), transparent 65%),
+    radial-gradient(30rem 20rem at 100% 0%, color-mix(in oklab, var(--accent) 6%, transparent), transparent 70%),
+    var(--surface);
+  box-shadow: 0 40px 120px -70px color-mix(in oklab, var(--accent) 60%, transparent);
+}
+
+/* A warm light behind the photo that breathes, like a studio backdrop. */
+.mentor-portrait-glow {
+  position: absolute;
+  inset: 8% 4% -4%;
+  border-radius: 40%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--accent) 55%, transparent), transparent);
+  filter: blur(42px);
+  opacity: 0.55;
+  animation: mentor-breathe 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes mentor-breathe {
+  0%, 100% { opacity: 0.4; transform: scale(0.96); }
+  50% { opacity: 0.7; transform: scale(1.03); }
+}
+.mentor-portrait > div {
+  transition:
+    transform 0.7s var(--ease-out-expo),
+    border-color 0.4s ease;
+}
+.mentor-portrait:hover > div {
+  transform: translateY(-4px) rotate(-0.6deg);
+  border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+}
+
+/* The hero trio on the mentors page: three portraits fanned like prints. */
+.mentor-trio > * {
+  transition: transform 0.8s var(--ease-out-expo);
+}
+.mentor-trio > :nth-child(1) { transform: translate(-14%, 8%) rotate(-7deg); }
+.mentor-trio > :nth-child(2) { transform: translateY(-4%); z-index: 2; }
+.mentor-trio > :nth-child(3) { transform: translate(14%, 8%) rotate(7deg); }
+.mentor-trio:hover > :nth-child(1) { transform: translate(-22%, 6%) rotate(-10deg); }
+.mentor-trio:hover > :nth-child(3) { transform: translate(22%, 6%) rotate(10deg); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

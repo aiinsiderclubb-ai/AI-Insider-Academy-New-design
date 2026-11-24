@@ -36,6 +36,11 @@ export function buildNav(d: Dictionary, locale: Locale): NavSection[] {
             { label: d.nav.catalog, href: p("/learn"), note: d.learn.body },
             { label: d.nav.bundles, href: p("/learn?tab=bundles"), note: d.learn.inBundles },
             { label: d.nav.accelerator, href: p("/learn/ai-insider-accelerator"), note: d.learn.apply },
+            {
+              label: locale === "en" ? "Mentors" : "Менторы",
+              href: p("/mentors"),
+              note: locale === "en" ? "Who teaches and reviews your work" : "Кто ведёт курсы и проверяет работы",
+            },
           ],
         },
       ],

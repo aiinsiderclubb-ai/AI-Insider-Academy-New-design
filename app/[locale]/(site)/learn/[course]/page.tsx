@@ -12,6 +12,8 @@ import { Magnetic, Spotlight } from "@/components/motion/pointer";
 import { Marquee } from "@/components/motion/marquee";
 import { Wipe } from "@/components/motion/wipe";
 import { AccessTiers } from "@/components/catalog/access-tiers";
+import { MentorSpotlight } from "@/components/mentors/mentor-spotlight";
+import { mentorForCourse } from "@/content/mentors";
 import { CourseBar } from "@/components/catalog/course-bar";
 import { CourseHero } from "@/components/catalog/course-hero";
 import { Curriculum } from "@/components/catalog/curriculum";
@@ -83,7 +85,6 @@ export default async function CoursePage({
   const soon = course.status === "in-development";
   const prerequisites = (pick(locale, profile?.prerequisites, profile?.prerequisitesEn) ?? []) as string[];
   const instructor = instructorFor(course.id);
-  const highlights = (pick(locale, instructor.highlightsRu, instructor.highlights) ?? []) as string[];
 
   const related = allCourses
     .filter((item) => item.id !== course.id && item.categoryLabel === course.categoryLabel)
@@ -343,30 +344,17 @@ export default async function CoursePage({
       {/* ================================ voices ================================ */}
       <section className="chapter">
         <Container size="wide">
-          <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
-            <div>
-              <ChapterHead
-                eyebrow={d.learn.instructor}
-                lines={[pick(locale, instructor.nameRu, instructor.name)]}
-                body={pick(locale, instructor.bioRu, instructor.bio)}
-              />
-              <p className="mt-5 text-[13px] text-muted">{pick(locale, instructor.roleRu, instructor.role)}</p>
-              {highlights.length > 0 && (
-                <ul className="mt-6 flex flex-wrap gap-2">
-                  {highlights.map((item) => (
-                    <li
-                      key={item}
-                      className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-[12.5px] text-ink-2"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+          <MentorSpotlight
+            mentor={mentorForCourse(course.id)}
+            locale={locale}
+            d={d}
+            bio={pick(locale, instructor.bioRu, instructor.bio)}
+            mentorPlan={!course.isFree}
+          />
 
-            {/* Hidden until real students have left reviews. */}
-            {reviews.length > 0 && (
+          {/* Hidden until real students have left reviews. */}
+          {reviews.length > 0 && (
+            <div className="mt-16">
               <div id="reviews" className="scroll-mt-24">
                 <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
                   <p className="eyebrow">{d.learn.reviews}</p>
@@ -391,8 +379,8 @@ export default async function CoursePage({
                   ))}
                 </RevealGroup>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </Container>
       </section>
 

@@ -1,0 +1,25 @@
+{
+  "name": "motion-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion project from Claude Motion Studio (AI Insider Academy).",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render",
+    "still": "remotion still",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.546",
+    "@remotion/google-fonts": "4.0.546",
+    "@remotion/layout-utils": "4.0.546",
+    "@remotion/paths": "4.0.546",
+    "react": "19.2.9",
+    "react-dom": "19.2.9",
+    "remotion": "4.0.546"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "typescript": "5.9.3"
+  }
+}

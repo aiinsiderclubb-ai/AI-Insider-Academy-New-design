@@ -13,6 +13,8 @@ import { FreePreview, LicensePicker } from "@/components/store/license-picker";
 import { WishlistButton } from "@/components/store/wishlist";
 import { archiveName, bundledFor, downloadablesFor } from "@/content/downloadables";
 import { ProductCover } from "@/components/store/product-cover";
+import { AmbientVideo } from "@/components/store/hover-video";
+import { ClipGallery } from "@/components/store/clip-gallery";
 import { pick } from "@/content/locale";
 import { tierDiscount } from "@/content/store";
 import { getProduct } from "@/lib/api/store";
@@ -106,8 +108,24 @@ export default async function ProductPage({
             )}
 
             <div className="relative mt-7 aspect-[16/9] overflow-hidden rounded-lg border border-line bg-ground">
-              <ProductCover product={product} variant="hero" />
+              {product.video ? (
+                <AmbientVideo
+                  src={product.video}
+                  poster={product.video.replace(/\.mp4$/, ".jpg")}
+                  playLabel={pick(locale, "Включить видео", "Play video")}
+                />
+              ) : (
+                <ProductCover product={product} variant="hero" />
+              )}
             </div>
+
+            {product.clips.length > 0 && (
+              <ClipGallery
+                clips={product.clips}
+                title={pick(locale, "Сделано этим набором", "Made with this pack")}
+                hint={pick(locale, "Наведите, чтобы запустить", "Point at a clip to play it")}
+              />
+            )}
 
             {/* -------------------------- outcome strip -------------------------- */}
             {(product.outcome || product.setupTime || product.priceModel) && (

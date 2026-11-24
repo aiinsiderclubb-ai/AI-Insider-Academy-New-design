@@ -1,0 +1,21 @@
+{
+ "name": "insider-motion-studio",
+ "displayName": "Claude Motion Studio",
+ "version": "1.0.0",
+ "description": "Eight skills for motion design in code with Remotion: art direction and storyboards, kinetic typography, product promos from real screenshots, animated charts from CSV, word-timed captions, logo stings, beat-synced editing, and render review with contact sheets, platform checks, loudness and safe zones. Ships a Remotion project with eight styles; nine bundled Python scripts, standard library only.",
+ "author": {
+  "name": "AI Insider Academy",
+  "url": "https://myinsideracademy.com"
+ },
+ "homepage": "https://myinsideracademy.com",
+ "license": "LicenseRef-Proprietary",
+ "keywords": [
+  "video",
+  "motion-design",
+  "remotion",
+  "kinetic-typography",
+  "captions",
+  "reels",
+  "animation"
+ ]
+}

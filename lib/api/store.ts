@@ -42,6 +42,10 @@ export interface Product {
   outcome: string;
   setupTime: string;
   priceModel: string;
+  /** A muted looping preview for the hero; null for most products. */
+  video: string | null;
+  /** Example clips (MP4), each with a poster beside it under the same name + `.jpg`. */
+  clips: string[];
 }
 
 export interface Bundle extends ApiBundle {
@@ -124,6 +128,8 @@ function toProduct(raw: ApiProduct, locale: Locale): Product {
     outcome: suffixed(raw as unknown as Record<string, unknown>, "outcome", locale),
     setupTime: raw.setupTime ?? "",
     priceModel: raw.priceModel ?? "",
+    video: raw.videoPreview || null,
+    clips: (raw.screenshots ?? []).filter((item) => item.endsWith(".mp4")),
   };
 }
 
@@ -152,6 +158,8 @@ export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
           outcomeEn: product.outcomeEn ?? local?.outcomeEn,
           setupTime: product.setupTime ?? local?.setupTime,
           priceModel: product.priceModel ?? local?.priceModel,
+          videoPreview: product.videoPreview ?? local?.videoPreview ?? null,
+          screenshots: product.screenshots?.length ? product.screenshots : (local?.screenshots ?? []),
         },
         locale,
       );

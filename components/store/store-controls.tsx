@@ -80,7 +80,18 @@ function StoreSearchInner({ d, className }: { d: Dictionary; className?: string 
 /* =================================== sort ================================== */
 
 /** `rated` is false until real buyers have rated something: sorting by an empty rating would only shuffle the shelf. */
-function StoreSortInner({ d, className, rated = false }: { d: Dictionary; className?: string; rated?: boolean }) {
+function StoreSortInner({
+  d,
+  className,
+  rated = false,
+  quiet = false,
+}: {
+  d: Dictionary;
+  className?: string;
+  rated?: boolean;
+  /** Keep the label for screen readers only, where the select speaks for itself. */
+  quiet?: boolean;
+}) {
   const { write, params } = useQueryWriter();
   const current = params.get("sort") ?? "popular";
 
@@ -95,11 +106,11 @@ function StoreSortInner({ d, className, rated = false }: { d: Dictionary; classN
 
   return (
     <label className={cn("flex items-center gap-2 text-[13px] text-muted", className)}>
-      <span className="whitespace-nowrap">{d.common.sortBy}</span>
+      <span className={quiet ? "sr-only" : "whitespace-nowrap"}>{d.common.sortBy}</span>
       <select
         value={current}
         onChange={(event) => write({ sort: event.target.value === "popular" ? null : event.target.value })}
-        className="h-9 rounded-md border border-line bg-surface px-2.5 pr-7 text-[13px] font-medium text-ink shadow-xs outline-none focus:border-accent focus:ring-2 focus:ring-[var(--accent-ring)]"
+        className="h-9 rounded-full border border-line bg-surface px-3.5 pr-8 text-[13px] font-medium text-ink outline-none focus:border-accent focus:ring-2 focus:ring-[var(--accent-ring)]"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -234,6 +245,92 @@ function StoreFacetsInner({ d, categories, rated }: { d: Dictionary; categories:
   );
 }
 
+/* ================================ filter bar =============================== */
+
+const tab = (active: boolean) =>
+  cn(
+    "inline-flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full px-4 text-[13.5px] whitespace-nowrap transition-colors",
+    active ? "bg-ink font-medium text-ground" : "text-ink-2 hover:bg-surface-3 hover:text-ink",
+  );
+
+/**
+ * The catalogue's controls in one row above the grid: categories as tabs
+ * (scrolling sideways on a phone), then price and order. It replaces the
+ * sidebar so the grid gets the full width.
+ */
+function StoreFilterBarInner({
+  d,
+  categories,
+  total,
+  rated = false,
+}: {
+  d: Dictionary;
+  categories: FacetCategory[];
+  total: number;
+  rated?: boolean;
+}) {
+  const { write, params, pending } = useQueryWriter();
+  const category = params.get("category") ?? "all";
+  const band = params.get("price") ?? "all";
+  const strip = React.useRef<HTMLDivElement>(null);
+
+  // A chosen category further along the strip is scrolled into sight — the strip only, never the page.
+  React.useEffect(() => {
+    const container = strip.current;
+    const chosen = container?.querySelector<HTMLElement>('[aria-selected="true"]');
+    if (!container || !chosen) return;
+    const offset = chosen.offsetLeft - container.clientWidth / 2 + chosen.offsetWidth / 2;
+    container.scrollTo({ left: Math.max(0, offset), behavior: "smooth" });
+  }, [category]);
+
+  return (
+    <div className={cn("flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6", pending && "opacity-80")}>
+      <div ref={strip} className="scroll-x relative -mx-5 min-w-0 px-5 sm:mx-0 sm:px-0" role="tablist" aria-label={d.store.categories}>
+        <div className="flex gap-1">
+          <button type="button" role="tab" aria-selected={category === "all"} onClick={() => write({ category: null })} className={tab(category === "all")}>
+            {d.common.all}
+            <span className="font-mono text-[11px] tabular-nums opacity-60">{total}</span>
+          </button>
+          {categories
+            .filter((item) => item.count > 0)
+            .map((item) => (
+              <button
+                key={item.slug}
+                type="button"
+                role="tab"
+                aria-selected={category === item.slug}
+                onClick={() => write({ category: category === item.slug ? null : item.slug })}
+                className={tab(category === item.slug)}
+              >
+                {item.label}
+                <span className="font-mono text-[11px] tabular-nums opacity-60">{item.count}</span>
+              </button>
+            ))}
+        </div>
+      </div>
+
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
+        <label className="flex items-center gap-2 text-[13px] text-muted">
+          <span className="sr-only">{d.store.filterPrice}</span>
+          <select
+            value={band}
+            onChange={(event) => write({ price: event.target.value })}
+            className="h-9 rounded-full border border-line bg-surface px-3.5 pr-8 text-[13px] font-medium text-ink outline-none focus:border-accent focus:ring-2 focus:ring-[var(--accent-ring)]"
+          >
+            <option value="all">{d.store.filterPrice}</option>
+            {PRICE_BANDS.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.max > 1000 ? `${item.min}+ €` : `${item.min}–${item.max} €`}
+              </option>
+            ))}
+          </select>
+        </label>
+        <StoreSortInner d={d} rated={rated} quiet />
+      </div>
+    </div>
+  );
+}
+
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -262,6 +359,14 @@ export function StoreFacets(props: { d: Dictionary; categories: FacetCategory[];
   return (
     <React.Suspense fallback={<div className="h-64" aria-hidden />}>
       <StoreFacetsInner {...props} />
+    </React.Suspense>
+  );
+}
+
+export function StoreFilterBar(props: { d: Dictionary; categories: FacetCategory[]; total: number; rated?: boolean }) {
+  return (
+    <React.Suspense fallback={<div className="h-9" aria-hidden />}>
+      <StoreFilterBarInner {...props} />
     </React.Suspense>
   );
 }

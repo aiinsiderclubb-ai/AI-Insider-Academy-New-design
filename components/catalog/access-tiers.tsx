@@ -6,6 +6,7 @@ import { Magnetic } from "@/components/motion/pointer";
 import { pick } from "@/content/locale";
 import type { Course } from "@/lib/api/catalog";
 import { formatPrice, path, type Dictionary, type Locale } from "@/lib/i18n";
+import { FreeStart } from "./free-start";
 
 /**
  * The one place a course price is composed.
@@ -69,7 +70,9 @@ export function AccessTiers({
     );
   }
 
-  if (course.isFree || soon) {
+  if (course.isFree && !soon) return <FreeStart course={course} locale={locale} d={d} />;
+
+  if (soon) {
     return (
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-8 rounded-2xl border border-line bg-surface p-7 shadow-sm sm:p-9">

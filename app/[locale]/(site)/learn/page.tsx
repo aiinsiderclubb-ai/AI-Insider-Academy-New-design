@@ -278,7 +278,14 @@ export default async function LearnPage({
           </Reveal>
           <RevealGroup step={80} className="grid gap-4 lg:grid-cols-3">
             {courseBundles.map((bundle, index) => (
-              <BundleCard key={bundle.id} bundle={bundle} locale={locale} d={d} featured={index === 1} />
+              <BundleCard
+                key={bundle.id}
+                bundle={bundle}
+                locale={locale}
+                d={d}
+                featured={index === 1}
+                soon={bundle.courseIds.some((id) => groups.soon.some((course) => course.id === id))}
+              />
             ))}
           </RevealGroup>
         </Container>

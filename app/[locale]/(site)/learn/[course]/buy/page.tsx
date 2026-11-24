@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Check, ShieldCheck, Zap } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/navigation";
@@ -41,6 +41,8 @@ export default async function BuyCoursePage({
 
   const course = await getCourse(slug, locale);
   if (!course || course.isFree) notFound();
+  // A course still being recorded is not on sale; its page offers a launch notice instead.
+  if (course.status === "in-development") redirect(path(`/learn/${course.slug}`, locale));
 
   const [status, user, access] = await Promise.all([getCheckoutStatus(), getSession(), getAccess()]);
 

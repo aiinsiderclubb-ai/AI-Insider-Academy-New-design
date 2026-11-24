@@ -261,7 +261,7 @@
    "difficulty": null,
    "audienceLabelRu": "Для всех",
    "audienceLabelEn": "For everyone",
-   "status": "published"
+   "status": "in-development"
   },
   {
    "id": "ai-for-productivity",
@@ -941,7 +941,7 @@
    "difficulty": 1,
    "audienceLabelRu": "Для новичков",
    "audienceLabelEn": "For beginners",
-   "status": "published"
+   "status": "in-development"
   },
   {
    "id": "ai-content-creator",
@@ -1317,7 +1317,7 @@
    "difficulty": 2,
    "audienceLabelRu": "Для новичков и фрилансеров",
    "audienceLabelEn": "For beginners and freelancers",
-   "status": "published"
+   "status": "in-development"
   },
   {
    "id": "ai-automation-engineer",
@@ -1526,7 +1526,7 @@
    "difficulty": 2,
    "audienceLabelRu": "Для фрилансеров и внедренцев",
    "audienceLabelEn": "For freelancers and integrators",
-   "status": "published"
+   "status": "in-development"
   },
   {
    "id": "ai-agent-engineer",
@@ -1735,7 +1735,7 @@
    "difficulty": 3,
    "audienceLabelRu": "Для продвинутых и разработчиков",
    "audienceLabelEn": "For advanced users and developers",
-   "status": "published"
+   "status": "in-development"
   },
   {
    "id": "ai-business-builder",
@@ -1929,7 +1929,7 @@
    "difficulty": 2,
    "audienceLabelRu": "Для фрилансеров и агентств",
    "audienceLabelEn": "For freelancers and agencies",
-   "status": "published"
+   "status": "in-development"
   },
   {
    "id": "voice-agents",

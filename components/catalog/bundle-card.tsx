@@ -14,11 +14,14 @@ export function BundleCard({
   locale,
   d,
   featured,
+  soon,
 }: {
   bundle: CourseBundle;
   locale: Locale;
   d: Dictionary;
   featured?: boolean;
+  /** A course in the pack is still being recorded, so the pack is not on sale yet. */
+  soon?: boolean;
 }) {
   const saving = bundle.oldPriceEur - bundle.priceEur;
   const bonuses = pick(locale, bundle.bonusRu, bundle.bonusEn);
@@ -32,7 +35,11 @@ export function BundleCard({
     >
       <div className="flex items-center justify-between gap-3">
         <span className="eyebrow">{d.nav.bundles}</span>
-        {featured && <Badge tone="accent">{d.plans.bestValue}</Badge>}
+        {soon ? (
+          <Badge tone="warning">{d.badges.soon}</Badge>
+        ) : (
+          featured && <Badge tone="accent">{d.plans.bestValue}</Badge>
+        )}
       </div>
 
       <h3 className="mt-4 text-[21px] leading-tight">{bundle.title}</h3>

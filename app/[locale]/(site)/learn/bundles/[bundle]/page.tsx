@@ -59,6 +59,8 @@ export default async function BundlePage({
     demo: { name: "Demo", note: pick(locale, "Тестовая оплата", "Test payment") },
   };
   const lessons = included.reduce((sum, course) => sum + course.lessonCount, 0);
+  /* A pack goes on sale once every course in it is recorded. */
+  const soon = included.some((course) => course.status === "in-development");
 
   return (
     <>
@@ -150,19 +152,32 @@ export default async function BundlePage({
             </div>
 
             {/* The pack itself is the item: paying opens its courses and hands over its bonuses. */}
-            <div className="mt-4">
-              <CheckoutForm
-                locale={locale}
-                d={d}
-                tiers={[{ id: "pack", label: bundle.title, priceEur: bundle.priceEur, itemId: bundle.id }]}
-                providers={status.providers}
-                prelaunch={status.prelaunch}
-                signedIn={Boolean(user)}
-                successHref={path("/app/learning", locale)}
-                providerLabels={providerLabels}
-                email={user?.email}
-              />
-            </div>
+            {soon ? (
+              <div className="mt-4 rounded-lg border border-line bg-surface p-5 shadow-sm">
+                <Badge tone="warning">{d.badges.soon}</Badge>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-ink-3">
+                  {pick(
+                    locale,
+                    "Курсы этого пакета сейчас записываются. Пакет откроется для покупки, как только выйдут все видео.",
+                    "The courses in this bundle are being recorded. It goes on sale once every video is out.",
+                  )}
+                </p>
+              </div>
+            ) : (
+              <div className="mt-4">
+                <CheckoutForm
+                  locale={locale}
+                  d={d}
+                  tiers={[{ id: "pack", label: bundle.title, priceEur: bundle.priceEur, itemId: bundle.id }]}
+                  providers={status.providers}
+                  prelaunch={status.prelaunch}
+                  signedIn={Boolean(user)}
+                  successHref={path("/app/learning", locale)}
+                  providerLabels={providerLabels}
+                  email={user?.email}
+                />
+              </div>
+            )}
           </aside>
         </div>
       </Container>

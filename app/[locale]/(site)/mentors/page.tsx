@@ -9,7 +9,6 @@ import { Container } from "@/components/primitives/surface";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { MentorFaces, MentorPortrait } from "@/components/mentors/mentor-portrait";
 import { MentorConstellation } from "@/components/mentors/mentor-constellation";
-import { MentorLink } from "@/components/mentors/mentor-link";
 import { ReviewFlow, ReviewFlowHead } from "@/components/mentors/review-flow";
 import { LaunchButton } from "@/components/catalog/launch-button";
 import { pick } from "@/content/locale";
@@ -108,14 +107,13 @@ export default async function MentorsPage({ params }: { params: Promise<{ locale
 
       {/* ================================ mentors ================================= */}
       <section className="chapter ch-paper">
-        <Container size="wide" className="flex flex-col gap-6 lg:gap-4">
+        <Container size="wide" className="flex flex-col gap-24 lg:gap-32">
           {mentors.map((mentor, i) => {
             const name = pick(locale, mentor.nameRu, mentor.name);
             const taught = coursesTaughtBy(mentor, courses);
             const flip = i % 2 === 1;
             return (
               <Fragment key={mentor.id}>
-              {i > 0 && <MentorLink from={i % 2 === 1 ? "left" : "right"} index={i} />}
               <article
                 id={mentor.id}
                 className={cn(
@@ -224,10 +222,10 @@ export default async function MentorsPage({ params }: { params: Promise<{ locale
       </section>
 
       {/* ============================== how review works ============================== */}
-      <section className="chapter review-section relative overflow-hidden">
+      <section className="chapter">
         <Container size="wide">
           <ReviewFlowHead locale={locale} />
-          <div className="mt-16">
+          <div className="mt-12">
             <ReviewFlow locale={locale} />
           </div>
 

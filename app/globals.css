@@ -999,157 +999,22 @@
 }
 .constellation-note { animation: g-float 6s ease-in-out infinite; }
 
-/* -------------------- mentors page: thread between rows -------------------- */
+/* -------------------- mentors page: review steps -------------------- */
 
-.mentor-link-path {
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-dasharray: 7 11;
-  animation: thread-flow 1.4s linear infinite;
-}
-.mentor-link-glow {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 12;
-  opacity: 0.1;
-  filter: blur(8px);
-}
-.mentor-link-node {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  translate: -50% -50%;
-  border-radius: 50%;
-  background: var(--ground);
-  border: 2px solid var(--accent);
-  box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent) 16%, transparent), 0 0 18px 2px color-mix(in oklab, var(--accent) 45%, transparent);
-}
-.mentor-link-spark {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  translate: -50% -50%;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 60%, transparent), 0 0 22px 6px color-mix(in oklab, var(--accent) 70%, transparent);
-  animation-duration: 3.6s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-/* the S-curve sampled at quarters of its length */
-.mentor-link-spark-lr { animation-name: link-lr; }
-.mentor-link-spark-rl { animation-name: link-rl; }
-.mentor-link-spark-down { left: 50%; animation-name: link-down; }
-@keyframes link-lr {
-  0% { left: 20%; top: 0%; opacity: 0; }
-  8% { opacity: 1; }
-  25% { left: 29.4%; top: 31.4%; }
-  50% { left: 50%; top: 50%; }
-  75% { left: 70.6%; top: 68.6%; }
-  92% { opacity: 1; }
-  100% { left: 80%; top: 100%; opacity: 0; }
-}
-@keyframes link-rl {
-  0% { left: 80%; top: 0%; opacity: 0; }
-  8% { opacity: 1; }
-  25% { left: 70.6%; top: 31.4%; }
-  50% { left: 50%; top: 50%; }
-  75% { left: 29.4%; top: 68.6%; }
-  92% { opacity: 1; }
-  100% { left: 20%; top: 100%; opacity: 0; }
-}
-@keyframes link-down {
-  0% { top: 0%; opacity: 0; }
-  15%, 85% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-/* -------------------- mentors page: review flow -------------------- */
-
-.review-section {
-  background:
-    radial-gradient(50rem 26rem at 50% 0%, color-mix(in oklab, var(--accent) 9%, transparent), transparent 70%);
-}
-/* the lit track through the three station nodes */
-.review-track {
-  position: absolute;
-  left: 16.66%;
-  right: 16.66%;
-  top: 24px;
-  height: 2px;
-  background: linear-gradient(90deg, color-mix(in oklab, var(--accent) 25%, transparent), var(--accent), color-mix(in oklab, var(--accent) 25%, transparent));
-  overflow: hidden;
-}
-.review-track::after,
-.review-track-vertical::after {
+/* a hairline of accent grows across the top of the step under the pointer */
+.review-step::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, #fff, transparent);
-  width: 30%;
-  animation: track-run 3.2s ease-in-out infinite;
+  left: 0;
+  top: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s var(--ease-out-expo);
 }
-.review-track-vertical {
-  position: absolute;
-  left: 23px;
-  top: 24px;
-  bottom: 24px;
-  width: 2px;
-  overflow: hidden;
-  background: linear-gradient(var(--accent), color-mix(in oklab, var(--accent) 20%, transparent));
-}
-.review-track-vertical::after {
-  width: auto;
-  height: 30%;
-  background: linear-gradient(transparent, #fff, transparent);
-  animation-name: track-run-down;
-}
-@keyframes track-run {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(340%); }
-}
-@keyframes track-run-down {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(340%); }
-}
-.review-node {
-  z-index: 2;
-  box-shadow: 0 0 0 6px var(--ground), 0 0 0 7px color-mix(in oklab, var(--accent) 40%, transparent), 0 10px 30px -6px color-mix(in oklab, var(--accent) 70%, transparent);
-  transition: transform 0.5s var(--ease-out-expo);
-}
-.review-card:hover .review-node { transform: scale(1.1); }
-@media (min-width: 1024px) {
-  .review-card:hover .review-node { transform: translateX(-50%) scale(1.1); }
-}
-
-.review-progress { animation: review-fill 3.2s var(--ease-out-quart) infinite; }
-@keyframes review-fill {
-  0% { width: 0%; }
-  70%, 100% { width: 100%; }
-}
-.review-tick {
-  opacity: 0;
-  transform: scale(0.4);
-  animation: review-tick 3.6s var(--ease-out-expo) infinite;
-}
-@keyframes review-tick {
-  0%, 10% { opacity: 0; transform: scale(0.4); }
-  22%, 85% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.4); }
-}
-.review-bubble { animation: review-bubble 4s var(--ease-out-expo) infinite; opacity: 0; }
-@keyframes review-bubble {
-  0% { opacity: 0; transform: translateY(8px) scale(0.96); }
-  15%, 85% { opacity: 1; transform: none; }
-  100% { opacity: 0; transform: translateY(-4px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .review-tick, .review-bubble { opacity: 1; transform: none; }
-  .review-progress { width: 100%; }
-  .mentor-link-spark { display: none; }
-}
+.review-step:hover::before { transform: scaleX(1); }
 
 /* ==========================================================================
    Giveaway — a lit stage with the prize as a holographic ticket

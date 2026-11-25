@@ -51,12 +51,20 @@ function messageFor(code: string, status: number, d: Dictionary, locale: Locale)
     return locale === "en" ? "You already have this course in this plan." : locale === "ukr" ? "Цей курс у вас уже є в цьому тарифі." : "Этот курс у вас уже есть в этом тарифе.";
   }
   /* Tribute's fixed products and Gumroad sell one price, so they turn the mentor plan away. */
-  if (code === "PLAN_NOT_AVAILABLE" || status === 409) {
+  if (code === "PLAN_NOT_AVAILABLE") {
     return locale === "en"
       ? "This payment method does not take the mentor plan yet — choose another method, or write to support."
       : locale === "ukr"
         ? "Цей спосіб оплати поки не приймає тариф з ментором — оберіть інший або напишіть у підтримку."
         : "Этот способ оплаты пока не принимает тариф с ментором — выберите другой или напишите в поддержку.";
+  }
+  /* Any other conflict: the item is not on sale at the payment service right now. */
+  if (status === 409) {
+    return locale === "en"
+      ? "Payment for this item is not open right now. Write to support and we'll sort it out quickly."
+      : locale === "ukr"
+        ? "Оплата цього товару зараз недоступна. Напишіть у підтримку — швидко розберемося."
+        : "Оплата этого товара сейчас недоступна. Напишите в поддержку — быстро разберёмся.";
   }
   if (status === 401 || status === 403) return d.errors.unauthorized;
   if (status === 404) return d.errors.providerDisabled;
@@ -122,8 +130,9 @@ export function CheckoutForm({
   const discount = Math.max(0, base - total);
 
   React.useEffect(() => {
-    // A new tier invalidates any quote tied to the previous price.
+    // A new tier invalidates any quote tied to the previous price, and any error about the old one.
     setPromoState({ status: "idle" });
+    setError(null);
   }, [tierId]);
 
   async function applyPromo(event: React.FormEvent) {

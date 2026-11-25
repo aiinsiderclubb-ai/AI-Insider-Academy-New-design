@@ -112,9 +112,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     { id: "finish", label: pick(locale, "Старт", "Get going") },
   ];
 
-  const visibleStops = open
-    ? stops
-    : stops.filter((stop) => !["programmes", "access", "path", "voices", "finish"].includes(stop.id));
+  // The access block (one-off course vs subscription) returns with the plans.
+  const showAccess = open && plansPublic();
+  const visibleStops = (open ? stops : stops.filter((stop) => !["programmes", "path", "voices", "finish"].includes(stop.id))).filter(
+    (stop) => showAccess || stop.id !== "access",
+  );
 
   const ribbon = storeCategories.map((category) => pick(locale, category.titleRu, category.titleEn));
 
@@ -124,7 +126,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         stops={visibleStops}
         from={pick(locale, "Вопрос", "Question")}
         to={pick(locale, "Результат", "Result")}
-        railUntil={open ? "access" : "store"}
+        railUntil={showAccess ? "access" : "store"}
       />
 
       <div id="start" />
@@ -192,15 +194,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       {open && (
         <>
-          <div id="access" />
-          <Access
-            d={d}
-            options={accessOptions.filter(
-              (option) =>
-                (plansPublic() || option.href !== path("/plans", locale)) &&
-                (packsPublic() || option.href !== path("/learn?tab=bundles", locale)),
-            )}
-          />
+          {showAccess && (
+            <>
+              <div id="access" />
+              <Access
+                d={d}
+                options={accessOptions.filter((option) => packsPublic() || option.href !== path("/learn?tab=bundles", locale))}
+              />
+            </>
+          )}
 
           <div id="voices" />
           <Reviews locale={locale} d={d} reviews={reviews} />

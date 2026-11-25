@@ -105,9 +105,13 @@ export default async function BuyCoursePage({
         ]}
       />
 
-      <div className="mt-7 grid gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,1fr)_380px]">
+      {/*
+        On a phone the order panel comes right after the trailer, before the
+        details; on a wide screen it holds the right column beside both.
+      */}
+      <div className="mt-7 grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:grid-rows-[auto_1fr]">
         {/* ------------------------------ left column ----------------------------- */}
-        <div>
+        <div className="order-1 min-w-0 lg:order-none lg:col-start-1 lg:row-start-1">
           <div className="flex flex-wrap items-center gap-2">
             <Badge tone="outline">{course.categoryLabel}</Badge>
             {course.isProOnly && <Badge tone="accent">{d.badges.pro}</Badge>}
@@ -140,7 +144,10 @@ export default async function BuyCoursePage({
             )
           )}
 
-          <section className="mt-8 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
+        </div>
+
+        <div className="order-3 min-w-0 lg:order-none lg:col-start-1 lg:row-start-2">
+          <section className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
             {[
               pick(locale, "Пожизненный доступ ко всем урокам", "Lifetime access to every lesson"),
               pick(locale, "Готовые шаблоны и материалы", "Templates and resources included"),
@@ -168,7 +175,7 @@ export default async function BuyCoursePage({
         </div>
 
         {/* ------------------------------ order panel ----------------------------- */}
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside className="order-2 lg:sticky lg:top-24 lg:order-none lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
           {ownsAll ? (
             <Note tone="accent">
               {pick(locale, "Этот курс у вас уже есть со всеми возможностями.", "You already have this course with everything included.")}{" "}

@@ -33,6 +33,8 @@ const PROVIDER_META: Record<ProviderId, { icon: React.ElementType; endpoint: str
   demo: { icon: TestTube2, endpoint: "/api/payments/demo" },
 };
 
+const MENTOR_PROVIDERS = new Set<ProviderId>(["paddle", "stripe", "liqpay", "demo"]);
+
 /** The friend's code `proxy.ts` kept from a `?ref=` link, if any. */
 function referralFromCookie(): string | undefined {
   if (typeof document === "undefined") return undefined;
@@ -94,7 +96,7 @@ export function CheckoutForm({
   const { push } = useToast();
 
   const [tierId, setTierId] = React.useState(defaultTier ?? tiers[0]?.id);
-  const [provider, setProvider] = React.useState<ProviderId | null>(providers[0] ?? null);
+  const [pickedProvider, setProvider] = React.useState<ProviderId | null>(providers[0] ?? null);
   const [promo, setPromo] = React.useState("");
   // The server render has no cookie to agree with, so it renders without the note.
   const referred = React.useSyncExternalStore(
@@ -108,8 +110,13 @@ export function CheckoutForm({
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [digitalWaiver, setDigitalWaiver] = React.useState(false);
+  const [promoOpen, setPromoOpen] = React.useState(false);
 
   const tier = tiers.find((item) => item.id === tierId) ?? tiers[0];
+  // Gumroad and Tribute sell one fixed price, so they cannot take the mentor plan.
+  const sellers = tier?.plan === "mentor" ? providers.filter((id) => MENTOR_PROVIDERS.has(id)) : providers;
+
+  const chosenProvider: ProviderId | null = pickedProvider && sellers.includes(pickedProvider) ? pickedProvider : (sellers[0] ?? null);
   const base = tier?.priceEur ?? 0;
   const total = promoState.status === "ok" ? promoState.finalEur : base;
   const discount = Math.max(0, base - total);
@@ -143,6 +150,7 @@ export function CheckoutForm({
   }
 
   async function pay() {
+    const provider = chosenProvider;
     if (!tier || !provider) return;
     if (!signedIn) {
       router.push(`/${locale}/login?next=${encodeURIComponent(successHref)}`);
@@ -233,185 +241,227 @@ export function CheckoutForm({
     );
   }
 
-  return (
-    <div className="rounded-lg border border-line bg-surface p-5 shadow-sm">
-      <p className="eyebrow">{d.checkout.title}</p>
+  const single = sellers.length === 1;
+  const mentorBlocked = tier?.plan === "mentor" && sellers.length === 0;
 
+  return (
+    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
       {/* --------------------------------- tiers -------------------------------- */}
-      {tiers.length > 1 && (
-        <fieldset className="mt-4">
-          <legend className="sr-only">{d.checkout.yourOrder}</legend>
-          <div className="flex flex-col gap-2">
-            {tiers.map((item) => (
-              <label
-                key={item.id}
-                className={cn(
-                  "flex cursor-pointer items-start gap-3 rounded-md border p-3.5 transition-colors",
-                  item.id === tierId ? "border-accent bg-accent-soft" : "border-line hover:border-line-2 hover:bg-surface-2",
-                )}
-              >
-                <input
-                  type="radio"
-                  name="tier"
-                  value={item.id}
-                  checked={item.id === tierId}
-                  onChange={() => setTierId(item.id)}
-                  className="mt-1 h-4 w-4 accent-[var(--accent)]"
-                />
-                <span className="min-w-0 flex-1">
-                  <span className="flex items-baseline justify-between gap-3">
-                    <span className="text-[14px] font-medium text-ink">{item.label}</span>
-                    <span className="font-mono text-[14px] tabular-nums text-ink">{formatPrice(item.priceEur, locale)}</span>
-                  </span>
-                  {item.note && <span className="mt-1 block text-[12.5px] leading-snug text-ink-3">{item.note}</span>}
-                </span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-      )}
+      <div className="p-5 pb-4">
+        <p className="text-[13px] font-medium text-ink-3">{d.checkout.yourOrder}</p>
+        {tiers.length > 1 ? (
+          <fieldset className="mt-3">
+            <legend className="sr-only">{d.checkout.yourOrder}</legend>
+            <div className={cn("grid gap-2", tiers.length === 2 ? "grid-cols-2" : "grid-cols-1")}>
+              {tiers.map((item) => {
+                const chosen = item.id === tierId;
+                return (
+                  <label
+                    key={item.id}
+                    className={cn(
+                      "relative flex cursor-pointer flex-col gap-1 rounded-xl border p-3.5 transition-[border-color,background-color] duration-200",
+                      "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--accent-ring)]",
+                      chosen ? "border-accent bg-accent-soft" : "border-line hover:border-line-2 hover:bg-surface-2",
+                    )}
+                  >
+                    <input
+                      type="radio"
+                      name="tier"
+                      value={item.id}
+                      checked={chosen}
+                      onChange={() => setTierId(item.id)}
+                      className="sr-only"
+                    />
+                    <span className="pr-6 text-[13.5px] leading-tight font-medium text-ink">{item.label}</span>
+                    <span className="font-display text-[1.35rem] leading-none font-extrabold tracking-tight text-ink tabular-nums">
+                      {formatPrice(item.priceEur, locale)}
+                    </span>
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "absolute top-3 right-3 h-4 w-4 rounded-full border-2 transition-colors",
+                        chosen ? "border-accent bg-accent shadow-[inset_0_0_0_2px_var(--accent-soft)]" : "border-line-2",
+                      )}
+                    />
+                  </label>
+                );
+              })}
+            </div>
+            {tier?.note && <p className="mt-2.5 text-[12.5px] leading-snug text-ink-3">{tier.note}</p>}
+          </fieldset>
+        ) : (
+          tier && (
+            <div className="mt-2 flex items-baseline justify-between gap-4">
+              <p className="text-[15px] font-medium text-ink">{tier.label}</p>
+              <p className="font-display text-[1.35rem] leading-none font-extrabold tracking-tight tabular-nums">
+                {formatPrice(tier.priceEur, locale)}
+              </p>
+            </div>
+          )
+        )}
+      </div>
 
       {/* --------------------------------- promo -------------------------------- */}
-      <form onSubmit={applyPromo} className="mt-5">
-        <Field
-          label={d.checkout.promoCode}
-          htmlFor="promo"
-          error={promoState.status === "error" ? promoState.message : undefined}
-          hint={promoState.status === "ok" ? d.checkout.promoApplied : undefined}
-        >
-          <div className="flex gap-2">
-            <Input
-              id="promo"
-              value={promo}
-              onChange={(event) => setPromo(event.target.value.toUpperCase())}
-              placeholder="AI2026"
-              autoComplete="off"
-              invalid={promoState.status === "error"}
-              className="font-mono tracking-wide"
-            />
-            <Button type="submit" variant="secondary" loading={promoState.status === "checking"} disabled={!promo.trim()}>
-              {d.checkout.promoApply}
-            </Button>
-          </div>
-        </Field>
-      </form>
-
-      {referred && (providers.includes("paddle") || providers.includes("gumroad")) && (
-        <p className="mt-3 rounded-md border border-accent/30 bg-accent-soft px-3.5 py-2.5 text-[12.5px] leading-relaxed text-ink-2">
-          {locale === "en"
-            ? "You came by a friend's link: 10% off your first purchase is applied at payment, unless a promo code gives you more."
-            : "Вы пришли по ссылке друга: −10% на первую покупку применится при оплате, если промокод не даёт больше."}
-        </p>
-      )}
-
-      {/* -------------------------------- summary ------------------------------- */}
-      <dl className="mt-5 flex flex-col gap-2 border-t border-line pt-4 text-[13.5px]">
-        <div className="flex justify-between gap-4">
-          <dt className="text-ink-3">{d.checkout.subtotal}</dt>
-          <dd className="font-mono tabular-nums text-ink-2">{formatPrice(base, locale)}</dd>
-        </div>
-        {discount > 0 && (
-          <div className="flex justify-between gap-4">
-            <dt className="text-ink-3">{d.checkout.discount}</dt>
-            <dd className="font-mono tabular-nums text-success">−{formatPrice(discount, locale)}</dd>
-          </div>
+      <div className="border-t border-line px-5 py-3.5">
+        {promoOpen || promoState.status !== "idle" ? (
+          <form onSubmit={applyPromo}>
+            <Field
+              label={d.checkout.promoCode}
+              htmlFor="promo"
+              error={promoState.status === "error" ? promoState.message : undefined}
+              hint={promoState.status === "ok" ? d.checkout.promoApplied : undefined}
+            >
+              <div className="flex gap-2">
+                <Input
+                  id="promo"
+                  value={promo}
+                  onChange={(event) => setPromo(event.target.value.toUpperCase())}
+                  placeholder="AI2026"
+                  autoComplete="off"
+                  invalid={promoState.status === "error"}
+                  className="font-mono tracking-wide"
+                />
+                <Button type="submit" variant="secondary" loading={promoState.status === "checking"} disabled={!promo.trim()}>
+                  {d.checkout.promoApply}
+                </Button>
+              </div>
+            </Field>
+          </form>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setPromoOpen(true)}
+            className="cursor-pointer text-[13px] text-ink-2 underline decoration-line-2 underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
+          >
+            {locale === "en" ? "Have a promo code?" : locale === "ukr" ? "Є промокод?" : "Есть промокод?"}
+          </button>
         )}
-        <div className="mt-1 flex items-baseline justify-between gap-4 border-t border-line pt-3">
-          <dt className="text-[14px] font-medium text-ink">{d.checkout.total}</dt>
-          <dd className="font-display text-[1.75rem] leading-none font-extrabold tracking-tight tabular-nums">
-            {formatPrice(total, locale)}
-          </dd>
-        </div>
-      </dl>
+
+        {referred && (sellers.includes("paddle") || sellers.includes("gumroad")) && (
+          <p className="mt-2.5 text-[12.5px] leading-relaxed text-accent-ink">
+            {locale === "en"
+              ? "You came by a friend's link: 10% off your first purchase is applied at payment, unless a promo code gives you more."
+              : "Вы пришли по ссылке друга: −10% на первую покупку применится при оплате, если промокод не даёт больше."}
+          </p>
+        )}
+      </div>
 
       {/* -------------------------------- providers ----------------------------- */}
-      <fieldset className="mt-5">
-        <legend className="eyebrow mb-2.5">{d.checkout.paymentMethod}</legend>
-        {providers.length === 0 ? (
-          <p className="rounded-md border border-line bg-surface-2 px-3.5 py-3 text-[13px] text-ink-3">
-            {d.errors.providerDisabled}
-          </p>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {providers.map((id) => {
+      {sellers.length > 1 && (
+        <fieldset className="border-t border-line px-5 py-4">
+          <legend className="sr-only">{d.checkout.paymentMethod}</legend>
+          <p className="mb-2.5 text-[13px] font-medium text-ink-3">{d.checkout.paymentMethod}</p>
+          <div className="flex flex-col gap-1.5">
+            {sellers.map((id) => {
               const Icon = PROVIDER_META[id].icon;
               return (
                 <label
                   key={id}
                   className={cn(
-                    "flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors",
-                    id === provider ? "border-accent bg-accent-soft" : "border-line hover:border-line-2 hover:bg-surface-2",
+                    "flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors",
+                    id === chosenProvider ? "border-accent bg-accent-soft" : "border-line hover:border-line-2 hover:bg-surface-2",
                   )}
                 >
                   <input
                     type="radio"
                     name="provider"
                     value={id}
-                    checked={id === provider}
+                    checked={id === chosenProvider}
                     onChange={() => setProvider(id)}
                     className="h-4 w-4 accent-[var(--accent)]"
                   />
                   <Icon className="h-4 w-4 shrink-0 text-ink-3" aria-hidden />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[13.5px] font-medium text-ink">{providerLabels[id].name}</span>
-                    <span className="block text-[12px] text-muted">{providerLabels[id].note}</span>
-                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[13.5px] font-medium text-ink">{providerLabels[id].name}</span>
                   {id === "demo" && <Badge tone="outline">test</Badge>}
                 </label>
               );
             })}
           </div>
-        )}
-      </fieldset>
-
-      {error && (
-        <p role="alert" className="mt-4 flex gap-2 rounded-md border border-danger/30 bg-danger-soft px-3.5 py-3 text-[13px] text-ink-2">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
-          {error}
-        </p>
+        </fieldset>
       )}
 
-      <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-md border border-line bg-surface-2 p-3.5 text-[12.5px] leading-relaxed text-ink-2">
-        <input
-          type="checkbox"
-          className="mt-0.5"
-          checked={digitalWaiver}
-          onChange={(event) => setDigitalWaiver(event.target.checked)}
-        />
-        <span>{d.checkout.digitalWaiver}</span>
-      </label>
-
-      <p className="mt-3 text-[12.5px] leading-relaxed text-ink-3">{d.checkout.emailMatch}</p>
-
-      <Button
-        onClick={pay}
-        size="lg"
-        full
-        className="mt-5"
-        loading={submitting}
-        disabled={!provider || !tier || !digitalWaiver}
-      >
-        {submitting ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-            {d.checkout.processing}
-          </>
-        ) : (
-          `${d.checkout.pay} ${formatPrice(total, locale)}`
+      {/* --------------------------------- total -------------------------------- */}
+      <div className="border-t border-line bg-surface-2 p-5">
+        {discount > 0 && (
+          <div className="mb-2 flex justify-between gap-4 text-[13px]">
+            <span className="text-ink-3">
+              {d.checkout.discount} <span className="text-faint line-through">{formatPrice(base, locale)}</span>
+            </span>
+            <span className="font-mono text-success tabular-nums">−{formatPrice(discount, locale)}</span>
+          </div>
         )}
-      </Button>
 
-      <p className="mt-3 text-center text-[12px] leading-relaxed text-muted">
-        {d.checkout.termsLead}{" "}
-        <Link href={path("/legal/offer", locale)} className="underline underline-offset-2 hover:text-ink">
-          {d.checkout.termsOffer}
-        </Link>{" "}
-        {d.checkout.termsAnd}{" "}
-        <Link href={path("/legal/refund", locale)} className="underline underline-offset-2 hover:text-ink">
-          {d.checkout.termsRefund}
-        </Link>
-        .
-      </p>
+        {mentorBlocked ? (
+          <div className="rounded-lg border border-line bg-surface px-4 py-3.5 text-[13px] leading-relaxed text-ink-2">
+            {locale === "en"
+              ? "The mentor plan is arranged by hand for now. Write to us and we'll set it up — or take self-study and move up later at the difference."
+              : "Тариф с ментором пока оформляем вручную. Напишите нам — всё настроим. Или возьмите самостоятельный и перейдите позже, доплатив разницу."}
+            <Link
+              href={path("/app/support", locale)}
+              className="mt-3 flex h-11 items-center justify-center rounded-full bg-accent text-[14px] font-medium text-on-accent transition-colors hover:bg-accent-strong"
+            >
+              {locale === "en" ? "Write to us" : "Написать нам"}
+            </Link>
+          </div>
+        ) : (
+          <>
+            <label className="flex cursor-pointer items-start gap-2.5 text-[12px] leading-snug text-ink-3">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]"
+                checked={digitalWaiver}
+                onChange={(event) => {
+                  setDigitalWaiver(event.target.checked);
+                  if (event.target.checked) setError(null);
+                }}
+              />
+              <span>{d.checkout.digitalWaiver}</span>
+            </label>
+
+            {error && (
+              <p role="alert" className="mt-3 flex gap-2 rounded-md border border-danger/30 bg-danger-soft px-3 py-2.5 text-[12.5px] text-ink-2">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
+                {error}
+              </p>
+            )}
+
+            {sellers.length === 0 ? (
+              <p className="mt-4 rounded-md border border-line bg-surface px-3.5 py-3 text-[13px] text-ink-3">{d.errors.providerDisabled}</p>
+            ) : (
+              <Button onClick={pay} size="lg" full className="mt-4" loading={submitting} disabled={!chosenProvider || !tier || !digitalWaiver}>
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                    {d.checkout.processing}
+                  </>
+                ) : (
+                  `${d.checkout.pay} ${formatPrice(total, locale)}`
+                )}
+              </Button>
+            )}
+
+            {single && chosenProvider && (
+              <p className="mt-2.5 flex items-center justify-center gap-1.5 text-center text-[12px] text-muted">
+                <ShieldCheck className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                {providerLabels[chosenProvider].note}
+              </p>
+            )}
+            {chosenProvider === "tribute" && <p className="mt-2 text-center text-[12px] leading-relaxed text-ink-3">{d.checkout.emailMatch}</p>}
+          </>
+        )}
+
+        <p className="mt-3 text-center text-[11.5px] leading-relaxed text-faint">
+          {d.checkout.termsLead}{" "}
+          <Link href={path("/legal/offer", locale)} className="underline underline-offset-2 hover:text-ink">
+            {d.checkout.termsOffer}
+          </Link>{" "}
+          {d.checkout.termsAnd}{" "}
+          <Link href={path("/legal/refund", locale)} className="underline underline-offset-2 hover:text-ink">
+            {d.checkout.termsRefund}
+          </Link>
+          .
+        </p>
+      </div>
     </div>
   );
 }

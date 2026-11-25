@@ -133,11 +133,21 @@ export function CourseCard({
         </div>
 
         {/* the title and pitch are already on the artwork; screen readers still get them */}
-        <h3 className={cn("text-[19px] leading-[1.15]", image && "sr-only")}>
-          <Link href={href} className="outline-offset-4 after:absolute after:inset-0 after:content-['']">
-            {course.title}
-          </Link>
-        </h3>
+        {image ? (
+          /* The title is drawn on the art. A screen-reader-only heading cannot
+             carry the card-wide link (its overlay is clipped with it), so the
+             link covers the card on its own. */
+          <>
+            <h3 className="sr-only">{course.title}</h3>
+            <Link href={href} aria-label={course.title} className="absolute inset-0 z-[1] rounded-xl outline-offset-4" />
+          </>
+        ) : (
+          <h3 className="text-[19px] leading-[1.15]">
+            <Link href={href} className="outline-offset-4 after:absolute after:inset-0 after:content-['']">
+              {course.title}
+            </Link>
+          </h3>
+        )}
 
         <p className={cn("line-clamp-2 text-[13.5px] leading-relaxed text-ink-3", image && "sr-only")}>
           {course.description || course.summary}

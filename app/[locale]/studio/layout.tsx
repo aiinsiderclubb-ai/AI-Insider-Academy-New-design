@@ -36,6 +36,7 @@ export default async function StudioLayout({
         { id: "pulse", label: pick(locale, "Пульс", "Pulse"), href: p("/studio") },
         { id: "queue", label: pick(locale, "Очереди", "Queues"), href: p("/studio/queue"), badge: counts.total },
         { id: "homework", label: pick(locale, "Проверка ДЗ", "Homework review"), href: p("/studio/homework"), badge: counts.homework },
+        { id: "approved", label: pick(locale, "Одобренные", "Approved"), href: p("/studio/approved") },
       ],
     },
     {

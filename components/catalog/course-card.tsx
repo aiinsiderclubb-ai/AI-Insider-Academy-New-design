@@ -58,6 +58,8 @@ export function CourseCard({
   const soon = course.status === "in-development";
   const href = path(`/learn/${course.slug}`, locale);
 
+  if (image) return <ArtCourseCard course={course} locale={locale} d={d} priority={priority} image={image} />;
+
   return (
     <article
       className={cn(
@@ -184,6 +186,134 @@ export function CourseCard({
             >
               <ArrowUpRight className="h-4 w-4" />
             </span>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+/* Dark ground the art fades into; the card keeps it in either theme. */
+const ART_INK = "#0c0c0e";
+
+/**
+ * A course with finished artwork. The art's own title block (its lower third)
+ * is cropped away: the card shows the picture, then the text in bold under
+ * it, on a black fade that carries the picture into the card.
+ */
+function ArtCourseCard({
+  course,
+  locale,
+  d,
+  priority,
+  image,
+}: {
+  course: Course;
+  locale: Locale;
+  d: Dictionary;
+  priority?: boolean;
+  image: string;
+}) {
+  const soon = course.status === "in-development";
+  const href = path(`/learn/${course.slug}`, locale);
+  const chips = [
+    lessonCount(course.lessonCount, locale, d),
+    course.difficultyLabel,
+    course.isProOnly ? "PRO" : null,
+  ].filter(Boolean) as string[];
+
+  return (
+    <article
+      className={cn(
+        "group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 text-white shadow-md",
+        "transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-out-quart)]",
+        "hover:-translate-y-0.5 hover:border-white/20 hover:shadow-lg focus-within:-translate-y-0.5",
+      )}
+      style={{ background: ART_INK }}
+    >
+      <div className="relative aspect-[21/10] overflow-hidden">
+        <ArtParallax>
+          <Image
+            src={image}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw"
+            priority={priority}
+            className={cn("object-cover object-top", soon && "opacity-60 saturate-50")}
+          />
+        </ArtParallax>
+        {/* the black fade the text block rises out of */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5"
+          style={{ background: `linear-gradient(to bottom, transparent, color-mix(in oklab, ${ART_INK} 70%, transparent) 55%, ${ART_INK})` }}
+        />
+        {soon && (
+          <div className="absolute top-[7%] right-[4%]">
+            <Badge tone="warning" className="shadow-md">
+              {d.badges.soon}
+            </Badge>
+          </div>
+        )}
+      </div>
+
+      <div className="relative -mt-14 flex flex-1 flex-col gap-3 px-5 pb-5">
+        <h3 className="font-display text-[22px] leading-[1.08] font-extrabold tracking-[-0.025em] text-white">
+          <Link href={href} className="outline-offset-4 after:absolute after:inset-0 after:z-[1] after:content-['']">
+            {course.title}
+          </Link>
+        </h3>
+        <p className="line-clamp-2 text-[13.5px] leading-snug font-semibold text-white/75">{course.description || course.summary}</p>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          {chips.map((chip) => (
+            <span
+              key={chip}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11.5px] font-semibold",
+                chip === "PRO" ? "border-accent/50 text-accent" : "border-white/15 bg-white/5 text-white/85",
+              )}
+            >
+              {chip === "PRO" && <Lock className="h-3 w-3" aria-hidden />}
+              {chip}
+            </span>
+          ))}
+          <span className="ml-1">
+            <Difficulty level={course.difficulty} label={course.difficultyLabel} />
+          </span>
+        </div>
+
+        {/* Sits above the card-wide link so it can lead straight into the demo lesson. */}
+        {!course.isFree && !soon && (
+          <Link
+            href={path(`/study/${course.slug}/1`, locale)}
+            className="relative z-10 inline-flex w-fit items-center gap-1.5 text-[13px] font-semibold text-accent underline-offset-4 hover:underline"
+          >
+            <Play className="h-3.5 w-3.5" aria-hidden />
+            {pick(locale, "Смотреть бесплатный урок", "Watch the free lesson")}
+          </Link>
+        )}
+
+        <div className="mt-auto flex items-center justify-between gap-4 border-t border-white/10 pt-4">
+          {course.isFree ? (
+            <span className="font-mono text-[14px] font-semibold tracking-wide text-emerald-400">{d.common.free}</span>
+          ) : (
+            <span className="font-mono text-[19px] leading-none font-bold tabular-nums text-white">
+              <span className="text-[12px] font-normal text-white/55">{pick(locale, "от ", "from ")}</span>
+              {formatPrice(course.priceEur, locale)}
+            </span>
+          )}
+          {soon ? (
+            <span className="text-[13px] font-semibold text-white/60">{d.badges.soon}</span>
+          ) : (
+            /* Above the card-wide link, so it leads straight to checkout (or into a free course). */
+            <Link
+              href={course.isFree ? href : path(`/learn/${course.slug}/buy`, locale)}
+              className="relative z-10 inline-flex h-10 items-center gap-1.5 rounded-full bg-accent px-5 text-[14px] font-bold text-on-accent shadow-[0_8px_22px_-8px_color-mix(in_oklab,var(--accent)_75%,transparent)] transition-[transform,background-color] duration-200 hover:-translate-y-px hover:bg-accent-strong"
+            >
+              {course.isFree ? pick(locale, "Начать", "Start") : pick(locale, "Купить", "Buy")}
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
           )}
         </div>
       </div>

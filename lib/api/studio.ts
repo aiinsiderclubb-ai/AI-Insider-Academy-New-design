@@ -132,6 +132,7 @@ export const STUDIO_ACCESS = {
   pulse: ["admin", "editor", "moderator"],
   queue: ["admin", "moderator"],
   homework: ["admin", "moderator"],
+  approved: ["admin", "moderator"],
   logins: ["admin", "moderator"],
   free: ["admin", "editor", "moderator"],
   referrals: ["admin"],
@@ -374,6 +375,25 @@ export interface SentLetter {
 
 export async function getSentLetters() {
   return tryApi<{ letters: SentLetter[] }>("/admin/email/sent", { admin: true, soft: true }, { letters: [] });
+}
+
+export interface LetterState {
+  id: string;
+  status: "pending" | "sending" | "sent" | "failed" | "skipped" | string;
+  sentAt: string | null;
+  sendAfter: string | null;
+  error: string | null;
+}
+
+export interface ApprovedPerson extends StudioApplication {
+  userId?: number | null;
+  approvedAt: string | null;
+  accessGranted?: boolean;
+  letters: { application_accepted?: LetterState; todayfree_offer?: LetterState };
+}
+
+export async function getApprovedPeople() {
+  return tryApi<{ smtp: boolean; people: ApprovedPerson[] }>("/admin/applications/accepted", { admin: true, soft: true }, { smtp: true, people: [] });
 }
 
 export async function getUserCard(id: string) {

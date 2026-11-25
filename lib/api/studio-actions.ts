@@ -54,6 +54,28 @@ export async function decideApplication(
   }
 }
 
+/** Sends the approval letter to one approved person, now. */
+export async function sendWelcomeLetter(locale: string, id: string): Promise<ActionResult> {
+  try {
+    await api(`/admin/applications/${encodeURIComponent(id)}/send-welcome`, { admin: true, method: "POST" });
+    refresh(locale);
+    return { ok: true };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+/** Sends the approval letter to every approved person who has not had one. */
+export async function sendMissingWelcomeLetters(locale: string): Promise<ActionResult & { sent?: number }> {
+  try {
+    const result = await api<{ sent: number }>("/admin/applications/send-missing-welcome", { admin: true, method: "POST" });
+    refresh(locale);
+    return { ok: true, sent: result.sent };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
 /* --------------------------------- reviews --------------------------------- */
 
 export async function moderateReview(

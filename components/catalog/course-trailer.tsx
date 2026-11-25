@@ -28,6 +28,7 @@ export function CourseTrailer({
   soonLabel,
   playLabel,
   facts,
+  artwork,
 }: {
   src: string | null;
   poster: string | null;
@@ -37,6 +38,8 @@ export function CourseTrailer({
   soonLabel: string;
   playLabel: string;
   facts: string[];
+  /** The poster is finished artwork with its own logo, badge and title: keep the frame's chrome off it. */
+  artwork?: boolean;
 }) {
   const video = React.useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = React.useState(false);
@@ -96,21 +99,25 @@ export function CourseTrailer({
             playing ? "pointer-events-none opacity-0" : "opacity-100",
           )}
         >
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(180deg, rgb(10 9 8 / 0.5) 0%, rgb(10 9 8 / 0.1) 32%, rgb(10 9 8 / 0.6) 80%, rgb(10 9 8 / 0.9) 100%)",
-            }}
-          />
+          {!artwork && (
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgb(10 9 8 / 0.5) 0%, rgb(10 9 8 / 0.1) 32%, rgb(10 9 8 / 0.6) 80%, rgb(10 9 8 / 0.9) 100%)",
+              }}
+            />
+          )}
 
           {/* Chrome sits in pills: a poster can be any brightness, and a
               gradient alone does not guarantee the label stays readable. */}
-          <p className="absolute top-5 left-5 rounded-full bg-black/50 px-3 py-1 font-mono text-2xs tracking-[0.2em] text-white/85 uppercase backdrop-blur-sm sm:top-6 sm:left-7">
-            {label}
-          </p>
+          {!artwork && (
+            <p className="absolute top-5 left-5 rounded-full bg-black/50 px-3 py-1 font-mono text-2xs tracking-[0.2em] text-white/85 uppercase backdrop-blur-sm sm:top-6 sm:left-7">
+              {label}
+            </p>
+          )}
 
-          {duration && (
+          {duration && !artwork && (
             <p className="absolute top-5 right-5 rounded-full bg-black/50 px-2.5 py-1 font-mono text-2xs tabular-nums text-white/85 backdrop-blur-sm sm:top-6 sm:right-7">
               {duration}
             </p>
@@ -140,7 +147,7 @@ export function CourseTrailer({
           </div>
 
           {/* -------------------------------- chrome -------------------------------- */}
-          {facts.length > 0 && (
+          {facts.length > 0 && !artwork && (
             <ul className="absolute right-5 bottom-5 left-5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 sm:right-7 sm:bottom-6 sm:left-7">
               {facts.map((fact, index) => (
                 <li key={fact} className="flex items-center gap-2.5">

@@ -68,7 +68,7 @@ export function CourseHero({
   const trailer = courseTrailer(course.slug);
 
   return (
-    <section data-dark-hero className="ch-ink relative isolate -mt-16 overflow-hidden">
+    <section data-dark-hero className="ch-ink relative isolate z-10 -mt-16 overflow-x-clip">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -232,6 +232,7 @@ export function CourseHero({
               soonLabel={pick(locale, "Трейлер скоро", "Trailer coming")}
               playLabel={pick(locale, "Смотреть трейлер", "Play the trailer")}
               facts={facts}
+              artwork
             />
           </div>
         </Container>

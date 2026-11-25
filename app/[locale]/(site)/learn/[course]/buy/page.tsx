@@ -133,6 +133,7 @@ export default async function BuyCoursePage({
                 soonLabel={pick(locale, "Трейлер скоро", "Trailer coming")}
                 playLabel={pick(locale, "Смотреть трейлер", "Play the trailer")}
                 facts={[]}
+                artwork
               />
             </div>
           ) : (

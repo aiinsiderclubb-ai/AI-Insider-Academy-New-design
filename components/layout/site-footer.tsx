@@ -7,7 +7,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { links } from "@/content/site";
 import type { Dictionary } from "@/lib/i18n";
 import { localeShort, locales, path, type Locale } from "@/lib/i18n/config";
-import { coursesPublic } from "@/lib/visibility";
+import { coursesPublic, plansPublic } from "@/lib/visibility";
 
 /** `https://t.me/name` → `@name`, the way a person would write it. */
 function handle(url: string) {
@@ -37,7 +37,7 @@ export function SiteFooter({ locale, d }: { locale: Locale; d: Dictionary }) {
       links: [
         { label: d.nav.catalog, href: p("/learn") },
         { label: d.nav.bundles, href: p("/learn?tab=bundles") },
-        { label: d.nav.plans, href: p("/plans") },
+        ...(plansPublic() ? [{ label: d.nav.plans, href: p("/plans") }] : []),
       ],
     },
     {

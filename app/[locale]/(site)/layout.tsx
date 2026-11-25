@@ -8,7 +8,7 @@ import { getStoreCatalog } from "@/lib/api/store";
 import { getSession } from "@/lib/api/session";
 import { getAssistantOnline } from "@/lib/api/public";
 import { getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
-import { coursesPublic } from "@/lib/visibility";
+import { coursesPublic, plansPublic } from "@/lib/visibility";
 
 export default async function SiteLayout({
   children,
@@ -46,7 +46,7 @@ export default async function SiteLayout({
       keywords: product.summary,
     })),
     // Plans only make sense once the courses are public (lib/visibility.ts).
-    ...(coursesPublic()
+    ...(plansPublic()
       ? [
           {
             id: "page-plans",

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale, isLocale, locales, matchLocale } from "@/lib/i18n/config";
-import { coursesPublic, isCourseOnlyPath } from "@/lib/visibility";
+import { coursesPublic, isCourseOnlyPath, isPlanPath, plansPublic } from "@/lib/visibility";
 import { SOURCE_COOKIE, SOURCE_MAX_AGE, firstTouchSource } from "@/lib/attribution";
 
 const LOCALE_COOKIE = "aia-locale";
@@ -80,6 +80,12 @@ function route(request: NextRequest) {
     // and bookmarks come back to life by themselves once the flag is set.
     if (!coursesPublic() && isCourseOnlyPath(rest)) {
       const response = NextResponse.rewrite(new URL(`/${first}/soon`, request.url));
+      response.headers.set("X-Robots-Tag", "noindex");
+      return response;
+    }
+    // The plans keep their own switch: hidden until there is a way to pay for them.
+    if (!plansPublic() && isPlanPath(rest)) {
+      const response = NextResponse.rewrite(new URL(`/${first}/soon?for=plans`, request.url));
       response.headers.set("X-Robots-Tag", "noindex");
       return response;
     }

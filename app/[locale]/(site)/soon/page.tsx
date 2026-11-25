@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/primitives/button";
 import { Dot } from "@/components/primitives/badge";
 import { Container } from "@/components/primitives/surface";
 import { links } from "@/content/site";
-import { coursesPublic } from "@/lib/visibility";
+import { coursesPublic, plansPublic } from "@/lib/visibility";
 import { path, type Locale } from "@/lib/i18n";
 
 /*
@@ -45,17 +45,65 @@ const COPY = {
   },
 } satisfies Record<Locale, Record<string, string>>;
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+/** For /plans while the subscriptions are hidden but the courses are open. */
+const PLANS_COPY = {
+  ru: {
+    eyebrow: "Club и Pro · скоро",
+    title: "Подписки откроются",
+    mark: "совсем скоро",
+    body: "Club и Pro появятся чуть позже. А курсы уже открыты: покупаете один раз — и он ваш навсегда, без подписки.",
+    signUp: "Смотреть курсы",
+    telegram: "Следить в Telegram",
+    store: "Готовые AI-системы в магазине",
+  },
+  ukr: {
+    eyebrow: "Club і Pro · незабаром",
+    title: "Підписки відкриються",
+    mark: "зовсім скоро",
+    body: "Club і Pro з’являться трохи пізніше. А курси вже відкриті: купуєте один раз — і він ваш назавжди, без підписки.",
+    signUp: "Дивитися курси",
+    telegram: "Стежити в Telegram",
+    store: "Готові AI-системи в магазині",
+  },
+  en: {
+    eyebrow: "Club and Pro · soon",
+    title: "Subscriptions open",
+    mark: "very soon",
+    body: "Club and Pro arrive a little later. The courses are open now: buy one once and it is yours for good, no subscription.",
+    signUp: "See the courses",
+    telegram: "Follow on Telegram",
+    store: "Ready-made AI systems in the store",
+  },
+} satisfies Record<Locale, Record<string, string>>;
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ for?: string }>;
+}): Promise<Metadata> {
   const { locale } = await params;
-  const copy = COPY[locale as Locale] ?? COPY.ru;
+  const plans = (await searchParams).for === "plans";
+  const copy = (plans ? PLANS_COPY : COPY)[locale as Locale] ?? COPY.ru;
   return { title: `${copy.title} ${copy.mark}`, robots: { index: false, follow: false } };
 }
 
-export default async function SoonPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function SoonPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ for?: string }>;
+}) {
   const { locale: raw } = await params;
   const locale = raw as Locale;
-  if (coursesPublic()) redirect(path("/learn", locale));
-  const copy = COPY[locale] ?? COPY.ru;
+  const forPlans = (await searchParams).for === "plans";
+  if (forPlans && plansPublic()) redirect(path("/plans", locale));
+  const showPlans = forPlans && coursesPublic();
+  if (!showPlans && coursesPublic()) redirect(path("/learn", locale));
+  const copy = (showPlans ? PLANS_COPY[locale] : COPY[locale]) ?? COPY.ru;
+  const primaryHref = path(showPlans ? "/learn" : "/register", locale);
 
   return (
     <section className="relative isolate overflow-hidden">
@@ -86,7 +134,7 @@ export default async function SoonPage({ params }: { params: Promise<{ locale: s
           <p className="mt-8 max-w-xl text-[17px] leading-relaxed text-ink-2">{copy.body}</p>
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
-            <ButtonLink href={path("/register", locale)} size="lg" className="group">
+            <ButtonLink href={primaryHref} size="lg" className="group">
               {copy.signUp}
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
             </ButtonLink>

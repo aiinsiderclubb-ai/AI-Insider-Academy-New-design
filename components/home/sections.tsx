@@ -13,7 +13,18 @@ import { cn } from "@/lib/utils";
 
 /* ============================== four entrances ============================= */
 
-export function Entrances({ locale, d, prelaunch = false }: { locale: Locale; d: Dictionary; prelaunch?: boolean }) {
+export function Entrances({
+  locale,
+  d,
+  prelaunch = false,
+  plans = true,
+}: {
+  locale: Locale;
+  d: Dictionary;
+  prelaunch?: boolean;
+  /** False while the subscriptions are hidden (lib/visibility.ts). */
+  plans?: boolean;
+}) {
   const all = [
     { id: "learn", title: d.nav.learn, note: d.home.coursesBody, href: path("/learn", locale) },
     { id: "store", title: d.nav.store, note: d.home.storeBody, href: path("/store", locale) },
@@ -21,7 +32,9 @@ export function Entrances({ locale, d, prelaunch = false }: { locale: Locale; d:
     { id: "community", title: d.nav.community, note: d.community.forumBody, href: path("/community/forum", locale) },
   ];
   // Before launch only the doors that open onto something.
-  const items = prelaunch ? all.filter((item) => item.id === "store" || item.id === "community") : all;
+  const items = prelaunch
+    ? all.filter((item) => item.id === "store" || item.id === "community")
+    : all.filter((item) => plans || item.id !== "plans");
 
   return (
     <Container size="wide" className="py-20 sm:py-28">
@@ -34,6 +47,7 @@ export function Entrances({ locale, d, prelaunch = false }: { locale: Locale; d:
         className={cn(
           "grid overflow-hidden rounded-2xl border border-line bg-surface sm:grid-cols-2",
           items.length === 4 && "lg:grid-cols-4",
+          items.length === 3 && "lg:grid-cols-3",
         )}
       >
         {items.map((item, index) => (
@@ -91,7 +105,7 @@ export function Access({ d, options }: { d: Dictionary; options: AccessOption[] 
             <SectionHead eyebrow={d.home.plansTitle} title={d.home.plansBody} />
           </Reveal>
 
-          <RevealGroup step={80} className="grid gap-4 lg:grid-cols-3">
+          <RevealGroup step={80} className={cn("grid gap-4", options.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3")}>
             {options.map((option) => (
               <div
                 key={option.title}
@@ -229,10 +243,13 @@ export function Closing({
   locale,
   d,
   stats,
+  plans = true,
 }: {
   locale: Locale;
   d: Dictionary;
   stats: ClosingStats;
+  /** False while the subscriptions are hidden: the second button goes to the catalogue instead. */
+  plans?: boolean;
 }) {
   const [before, mark, after] = splitOnMark(d.home.ctaBody, d.home.ctaMark);
 
@@ -308,12 +325,12 @@ export function Closing({
                   </ButtonLink>
                 </Magnetic>
                 <ButtonLink
-                  href={path("/plans", locale)}
+                  href={path(plans ? "/plans" : "/learn", locale)}
                   variant="secondary"
                   size="lg"
                   className="border-line-3 bg-[color-mix(in_oklab,var(--surface)_55%,transparent)] backdrop-blur-md"
                 >
-                  {d.plans.compare}
+                  {plans ? d.plans.compare : d.nav.catalog}
                 </ButtonLink>
               </div>
             </div>

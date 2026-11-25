@@ -16,7 +16,7 @@ import { getStoreCatalog } from "@/lib/api/store";
 import { getReviews } from "@/lib/api/public";
 import { storeCategories } from "@/content/store";
 import { formatPrice, getDictionary, locales, path, type Locale } from "@/lib/i18n";
-import { coursesPublic } from "@/lib/visibility";
+import { coursesPublic, plansPublic } from "@/lib/visibility";
 
 export const revalidate = 300;
 
@@ -142,7 +142,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       />
 
       <div id="entrances" />
-      <Entrances locale={locale} d={d} prelaunch={!open} />
+      <Entrances locale={locale} d={d} prelaunch={!open} plans={plansPublic()} />
 
       <Marquee items={ribbon} className="mb-20 sm:mb-28" />
 
@@ -193,7 +193,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {open && (
         <>
           <div id="access" />
-          <Access d={d} options={accessOptions} />
+          <Access d={d} options={plansPublic() ? accessOptions : accessOptions.filter((option) => option.href !== path("/plans", locale))} />
 
           <div id="voices" />
           <Reviews locale={locale} d={d} reviews={reviews} />
@@ -203,6 +203,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             locale={locale}
             d={d}
             stats={{ courses: courses.length, lessons: totalLessons, products: catalog.products.length }}
+            plans={plansPublic()}
           />
         </>
       )}

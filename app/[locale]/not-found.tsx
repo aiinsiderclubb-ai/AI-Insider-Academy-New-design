@@ -3,7 +3,7 @@ import { BrandMark } from "@/components/layout/brand";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container } from "@/components/primitives/surface";
 import { getDictionary, path, defaultLocale } from "@/lib/i18n";
-import { coursesPublic } from "@/lib/visibility";
+import { coursesPublic, plansPublic } from "@/lib/visibility";
 
 /**
  * `not-found` cannot read route params, so it speaks the default locale and
@@ -16,7 +16,7 @@ export default function NotFound() {
   const routes = [
     ...(coursesPublic() ? [{ label: d.nav.learn, href: path("/learn", locale) }] : []),
     { label: d.nav.store, href: path("/store", locale) },
-    ...(coursesPublic() ? [{ label: d.nav.plans, href: path("/plans", locale) }] : []),
+    ...(plansPublic() ? [{ label: d.nav.plans, href: path("/plans", locale) }] : []),
     { label: d.nav.community, href: path("/community/forum", locale) },
   ];
 

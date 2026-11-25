@@ -1,3 +1,4 @@
+import { plansPublic } from "@/lib/visibility";
 import type { Metadata } from "next";
 import { CreditCard, Receipt } from "lucide-react";
 import { AppPage } from "@/components/app/page-header";
@@ -140,9 +141,11 @@ export default async function OrdersPage({ params }: { params: Promise<{ locale:
             ) : (
               <>
                 <p className="mt-3 text-[13.5px] leading-relaxed text-ink-3">{d.plans.body}</p>
-                <ButtonLink href={path("/plans", locale)} variant="secondary" size="sm" className="mt-4" full>
-                  {d.plans.compare}
-                </ButtonLink>
+                {plansPublic() && (
+                  <ButtonLink href={path("/plans", locale)} variant="secondary" size="sm" className="mt-4" full>
+                    {d.plans.compare}
+                  </ButtonLink>
+                )}
               </>
             )}
           </div>

@@ -7,7 +7,7 @@ import { giveawayList } from "@/content/community";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
 import { getAllBlogPosts } from "@/lib/api/public";
-import { coursesPublic } from "@/lib/visibility";
+import { coursesPublic, plansPublic } from "@/lib/visibility";
 
 const SITE = resolveSiteUrl();
 
@@ -33,7 +33,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/community/blog", priority: 0.8, changeFrequency: "weekly" as const },
   ];
   // Hidden until launch (lib/visibility.ts): nothing under /learn or /plans is listed.
-  const staticPaths = open ? allStatic : allStatic.filter((entry) => entry.path !== "/learn" && entry.path !== "/plans");
+  const staticPaths = (open ? allStatic : allStatic.filter((entry) => entry.path !== "/learn")).filter(
+    (entry) => entry.path !== "/plans" || plansPublic(),
+  );
 
   const dynamicPaths = [
     ...courses.map((course) => ({ path: `/learn/${course.slug}`, priority: 0.8, changeFrequency: "weekly" as const })),

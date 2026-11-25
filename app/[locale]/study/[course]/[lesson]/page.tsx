@@ -64,16 +64,17 @@ export default async function StudyPage({
   });
 
   /*
-   * An assignment written for this lesson wins, and is practice: the learner
-   * checks it against the criteria and nothing is sent in. Otherwise a reviewed
+   * An assignment written for this lesson wins. On a free course it is practice:
+   * the learner checks it against the criteria and nothing is sent in. Otherwise a reviewed
    * course falls back to the shared wording from its second lesson on — the
    * first is the free sample and has never carried one.
    */
   const own = lessonHomework(course.id, current.id);
   /* The self-study plan has no review: its assignments are checked against the criteria. */
   const selfPlan = onSelfPlan(access, course);
+  // A lesson's own assignment is reviewed on a reviewed course's mentor plan, and practice everywhere else.
   const homework: StudyHomework | null = own
-    ? localised(own, true)
+    ? localised(own, course.hasHomework ? selfPlan : true)
     : course.hasHomework && index > 0
       ? localised(defaultHomework, selfPlan)
       : null;

@@ -2122,6 +2122,420 @@
      "If a scenario saved nothing, you noted that honestly and went back to the old way"
     ]
    }
+  },
+  "ai-automation-engineer": {
+   "ae1": {
+    "tasks": [
+     "Соберите почтового помощника из урока: Gmail Trigger → Text Classifier → метки в Gmail → черновики ответов",
+     "Придумайте свои четыре категории под свою работу или знакомый бизнес — с описанием у каждой и обязательной категорией «всё остальное»",
+     "Отправьте в тестовый ящик десять разных писем, включая письмо без ключевых слов, рассылку и письмо почти без текста"
+    ],
+    "tasksEn": [
+     "Build the email assistant from the lesson: Gmail Trigger → Text Classifier → Gmail labels → reply drafts",
+     "Come up with four categories of your own for your work or a business you know — each with a description, and always an \"everything else\" category",
+     "Send ten different emails to your test inbox, including one without keywords, a newsletter and one with almost no text"
+    ],
+    "deliverables": [
+     "Активный workflow в вашем n8n",
+     "Счёт: сколько писем из десяти AI отнёс к правильной категории, и какие ошибся"
+    ],
+    "deliverablesEn": [
+     "An active workflow in your n8n",
+     "A tally: how many of the ten emails the AI put in the right category, and which it got wrong"
+    ],
+    "criteria": [
+     "Workflow срабатывает сам, без нажатия кнопки — запуск виден в списке выполнений",
+     "Черновик ложится в ту же переписку, а не новым письмом",
+     "В промпте ответа есть блок «нельзя»: модель не обещает сроки и деньги, которых не знает",
+     "Письма из категории «всё остальное» получают метку, но не черновик"
+    ],
+    "criteriaEn": [
+     "The workflow runs on its own, without pressing a button — the run shows in the executions list",
+     "The draft lands in the same thread, not as a new email",
+     "The reply prompt has a \"don't\" block: the model promises no dates or money it doesn't know",
+     "Emails in \"everything else\" get a label but no draft"
+    ]
+   },
+   "ae2": {
+    "tasks": [
+     "Соберите форму оптовой заявки на встроенном триггере-форме: компания, контакт, email, город, количество, комментарий; email и количество — обязательные, с типами «электронная почта» и «число»",
+     "Добавьте узел Edit Fields и хотя бы одно вычисляемое поле через выражение в двойных фигурных скобках — например, «крупный» или «стандартный» заказ",
+     "Отправляйте менеджеру письмо со всеми полями формы и вычисляемым полем в теме",
+     "Активируйте workflow и отправьте форму три раза с разными данными по рабочей, а не тестовой ссылке"
+    ],
+    "tasksEn": [
+     "Build the wholesale request form on the built-in form trigger: company, contact, email, city, quantity, comment; email and quantity required, typed as email and number",
+     "Add an Edit Fields node with at least one field computed by an expression in double curly braces — for example a \"large\" or \"standard\" order",
+     "Send the manager an email with every form field and the computed field in the subject",
+     "Activate the workflow and submit the form three times with different data through the production link, not the test one"
+    ],
+    "deliverables": [
+     "Скриншот списка выполнений с тремя запусками",
+     "Экспорт workflow в JSON"
+    ],
+    "deliverablesEn": [
+     "A screenshot of the executions list with the three runs",
+     "The workflow exported as JSON"
+    ],
+    "criteria": [
+     "Форма не принимает адрес без @ и текст вместо числа",
+     "Вычисляемое поле меняется в зависимости от данных, а не одно и то же во всех трёх письмах",
+     "После отправки форма показывает понятный текст о том, что будет дальше",
+     "Учётные данные названы понятно: чьи и для чего"
+    ],
+    "criteriaEn": [
+     "The form rejects an address without @ and text in place of a number",
+     "The computed field changes with the data instead of being the same in all three emails",
+     "After submitting, the form says plainly what happens next",
+     "Credentials have clear names: whose and what for"
+    ]
+   },
+   "ae3": {
+    "tasks": [
+     "Сделайте копию формы оптовой заявки и добавьте фильтр, который отбрасывает мусор — например, заявки без email",
+     "Разведите заявки узлом Switch минимум на три направления и обязательно включите запасной выход",
+     "Соберите вечернюю сводку: Aggregate собирает заявки за день в одно сообщение вместо пачки отдельных",
+     "Создайте отдельный workflow-обработчик ошибок на Error Trigger, подключите его в настройках всех своих workflow и проверьте, специально сломав один узел"
+    ],
+    "tasksEn": [
+     "Copy the wholesale form workflow and add a filter that drops junk — for example requests with no email",
+     "Route requests with a Switch node to at least three branches, and always switch on the fallback output",
+     "Build an evening digest: Aggregate gathers the day's requests into one message instead of a pile of separate ones",
+     "Create a separate error-handler workflow on Error Trigger, set it in the settings of all your workflows and test it by breaking a node on purpose"
+    ],
+    "deliverables": [
+     "Экспорт доработанного workflow заявок и обработчика ошибок в JSON",
+     "Скриншот письма об ошибке со ссылкой на упавшее выполнение"
+    ],
+    "deliverablesEn": [
+     "Exports of the reworked request workflow and the error handler as JSON",
+     "A screenshot of the error email with its link to the failed execution"
+    ],
+    "criteria": [
+     "Заявка, которая не подходит ни под одно правило Switch, уходит в запасной выход, а не теряется",
+     "Сводка приходит одним сообщением со всеми заявками",
+     "На узлах, которые обращаются к внешним сервисам и AI, включён повтор при ошибке",
+     "Письмо об ошибке называет workflow, узел и текст ошибки"
+    ],
+    "criteriaEn": [
+     "A request that matches no Switch rule goes to the fallback output instead of getting lost",
+     "The digest arrives as one message with every request in it",
+     "Nodes that call outside services and AI have retry on error switched on",
+     "The error email names the workflow, the node and the error message"
+    ]
+   },
+   "ae4": {
+    "tasks": [
+     "Найдите любой бесплатный API — погода, курсы валют, праздники — и сделайте к нему запрос через HTTP Request; если в документации есть пример cURL, импортируйте его",
+     "Соберите webhook, который принимает заказ, проверяет обязательные поля и отвечает отправителю через Respond to Webhook: код 200, если всё в порядке, и 400 с названием недостающего поля",
+     "Закройте webhook секретным ключом в заголовке",
+     "Если своего сайта нет, отправляйте заказы из второго workflow через HTTP Request методом POST"
+    ],
+    "tasksEn": [
+     "Find any free API — weather, exchange rates, holidays — and call it with HTTP Request; if its docs give a cURL example, import it",
+     "Build a webhook that takes an order, checks the required fields and answers the sender with Respond to Webhook: 200 when all is well, 400 naming the missing field",
+     "Protect the webhook with a secret key in a header",
+     "If you have no site of your own, send the orders from a second workflow with an HTTP Request POST"
+    ],
+    "deliverables": [
+     "Экспорт обоих workflow в JSON",
+     "Скриншоты трёх ответов webhook: успешный заказ, заказ без обязательного поля и запрос без ключа"
+    ],
+    "deliverablesEn": [
+     "Both workflows exported as JSON",
+     "Screenshots of three webhook answers: a good order, an order missing a required field, and a request without the key"
+    ],
+    "criteria": [
+     "Запрос без секретного ключа отклоняется и не доходит до логики",
+     "Ответ на неполный заказ говорит, какого поля не хватает",
+     "API-ключи хранятся только в учётных данных, не в полях узлов"
+    ],
+    "criteriaEn": [
+     "A request without the secret key is rejected before it reaches the logic",
+     "The answer to an incomplete order says which field is missing",
+     "API keys live only in credentials, never in node fields"
+    ]
+   },
+   "ae5": {
+    "tasks": [
+     "Создайте базу в Google Sheets из двух листов — клиенты и заказы: одна строка заголовков, одна запись на строку, уникальный ID, один тип данных в столбце",
+     "Подключите к ней приём заказов из прошлого урока: заказ пишется через «добавить или обновить» по ID, клиент ищется по email и создаётся или обновляется",
+     "Соберите утреннюю сводку по расписанию: сколько заказов и на какую сумму",
+     "Проверьте защиту от дублей: отправьте один и тот же заказ дважды"
+    ],
+    "tasksEn": [
+     "Build a two-sheet database in Google Sheets — customers and orders: one header row, one record per row, a unique ID, one data type per column",
+     "Connect the order intake from the last lesson: orders are written with \"append or update\" by ID, and the customer is looked up by email and created or updated",
+     "Build a scheduled morning digest: how many orders and for how much",
+     "Test the duplicate protection: send the same order twice"
+    ],
+    "deliverables": [
+     "Ссылка на таблицу (доступ на просмотр) или скриншоты обоих листов",
+     "Экспорт workflow приёма заказов и сводки в JSON"
+    ],
+    "deliverablesEn": [
+     "A view link to the spreadsheet, or screenshots of both sheets",
+     "The order intake and digest workflows exported as JSON"
+    ],
+    "criteria": [
+     "Повторно отправленный заказ не создаёт вторую строку",
+     "Новый клиент создаётся, у существующего обновляются данные, а не появляется дубль",
+     "Поиск клиента не останавливает workflow, когда клиент не найден",
+     "Суммы в сводке считаются как числа и сходятся с таблицей"
+    ],
+    "criteriaEn": [
+     "An order sent twice does not create a second row",
+     "A new customer is created; an existing one is updated, not duplicated",
+     "The customer lookup does not stop the workflow when nobody is found",
+     "Digest totals are computed as numbers and match the sheet"
+    ]
+   },
+   "ae6": {
+    "tasks": [
+     "Доработайте ветку оптовых запросов: AI вытаскивает из письма данные — компанию, количество, город, сроки — и может ответить «не знаю», если данных нет",
+     "Проверьте полноту обычными условиями и задайте приоритет через Switch; то, что можно посчитать правилом, считайте правилом, а не моделью",
+     "Пишите ответ на основе цен из прайса в таблице и записывайте запрос в таблицу",
+     "Прогоните через ветку десять разных писем, включая неполные и странные"
+    ],
+    "tasksEn": [
+     "Rework the wholesale branch: the AI pulls company, quantity, city and timing out of the email, and may answer \"unknown\" when the data isn't there",
+     "Check completeness with ordinary conditions and set priority with a Switch; anything a rule can compute, compute with a rule, not the model",
+     "Write the reply from the prices in the sheet's price list, and log the request in the sheet",
+     "Run ten different emails through the branch, including incomplete and odd ones"
+    ],
+    "deliverables": [
+     "Таблица теста: письмо, что вернула модель, где ошиблась",
+     "Короткая заметка: что вы изменили в промпте или примерах, чтобы исправить ошибки"
+    ],
+    "deliverablesEn": [
+     "A test table: the email, what the model returned, where it went wrong",
+     "A short note: what you changed in the prompt or examples to fix the errors"
+    ],
+    "criteria": [
+     "Неполный запрос не уходит дальше как полный — его ловит проверка",
+     "Цены в ответе берутся из таблицы, а не придумываются моделью",
+     "Для извлечения стоит температура ноль или около нуля",
+     "В кабинете провайдера модели стоит лимит расходов"
+    ],
+    "criteriaEn": [
+     "An incomplete request does not go on as a complete one — the check catches it",
+     "Prices in the reply come from the sheet, not from the model",
+     "Extraction runs at a temperature of zero or close to it",
+     "A spending limit is set in the model provider's account"
+    ]
+   },
+   "ae7": {
+    "tasks": [
+     "Создайте бота через BotFather и соберите Telegram-бота с тремя кнопками: статус заказа из таблицы, готовый текст и передача менеджеру в группу",
+     "Добавьте ответы AI на свободные вопросы по базе из пяти–семи вопросов и распознавание голосовых сообщений",
+     "Перенаправьте уведомления обработчика ошибок в Telegram",
+     "WhatsApp: создайте приложение в кабинете Meta и отправьте одно тестовое сообщение с тестового номера через n8n"
+    ],
+    "tasksEn": [
+     "Create a bot through BotFather and build a Telegram bot with three buttons: order status from the sheet, a ready-made text, and a handover to a manager in a group",
+     "Add AI answers to free-form questions from a base of five to seven questions, and voice message recognition",
+     "Send the error handler's notifications to Telegram",
+     "WhatsApp: create an app in the Meta dashboard and send one test message from the test number through n8n"
+    ],
+    "deliverables": [
+     "Видео или скриншоты диалога с ботом: все три кнопки, свободный вопрос и голосовое",
+     "Скриншот тестового сообщения WhatsApp, отправленного из n8n"
+    ],
+    "deliverablesEn": [
+     "A video or screenshots of a chat with the bot: all three buttons, a free-form question and a voice message",
+     "A screenshot of the WhatsApp test message sent from n8n"
+    ],
+    "criteria": [
+     "Токен бота хранится в учётных данных",
+     "Кнопка «позвать человека» доходит до группы менеджеров с контекстом: кто и о чём спрашивает",
+     "На вопрос вне базы бот не выдумывает ответ"
+    ],
+    "criteriaEn": [
+     "The bot token is kept in credentials",
+     "The \"call a person\" button reaches the managers' group with context: who is asking and about what",
+     "The bot does not make up an answer to a question outside its base"
+    ]
+   },
+   "ae8": {
+    "tasks": [
+     "Заведите бесплатный аккаунт HubSpot или возьмите CRM, с которой работаете",
+     "Соберите workflow «Лиды — приём» и подключите к нему минимум два источника заявок; контакты создавайте или обновляйте по email",
+     "Сделайте квалификацию правилами и AI, причём AI объясняет свою оценку, и маршрутизацию на три ветки: горячий, тёплый, холодный",
+     "Настройте обратную связь: выигранная сделка создаёт заказ в таблице; прогоните пять тестовых заявок разного качества"
+    ],
+    "tasksEn": [
+     "Open a free HubSpot account or use a CRM you already work with",
+     "Build a \"Leads — intake\" workflow and connect at least two lead sources to it; create or update contacts by email",
+     "Qualify with rules plus AI, with the AI explaining its score, and route to three branches: hot, warm, cold",
+     "Close the loop: a won deal creates an order in the sheet; run five test leads of different quality"
+    ],
+    "deliverables": [
+     "Экспорт workflow в JSON",
+     "Таблица пяти тестовых заявок: оценка, объяснение AI и ветка, в которую ушла заявка",
+     "Скриншот заказа в таблице, созданного выигранной сделкой"
+    ],
+    "deliverablesEn": [
+     "The workflows exported as JSON",
+     "A table of the five test leads: score, the AI's explanation and the branch each went to",
+     "A screenshot of the order in the sheet created by a won deal"
+    ],
+    "criteria": [
+     "Повторная заявка того же человека не создаёт второй контакт",
+     "У каждой оценки есть объяснение от AI",
+     "Горячий лид сразу уходит менеджеру, а не ждёт сводки",
+     "Решено и записано, где источник правды для клиентов и где для заказов"
+    ],
+    "criteriaEn": [
+     "A second request from the same person does not create a second contact",
+     "Every score comes with an explanation from the AI",
+     "A hot lead goes to a manager right away instead of waiting for a digest",
+     "It is decided and written down where the source of truth is for customers and for orders"
+    ]
+   },
+   "ae9": {
+    "tasks": [
+     "Замените в своём Telegram-боте простую цепочку на AI-агента с памятью по chat id и тремя инструментами",
+     "Напишите системный промпт по шести блокам, с конкретным списком случаев, когда агент зовёт человека",
+     "Составьте таблицу из двадцати тестов — обычные вопросы, сложные, провокации (минимум пять) и пограничные случаи — и прогоните её",
+     "Подключите журнал диалогов: дата, chat id, вопрос, ответ агента и какие инструменты он вызвал"
+    ],
+    "tasksEn": [
+     "Replace the simple chain in your Telegram bot with an AI agent that has memory keyed by chat id and three tools",
+     "Write a six-part system prompt with a concrete list of cases when the agent calls a person",
+     "Write a table of twenty tests — ordinary questions, hard ones, provocations (at least five) and edge cases — and run it",
+     "Connect a dialogue log: date, chat id, question, the agent's answer and which tools it called"
+    ],
+    "deliverables": [
+     "Таблица двадцати тестов с результатами прогона",
+     "Системный промпт агента",
+     "Скриншот листа «Диалоги» с записями"
+    ],
+    "deliverablesEn": [
+     "The twenty-test table with the results of the run",
+     "The agent's system prompt",
+     "A screenshot of the Dialogues sheet with entries"
+    ],
+    "criteria": [
+     "Инструменты не отдают агенту лишних данных — например, адрес и телефон клиента",
+     "На провокации агент не выдаёт чужие данные и не уходит от темы магазина",
+     "Раздражённого клиента агент передаёт человеку, а не спорит",
+     "Стоит лимит расходов у провайдера модели"
+    ],
+    "criteriaEn": [
+     "The tools give the agent no data it doesn't need — a customer's address and phone, for example",
+     "Under provocation the agent gives out no one else's data and stays on the shop's topics",
+     "An angry customer gets handed to a person, not argued with",
+     "A spending limit is set with the model provider"
+    ]
+   },
+   "ae10": {
+    "tasks": [
+     "Разбейте самый большой workflow своей системы на под-workflow с понятными названиями",
+     "Добавьте защиту от повторов: каждое событие проверяется по ID, обработанные ID пишутся в служебную таблицу",
+     "Добавьте журнал запусков и ежедневный «пульс», который замечает тихие поломки",
+     "Настройте ночной бэкап workflow и тестовую копию бота для правок; проверьте, что из бэкапа можно восстановиться"
+    ],
+    "tasksEn": [
+     "Split the largest workflow in your system into sub-workflows with clear names",
+     "Add duplicate protection: every event is checked by ID, and processed IDs go to a service sheet",
+     "Add a run log and a daily \"pulse\" that catches silent failures",
+     "Set up a nightly workflow backup and a test copy of the bot for changes; check that you can restore from the backup"
+    ],
+    "deliverables": [
+     "Документ системы на одну–две страницы: схема, список workflow с одной строкой о каждом, сервисы и чьи аккаунты, что делать при ошибке, частые проблемы",
+     "Экспорт workflow в JSON"
+    ],
+    "deliverablesEn": [
+     "A one-to-two-page system document: a diagram, the list of workflows with one line each, services and whose accounts, what to do on an error, common problems",
+     "The workflows exported as JSON"
+    ],
+    "criteria": [
+     "Одно и то же событие, отправленное дважды, обрабатывается один раз",
+     "Пульс сообщает, если за день не было ни одного запуска там, где они должны быть",
+     "Ключи только в учётных данных — в экспортированных файлах их нет",
+     "По документу другой человек может понять систему без вас"
+    ],
+    "criteriaEn": [
+     "The same event sent twice is processed once",
+     "The pulse reports a day with no runs where runs should have happened",
+     "Keys live only in credentials — none appear in the exported files",
+     "Someone else can understand the system from the document without you"
+    ]
+   },
+   "ae11": {
+    "tasks": [
+     "Найдите знакомого владельца бизнеса или возьмите «Глину и Ко» и проведите бриф по пяти блокам: как сейчас, объёмы, доступы, исключения и что будет успехом",
+     "Нарисуйте две схемы процесса: «как сейчас» и «как будет»",
+     "Оцените проект по блокам с запасом в полтора раза и посчитайте ценность для бизнеса",
+     "Напишите коммерческое предложение на одну–две страницы по шаблону урока"
+    ],
+    "tasksEn": [
+     "Find a business owner you know, or take Glina & Co, and run a five-part brief: how it works now, volumes, access, exceptions and what success looks like",
+     "Draw two process diagrams: \"as is\" and \"to be\"",
+     "Estimate the project block by block with a 1.5× margin, and work out its value to the business",
+     "Write a one-to-two-page proposal following the lesson's template"
+    ],
+    "deliverables": [
+     "Заметки брифа",
+     "Две схемы процесса",
+     "Коммерческое предложение"
+    ],
+    "deliverablesEn": [
+     "The brief notes",
+     "The two process diagrams",
+     "The proposal"
+    ],
+    "criteria": [
+     "В предложении есть раздел «что не входит»",
+     "Критерии приёмки проверяемы: про каждый можно сказать «выполнен» или «нет»",
+     "Оценка разбита по блокам, а не одна цифра",
+     "Описаны сдача проекта и гарантийный период"
+    ],
+    "criteriaEn": [
+     "The proposal has a \"not included\" section",
+     "Acceptance criteria are checkable: each one is either met or not",
+     "The estimate is broken into blocks, not one number",
+     "Handover and the warranty period are described"
+    ]
+   },
+   "ae12": {
+    "tasks": [
+     "Выберите один бизнес — реальный или продуманный как реальный — и одну его главную боль",
+     "Соберите систему из двух-трёх связанных блоков с семью элементами: вход извне, хранение без дублей, AI-шаг с проверкой, человек в контуре, надёжность, порядок и документ системы",
+     "Протестируйте систему на странных данных: пустые поля, другой язык, повторная отправка, очень длинное сообщение",
+     "Перед сдачей откройте экспорт workflow и убедитесь, что в нём нет ваших ключей"
+    ],
+    "tasksEn": [
+     "Pick one business — real, or thought through as if real — and its one main pain",
+     "Build a system of two or three connected blocks with the seven elements: an outside input, storage without duplicates, an AI step with a check, a human in the loop, reliability, tidiness and a system document",
+     "Test the system on odd data: empty fields, another language, a repeated submission, a very long message",
+     "Before handing in, open the workflow export and make sure none of your keys are in it"
+    ],
+    "deliverables": [
+     "Экспорт всех workflow в JSON",
+     "Документ системы",
+     "Видео на пять минут: как система работает на живом примере",
+     "Таблица тестов: что проверяли и что получилось"
+    ],
+    "deliverablesEn": [
+     "Every workflow exported as JSON",
+     "The system document",
+     "A five-minute video of the system working on a live example",
+     "A test table: what you checked and what happened"
+    ],
+    "criteria": [
+     "Все семь элементов есть и работают",
+     "Система не ломается на странных данных из таблицы тестов",
+     "Узлы и workflow названы понятно, ключи только в учётных данных",
+     "Видео показывает, что делает система, а не как собирались узлы"
+    ],
+    "criteriaEn": [
+     "All seven elements are there and working",
+     "The system does not break on the odd data in the test table",
+     "Nodes and workflows have clear names; keys live only in credentials",
+     "The video shows what the system does, not how the nodes were assembled"
+    ]
+   }
   }
  }
 }

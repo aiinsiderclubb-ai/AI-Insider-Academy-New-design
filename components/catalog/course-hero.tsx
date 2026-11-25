@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ListVideo, Play } from "lucide-react";
+import { ArrowRight, Flame, ListVideo, Play } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs } from "@/components/primitives/navigation";
 import { ButtonLink } from "@/components/primitives/button";
@@ -9,6 +9,7 @@ import { Headline } from "@/components/motion/headline";
 import { Magnetic } from "@/components/motion/pointer";
 import { Reveal } from "@/components/motion/reveal";
 import { CourseTrailer } from "@/components/catalog/course-trailer";
+import { Countdown } from "@/components/motion/countdown";
 import { groupLessons } from "@/content/catalog";
 import type { DemoState } from "@/lib/api/session";
 import { courseTrailer } from "@/content/covers";
@@ -27,6 +28,11 @@ import { cn } from "@/lib/utils";
  * one action. The numbers that used to occupy a ledger of their own now ride
  * on the trailer's bottom edge, where they read as a caption.
  */
+/** The moment of this render, for the countdown's first paint. */
+function renderedAt() {
+  return Date.now();
+}
+
 /** Hours left until a moment, rounded up — for the launch offer's countdown. */
 function hoursUntil(endsAt: string) {
   return Math.max(1, Math.ceil((Date.parse(endsAt) - Date.now()) / 3_600_000));
@@ -158,6 +164,33 @@ export function CourseHero({
             <div className="flex flex-col gap-4 lg:items-end lg:text-right">
               {sellsPlans ? (
                 <div className="w-full lg:w-[22rem]">
+                  {offerHours && course.mentorOfferEndsAt ? (
+                    <div className="relative mb-4 overflow-hidden rounded-xl border border-accent/50 p-4 text-left shadow-glow" style={{ background: "linear-gradient(135deg, color-mix(in oklab, var(--accent) 30%, transparent), color-mix(in oklab, var(--accent) 8%, transparent))" }}>
+                      <p className="flex items-center gap-2 font-mono text-[10.5px] tracking-[0.16em] text-accent-ink uppercase">
+                        <Flame className="h-3.5 w-3.5" aria-hidden />
+                        {pick(locale, "Цена запуска", "Launch price")}
+                      </p>
+                      <p className="mt-2 text-[15px] leading-snug font-semibold text-ink">
+                        {pick(locale, "Ментор и проверка заданий — без доплаты", "Mentor and reviewed work — no extra charge")}
+                      </p>
+                      <p className="mt-1 text-[12.5px] leading-snug text-ink-2">
+                        {pick(
+                          locale,
+                          `Первые 72 часа после запуска тариф с ментором стоит как самостоятельный: ${formatPrice(course.mentorPriceEur, locale)} вместо ${formatPrice(course.mentorListEur ?? course.mentorPriceEur, locale)}. Потом — обычная цена.`,
+                          `For the first 72 hours after launch the mentor plan costs the same as self-study: ${formatPrice(course.mentorPriceEur, locale)} instead of ${formatPrice(course.mentorListEur ?? course.mentorPriceEur, locale)}. Then the usual price.`,
+                        )}
+                      </p>
+                      <div className="mt-3 flex items-center justify-between gap-3 border-t border-accent/25 pt-3">
+                        <span className="text-[12px] text-muted">{pick(locale, "До конца осталось", "Ends in")}</span>
+                        <Countdown
+                          endsAt={course.mentorOfferEndsAt}
+                          serverNow={renderedAt()}
+                          className="text-ink"
+                          labels={locale === "en" ? ["h", "min", "sec"] : ["ч", "мин", "сек"]}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
                   <p className="eyebrow">{d.learn.priceYours}</p>
                   <div className="mt-3 flex flex-col gap-2.5 text-left">
                     {plans.map((plan) => (
@@ -206,15 +239,7 @@ export function CourseHero({
                       </Link>
                     ))}
                   </div>
-                  {offerHours ? (
-                    <p className="mt-2.5 rounded-lg border border-accent/40 bg-accent-soft px-3 py-2 text-[12.5px] leading-snug text-ink lg:text-right">
-                      {pick(
-                        locale,
-                        `Запуск: тариф с ментором по цене самостоятельного — ещё ${offerHours} ч`,
-                        `Launch: the mentor plan at the self-study price — ${offerHours} h left`,
-                      )}
-                    </p>
-                  ) : null}
+
                   <p className="mt-2.5 text-[12.5px] text-muted lg:text-right">
                     {pick(locale, "Разовая оплата · доступ навсегда · можно доплатить до ментора позже", "One payment · yours for good · upgrade to a mentor any time")}
                   </p>

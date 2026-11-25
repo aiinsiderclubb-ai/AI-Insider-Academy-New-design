@@ -22,6 +22,11 @@ export interface CheckoutTier {
   itemId: string;
   /** For a course: which plan is bought. The API prices it and records it. */
   plan?: "self" | "mentor";
+  /**
+   * The plan costs no more than the course's self-study price (the launch
+   * offer), so single-price sellers — Gumroad, Tribute — can take it too.
+   */
+  atListPrice?: boolean;
 }
 
 const PROVIDER_META: Record<ProviderId, { icon: React.ElementType; endpoint: string }> = {
@@ -122,12 +127,14 @@ export function CheckoutForm({
 
   const tier = tiers.find((item) => item.id === tierId) ?? tiers[0];
   // Gumroad and Tribute sell one fixed price, so they cannot take the mentor plan.
-  const sellers = tier?.plan === "mentor" ? providers.filter((id) => MENTOR_PROVIDERS.has(id)) : providers;
+  const sellers = tier?.plan === "mentor" && !tier.atListPrice ? providers.filter((id) => MENTOR_PROVIDERS.has(id)) : providers;
 
   const chosenProvider: ProviderId | null = pickedProvider && sellers.includes(pickedProvider) ? pickedProvider : (sellers[0] ?? null);
   const base = tier?.priceEur ?? 0;
   const total = promoState.status === "ok" ? promoState.finalEur : base;
   const discount = Math.max(0, base - total);
+  // A code that takes the whole price off (TODAYFREE) skips the payment service entirely.
+  const free = promoState.status === "ok" && total <= 0 && base > 0 && !storeItem;
 
   React.useEffect(() => {
     // A new tier invalidates any quote tied to the previous price, and any error about the old one.
@@ -158,7 +165,38 @@ export function CheckoutForm({
     }
   }
 
+  async function claimFree() {
+    if (!tier) return;
+    if (!signedIn) {
+      router.push(`/${locale}/login?next=${encodeURIComponent(successHref)}`);
+      return;
+    }
+    setSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/payments/free", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ courseId: tier.itemId, plan: tier.plan, promoCode: promo.trim(), locale }),
+      });
+      const payload = (await response.json().catch(() => ({}))) as { code?: string; errorRu?: string; error?: string };
+      if (!response.ok) {
+        setError(payload.errorRu ?? messageFor(payload.code ?? "", response.status, d, locale));
+        return;
+      }
+      push({ tone: "success", title: locale === "en" ? "The course is yours" : "Курс ваш", body: locale === "en" ? "Access is open — start with the first lesson." : "Доступ открыт — начинайте с первого урока." });
+      router.push(successHref);
+      router.refresh();
+    } catch {
+      setError(d.errors.network);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function pay() {
+    if (free) return claimFree();
     const provider = chosenProvider;
     if (!tier || !provider) return;
     if (!signedIn) {
@@ -251,7 +289,7 @@ export function CheckoutForm({
   }
 
   const single = sellers.length === 1;
-  const mentorBlocked = tier?.plan === "mentor" && sellers.length === 0;
+  const mentorBlocked = tier?.plan === "mentor" && sellers.length === 0 && !free;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
@@ -434,7 +472,22 @@ export function CheckoutForm({
               </p>
             )}
 
-            {sellers.length === 0 ? (
+            {free ? (
+              <Button onClick={claimFree} size="lg" full className="mt-4" loading={submitting} disabled={!tier || !digitalWaiver}>
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                    {d.checkout.processing}
+                  </>
+                ) : locale === "en" ? (
+                  "Start for free"
+                ) : locale === "ukr" ? (
+                  "Почати безкоштовно"
+                ) : (
+                  "Начать бесплатно"
+                )}
+              </Button>
+            ) : sellers.length === 0 ? (
               <p className="mt-4 rounded-md border border-line bg-surface px-3.5 py-3 text-[13px] text-ink-3">{d.errors.providerDisabled}</p>
             ) : (
               <Button onClick={pay} size="lg" full className="mt-4" loading={submitting} disabled={!chosenProvider || !tier || !digitalWaiver}>
@@ -449,7 +502,7 @@ export function CheckoutForm({
               </Button>
             )}
 
-            {single && chosenProvider && (
+            {single && chosenProvider && !free && (
               <p className="mt-2.5 flex items-center justify-center gap-1.5 text-center text-[12px] text-muted">
                 <ShieldCheck className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 {providerLabels[chosenProvider].note}

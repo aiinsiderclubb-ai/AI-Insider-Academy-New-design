@@ -83,6 +83,8 @@ export default async function BuyCoursePage({
         ),
     priceEur: upgrading ? course.mentorPriceEur - course.priceEur : course.mentorPriceEur,
     itemId: course.id,
+    // During the launch offer the mentor plan costs the self-study price, which Gumroad and Tribute can take.
+    atListPrice: Boolean(offer) && !upgrading,
   };
   const tiers: CheckoutTier[] = upgrading ? [mentorTier] : [selfTier, mentorTier];
 

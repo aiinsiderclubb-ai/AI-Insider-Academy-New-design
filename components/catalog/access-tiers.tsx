@@ -4,6 +4,7 @@ import { ButtonLink } from "@/components/primitives/button";
 import { Reveal } from "@/components/motion/reveal";
 import { Magnetic } from "@/components/motion/pointer";
 import { pick } from "@/content/locale";
+import { Countdown } from "@/components/motion/countdown";
 import type { Course } from "@/lib/api/catalog";
 import { formatPrice, path, type Dictionary, type Locale } from "@/lib/i18n";
 import { FreeStart } from "./free-start";
@@ -15,9 +16,9 @@ import { FreeStart } from "./free-start";
  * The mentor tier is the filled card because it is the one being recommended;
  * everything else on the page stays quiet enough for that to read.
  */
-/** Hours left in the launch offer, rounded up. */
-function offerHours(endsAt: string) {
-  return Math.max(1, Math.ceil((Date.parse(endsAt) - Date.now()) / 3_600_000));
+/** The moment of this render, for the countdown's first paint. */
+function offerNow() {
+  return Date.now();
 }
 
 export function AccessTiers({
@@ -220,10 +221,16 @@ export function AccessTiers({
             )}
           </p>
           {course.mentorOfferEndsAt ? (
-            <p className="relative mt-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-on-accent/15 px-3 py-1 text-[12.5px] font-medium">
-              {pick(locale, "Запуск: по цене самостоятельного ещё", "Launch: at the self-study price for")} {offerHours(course.mentorOfferEndsAt)}{" "}
-              {pick(locale, "ч", "h")}
-            </p>
+            <div className="relative mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-on-accent/12 px-4 py-3">
+              <span className="text-[12.5px] leading-snug font-medium">
+                {pick(locale, "Цена запуска: первые 72 часа — как самостоятельный", "Launch price: for 72 hours, the self-study price")}
+              </span>
+              <Countdown
+                endsAt={course.mentorOfferEndsAt}
+                serverNow={offerNow()}
+                labels={locale === "en" ? ["h", "min", "sec"] : ["ч", "мин", "сек"]}
+              />
+            </div>
           ) : null}
           <p className="relative mt-2 text-[13px] opacity-75">{d.learn.mentorNote}</p>
 

@@ -44,6 +44,8 @@ export interface MeResponse {
   achievements: Achievement[];
   /** Sales and entitlements are frozen until the platform launches. */
   prelaunch: boolean;
+  /** Gifts that apply to this person right now. */
+  offers?: { todayFree?: { code: string; endsAt: string } | null };
 }
 
 /**

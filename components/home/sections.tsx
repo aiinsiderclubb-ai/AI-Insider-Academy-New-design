@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowRight, Check, GraduationCap, MessagesSquare, ShoppingBag, Sparkles } from "lucide-react";
 import { Badge, Dot } from "@/components/primitives/badge";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container, SectionHead } from "@/components/primitives/surface";
@@ -36,11 +36,12 @@ export function Entrances({
   /** False while the subscriptions are hidden (lib/visibility.ts). */
   plans?: boolean;
 }) {
+  const t = (ru: string, en: string, ukr: string) => (locale === "en" ? en : locale === "ukr" ? ukr : ru);
   const all = [
-    { id: "learn", title: d.nav.learn, note: d.home.coursesBody, href: path("/learn", locale) },
-    { id: "store", title: d.nav.store, note: d.home.storeBody, href: path("/store", locale) },
-    { id: "plans", title: d.nav.plans, note: d.plans.body, href: path("/plans", locale) },
-    { id: "community", title: d.nav.community, note: d.community.forumBody, href: path("/community/forum", locale) },
+    { id: "learn", icon: GraduationCap, title: d.nav.learn, note: d.home.coursesBody, href: path("/learn", locale), cta: t("Смотреть курсы", "See the courses", "Дивитися курси") },
+    { id: "store", icon: ShoppingBag, title: d.nav.store, note: d.home.storeBody, href: path("/store", locale), cta: t("Открыть магазин", "Open the store", "Відкрити магазин") },
+    { id: "plans", icon: Sparkles, title: d.nav.plans, note: d.plans.body, href: path("/plans", locale), cta: t("Сравнить подписки", "Compare plans", "Порівняти підписки") },
+    { id: "community", icon: MessagesSquare, title: d.nav.community, note: d.community.forumBody, href: path("/community/forum", locale), cta: t("Задать вопрос", "Ask a question", "Поставити питання") },
   ];
   // Before launch only the doors that open onto something.
   const items = prelaunch
@@ -56,7 +57,7 @@ export function Entrances({
       <RevealGroup
         step={70}
         className={cn(
-          "grid overflow-hidden rounded-2xl border border-line bg-surface sm:grid-cols-2",
+          "grid gap-3 sm:grid-cols-2",
           items.length === 4 && "lg:grid-cols-4",
           items.length === 3 && "lg:grid-cols-3",
         )}
@@ -66,27 +67,31 @@ export function Entrances({
             key={item.href}
             href={item.href}
             className={cn(
-              "group relative flex h-full min-h-48 flex-col justify-between gap-8 p-6 transition-colors hover:bg-surface-2",
-              "border-line",
-              index > 0 && "border-t sm:border-t-0",
-              index % 2 === 1 && "sm:border-l",
-              "lg:border-l lg:first:border-l-0",
-              (index === 2 || index === 3) && "sm:border-t lg:border-t-0",
+              "group relative isolate flex h-full min-h-56 flex-col gap-6 overflow-hidden rounded-2xl border border-line bg-surface p-6 shadow-xs",
+              "transition-[transform,border-color,box-shadow] duration-300 ease-[var(--ease-out-quart)]",
+              "hover:-translate-y-1 hover:border-accent/50 hover:shadow-md",
             )}
           >
-            <span className="font-mono text-[12px] tracking-[0.14em] text-accent">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <span>
-              <span className="block text-[20px] leading-tight font-extrabold tracking-tight text-ink">
-                {item.title}
+            {/* a warm glow that rises from the corner on hover */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -top-24 -right-24 -z-10 h-56 w-56 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+              style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--accent) 28%, transparent), transparent 70%)" }}
+            />
+            <span className="flex items-center justify-between">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent-soft text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-on-accent">
+                <item.icon className="h-5 w-5" aria-hidden />
               </span>
+              <span className="font-mono text-[12px] tracking-[0.14em] text-faint">{String(index + 1).padStart(2, "0")}</span>
+            </span>
+            <span className="flex-1">
+              <span className="block text-[21px] leading-tight font-extrabold tracking-tight text-ink">{item.title}</span>
               <span className="mt-2.5 line-clamp-3 block text-[13.5px] leading-relaxed text-ink-3">{item.note}</span>
             </span>
-            <ArrowUpRight
-              className="h-5 w-5 text-line-3 transition-[color,transform] duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
-              aria-hidden
-            />
+            <span className="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-accent-ink">
+              {item.cta}
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
+            </span>
           </Link>
         ))}
       </RevealGroup>

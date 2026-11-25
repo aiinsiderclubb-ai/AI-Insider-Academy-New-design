@@ -154,9 +154,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <Container size="wide" id="programmes" className="pb-20 sm:pb-28">
           <Reveal>
           <SectionHead
-            eyebrow={d.learn.tabPaid}
-            title={d.home.coursesTitle}
-            body={d.home.coursesBody}
+            eyebrow={pick(locale, "Курсы", "Courses")}
+            title={pick(locale, "Программа с проверкой и бесплатные курсы", "A reviewed programme and free courses")}
+            body={pick(
+              locale,
+              "Платная программа с проверкой заданий и сертификатом — и два бесплатных курса, которые открываются сразу после регистрации.",
+              "A paid programme with reviewed work and a certificate — and two free courses that open as soon as you sign up.",
+            )}
             action={
               <ButtonLink href={path("/learn", locale)} variant="ghost" size="sm">
                 {d.nav.catalog}
@@ -166,9 +170,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           />
           </Reveal>
           <RevealGroup step={70} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {groups.paid.slice(0, 4).map((course, index) => (
-              <CourseCard key={course.id} course={course} locale={locale} d={d} priority={index < 2} />
-            ))}
+            {/* the paid programmes first, then the free courses that are already open */}
+            {[...groups.paid.slice(0, 4), ...groups.free.filter((course) => course.status === "published")]
+              .slice(0, 4)
+              .map((course, index) => (
+                <CourseCard key={course.id} course={course} locale={locale} d={d} priority={index < 2} />
+              ))}
           </RevealGroup>
         </Container>
       )}

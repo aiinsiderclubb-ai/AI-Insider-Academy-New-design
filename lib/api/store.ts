@@ -136,11 +136,13 @@ function toProduct(raw: ApiProduct, locale: Locale): Product {
 /* ---------------------------------- queries -------------------------------- */
 
 export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
-  const raw = await tryApi<ApiCatalog>(
-    "/marketplace/catalog",
-    { revalidate: 120, tags: ["marketplace"] },
-    { enabled: false, products: [], bundles: [] },
-  );
+  const [raw, till] = await Promise.all([
+    tryApi<ApiCatalog>("/marketplace/catalog", { revalidate: 120, tags: ["marketplace"] }, { enabled: false, products: [], bundles: [] }),
+    // Gumroad sells each item as its own product, created a few a day: only
+    // what it has on sale can be bought here. No list (Gumroad off or down) — no filter.
+    tryApi<{ enabled?: boolean; onSale?: string[] }>("/payments/gumroad/status", { revalidate: 120 }, {}),
+  ]);
+  const onSale = till.enabled && Array.isArray(till.onSale) ? new Set(till.onSale) : null;
 
   // Ratings come only from real buyer reviews, which the API will serve once there are any.
   const localById = new Map(fallbackProducts.map((product) => [product.id, product]));
@@ -163,7 +165,8 @@ export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
         },
         locale,
       );
-    });
+    })
+    .map((product) => (onSale && product.available && !onSale.has(product.id) ? { ...product, available: false } : product));
   const byId = new Map(products.map((product) => [product.id, product]));
 
   const bundles: Bundle[] = (raw.bundles ?? []).map((bundle) => {

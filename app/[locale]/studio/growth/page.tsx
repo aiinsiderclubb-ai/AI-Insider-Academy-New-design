@@ -28,7 +28,7 @@ export default async function StudioGrowthPage({ params }: { params: Promise<{ l
     studioItemOptions(locale),
   ]);
   const codes = (Array.isArray(promoPayload) ? promoPayload : (promoPayload.codes ?? [])) as PromoCode[];
-  const campaigns = codes.filter((code) => (code.kind ?? "campaign") === "campaign");
+  const campaigns = codes.filter((code) => (code.kind ?? "campaign") !== "reward");
 
   const liveBySlug = new Map(live.map((item) => [item.slug, item]));
   const giveaways = giveawayList.map((giveaway) => ({
@@ -73,7 +73,7 @@ export default async function StudioGrowthPage({ params }: { params: Promise<{ l
       )}
     >
       <section className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <StatTile label={pick(locale, "Промокодов кампаний", "Campaign codes")} value={formatNumber(campaigns.length, locale)} />
+        <StatTile label={pick(locale, "Промокодов", "Promo codes")} value={formatNumber(campaigns.length, locale)} />
         <StatTile label={pick(locale, "Пришли по ссылкам", "Came by referral")} value={formatNumber(referrals?.invited ?? 0, locale)} />
         <StatTile
           label={pick(locale, "Из них купили", "Of them bought")}

@@ -63,16 +63,23 @@ export function QueueBoard({
 
 /* -------------------------------- homework -------------------------------- */
 
-function HomeworkQueue({
+export function HomeworkQueue({
   locale,
   d,
   items,
   onReview,
+  learnerBase,
+  emptyTitle,
+  emptyBody,
 }: {
   locale: Locale;
   d: Dictionary;
   items: StudioHomework[];
   onReview: (id: string, status: "accepted" | "resubmit", comment?: string) => Promise<ActionResult>;
+  /** Path prefix of a learner's Studio card; the user id is appended. */
+  learnerBase?: string;
+  emptyTitle?: string;
+  emptyBody?: string;
 }) {
   const { push } = useToast();
   const [openId, setOpenId] = React.useState<string | null>(items[0]?.id ?? null);
@@ -98,8 +105,8 @@ function HomeworkQueue({
     return (
       <EmptyState
         icon={<Inbox className="h-5 w-5" aria-hidden />}
-        title={pick(locale, "Очередь пуста", "The queue is clear")}
-        body={pick(locale, "Все домашние задания проверены.", "Every assignment has been reviewed.")}
+        title={emptyTitle ?? pick(locale, "Очередь пуста", "The queue is clear")}
+        body={emptyBody ?? pick(locale, "Все домашние задания проверены.", "Every assignment has been reviewed.")}
       />
     );
   }
@@ -122,13 +129,22 @@ function HomeworkQueue({
                   <Badge tone="outline">
                     {pick(locale, "урок", "lesson")} {item.lessonIndex + 1}
                   </Badge>
+                  {item.plan === "mentor" && <Badge tone="accent">{pick(locale, "с ментором", "mentor plan")}</Badge>}
+                  {item.plan === "self" && <Badge tone="warning">{pick(locale, "самостоятельно", "self-study")}</Badge>}
+                  {item.plan == null && <Badge tone="neutral">{pick(locale, "подписка / выдан", "plan / granted")}</Badge>}
                 </span>
                 <span className="mt-1 block truncate font-mono text-[12px] text-muted">
                   {item.email} · {formatRelative(item.updatedAt || item.date, locale)}
                 </span>
               </span>
               <Badge tone={item.status === "pending" ? "warning" : item.status === "accepted" ? "success" : "neutral"}>
-                {item.status}
+                {item.status === "pending"
+                  ? pick(locale, "ждёт проверки", "waiting")
+                  : item.status === "accepted"
+                    ? pick(locale, "принято", "accepted")
+                    : item.status === "resubmit"
+                      ? pick(locale, "на доработке", "sent back")
+                      : item.status}
               </Badge>
             </button>
 
@@ -142,9 +158,28 @@ function HomeworkQueue({
                 {item.fileName && (
                   <p className="mt-2.5 flex items-center gap-1.5 font-mono text-[12px] text-muted">
                     <FileText className="h-3.5 w-3.5" aria-hidden />
-                    {item.fileName}
+                    {item.fileUrl ? (
+                      <a href={item.fileUrl} target="_blank" rel="noreferrer" className="text-accent-ink underline-offset-4 hover:underline">
+                        {item.fileName}
+                      </a>
+                    ) : (
+                      item.fileName
+                    )}
                   </p>
                 )}
+
+                {item.adminComment && (
+                  <div className="mt-3 rounded-md border border-line bg-surface p-3">
+                    <p className="eyebrow mb-1">{pick(locale, "Прошлый комментарий", "Previous comment")}</p>
+                    <p className="text-[13px] whitespace-pre-line text-ink-2">{item.adminComment}</p>
+                  </div>
+                )}
+
+                {learnerBase && item.userId ? (
+                  <a href={`${learnerBase}${item.userId}`} className="mt-3 inline-block text-[12.5px] text-accent-ink underline-offset-4 hover:underline">
+                    {pick(locale, "Карточка ученика →", "Learner card →")}
+                  </a>
+                ) : null}
 
                 <div className="mt-4">
                   <Textarea

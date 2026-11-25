@@ -41,6 +41,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
           personalId: me.user.personalId,
           avatarUrl: me.user.avatarUrl,
           emailVerified: me.user.emailVerified,
+          passwordTemporary: me.user.passwordTemporary,
         }}
         telegram={telegram}
       />

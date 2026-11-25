@@ -35,12 +35,14 @@ export default async function StudioLayout({
       items: [
         { id: "pulse", label: pick(locale, "Пульс", "Pulse"), href: p("/studio") },
         { id: "queue", label: pick(locale, "Очереди", "Queues"), href: p("/studio/queue"), badge: counts.total },
+        { id: "homework", label: pick(locale, "Проверка ДЗ", "Homework review"), href: p("/studio/homework"), badge: counts.homework },
       ],
     },
     {
       title: pick(locale, "Люди и деньги", "People and money"),
       items: [
         { id: "learners", label: pick(locale, "Ученики", "Learners"), href: p("/studio/learners") },
+        { id: "logins", label: pick(locale, "Входы", "Sign-ins"), href: p("/studio/logins") },
         { id: "orders", label: pick(locale, "Заказы", "Orders"), href: p("/studio/orders") },
         { id: "revenue", label: pick(locale, "Выручка", "Revenue"), href: p("/studio/revenue") },
         { id: "support", label: pick(locale, "Поддержка", "Support"), href: p("/studio/support") },
@@ -50,6 +52,7 @@ export default async function StudioLayout({
       title: pick(locale, "Каталоги", "Catalogues"),
       items: [
         { id: "courses", label: pick(locale, "Курсы", "Courses"), href: p("/studio/courses") },
+        { id: "free", label: pick(locale, "Бесплатные просмотры", "Free views"), href: p("/studio/free") },
         { id: "store", label: pick(locale, "Магазин", "Store"), href: p("/studio/store") },
         { id: "content", label: pick(locale, "Контент", "Content"), href: p("/studio/content") },
       ],
@@ -58,6 +61,7 @@ export default async function StudioLayout({
       title: pick(locale, "Операции", "Operations"),
       items: [
         { id: "growth", label: pick(locale, "Рост и промокоды", "Growth and promos"), href: p("/studio/growth") },
+        { id: "referrals", label: pick(locale, "Рефералы", "Referrals"), href: p("/studio/referrals") },
         { id: "mail", label: pick(locale, "Письма", "Mail"), href: p("/studio/mail") },
         { id: "ops", label: pick(locale, "Инфраструктура", "Infrastructure"), href: p("/studio/ops") },
       ],

@@ -35,6 +35,12 @@ export interface StudioHomework {
   date: string;
   updatedAt: string;
   personal_id?: string;
+  /** The learner's account, when one matches the email. */
+  userId?: number | null;
+  /** Plan held for this course: mentor, self, or null when it is not a purchase (Club, Pro, admin). */
+  plan?: "mentor" | "self" | null;
+  adminComment?: string | null;
+  fileUrl?: string | null;
 }
 
 export interface StudioReview {
@@ -125,6 +131,10 @@ export interface StudioDashboard {
 export const STUDIO_ACCESS = {
   pulse: ["admin", "editor", "moderator"],
   queue: ["admin", "moderator"],
+  homework: ["admin", "moderator"],
+  logins: ["admin", "moderator"],
+  free: ["admin", "editor", "moderator"],
+  referrals: ["admin"],
   learners: ["admin", "moderator"],
   support: ["admin", "moderator"],
   orders: ["admin"],
@@ -221,6 +231,8 @@ export interface StudioPayment {
   provider: string;
   externalId: string | null;
   status: string;
+  /** For a course: the plan bought (self or mentor). */
+  plan?: "self" | "mentor" | null;
   createdAt: string;
   completedAt: string | null;
 }
@@ -270,6 +282,7 @@ export interface StudioUserRow {
   personalId: string | null;
   emailVerified: boolean;
   createdAt: string;
+  lastLoginAt?: string | null;
   purchases: number;
   paid: number;
 }
@@ -280,7 +293,10 @@ export async function searchUsers(q: string) {
 
 export interface StudioUserCard {
   user: { id: number; email: string; name: string | null; personalId: string | null; emailVerified: boolean; createdAt: string; authProvider?: string | null };
-  purchases: { id: number; itemId: string; title: string; kind: string; provider: string | null; paymentRef: string | null; purchasedAt: string }[];
+  purchases: { id: number; itemId: string; title: string; kind: string; provider: string | null; paymentRef: string | null; purchasedAt: string; plan?: "self" | "mentor" | null }[];
+  logins?: StudioLogin[];
+  lastLoginAt?: string | null;
+  passwordTemporary?: boolean;
   entitlements: { id: string; productId: string; title: string; licenseTier: string; sourceType: string; sourceId: string | null; status: string; grantedAt: string }[];
   payments: StudioPayment[];
   referral: {
@@ -289,6 +305,75 @@ export interface StudioUserCard {
   };
   rewards: { code: string; percent: number; kind: string; validFrom: string | null; validUntil: string | null; status: string }[];
   supportMessages: number;
+}
+
+export interface StudioLogin {
+  id: number;
+  userId: number | null;
+  email: string | null;
+  personalId: string | null;
+  method: string;
+  ip: string | null;
+  userAgent: string | null;
+  at: string;
+}
+
+export async function getLogins(filters: { q?: string; userId?: string } = {}) {
+  const qs = new URLSearchParams(Object.entries(filters).filter(([, v]) => v) as [string, string][]).toString();
+  return tryApi<{ logins: StudioLogin[]; last24h: { logins: number; people: number }; last7d: { people: number } }>(
+    `/admin/logins${qs ? `?${qs}` : ""}`,
+    { admin: true, soft: true },
+    { logins: [], last24h: { logins: 0, people: 0 }, last7d: { people: 0 } },
+  );
+}
+
+export interface FreeViewRow {
+  id: string;
+  slug: string;
+  title: string;
+  views: number;
+  visitors: number;
+  accounts: number;
+  started: number;
+}
+
+export async function getFreeViews(days = 30) {
+  return tryApi<{ days: number; free: FreeViewRow[]; demos: FreeViewRow[]; people: { userId: number; email: string; personalId: string | null; lastSeen: string; views: number }[] } | null>(
+    `/admin/free-views?days=${days}`,
+    { admin: true, soft: true },
+    null,
+  );
+}
+
+export interface ReferralRow {
+  id: number;
+  referrerEmail: string;
+  referrerId: number | null;
+  referrerCode: string | null;
+  referredEmail: string;
+  referredId: number | null;
+  purchased: boolean;
+  date: string;
+  reward: { code: string | null; status: string | null; validFrom?: string | null; validUntil?: string | null };
+}
+
+export async function getReferralList(q = "") {
+  return tryApi<{ referrals: ReferralRow[] }>(`/admin/referrals/list${q ? `?q=${encodeURIComponent(q)}` : ""}`, { admin: true, soft: true }, { referrals: [] });
+}
+
+export interface SentLetter {
+  id: string;
+  email: string;
+  template: string;
+  subject: string;
+  status: string;
+  createdAt: string;
+  sentAt: string | null;
+  error: string | null;
+}
+
+export async function getSentLetters() {
+  return tryApi<{ letters: SentLetter[] }>("/admin/email/sent", { admin: true, soft: true }, { letters: [] });
 }
 
 export async function getUserCard(id: string) {

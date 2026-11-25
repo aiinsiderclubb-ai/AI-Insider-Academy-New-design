@@ -167,3 +167,24 @@ export async function adminSignOut(locale: Locale = defaultLocale) {
   await clearAdminToken();
   redirect(`/${locale}/studio`);
 }
+
+/* ---------------------------- change password ---------------------------- */
+
+/**
+ * Changes the password from the cabinet. The API signs out every session by
+ * bumping the token version and hands back a fresh token for this one, which
+ * replaces the cookie — so the person stays signed in here.
+ */
+export async function changePassword(currentPassword: string, newPassword: string): Promise<AuthResult> {
+  try {
+    const result = await api<{ token?: string }>("/me/password", {
+      method: "PATCH",
+      auth: true,
+      body: { currentPassword, newPassword },
+    });
+    if (result.token) await writeSessionToken(result.token);
+    return { ok: true };
+  } catch (error) {
+    return describe(error);
+  }
+}

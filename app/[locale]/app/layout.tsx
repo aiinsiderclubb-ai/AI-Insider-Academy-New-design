@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { KeyRound } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { AssistantWidget } from "@/components/assistant/assistant-widget";
 import { buildAppNav } from "@/components/layout/nav-model";
@@ -50,6 +52,24 @@ export default async function AppLayout({
         unread={unread}
         onSignOut={handleSignOut}
       >
+        {me.user.passwordTemporary && (
+          <div
+            role="status"
+            className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-warning/40 bg-warning-soft px-4 py-3 text-[13.5px] text-ink"
+          >
+            <span className="flex items-center gap-2">
+              <KeyRound className="h-4 w-4 shrink-0 text-warning" aria-hidden />
+              {locale === "en"
+                ? "You signed in with a temporary password. Choose your own to keep the account safe."
+                : locale === "ukr"
+                  ? "Ви увійшли з тимчасовим паролем. Придумайте свій, щоб захистити акаунт."
+                  : "Вы вошли с временным паролем. Придумайте свой, чтобы защитить аккаунт."}
+            </span>
+            <Link href={path("/app/settings", locale)} className="font-medium text-accent-ink underline-offset-4 hover:underline">
+              {locale === "en" ? "Change password" : locale === "ukr" ? "Змінити пароль" : "Сменить пароль"} →
+            </Link>
+          </div>
+        )}
         {children}
       </AppShell>
       {/* Above the tab bar that docks to the bottom on phones and tablets. */}

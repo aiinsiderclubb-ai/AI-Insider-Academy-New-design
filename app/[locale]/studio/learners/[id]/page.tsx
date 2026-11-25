@@ -2,13 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { StudioPage } from "@/components/studio/studio-shell";
 import { NoAccess } from "@/components/studio/no-access";
-import { DeleteLearnerButton, GrantForm, RevokeGrantButton } from "@/components/studio/people-controls";
+import { DeleteLearnerButton, GrantForm, RevokeGrantButton, TemporaryPasswordForm } from "@/components/studio/people-controls";
 import { Cell, DataTable, Panel, Row, StatTile } from "@/components/studio/tiles";
 import { Badge } from "@/components/primitives/badge";
 import { pick } from "@/content/locale";
 import { canOpen, getStudioDashboard, getUserCard, studioItemOptions } from "@/lib/api/studio";
-import { deleteLearner, grantItem, revokeGrant } from "@/lib/api/studio-actions";
-import { formatDate, formatNumber, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
+import { deleteLearner, grantItem, revokeGrant, setTemporaryPassword } from "@/lib/api/studio-actions";
+import { formatDate, formatNumber, formatPrice, formatRelative, getDictionary, path, type Locale } from "@/lib/i18n";
 
 export default async function StudioLearnerPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
   const { locale: raw, id } = await params;
@@ -45,13 +45,27 @@ export default async function StudioLearnerPage({ params }: { params: Promise<{ 
     "use server";
     return deleteLearner(locale, userId);
   }
+  async function handleTemporaryPassword(password?: string) {
+    "use server";
+    return setTemporaryPassword(locale, userId, password);
+  }
+  const METHOD: Record<string, string> = {
+    password: pick(locale, "пароль", "password"),
+    google: "Google",
+    apple: "Apple",
+    email_code: pick(locale, "код из письма", "email code"),
+    email_link: pick(locale, "ссылка из письма", "email link"),
+    test: pick(locale, "тестовый вход", "test login"),
+  };
+  const logins = card.logins ?? [];
 
   return (
     <StudioPage
       title={card.user.name || card.user.email}
       body={
         <span className="font-mono text-[13px]">
-          {card.user.email} · {card.user.personalId ?? "—"} · {pick(locale, "с нами с", "joined")} {date(card.user.createdAt)}
+          ID {card.user.id} · {card.user.email} · {card.user.personalId ?? "—"} · {pick(locale, "с нами с", "joined")} {date(card.user.createdAt)}
+          {card.lastLoginAt ? ` · ${pick(locale, "вход", "signed in")} ${formatRelative(card.lastLoginAt, locale)}` : ""}
           {card.user.authProvider ? ` · ${card.user.authProvider}` : ""}
         </span>
       }
@@ -99,7 +113,11 @@ export default async function StudioLearnerPage({ params }: { params: Promise<{ 
           >
             {card.purchases.map((purchase) => (
               <Row key={purchase.id}>
-                <Cell strong>{purchase.title}</Cell>
+                <Cell strong>
+                  {purchase.title}
+                  {purchase.plan === "mentor" && <Badge tone="accent" className="ml-1.5">{pick(locale, "с ментором", "mentor")}</Badge>}
+                  {purchase.plan === "self" && <Badge tone="outline" className="ml-1.5">{pick(locale, "самостоятельно", "self-study")}</Badge>}
+                </Cell>
                 <Cell>
                   <Badge tone="outline">{purchase.provider ?? "—"}</Badge>
                 </Cell>
@@ -216,6 +234,51 @@ export default async function StudioLearnerPage({ params }: { params: Promise<{ 
             </ul>
           )}
         </Panel>
+      </div>
+
+      <div className="mt-3 grid gap-3 lg:grid-cols-2">
+        <Panel title={pick(locale, "Входы в аккаунт", "Sign-ins")}>
+          <DataTable
+            caption={pick(locale, "Входы", "Sign-ins")}
+            columns={[
+              { key: "when", label: pick(locale, "Когда", "When") },
+              { key: "how", label: pick(locale, "Как", "How") },
+              { key: "where", label: pick(locale, "Откуда", "From") },
+            ]}
+            empty={pick(locale, "Входов пока не записано", "No sign-ins recorded yet")}
+          >
+            {logins.map((login) => (
+              <Row key={login.id}>
+                <Cell mono>{formatDate(login.at, locale, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</Cell>
+                <Cell>
+                  <Badge tone="outline">{METHOD[login.method] ?? login.method}</Badge>
+                </Cell>
+                <Cell mono>
+                  <span title={login.userAgent ?? ""}>{login.ip ?? "—"}</span>
+                </Cell>
+              </Row>
+            ))}
+          </DataTable>
+        </Panel>
+
+        {isAdmin && (
+          <Panel title={pick(locale, "Пароль", "Password")}>
+            <TemporaryPasswordForm
+              locale={locale}
+              d={d}
+              email={card.user.email}
+              active={card.passwordTemporary}
+              onSet={handleTemporaryPassword}
+            />
+            <p className="mt-3 text-[12.5px] leading-relaxed text-muted">
+              {pick(
+                locale,
+                "Человек входит с временным паролем по своему email, и кабинет сразу просит придумать свой. Почта аккаунта при этом считается подтверждённой.",
+                "The person signs in with the temporary password and their email, and the cabinet asks them to choose their own right away. The account's email counts as confirmed.",
+              )}
+            </p>
+          </Panel>
+        )}
       </div>
 
       {isAdmin && (

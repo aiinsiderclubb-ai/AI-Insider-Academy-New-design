@@ -9,6 +9,8 @@ import { Field, Input, Switch } from "@/components/primitives/field";
 import { Tabs } from "@/components/primitives/navigation";
 import { Avatar } from "@/components/primitives/display";
 import { useToast } from "@/components/primitives/toast";
+import { Note } from "@/components/primitives/states";
+import { changePassword } from "@/lib/auth/actions";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -30,10 +32,11 @@ export function SettingsPanels({
 }: {
   locale: Locale;
   d: Dictionary;
-  user: { name: string; email: string; personalId: string; avatarUrl?: string | null; emailVerified: boolean };
+  user: { name: string; email: string; personalId: string; avatarUrl?: string | null; emailVerified: boolean; passwordTemporary?: boolean };
   telegram: TelegramState;
 }) {
-  const [section, setSection] = React.useState<Section>("profile");
+  // On a password the team set, the cabinet opens straight onto changing it.
+  const [section, setSection] = React.useState<Section>(user.passwordTemporary ? "security" : "profile");
 
   const items: { value: Section; label: string }[] = [
     { value: "profile", label: d.auth.name },
@@ -73,7 +76,7 @@ export function SettingsPanels({
       <div className="min-w-0">
         {section === "profile" && <ProfilePanel d={d} user={user} />}
         {section === "email" && <EmailPanel d={d} user={user} />}
-        {section === "security" && <SecurityPanel d={d} />}
+        {section === "security" && <SecurityPanel d={d} locale={locale} temporary={user.passwordTemporary} />}
         {section === "telegram" && <TelegramPanel d={d} telegram={telegram} personalId={user.personalId} locale={locale} />}
         {section === "notifications" && <NotificationsPanel d={d} telegram={telegram} locale={locale} />}
       </div>
@@ -208,37 +211,40 @@ function EmailPanel({ d, user }: { d: Dictionary; user: { email: string; emailVe
   );
 }
 
-function SecurityPanel({ d }: { d: Dictionary }) {
+function SecurityPanel({ d, locale, temporary }: { d: Dictionary; locale: Locale; temporary?: boolean }) {
   const { push } = useToast();
+  const router = useRouter();
   const [current, setCurrent] = React.useState("");
   const [next, setNext] = React.useState("");
   const [saving, setSaving] = React.useState(false);
+  const ru = locale !== "en";
 
   async function save(event: React.FormEvent) {
     event.preventDefault();
     setSaving(true);
-    try {
-      const response = await fetch("/api/me/password", {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ currentPassword: current, newPassword: next }),
-      });
-      const payload = (await response.json().catch(() => ({}))) as { errorRu?: string; error?: string };
-      if (!response.ok) throw new Error(payload.errorRu ?? payload.error ?? "");
+    const result = await changePassword(current, next);
+    setSaving(false);
+    if (result.ok) {
       push({ tone: "success", title: d.common.saved });
       setCurrent("");
       setNext("");
-    } catch (error) {
-      push({ tone: "warning", title: (error as Error).message || d.errors.generic });
-    } finally {
-      setSaving(false);
+      router.refresh();
+    } else {
+      push({ tone: "warning", title: result.message === "network" ? d.errors.network : (result.message ?? d.errors.generic) });
     }
   }
 
   return (
     <Card title={d.auth.password} icon={KeyRound}>
+      {temporary && (
+        <Note tone="warning" className="mb-5">
+          {ru
+            ? "Сейчас у вас временный пароль, который выдала поддержка. Введите его ниже и придумайте свой — после этого временный перестанет работать."
+            : "You are on a temporary password from support. Enter it below and choose your own — the temporary one stops working after that."}
+        </Note>
+      )}
       <form onSubmit={save} className="flex flex-col gap-4">
-        <Field label={d.auth.password} htmlFor="current-password">
+        <Field label={temporary ? (ru ? "Временный пароль" : "Temporary password") : d.auth.password} htmlFor="current-password">
           <Input
             id="current-password"
             type="password"
@@ -248,7 +254,7 @@ function SecurityPanel({ d }: { d: Dictionary }) {
             required
           />
         </Field>
-        <Field label={d.auth.passwordRepeat} htmlFor="next-password" hint="8+ · A-z · 0-9">
+        <Field label={temporary ? (ru ? "Новый пароль" : "New password") : d.auth.passwordRepeat} htmlFor="next-password" hint="10+ · A-z · 0-9">
           <Input
             id="next-password"
             type="password"

@@ -131,6 +131,8 @@ export default async function StudioOrdersPage({
                 <Cell strong>
                   {order.itemTitle}
                   {order.licenseTier ? <span className="ml-1.5 font-mono text-[11px] text-muted">{order.licenseTier}</span> : null}
+                  {order.plan === "mentor" && <Badge tone="accent" className="ml-1.5">{pick(locale, "с ментором", "mentor")}</Badge>}
+                  {order.plan === "self" && <Badge tone="outline" className="ml-1.5">{pick(locale, "самостоятельно", "self-study")}</Badge>}
                 </Cell>
                 <Cell mono>
                   {order.userId ? (

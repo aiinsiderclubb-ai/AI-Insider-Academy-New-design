@@ -7,7 +7,9 @@ import { Cell, DataTable, Panel, Row, StatTile } from "@/components/studio/tiles
 import { Badge } from "@/components/primitives/badge";
 import { pick } from "@/content/locale";
 import { canOpen, getStudioDashboard, searchUsers } from "@/lib/api/studio";
-import { formatDate, formatNumber, formatPrice, path, type Locale } from "@/lib/i18n";
+import { deleteLearner } from "@/lib/api/studio-actions";
+import { DeleteLearnerButton } from "@/components/studio/people-controls";
+import { formatDate, formatNumber, formatPrice, formatRelative, getDictionary, path, type Locale } from "@/lib/i18n";
 
 export default async function StudioLearnersPage({
   params,
@@ -18,6 +20,7 @@ export default async function StudioLearnersPage({
 }) {
   const { locale: raw } = await params;
   const locale = raw as Locale;
+  const d = getDictionary(locale);
   const title = pick(locale, "Ученики", "Learners");
 
   const dashboard = await getStudioDashboard();
@@ -31,13 +34,19 @@ export default async function StudioLearnersPage({
   const verified = users.filter((user) => user.emailVerified).length;
   const withTelegram = users.filter((user) => user.telegramChatId).length;
   const teams = dashboard.teams ?? [];
+  const isAdmin = dashboard.role === "admin";
+
+  async function handleDelete(userId: number) {
+    "use server";
+    return deleteLearner(locale, userId);
+  }
 
   return (
     <StudioPage
       title={title}
       body={pick(
         locale,
-        "Найдите человека, чтобы увидеть его покупки, доступы, рефералов и коды — и выдать или забрать доступ.",
+        "Найдите человека по email, имени, ID аккаунта или личному ID — увидите покупки и тариф, входы, рефералов и коды, сможете выдать доступ, временный пароль или удалить аккаунт.",
         "Find a person to see their purchases, access, referrals and codes — and grant or revoke access.",
       )}
     >
@@ -68,6 +77,8 @@ export default async function StudioLearnersPage({
             { key: "state", label: pick(locale, "Статус", "State") },
             { key: "bought", label: pick(locale, "Покупки", "Purchases"), align: "right" },
             { key: "since", label: pick(locale, "С нами с", "Joined"), align: "right" },
+            { key: "seen", label: pick(locale, "Последний вход", "Last sign-in"), align: "right" },
+            { key: "actions", label: "", align: "right" },
           ]}
           empty={q ? pick(locale, "Никого не нашли", "Nobody found") : pick(locale, "Аккаунтов пока нет", "No accounts yet")}
         >
@@ -95,6 +106,21 @@ export default async function StudioLearnersPage({
               </Cell>
               <Cell align="right" mono>
                 {user.createdAt ? formatDate(user.createdAt, locale, { day: "numeric", month: "short", year: "2-digit" }) : "—"}
+              </Cell>
+              <Cell align="right" mono>
+                {user.lastLoginAt ? formatRelative(user.lastLoginAt, locale) : "—"}
+              </Cell>
+              <Cell align="right">
+                {isAdmin && (
+                  <DeleteLearnerButton
+                    compact
+                    locale={locale}
+                    d={d}
+                    email={user.email}
+                    backHref={path("/studio/learners", locale)}
+                    onDelete={handleDelete.bind(null, user.id)}
+                  />
+                )}
               </Cell>
             </Row>
           ))}

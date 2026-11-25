@@ -246,6 +246,8 @@ export interface ApiUser {
   avatarUrl?: string | null;
   streakCount?: number;
   telegramConnected?: boolean;
+  /** An admin set this password; the cabinet asks the person to choose their own. */
+  passwordTemporary?: boolean;
 }
 
 export interface ApiProgress {

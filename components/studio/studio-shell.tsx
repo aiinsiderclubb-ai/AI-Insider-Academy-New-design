@@ -20,6 +20,10 @@ import {
   Users,
   Wallet,
   X,
+  ClipboardCheck,
+  LogIn,
+  Eye,
+  Share2,
 } from "lucide-react";
 import { BrandMark } from "@/components/layout/brand";
 import { Badge } from "@/components/primitives/badge";
@@ -31,6 +35,10 @@ import { cn } from "@/lib/utils";
 const ICONS: Record<string, React.ElementType> = {
   pulse: Activity,
   queue: Inbox,
+  homework: ClipboardCheck,
+  logins: LogIn,
+  free: Eye,
+  referrals: Share2,
   learners: Users,
   revenue: Wallet,
   orders: Receipt,

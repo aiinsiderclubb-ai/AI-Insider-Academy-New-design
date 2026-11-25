@@ -4,7 +4,7 @@ import * as React from "react";
 import { Plus, Ticket, Trophy } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Button } from "@/components/primitives/button";
-import { Checkbox, Field, Input, Segmented, Select, Switch } from "@/components/primitives/field";
+import { Checkbox, Field, Input, Segmented, Select, Switch, Textarea } from "@/components/primitives/field";
 import { useToast } from "@/components/primitives/toast";
 import type { ActionResult, PromoInput } from "@/lib/api/studio-actions";
 import { pick } from "@/content/locale";
@@ -73,7 +73,9 @@ export interface PromoCode {
   validFrom?: string | null;
   validUntil?: string | null;
   active?: boolean;
-  kind?: "campaign" | "reward";
+  kind?: "campaign" | "reward" | "personal";
+  /** Accounts a personal code was issued to. */
+  recipients?: { id: number; email: string | null; personalId: string | null }[];
   createdAt?: string;
 }
 
@@ -111,7 +113,9 @@ export function PromoManager({
   onToggle: (code: string, active: boolean) => Promise<ActionResult>;
 }) {
   const { push } = useToast();
-  const [tab, setTab] = React.useState<"campaign" | "reward">("campaign");
+  const [tab, setTab] = React.useState<"campaign" | "personal" | "reward">("campaign");
+  const [recipients, setRecipients] = React.useState("");
+  const [notify, setNotify] = React.useState(true);
   const [code, setCode] = React.useState("");
   const [kind, setKind] = React.useState<"percent" | "eur">("percent");
   const [amount, setAmount] = React.useState("10");
@@ -153,10 +157,21 @@ export function PromoManager({
       validFrom: validFrom || null,
       validUntil: validUntil ? `${validUntil}T23:59:59.000Z` : null,
       courseIds: scope,
+      recipients: recipients.trim() || undefined,
+      notify: recipients.trim() ? notify : undefined,
     });
     setCreating(false);
     if (result.ok) {
-      push({ tone: "success", title: pick(locale, "Промокод создан", "Promo code created") });
+      push({
+        tone: "success",
+        title: recipients.trim()
+          ? notify
+            ? pick(locale, "Персональный код создан и отправлен на почту", "Personal code created and emailed")
+            : pick(locale, "Персональный код создан", "Personal code created")
+          : pick(locale, "Промокод создан", "Promo code created"),
+      });
+      if (recipients.trim()) setTab("personal");
+      setRecipients("");
       setCode("");
       setMaxUses("");
       setValidFrom("");
@@ -223,6 +238,33 @@ export function PromoManager({
           </Field>
         </div>
 
+        <Field
+          label={pick(locale, "Кому (необязательно)", "For whom (optional)")}
+          htmlFor="promo-recipients"
+          hint={pick(
+            locale,
+            "ID аккаунта, email или личный ID (AIA-…) — через запятую или с новой строки. Пусто — код для всех.",
+            "Account id, email or personal id (AIA-…), separated by commas or new lines. Empty — a code for everyone.",
+          )}
+        >
+          <Textarea
+            id="promo-recipients"
+            rows={2}
+            value={recipients}
+            onChange={(event) => setRecipients(event.target.value)}
+            placeholder="42, anna@example.com, AIA-7K2Q9X"
+            className="font-mono text-[13px]"
+          />
+        </Field>
+        {recipients.trim() && (
+          <Checkbox
+            id="promo-notify"
+            checked={notify}
+            onChange={(event) => setNotify(event.target.checked)}
+            label={<span className="text-[13px]">{pick(locale, "Отправить код этим людям на почту", "Email the code to these people")}</span>}
+          />
+        )}
+
         <details className="rounded-md border border-line bg-surface p-3">
           <summary className="cursor-pointer text-[13px] text-ink-2">
             {scope.length
@@ -272,6 +314,7 @@ export function PromoManager({
         onChange={setTab}
         options={[
           { value: "campaign", label: pick(locale, "Кампании", "Campaigns") },
+          { value: "personal", label: pick(locale, "Персональные", "Personal") },
           { value: "reward", label: pick(locale, "Награды (FRIEND, NEXT, THANKS)", "Rewards (FRIEND, NEXT, THANKS)") },
         ]}
       />
@@ -298,6 +341,11 @@ export function PromoManager({
                       {item.maxUses != null ? `/${item.maxUses}` : ""} {pick(locale, "исп.", "used")}
                       {period ? ` · ${period}` : ""}
                     </span>
+                    {item.recipients?.length ? (
+                      <span className="mt-0.5 block truncate font-mono text-[11.5px] text-ink-3">
+                        {pick(locale, "для", "for")} {item.recipients.map((r) => r.email ?? `#${r.id}`).join(", ")}
+                      </span>
+                    ) : null}
                   </span>
                 </span>
                 <span className="flex items-center gap-3">
@@ -314,6 +362,8 @@ export function PromoManager({
         <p className="text-[13px] text-muted">
           {tab === "campaign"
             ? pick(locale, "Промокодов кампаний пока нет", "No campaign codes yet")
+            : tab === "personal"
+              ? pick(locale, "Персональных кодов пока нет — укажите получателей при создании", "No personal codes yet — name the recipients when creating one")
             : pick(locale, "Коды наград появятся после первых покупок и отзывов", "Reward codes appear after the first purchases and reviews")}
         </p>
       )}

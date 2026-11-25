@@ -27,6 +27,11 @@ import { cn } from "@/lib/utils";
  * one action. The numbers that used to occupy a ledger of their own now ride
  * on the trailer's bottom edge, where they read as a caption.
  */
+/** Hours left until a moment, rounded up — for the launch offer's countdown. */
+function hoursUntil(endsAt: string) {
+  return Math.max(1, Math.ceil((Date.parse(endsAt) - Date.now()) / 3_600_000));
+}
+
 export function CourseHero({
   course,
   locale,
@@ -89,9 +94,7 @@ export function CourseHero({
     },
   ];
   /* The launch offer: the mentor plan at the self-study price, for a few days. */
-  const offerHours = course.mentorOfferEndsAt
-    ? Math.max(1, Math.ceil((Date.parse(course.mentorOfferEndsAt) - Date.now()) / 3_600_000))
-    : null;
+  const offerHours = course.mentorOfferEndsAt ? hoursUntil(course.mentorOfferEndsAt) : null;
 
   return (
     <section data-dark-hero className="ch-ink relative isolate z-10 -mt-16 overflow-x-clip">

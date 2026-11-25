@@ -49,7 +49,8 @@ export function ArtParallax({ children, className }: { children: React.ReactNode
 
   return (
     <div ref={ref} data-active="false" className={cn("art-parallax", className)}>
-      {children}
+      {/* everything drawn on the art (and anything pinned to it) moves as one layer */}
+      <div className="art-parallax-layer">{children}</div>
       <span aria-hidden className="art-parallax-glare" />
     </div>
   );

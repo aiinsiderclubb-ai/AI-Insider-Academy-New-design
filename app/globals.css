@@ -1271,12 +1271,14 @@
   --art-y: 0;
   perspective: 900px;
 }
-.art-parallax img {
+.art-parallax-layer {
+  position: absolute;
+  inset: 0;
   transform: scale(1) translate3d(0, 0, 0);
   transition: transform 0.7s var(--ease-out-quart);
   will-change: transform;
 }
-.art-parallax[data-active="true"] img {
+.art-parallax[data-active="true"] .art-parallax-layer {
   transform: scale(1.07)
     translate3d(calc(var(--art-x) * -1.8%), calc(var(--art-y) * -1.8%), 0)
     rotateX(calc(var(--art-y) * 2deg))
@@ -1349,7 +1351,7 @@
   .marquee-track { animation: none; }
   .assistant-launcher::after { animation: none; }
   .assistant-caret { animation: none; }
-  .art-parallax img, .art-parallax[data-active="true"] img { transform: none; }
+  .art-parallax-layer, .art-parallax[data-active="true"] .art-parallax-layer { transform: none; }
   .art-parallax-glare { display: none; }
   .cert-float, .cert-float-back, .cert-shadow { animation: none; }
   .cert-sheen::after { display: none; }

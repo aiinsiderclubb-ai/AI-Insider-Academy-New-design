@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Lock, Play } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Lock, Play } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { courseCover } from "@/content/covers";
 import { ArtParallax } from "@/components/catalog/art-parallax";
@@ -67,7 +67,8 @@ export function CourseCard({
       )}
     >
       {/* The artwork is a finished card — logo, badge, title, lesson count — so it is shown whole. */}
-      <div className={cn("relative overflow-hidden bg-surface-3", image ? "aspect-[3/2]" : "aspect-[21/9] border-b border-line")}>
+      {/* Above the card-wide link but transparent to clicks, so only its button catches them. */}
+      <div className={cn("relative overflow-hidden bg-surface-3", image ? "pointer-events-none z-[2] aspect-[3/2]" : "aspect-[21/9] border-b border-line")}>
         {image ? (
           <>
             <ArtParallax>
@@ -79,9 +80,26 @@ export function CourseCard({
                 priority={priority}
                 className={cn("object-cover", soon && "opacity-60 saturate-50")}
               />
+              {/* The art has a drawn arrow in its corner; a real button sits right over it. */}
+              <span className="pointer-events-auto absolute right-[3.6%] bottom-[4.6%] z-10 flex h-[13%] min-h-8 items-center">
+                {soon ? (
+                  <span className="inline-flex h-full items-center rounded-full border border-white/20 bg-black/75 px-4 text-[12.5px] font-medium text-white shadow-lg backdrop-blur-sm">
+                    {d.badges.soon}
+                  </span>
+                ) : (
+                  <Link
+                    href={course.isFree ? href : path(`/learn/${course.slug}/buy`, locale)}
+                    className="inline-flex h-full items-center gap-1.5 rounded-full bg-accent px-4 text-[13px] font-semibold text-on-accent shadow-[0_8px_24px_-6px_color-mix(in_oklab,var(--accent)_70%,transparent)] transition-[transform,background-color] duration-200 hover:-translate-y-px hover:bg-accent-strong"
+                  >
+                    {course.isFree ? pick(locale, "Начать", "Start") : pick(locale, "Купить", "Buy")}
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                  </Link>
+                )}
+              </span>
             </ArtParallax>
-            {/* No hard line under the art: its dark bottom edge melts into the card. */}
-            <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[9%] bg-gradient-to-b from-transparent to-surface" />
+            {/* No hard line under the art: in the dark theme its dark bottom edge melts into the card.
+                On a light card a fade would only leave a pale strip, so there the art simply ends. */}
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[9%] bg-gradient-to-b from-transparent to-surface light:hidden" />
           </>
         ) : (
           <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_20%_0%,var(--accent-soft),transparent_60%)]" />

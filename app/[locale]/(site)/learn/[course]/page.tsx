@@ -22,7 +22,7 @@ import { DifficultyLadder } from "@/components/catalog/difficulty";
 import { BundleCard } from "@/components/catalog/bundle-card";
 import { CourseCard } from "@/components/catalog/course-card";
 import { bundlesWithCourse, courseFaq, gradingStandard, instructorFor, profileFor } from "@/content/catalog";
-import { courseCover, courseTrailer } from "@/content/covers";
+import { courseTrailer, courseWallpaper } from "@/content/covers";
 import { pick } from "@/content/locale";
 import { getCourse, getCourses } from "@/lib/api/catalog";
 import { getCourseReviews } from "@/lib/api/public";
@@ -43,7 +43,7 @@ export async function generateMetadata({
   return {
     title: course.title,
     description: course.description || course.summary,
-    openGraph: { title: course.title, description: course.summary, images: [courseCover(course.image, course.slug) ?? ""] },
+    openGraph: { title: course.title, description: course.summary, images: [courseWallpaper(course.image, course.slug) ?? ""] },
   };
 }
 
@@ -76,7 +76,7 @@ export default async function CoursePage({
 
   const profile = profileFor(course.id);
   const bundles = packsPublic() ? bundlesWithCourse(course.id) : [];
-  const image = courseCover(course.image, course.slug);
+  const image = courseWallpaper(course.image, course.slug);
   /* The opener's media block crosses into this chapter, so the padding below
      has to know whether there is anything to cross. */
   const hasMedia = Boolean(image || courseTrailer(course.slug));

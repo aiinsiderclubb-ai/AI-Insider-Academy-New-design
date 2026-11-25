@@ -1,6 +1,6 @@
 import manifest from "./covers.json";
 
-type Bucket = "marketplace" | "courses" | "vault" | "certificates" | "design" | "videos";
+type Bucket = "marketplace" | "courses" | "coursesWide" | "vault" | "certificates" | "design" | "videos";
 
 const covers = manifest as Record<Bucket, Record<string, string>>;
 
@@ -12,6 +12,14 @@ export function cover(bucket: Bucket, slug: string | null | undefined): string |
   if (!slug) return null;
   const clean = slug.replace(/^\//, "").replace(/\.[^.]*$/, "").split("/").pop() ?? slug;
   return covers[bucket]?.[clean] ?? null;
+}
+
+/**
+ * The 16:9 version of a course's artwork, for the wide frames — the course
+ * page and checkout. Falls back to the card artwork when there is none.
+ */
+export function courseWallpaper(imagePath: string | null | undefined, slug: string): string | null {
+  return cover("coursesWide", slug) ?? courseCover(imagePath, slug);
 }
 
 export function courseCover(imagePath: string | null | undefined, slug: string): string | null {

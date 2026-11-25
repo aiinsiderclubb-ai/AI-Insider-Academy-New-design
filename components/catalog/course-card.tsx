@@ -65,8 +65,8 @@ export function CourseCard({
         "hover:-translate-y-0.5 hover:border-line-2 hover:shadow-md focus-within:-translate-y-0.5 focus-within:shadow-md",
       )}
     >
-      {/* cinematic band rather than a blog thumbnail */}
-      <div className="relative aspect-[21/9] overflow-hidden border-b border-line bg-surface-3">
+      {/* The artwork is a finished card — logo, badge, title, lesson count — so it is shown whole. */}
+      <div className={cn("relative overflow-hidden border-b border-line bg-surface-3", image ? "aspect-[3/2]" : "aspect-[21/9]")}>
         {image ? (
           <Image
             src={image}
@@ -75,25 +75,36 @@ export function CourseCard({
             sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw"
             priority={priority}
             className={cn(
-              "object-cover transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.04]",
-              soon && "opacity-55 saturate-50",
+              "object-cover transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.03]",
+              soon && "opacity-60 saturate-50",
             )}
           />
         ) : (
           <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_20%_0%,var(--accent-soft),transparent_60%)]" />
         )}
 
-        <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
-          <Badge className="border border-line/60 bg-[color-mix(in_oklab,var(--surface)_82%,transparent)] text-ink-2 backdrop-blur-sm">
-            {course.categoryLabel}
-          </Badge>
-          {course.badge && !soon && <Badge tone="accent">{d.badges[course.badge]}</Badge>}
-          {soon && (
-            <Badge tone="outline" className="border-line/60 bg-[color-mix(in_oklab,var(--surface)_82%,transparent)] backdrop-blur-sm">
-              {d.badges.soon}
+        {image ? (
+          // The artwork carries its own badge; a course still being recorded covers it with "soon".
+          soon && (
+            <div className="absolute top-[5%] right-[4%]">
+              <Badge tone="warning" className="shadow-md">
+                {d.badges.soon}
+              </Badge>
+            </div>
+          )
+        ) : (
+          <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
+            <Badge className="border border-line/60 bg-[color-mix(in_oklab,var(--surface)_82%,transparent)] text-ink-2 backdrop-blur-sm">
+              {course.categoryLabel}
             </Badge>
-          )}
-        </div>
+            {course.badge && !soon && <Badge tone="accent">{d.badges[course.badge]}</Badge>}
+            {soon && (
+              <Badge tone="outline" className="border-line/60 bg-[color-mix(in_oklab,var(--surface)_82%,transparent)] backdrop-blur-sm">
+                {d.badges.soon}
+              </Badge>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-3 p-5">
@@ -112,13 +123,16 @@ export function CourseCard({
           )}
         </div>
 
-        <h3 className="text-[19px] leading-[1.15]">
+        {/* the title and pitch are already on the artwork; screen readers still get them */}
+        <h3 className={cn("text-[19px] leading-[1.15]", image && "sr-only")}>
           <Link href={href} className="outline-offset-4 after:absolute after:inset-0 after:content-['']">
             {course.title}
           </Link>
         </h3>
 
-        <p className="line-clamp-2 text-[13.5px] leading-relaxed text-ink-3">{course.description || course.summary}</p>
+        <p className={cn("line-clamp-2 text-[13.5px] leading-relaxed text-ink-3", image && "sr-only")}>
+          {course.description || course.summary}
+        </p>
 
         {/* Sits above the card-wide link so it can lead straight into the demo lesson. */}
         {!course.isFree && !soon && (

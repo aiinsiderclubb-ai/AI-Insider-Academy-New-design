@@ -8,7 +8,7 @@ import { Breadcrumbs } from "@/components/primitives/navigation";
 import { Container } from "@/components/primitives/surface";
 import { Note } from "@/components/primitives/states";
 import { CheckoutForm, type CheckoutTier } from "@/components/checkout/checkout-form";
-import { courseCover, courseTrailer } from "@/content/covers";
+import { courseTrailer, courseWallpaper } from "@/content/covers";
 import { CourseTrailer } from "@/components/catalog/course-trailer";
 import { pick } from "@/content/locale";
 import { legalIsDraft } from "@/content/site";
@@ -91,7 +91,7 @@ export default async function BuyCoursePage({
     demo: { name: "Demo", note: pick(locale, "Тестовая оплата", "Test payment") },
   };
 
-  const image = courseCover(course.image, course.slug);
+  const image = courseWallpaper(course.image, course.slug);
   const trailer = courseTrailer(course.slug);
   return (
     <Container size="wide" className="pt-8 pb-20">
@@ -137,7 +137,7 @@ export default async function BuyCoursePage({
             </div>
           ) : (
             image && (
-              <div className="relative mt-7 aspect-[21/9] overflow-hidden rounded-lg border border-line bg-surface-3">
+              <div className="relative mt-7 aspect-video overflow-hidden rounded-lg border border-line bg-surface-3">
                 <Image src={image} alt="" fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
               </div>
             )

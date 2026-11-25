@@ -1,10 +1,11 @@
+import Link from "next/link";
 import { Lock, Play } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Reveal } from "@/components/motion/reveal";
 import { ScrollRail } from "@/components/motion/rail";
 import { groupLessons } from "@/content/catalog";
 import type { Course } from "@/lib/api/catalog";
-import { lessonCount, type Dictionary, type Locale } from "@/lib/i18n";
+import { lessonCount, path, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 /**
@@ -72,11 +73,10 @@ export function Curriculum({
                 {lessons.map((lesson) => {
                   const demoOver = demoExpired && lesson.index === 0 && !course.isFree;
                   const unlocked = (lesson.free && !demoOver) || lesson.index < unlockedUpTo;
-                  return (
-                    <li
-                      key={lesson.id}
-                      className="group/row flex items-start gap-4 border-t border-line/70 py-3.5 transition-colors first:border-t-0 hover:bg-[color-mix(in_oklab,var(--accent)_5%,transparent)]"
-                    >
+                  const rowClass =
+                    "group/row flex items-start gap-4 border-t border-line/70 py-3.5 transition-colors first:border-t-0 hover:bg-[color-mix(in_oklab,var(--accent)_5%,transparent)]";
+                  const content = (
+                    <>
                       <span
                         className={cn(
                           "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors",
@@ -106,6 +106,21 @@ export function Curriculum({
                       <span className="shrink-0 pt-0.5 font-mono text-[12px] text-faint tabular-nums">
                         {lesson.duration}
                       </span>
+                    </>
+                  );
+                  return unlocked ? (
+                    /* An open lesson — the free first one, or any once the course is yours — opens from here. */
+                    <li key={lesson.id} className="border-t border-line/70 first:border-t-0">
+                      <Link
+                        href={path(`/study/${course.slug}/${lesson.index + 1}`, locale)}
+                        className={cn(rowClass, "-mx-3 rounded-lg border-t-0 px-3 outline-offset-2")}
+                      >
+                        {content}
+                      </Link>
+                    </li>
+                  ) : (
+                    <li key={lesson.id} className={rowClass}>
+                      {content}
                     </li>
                   );
                 })}

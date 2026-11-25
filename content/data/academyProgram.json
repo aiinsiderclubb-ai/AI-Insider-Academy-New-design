@@ -389,7 +389,7 @@
      "descriptionEn": "How to pick the right task, count the time it costs you and see where automation actually pays off.",
      "duration": "13 мин",
      "durationEn": "13 min",
-     "videoUrl": "first-automation-n8n/fn1.mp4",
+     "videoUrl": "first-automation/fn1.mp4",
      "weekGoal": "Как выбрать подходящую задачу, посчитать потерю времени и понять, где автоматизация реально даст пользу.",
      "weekGoalEn": "How to pick the right task, count the time it costs you and see where automation actually pays off."
     },
@@ -401,7 +401,7 @@
      "descriptionEn": "Form → n8n → AI → Google Sheets → Telegram, plus data validation, a deliberate error and basic debugging.",
      "duration": "24 мин",
      "durationEn": "24 min",
-     "videoUrl": "first-automation-n8n/fn2.mp4",
+     "videoUrl": "first-automation/fn2.mp4",
      "weekGoal": "Форма → n8n → AI → Google Sheets → Telegram, плюс проверка данных, намеренная ошибка и базовая отладка.",
      "weekGoalEn": "Form → n8n → AI → Google Sheets → Telegram, plus data validation, a deliberate error and basic debugging."
     },
@@ -413,7 +413,7 @@
      "descriptionEn": "Turning the training workflow into a business system: first clients, demos, reaching decision makers and what production needs.",
      "duration": "21 мин",
      "durationEn": "21 min",
-     "videoUrl": "first-automation-n8n/fn3.mp4",
+     "videoUrl": "first-automation/fn3.mp4",
      "weekGoal": "Как превратить учебный workflow в бизнес-систему: первые клиенты, demo, выход на decision makers и что нужно для production.",
      "weekGoalEn": "Turning the training workflow into a business system: first clients, demos, reaching decision makers and what production needs."
     }
@@ -3446,7 +3446,7 @@
      "descriptionEn": "How to pick the right task, count the time it costs you and see where automation actually pays off.",
      "duration": "13 мин",
      "durationEn": "13 min",
-     "videoUrl": "first-automation-n8n/fn1.mp4",
+     "videoUrl": "first-automation/fn1.mp4",
      "weekGoal": "Как выбрать подходящую задачу, посчитать потерю времени и понять, где автоматизация реально даст пользу.",
      "weekGoalEn": "How to pick the right task, count the time it costs you and see where automation actually pays off."
     },
@@ -3458,7 +3458,7 @@
      "descriptionEn": "Form → n8n → AI → Google Sheets → Telegram, plus data validation, a deliberate error and basic debugging.",
      "duration": "24 мин",
      "durationEn": "24 min",
-     "videoUrl": "first-automation-n8n/fn2.mp4",
+     "videoUrl": "first-automation/fn2.mp4",
      "weekGoal": "Форма → n8n → AI → Google Sheets → Telegram, плюс проверка данных, намеренная ошибка и базовая отладка.",
      "weekGoalEn": "Form → n8n → AI → Google Sheets → Telegram, plus data validation, a deliberate error and basic debugging."
     },
@@ -3470,7 +3470,7 @@
      "descriptionEn": "Turning the training workflow into a business system: first clients, demos, reaching decision makers and what production needs.",
      "duration": "21 мин",
      "durationEn": "21 min",
-     "videoUrl": "first-automation-n8n/fn3.mp4",
+     "videoUrl": "first-automation/fn3.mp4",
      "weekGoal": "Как превратить учебный workflow в бизнес-систему: первые клиенты, demo, выход на decision makers и что нужно для production.",
      "weekGoalEn": "Turning the training workflow into a business system: first clients, demos, reaching decision makers and what production needs."
     }

@@ -125,7 +125,7 @@
      "titleEn": "Which process to automate first",
      "descRu": "Как выбрать подходящую задачу, посчитать потерю времени и понять, где автоматизация реально даст пользу.",
      "descEn": "How to pick the right task, count the time it costs you and see where automation actually pays off.",
-     "videoUrl": "first-automation-n8n/fn1.mp4",
+     "videoUrl": "first-automation/fn1.mp4",
      "duration": {
       "ru": "13 мин",
       "en": "13 min"
@@ -137,7 +137,7 @@
      "titleEn": "Building your first AI automation",
      "descRu": "Форма → n8n → AI → Google Sheets → Telegram, плюс проверка данных, намеренная ошибка и базовая отладка.",
      "descEn": "Form → n8n → AI → Google Sheets → Telegram, plus data validation, a deliberate error and basic debugging.",
-     "videoUrl": "first-automation-n8n/fn2.mp4",
+     "videoUrl": "first-automation/fn2.mp4",
      "duration": {
       "ru": "24 мин",
       "en": "24 min"
@@ -149,7 +149,7 @@
      "titleEn": "From first automation to a real project",
      "descRu": "Как превратить учебный workflow в бизнес-систему: первые клиенты, demo, выход на decision makers и что нужно для production.",
      "descEn": "Turning the training workflow into a business system: first clients, demos, reaching decision makers and what production needs.",
-     "videoUrl": "first-automation-n8n/fn3.mp4",
+     "videoUrl": "first-automation/fn3.mp4",
      "duration": {
       "ru": "21 мин",
       "en": "21 min"

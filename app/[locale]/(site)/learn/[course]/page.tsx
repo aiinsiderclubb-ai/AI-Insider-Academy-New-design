@@ -427,7 +427,7 @@ export default async function CoursePage({
       )}
 
       {/* ================================== faq ================================= */}
-      <section className="chapter ch-ink">
+      <section id="faq" className="chapter ch-ink scroll-mt-20">
         <Container size="wide">
           <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
             <div className="lg:sticky lg:top-28 lg:self-start">

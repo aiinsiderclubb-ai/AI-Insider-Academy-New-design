@@ -4,11 +4,10 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Check, ShieldCheck, Zap } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
-import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/navigation";
+import { Breadcrumbs } from "@/components/primitives/navigation";
 import { Container } from "@/components/primitives/surface";
 import { Note } from "@/components/primitives/states";
 import { CheckoutForm, type CheckoutTier } from "@/components/checkout/checkout-form";
-import { buyFaq } from "@/content/catalog";
 import { courseCover, courseTrailer } from "@/content/covers";
 import { CourseTrailer } from "@/components/catalog/course-trailer";
 import { pick } from "@/content/locale";
@@ -161,17 +160,6 @@ export default async function BuyCoursePage({
             ))}
           </section>
 
-          {/* --------------------------------- faq -------------------------------- */}
-          <section className="mt-10">
-            <h2 className="mb-5 text-[19px]">{d.learn.faq}</h2>
-            <Accordion>
-              {buyFaq.map((entry) => (
-                <AccordionItem key={entry.q} name="buy-faq" title={pick(locale, entry.q, entry.qEn)}>
-                  {pick(locale, entry.a, entry.aEn)}
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </section>
         </div>
 
         {/* ------------------------------ order panel ----------------------------- */}
@@ -197,6 +185,15 @@ export default async function BuyCoursePage({
             email={user?.email}
           />
           )}
+
+          {/* Questions live on the course page, so checkout stays about paying. */}
+          <Link
+            href={`${path(`/learn/${course.slug}`, locale)}#faq`}
+            className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-line px-4 py-3 text-[13px] text-ink-2 transition-colors hover:border-line-2 hover:text-ink"
+          >
+            {pick(locale, "Вопросы о доступе, возврате и сертификате", "Questions on access, refunds and certificates")}
+            <span aria-hidden>→</span>
+          </Link>
 
           <ul className="mt-4 flex flex-col gap-2 px-1">
             <li className="flex items-center gap-2 text-[12.5px] text-ink-3">

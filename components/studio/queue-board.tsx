@@ -13,6 +13,7 @@ import type { StudioApplication, StudioHomework, StudioReview } from "@/lib/api/
 import { pick } from "@/content/locale";
 import { formatRelative, type Dictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { ACTIVITY, DIRECTIONS, EXPERIENCE, SOURCES, optionLabel } from "@/content/application-options";
 
 type Tab = "homework" | "applications" | "reviews";
 
@@ -218,42 +219,135 @@ function ApplicationQueue({
 
   return (
     <ul className="grid gap-3 lg:grid-cols-2">
-      {items.map((item) => (
-        <li key={item.id} className="rounded-lg border border-line bg-surface p-5">
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <p className="truncate text-[14.5px] font-medium text-ink">{item.name || item.email}</p>
-              <p className="mt-0.5 truncate font-mono text-[12px] text-muted">{item.email}</p>
+      {items.map((item) => {
+        const fullName = [item.firstName, item.lastName].filter(Boolean).join(" ") || item.name || item.email;
+        const facts = [item.age ? pick(locale, `${item.age} лет`, `${item.age} y.o.`) : null, item.country, formatRelative(item.date, locale)]
+          .filter(Boolean)
+          .join(" · ");
+        const answers = [
+          { label: pick(locale, "Чем занимается", "Currently"), value: optionLabel(ACTIVITY, item.currentActivity, locale) },
+          { label: pick(locale, "Опыт с AI", "AI experience"), value: optionLabel(EXPERIENCE, item.aiExperience, locale) },
+          { label: pick(locale, "Откуда узнал(а)", "Heard from"), value: optionLabel(SOURCES, item.source, locale) },
+        ].filter((answer) => answer.value);
+        return (
+          <li
+            key={item.id}
+            id={`app-${item.id}`}
+            className="scroll-mt-24 rounded-lg border border-line bg-surface p-5 target:border-accent target:ring-2 target:ring-accent/25"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="truncate text-[14.5px] font-medium text-ink">{fullName}</p>
+                <p className="mt-0.5 flex flex-wrap gap-x-2 font-mono text-[12px] text-muted">
+                  <span className="truncate">{item.email}</span>
+                  {item.telegram && <TelegramHandle handle={item.telegram} />}
+                </p>
+              </div>
+              <Badge tone={item.status === "pending" || item.status === "new" ? "warning" : "neutral"}>
+                {statusLabel(item.status, locale)}
+              </Badge>
             </div>
-            <Badge tone={item.status === "pending" || item.status === "new" ? "warning" : "neutral"}>{item.status}</Badge>
-          </div>
 
-          {item.track && (
-            <p className="mt-3 text-[13px] text-ink-3">
-              {pick(locale, "Направление", "Track")}: {item.track}
-            </p>
-          )}
-          <p className="mt-1.5 text-[12.5px] text-muted">{formatRelative(item.date, locale)}</p>
+            {facts && <p className="mt-1.5 text-[12.5px] text-muted">{facts}</p>}
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Button size="sm" loading={busy === `${item.id}:approve`} onClick={() => act(item.id, "approve")}>
-              <Check className="h-4 w-4" aria-hidden />
-              {pick(locale, "Одобрить", "Approve")}
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              loading={busy === `${item.id}:reject`}
-              onClick={() => act(item.id, "reject")}
-              className="text-danger hover:bg-danger-soft"
-            >
-              <X className="h-4 w-4" aria-hidden />
-              {pick(locale, "Отклонить", "Reject")}
-            </Button>
-          </div>
-        </li>
-      ))}
+            {answers.length > 0 && (
+              <dl className="mt-4 grid gap-x-4 gap-y-2 text-[13px] sm:grid-cols-[auto_1fr]">
+                {answers.map((answer) => (
+                  <React.Fragment key={answer.label}>
+                    <dt className="text-muted">{answer.label}</dt>
+                    <dd className="text-ink-2">{answer.value}</dd>
+                  </React.Fragment>
+                ))}
+              </dl>
+            )}
+
+            {item.interests && item.interests.length > 0 && (
+              <ul className="mt-3 flex flex-wrap gap-1.5" aria-label={pick(locale, "Интересы", "Interests")}>
+                {item.interests.map((id) => (
+                  <li key={id}>
+                    <Badge tone="neutral">{optionLabel(DIRECTIONS, id, locale)}</Badge>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <LongAnswer locale={locale} label={pick(locale, "Почему хочет на курс", "Why this course")} text={item.motivation} />
+            <LongAnswer locale={locale} label={pick(locale, "Цель после курса", "Goal after the course")} text={item.futureGoal} />
+
+            {item.track && (
+              <p className="mt-3 text-[13px] text-ink-3">
+                {pick(locale, "Направление", "Track")}: {item.track}
+              </p>
+            )}
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button size="sm" loading={busy === `${item.id}:approve`} onClick={() => act(item.id, "approve")}>
+                <Check className="h-4 w-4" aria-hidden />
+                {pick(locale, "Одобрить", "Approve")}
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                loading={busy === `${item.id}:reject`}
+                onClick={() => act(item.id, "reject")}
+                className="text-danger hover:bg-danger-soft"
+              >
+                <X className="h-4 w-4" aria-hidden />
+                {pick(locale, "Отклонить", "Reject")}
+              </Button>
+            </div>
+          </li>
+        );
+      })}
     </ul>
+  );
+}
+
+function statusLabel(status: string, locale: Locale) {
+  const labels: Record<string, [string, string]> = {
+    new: ["Новая", "New"],
+    pending: ["Ждёт решения", "Pending"],
+    approved: ["Одобрена", "Approved"],
+    accepted: ["Одобрена", "Approved"],
+    rejected: ["Отклонена", "Rejected"],
+  };
+  const label = labels[status];
+  return label ? pick(locale, label[0], label[1]) : status;
+}
+
+/** '@name', 'name' or a t.me link, shown as a link that opens the chat. */
+function TelegramHandle({ handle }: { handle: string }) {
+  const name = handle.trim().replace(/^https?:\/\/(www\.)?t\.me\//i, "").replace(/^@/, "");
+  if (!/^[A-Za-z0-9_]{4,32}$/.test(name)) return <span>{handle}</span>;
+  return (
+    <a href={`https://t.me/${name}`} target="_blank" rel="noreferrer" className="text-accent hover:underline">
+      @{name}
+    </a>
+  );
+}
+
+/** A free-text answer: a few lines at first, the rest on request. */
+function LongAnswer({ locale, label, text }: { locale: Locale; label: string; text?: string }) {
+  const [open, setOpen] = React.useState(false);
+  const value = text?.trim();
+  if (!value) return null;
+  const long = value.length > 220;
+  return (
+    <div className="mt-4">
+      <p className="text-[12px] font-medium uppercase tracking-wide text-muted">{label}</p>
+      <p className={cn("mt-1 whitespace-pre-line text-[13.5px] leading-relaxed text-ink-2", long && !open && "line-clamp-4")}>
+        {value}
+      </p>
+      {long && (
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          className="mt-1 text-[12.5px] font-medium text-accent hover:underline"
+        >
+          {open ? pick(locale, "Свернуть", "Show less") : pick(locale, "Показать полностью", "Show all")}
+        </button>
+      )}
+    </div>
   );
 }
 

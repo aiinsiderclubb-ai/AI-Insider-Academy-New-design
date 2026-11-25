@@ -48,10 +48,24 @@ export interface StudioReview {
   date: string;
 }
 
+/** An application for «Найди своё в AI», as the API's mapApplication sends it. */
 export interface StudioApplication {
   id: string;
   email: string;
-  name: string;
+  /** Older rows only; new ones carry first and last name. */
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+  age?: number | null;
+  country?: string;
+  telegram?: string;
+  /** Option ids — see content/application-options. */
+  currentActivity?: string;
+  aiExperience?: string;
+  interests?: string[];
+  source?: string;
+  motivation?: string;
+  futureGoal?: string;
   status: string;
   track?: string;
   date: string;

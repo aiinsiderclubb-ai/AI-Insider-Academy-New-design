@@ -7,49 +7,7 @@ import { Checkbox, Field, Input, Select, Textarea } from "@/components/primitive
 import { Note } from "@/components/primitives/states";
 import { pick } from "@/content/locale";
 import type { Locale } from "@/lib/i18n";
-
-type Option = { id: string; ru: string; en: string };
-
-const ACTIVITY: Option[] = [
-  { id: "studying", ru: "Учусь", en: "Studying" },
-  { id: "working", ru: "Работаю", en: "Working" },
-  { id: "freelance", ru: "Фриланс", en: "Freelancing" },
-  { id: "entrepreneur", ru: "Свой бизнес", en: "Running a business" },
-  { id: "job_seeking", ru: "Ищу работу", en: "Looking for work" },
-  { id: "other", ru: "Другое", en: "Other" },
-];
-
-const EXPERIENCE: Option[] = [
-  { id: "newbie", ru: "Нет, я новичок", en: "None, I'm new to it" },
-  { id: "chatgpt_simple", ru: "Использую ChatGPT для простых задач", en: "I use ChatGPT for simple tasks" },
-  { id: "regular", ru: "Использую AI регулярно", en: "I use AI regularly" },
-  { id: "automations", ru: "Делаю автоматизации или ботов", en: "I build automations or bots" },
-  { id: "professional", ru: "Работаю с AI профессионально", en: "I work with AI professionally" },
-];
-
-/** The nine directions the course walks through, plus "not sure" — the honest answer for most applicants. */
-const DIRECTIONS: Option[] = [
-  { id: "productivity", ru: "AI в работе", en: "AI at work" },
-  { id: "content", ru: "Контент", en: "Content" },
-  { id: "video", ru: "AI-видео", en: "AI video" },
-  { id: "automation", ru: "Автоматизации", en: "Automation" },
-  { id: "chatbots", ru: "Чат-боты", en: "Chatbots" },
-  { id: "voice", ru: "Голосовые роботы", en: "Voice agents" },
-  { id: "agents", ru: "AI-агенты", en: "AI agents" },
-  { id: "vibecoding", ru: "Вайбкодинг", en: "Vibe coding" },
-  { id: "sales", ru: "Продажа AI-услуг", en: "Selling AI services" },
-  { id: "undecided", ru: "Пока не знаю", en: "Not sure yet" },
-];
-
-const SOURCES: Option[] = [
-  { id: "telegram", ru: "Telegram", en: "Telegram" },
-  { id: "instagram", ru: "Instagram", en: "Instagram" },
-  { id: "tiktok", ru: "TikTok", en: "TikTok" },
-  { id: "youtube", ru: "YouTube", en: "YouTube" },
-  { id: "google", ru: "Google", en: "Google" },
-  { id: "referral", ru: "Рекомендация", en: "A friend's recommendation" },
-  { id: "other", ru: "Другое", en: "Other" },
-];
+import { ACTIVITY, DIRECTIONS, EXPERIENCE, SOURCES, type Option } from "@/content/application-options";
 
 type Form = {
   firstName: string;

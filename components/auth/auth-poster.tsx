@@ -11,8 +11,7 @@ import { AsciiField } from "./ascii-field";
  * In front: the school's line in the site's display face, the second half on
  * the orange block the rest of the site uses for its marked words, and a
  * frame of small mono annotations — an issue number, the visitor's local
- * time, where the pointer is in the field. It says nothing about courses,
- * which stay hidden until launch (lib/visibility.ts).
+ * time, where the pointer is in the field.
  */
 
 const COPY: Record<
@@ -21,29 +20,29 @@ const COPY: Record<
 > = {
   ru: {
     kicker: "Школа AI-систем без воды",
-    status: "Предзапуск",
+    status: "Открыто",
     first: "Меньше хайпа.",
     second: "Больше систем.",
-    body: "Готовые n8n-системы, сообщество практиков и Academy, которая вот-вот откроется. Один аккаунт — на всё.",
-    points: ["Готовые AI-системы", "Сообщество практиков", "Ранний доступ к Academy"],
+    body: "Курсы с проверкой заданий, готовые n8n-системы и сообщество практиков. Один аккаунт — на всё.",
+    points: ["Курсы Academy", "Готовые AI-системы", "Сообщество практиков"],
     time: "Местное время",
   },
   ukr: {
     kicker: "Школа AI-систем без води",
-    status: "Передзапуск",
+    status: "Відкрито",
     first: "Менше хайпу.",
     second: "Більше систем.",
-    body: "Готові n8n-системи, спільнота практиків і Academy, яка ось-ось відкриється. Один акаунт — на все.",
-    points: ["Готові AI-системи", "Спільнота практиків", "Ранній доступ до Academy"],
+    body: "Курси з перевіркою завдань, готові n8n-системи та спільнота практиків. Один акаунт — на все.",
+    points: ["Курси Academy", "Готові AI-системи", "Спільнота практиків"],
     time: "Місцевий час",
   },
   en: {
     kicker: "A school of AI systems, no fluff",
-    status: "Pre-launch",
+    status: "Open",
     first: "Less hype.",
     second: "More systems.",
-    body: "Ready-made n8n systems, a community of practitioners and an Academy about to open. One account for all of it.",
-    points: ["Ready-made AI systems", "A practitioners' community", "Early access to Academy"],
+    body: "Courses with reviewed assignments, ready-made n8n systems and a community of practitioners. One account for all of it.",
+    points: ["Academy courses", "Ready-made AI systems", "A practitioners' community"],
     time: "Local time",
   },
 };

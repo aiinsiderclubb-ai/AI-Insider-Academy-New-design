@@ -24,9 +24,10 @@ import { CourseCard } from "@/components/catalog/course-card";
 import { bundlesWithCourse, courseFaq, gradingStandard, instructorFor, profileFor } from "@/content/catalog";
 import { courseTrailer, courseWallpaper } from "@/content/covers";
 import { pick } from "@/content/locale";
-import { getCourse, getCourses } from "@/lib/api/catalog";
+import { getCourse, getCourses, withMentorOffer } from "@/lib/api/catalog";
 import { getCourseReviews } from "@/lib/api/public";
 import { demoState, getAccess, onSelfPlan } from "@/lib/api/session";
+import { getMentorOffer } from "@/lib/api/checkout";
 import { formatDate, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -65,14 +66,17 @@ export default async function CoursePage({
   const locale = raw as Locale;
   const d = getDictionary(locale);
 
-  const course = await getCourse(slug, locale);
-  if (!course) notFound();
+  const listed = await getCourse(slug, locale);
+  if (!listed) notFound();
 
-  const [{ reviews, average, count }, access, allCourses] = await Promise.all([
-    getCourseReviews(course.id, locale),
+  const [{ reviews, average, count }, access, allCourses, offer] = await Promise.all([
+    getCourseReviews(listed.id, locale),
     getAccess(),
     getCourses(locale),
+    getMentorOffer(),
   ]);
+  // During the launch offer the mentor plan is sold at the self-study price.
+  const course = withMentorOffer(listed, offer);
 
   const profile = profileFor(course.id);
   const bundles = packsPublic() ? bundlesWithCourse(course.id) : [];

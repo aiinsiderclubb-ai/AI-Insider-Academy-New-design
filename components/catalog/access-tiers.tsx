@@ -15,6 +15,11 @@ import { FreeStart } from "./free-start";
  * The mentor tier is the filled card because it is the one being recommended;
  * everything else on the page stays quiet enough for that to read.
  */
+/** Hours left in the launch offer, rounded up. */
+function offerHours(endsAt: string) {
+  return Math.max(1, Math.ceil((Date.parse(endsAt) - Date.now()) / 3_600_000));
+}
+
 export function AccessTiers({
   course,
   locale,
@@ -46,7 +51,19 @@ export function AccessTiers({
             <p className="mt-2 text-[15px] text-ink-2">
               {pick(locale, "Продолжайте с того места, где остановились.", "Pick up where you left off.")}
             </p>
-            {selfPlan && (
+            {selfPlan && course.mentorOfferEndsAt && (
+              <p className="mt-3 text-[14px] leading-relaxed text-ink-3">
+                {pick(locale, "Тариф «Самостоятельно». Пока идёт запуск, переход на тариф с ментором — ", "Self-study plan. During the launch, moving up to the mentor plan is ")}
+                <a
+                  href={path(`/learn/${course.slug}/buy?tier=mentor`, locale)}
+                  className="font-medium text-accent-ink underline underline-offset-4"
+                >
+                  {pick(locale, "бесплатно", "free")}
+                </a>
+                .
+              </p>
+            )}
+            {selfPlan && !course.mentorOfferEndsAt && (
               <p className="mt-3 text-[14px] leading-relaxed text-ink-3">
                 {pick(locale, "Тариф «Самостоятельно». Проверка заданий и ментор — доплата ", "Self-study plan. Assignment review and a mentor: add ")}
                 <a
@@ -194,10 +211,20 @@ export function AccessTiers({
             <span className="font-display text-[clamp(2.5rem,4.4vw,3.5rem)] leading-none font-extrabold tracking-tight tabular-nums">
               {formatPrice(mentorPrice, locale)}
             </span>
-            <span className="font-mono text-[14px] tabular-nums opacity-70">
-              +{formatPrice(mentorExtra, locale)}
-            </span>
+            {course.mentorOfferEndsAt && course.mentorListEur ? (
+              <span className="font-mono text-[15px] tabular-nums line-through opacity-60">{formatPrice(course.mentorListEur, locale)}</span>
+            ) : (
+              <span className="font-mono text-[14px] tabular-nums opacity-70">
+                +{formatPrice(mentorExtra, locale)}
+              </span>
+            )}
           </p>
+          {course.mentorOfferEndsAt ? (
+            <p className="relative mt-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-on-accent/15 px-3 py-1 text-[12.5px] font-medium">
+              {pick(locale, "Запуск: по цене самостоятельного ещё", "Launch: at the self-study price for")} {offerHours(course.mentorOfferEndsAt)}{" "}
+              {pick(locale, "ч", "h")}
+            </p>
+          ) : null}
           <p className="relative mt-2 text-[13px] opacity-75">{d.learn.mentorNote}</p>
 
           <ul className="relative mt-7 flex flex-1 flex-col gap-2.5 border-t border-on-accent/20 pt-6">

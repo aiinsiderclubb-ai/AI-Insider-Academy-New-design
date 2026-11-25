@@ -41,6 +41,10 @@ export interface Course {
   priceEur: number;
   /** The plan with assignment review and a mentor, about twice the self-study price. */
   mentorPriceEur: number;
+  /** The usual mentor price, kept while a launch offer lowers mentorPriceEur. */
+  mentorListEur?: number;
+  /** When the launch offer on the mentor plan ends, while it runs. */
+  mentorOfferEndsAt?: string | null;
   oldPriceEur: number | null;
   isFree: boolean;
   isIntake: boolean;
@@ -202,4 +206,10 @@ export function groupCourses(courses: Course[]): CatalogGroups {
 /** Course modules for the curriculum accordion: named ones when the program has them. */
 export function courseModules(course: Course) {
   return groupLessons(course.lessons, course.modulePlan);
+}
+
+/** The course as the launch offer sells it: the mentor plan at the self-study price. */
+export function withMentorOffer<T extends Course>(course: T, offer: { endsAt: string } | null): T {
+  if (!offer || course.isFree || !(course.mentorPriceEur > course.priceEur)) return course;
+  return { ...course, mentorListEur: course.mentorPriceEur, mentorPriceEur: course.priceEur, mentorOfferEndsAt: offer.endsAt };
 }

@@ -8,14 +8,15 @@ import { Breadcrumbs } from "@/components/primitives/navigation";
 import { Container } from "@/components/primitives/surface";
 import { Note } from "@/components/primitives/states";
 import { CheckoutForm, type CheckoutTier } from "@/components/checkout/checkout-form";
+import { FreeUpgrade } from "@/components/checkout/free-upgrade";
 import { courseTrailer, courseWallpaper } from "@/content/covers";
 import { CourseTrailer } from "@/components/catalog/course-trailer";
 import { pick } from "@/content/locale";
 import { legalIsDraft } from "@/content/site";
-import { getCourse } from "@/lib/api/catalog";
-import { getCheckoutStatus, type ProviderId } from "@/lib/api/checkout";
+import { getCourse, withMentorOffer } from "@/lib/api/catalog";
+import { getCheckoutStatus, getMentorOffer, offerHoursLeft, type ProviderId } from "@/lib/api/checkout";
 import { getAccess, getSession, hasReview, onSelfPlan } from "@/lib/api/session";
-import { getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
+import { formatPrice, getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
 
 export async function generateMetadata({
   params,
@@ -39,8 +40,11 @@ export default async function BuyCoursePage({
   const locale = raw as Locale;
   const d = getDictionary(locale);
 
-  const course = await getCourse(slug, locale);
-  if (!course || course.isFree) notFound();
+  const listed = await getCourse(slug, locale);
+  if (!listed || listed.isFree) notFound();
+  const offer = await getMentorOffer();
+  // During the launch offer the mentor plan is sold at the self-study price.
+  const course = withMentorOffer(listed, offer);
   // A course still being recorded is not on sale; its page offers a launch notice instead.
   if (course.status === "in-development") redirect(path(`/learn/${course.slug}`, locale));
 
@@ -74,8 +78,8 @@ export default async function BuyCoursePage({
       ? pick(locale, "Доплата разницы: проверка домашних заданий и ментор.", "You pay the difference: assignment review and a mentor.")
       : pick(
           locale,
-          "Всё из самостоятельного + проверка каждого задания, приёмка финального проекта и ментор.",
-          "Everything in self-study + every assignment reviewed, the final project signed off, and a mentor.",
+          `Всё из самостоятельного + проверка каждого задания, приёмка финального проекта и ментор.${offer && course.mentorListEur ? ` Цена запуска вместо ${formatPrice(course.mentorListEur, locale)} — ещё ${offerHoursLeft(offer.endsAt)} ч.` : ""}`,
+          `Everything in self-study + every assignment reviewed, the final project signed off, and a mentor.${offer && course.mentorListEur ? ` Launch price instead of ${formatPrice(course.mentorListEur, locale)} — ${offerHoursLeft(offer.endsAt)} h left.` : ""}`,
         ),
     priceEur: upgrading ? course.mentorPriceEur - course.priceEur : course.mentorPriceEur,
     itemId: course.id,
@@ -172,6 +176,13 @@ export default async function BuyCoursePage({
                 {d.common.continue}
               </Link>
             </Note>
+          ) : upgrading && offer ? (
+            <FreeUpgrade
+              locale={locale}
+              courseId={course.id}
+              studyHref={path(`/study/${course.slug}/1`, locale)}
+              hoursLeft={offerHoursLeft(offer.endsAt)}
+            />
           ) : (
           <CheckoutForm
             locale={locale}

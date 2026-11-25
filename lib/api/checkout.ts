@@ -46,3 +46,22 @@ export const getCheckoutStatus = cache(async (): Promise<CheckoutStatus> => {
 
   return { prelaunch, providers };
 });
+
+/**
+ * The launch offer on courses: while it runs the mentor plan costs what
+ * self-study does (the API decides; this only reads it for display).
+ */
+export const getMentorOffer = cache(async (): Promise<{ endsAt: string } | null> => {
+  const payload = await tryApi<{ mentorAtSelfPrice?: { endsAt: string } | null }>(
+    "/payments/offers",
+    { revalidate: 60 },
+    { mentorAtSelfPrice: null },
+  );
+  const endsAt = payload.mentorAtSelfPrice?.endsAt;
+  return endsAt && Date.parse(endsAt) > Date.now() ? { endsAt } : null;
+});
+
+/** Hours left in the offer, rounded up — what the plan cards print. */
+export function offerHoursLeft(endsAt: string, now = Date.now()) {
+  return Math.max(1, Math.ceil((Date.parse(endsAt) - now) / 3_600_000));
+}

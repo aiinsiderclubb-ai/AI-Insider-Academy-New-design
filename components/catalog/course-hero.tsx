@@ -88,6 +88,10 @@ export function CourseHero({
       featured: true,
     },
   ];
+  /* The launch offer: the mentor plan at the self-study price, for a few days. */
+  const offerHours = course.mentorOfferEndsAt
+    ? Math.max(1, Math.ceil((Date.parse(course.mentorOfferEndsAt) - Date.now()) / 3_600_000))
+    : null;
 
   return (
     <section data-dark-hero className="ch-ink relative isolate z-10 -mt-16 overflow-x-clip">
@@ -176,8 +180,15 @@ export function CourseHero({
                           <span className="mt-0.5 block text-[12.5px] leading-snug text-muted">{plan.note}</span>
                         </span>
                         <span className="flex shrink-0 items-center gap-3">
-                          <span className="font-display text-[22px] leading-none font-extrabold tabular-nums text-ink">
-                            {formatPrice(plan.price, locale)}
+                          <span className="flex flex-col items-end">
+                            {plan.featured && offerHours && course.mentorListEur ? (
+                              <span className="font-mono text-[11.5px] leading-none text-faint line-through tabular-nums">
+                                {formatPrice(course.mentorListEur, locale)}
+                              </span>
+                            ) : null}
+                            <span className="font-display text-[22px] leading-none font-extrabold tabular-nums text-ink">
+                              {formatPrice(plan.price, locale)}
+                            </span>
                           </span>
                           <span
                             aria-hidden
@@ -192,6 +203,15 @@ export function CourseHero({
                       </Link>
                     ))}
                   </div>
+                  {offerHours ? (
+                    <p className="mt-2.5 rounded-lg border border-accent/40 bg-accent-soft px-3 py-2 text-[12.5px] leading-snug text-ink lg:text-right">
+                      {pick(
+                        locale,
+                        `Запуск: тариф с ментором по цене самостоятельного — ещё ${offerHours} ч`,
+                        `Launch: the mentor plan at the self-study price — ${offerHours} h left`,
+                      )}
+                    </p>
+                  ) : null}
                   <p className="mt-2.5 text-[12.5px] text-muted lg:text-right">
                     {pick(locale, "Разовая оплата · доступ навсегда · можно доплатить до ментора позже", "One payment · yours for good · upgrade to a mentor any time")}
                   </p>

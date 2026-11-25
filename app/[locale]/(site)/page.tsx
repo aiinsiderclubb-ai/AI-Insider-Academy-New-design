@@ -6,6 +6,7 @@ import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { Access, Closing, Entrances, Reviews, type AccessOption } from "@/components/home/sections";
 import { CourseCard } from "@/components/catalog/course-card";
 import { CertificateShowcase } from "@/components/home/certificate";
+import { FindYourPath } from "@/components/home/find-your-path";
 import { ProductCard } from "@/components/store/product-card";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container, SectionHead } from "@/components/primitives/surface";
@@ -40,6 +41,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   ]);
 
   const groups = groupCourses(courses);
+  // «Найди своё в AI» — free, by application — gets a block of its own.
+  const findYourPath = courses.find((course) => course.id === "ai-insider-accelerator" && course.status === "published") ?? null;
   const paidPrices = groups.paid.flatMap((course) => [course.priceEur, course.mentorPriceEur]).filter(Boolean);
   const cheapestBundle = [...courseBundles].sort((a, b) => a.priceEur - b.priceEur)[0];
   const club = planByTier("club");
@@ -106,6 +109,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     { id: "start", label: pick(locale, "Начало", "Start") },
     { id: "entrances", label: pick(locale, "Входы", "Entrances") },
     { id: "programmes", label: pick(locale, "Программы", "Programmes") },
+    { id: "find-your-path", label: pick(locale, "Найди своё", "Find your path") },
     { id: "certificate", label: pick(locale, "Сертификат", "Certificate") },
     { id: "store", label: pick(locale, "Магазин", "Store") },
     { id: "access", label: pick(locale, "Доступ", "Access") },
@@ -116,7 +120,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   // The access block (one-off course vs subscription) returns with the plans.
   const showAccess = open && plansPublic();
-  const visibleStops = (open ? stops : stops.filter((stop) => !["programmes", "certificate", "path", "voices", "finish"].includes(stop.id))).filter(
+  const visibleStops = (open ? stops : stops.filter((stop) => !["programmes", "find-your-path", "certificate", "path", "voices", "finish"].includes(stop.id))).filter(
     (stop) => showAccess || stop.id !== "access",
   );
 
@@ -179,6 +183,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </RevealGroup>
         </Container>
       )}
+
+      {open && findYourPath && <FindYourPath course={findYourPath} locale={locale} />}
 
       {open && <CertificateShowcase locale={locale} />}
 

@@ -52,21 +52,21 @@
  "courses": {
   "ai-agency-builder": "/courses/ai-agency-builder.png",
   "ai-agent-architect": "/courses/ai-agent-architect.png",
-  "ai-agent-engineer": "/courses/cards/ai-agent-engineer.jpg",
-  "ai-automation-engineer": "/courses/cards/ai-automation-engineer.jpg",
-  "ai-business-builder": "/courses/cards/ai-business-builder.jpg",
-  "ai-content-creator": "/courses/cards/ai-content-creator.jpg",
+  "ai-agent-engineer": "/courses/cards/ai-agent-engineer-v2.jpg",
+  "ai-automation-engineer": "/courses/cards/ai-automation-engineer-v2.jpg",
+  "ai-business-builder": "/courses/cards/ai-business-builder-v2.jpg",
+  "ai-content-creator": "/courses/cards/ai-content-creator-v2.jpg",
   "ai-conversational-systems": "/courses/ai-conversational-systems.png",
-  "ai-for-productivity": "/courses/cards/ai-for-productivity.jpg",
-  "ai-insider-accelerator": "/courses/cards/ai-insider-accelerator.jpg",
-  "ai-productivity-master": "/courses/cards/ai-productivity-master.jpg",
+  "ai-for-productivity": "/courses/cards/ai-for-productivity-v2.jpg",
+  "ai-insider-accelerator": "/courses/cards/ai-insider-accelerator-v2.jpg",
+  "ai-productivity-master": "/courses/cards/ai-productivity-master-v2.jpg",
   "ai-saas-builder": "/courses/ai-saas-builder.png",
-  "ai-start": "/courses/cards/ai-start.jpg",
+  "ai-start": "/courses/cards/ai-start-v2.jpg",
   "ai-user-pro": "/courses/ai-user-pro.png",
-  "first-automation-n8n": "/courses/cards/first-automation-n8n.jpg",
+  "first-automation-n8n": "/courses/cards/first-automation-n8n-v2.jpg",
   "no-code-automation": "/courses/no-code-automation.png",
-  "ai-for-developers": "/courses/cards/ai-for-developers.jpg",
-  "voice-agents": "/courses/cards/voice-agents.jpg"
+  "ai-for-developers": "/courses/cards/ai-for-developers-v2.jpg",
+  "voice-agents": "/courses/cards/voice-agents-v2.jpg"
  },
  "vault": {
   "vault-agency": "/vault/vault-agency.png",
@@ -105,16 +105,16 @@
   "ai-insider-accelerator-promo": "/videos/ai-insider-accelerator-promo.mp4"
  },
  "coursesWide": {
-  "ai-agent-engineer": "/courses/wide/ai-agent-engineer.jpg",
-  "ai-automation-engineer": "/courses/wide/ai-automation-engineer.jpg",
-  "ai-business-builder": "/courses/wide/ai-business-builder.jpg",
-  "ai-content-creator": "/courses/wide/ai-content-creator.jpg",
-  "ai-for-developers": "/courses/wide/ai-for-developers.jpg",
-  "ai-for-productivity": "/courses/wide/ai-for-productivity.jpg",
-  "ai-insider-accelerator": "/courses/wide/ai-insider-accelerator.jpg",
-  "ai-productivity-master": "/courses/wide/ai-productivity-master.jpg",
-  "ai-start": "/courses/wide/ai-start.jpg",
-  "first-automation-n8n": "/courses/wide/first-automation-n8n.jpg",
-  "voice-agents": "/courses/wide/voice-agents.jpg"
+  "ai-agent-engineer": "/courses/wide/ai-agent-engineer-v2.jpg",
+  "ai-automation-engineer": "/courses/wide/ai-automation-engineer-v2.jpg",
+  "ai-business-builder": "/courses/wide/ai-business-builder-v2.jpg",
+  "ai-content-creator": "/courses/wide/ai-content-creator-v2.jpg",
+  "ai-for-developers": "/courses/wide/ai-for-developers-v2.jpg",
+  "ai-for-productivity": "/courses/wide/ai-for-productivity-v2.jpg",
+  "ai-insider-accelerator": "/courses/wide/ai-insider-accelerator-v2.jpg",
+  "ai-productivity-master": "/courses/wide/ai-productivity-master-v2.jpg",
+  "ai-start": "/courses/wide/ai-start-v2.jpg",
+  "first-automation-n8n": "/courses/wide/first-automation-n8n-v2.jpg",
+  "voice-agents": "/courses/wide/voice-agents-v2.jpg"
  }
 }

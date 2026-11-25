@@ -9,7 +9,8 @@ import { Container } from "@/components/primitives/surface";
 import { Note } from "@/components/primitives/states";
 import { CheckoutForm, type CheckoutTier } from "@/components/checkout/checkout-form";
 import { buyFaq } from "@/content/catalog";
-import { courseCover } from "@/content/covers";
+import { courseCover, courseTrailer } from "@/content/covers";
+import { CourseTrailer } from "@/components/catalog/course-trailer";
 import { pick } from "@/content/locale";
 import { legalIsDraft } from "@/content/site";
 import { getCourse } from "@/lib/api/catalog";
@@ -92,6 +93,7 @@ export default async function BuyCoursePage({
   };
 
   const image = courseCover(course.image, course.slug);
+  const trailer = courseTrailer(course.slug);
   return (
     <Container size="wide" className="pt-8 pb-20">
       <Breadcrumbs
@@ -118,10 +120,24 @@ export default async function BuyCoursePage({
               : lessonCount(course.lessonCount, locale, d)}
           </p>
 
-          {image && (
-            <div className="relative mt-7 aspect-[21/9] overflow-hidden rounded-lg border border-line bg-surface-3">
-              <Image src={image} alt="" fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
+          {/* The trailer, when the course has one — a buyer sees the course moving, not a still. */}
+          {trailer ? (
+            <div className="mt-7">
+              <CourseTrailer
+                src={trailer}
+                poster={image ?? null}
+                label={pick(locale, "Трейлер курса", "Course trailer")}
+                soonLabel={pick(locale, "Трейлер скоро", "Trailer coming")}
+                playLabel={pick(locale, "Смотреть трейлер", "Play the trailer")}
+                facts={[]}
+              />
             </div>
+          ) : (
+            image && (
+              <div className="relative mt-7 aspect-[21/9] overflow-hidden rounded-lg border border-line bg-surface-3">
+                <Image src={image} alt="" fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
+              </div>
+            )
           )}
 
           <section className="mt-8 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">

@@ -7,7 +7,6 @@ import { Breadcrumbs, Accordion, AccordionItem } from "@/components/primitives/n
 import { Container, SectionHead } from "@/components/primitives/surface";
 import { Reveal } from "@/components/motion/reveal";
 import { Rating } from "@/components/primitives/display";
-import { Note } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
 import { FreePreview, LicensePicker } from "@/components/store/license-picker";
 import { WishlistButton } from "@/components/store/wishlist";
@@ -329,15 +328,6 @@ export default async function ProductPage({
             )}
 
 
-            {!discount && (
-              <Note>
-                {pick(
-                  locale,
-                  `Подписка Pro снижает цену на ${Math.round(tierDiscount.pro * 100)}%, Club — на ${Math.round(tierDiscount.club * 100)}%.`,
-                  `A Pro plan takes ${Math.round(tierDiscount.pro * 100)}% off, Club takes ${Math.round(tierDiscount.club * 100)}%.`,
-                )}
-              </Note>
-            )}
           </aside>
         </div>
       </Container>

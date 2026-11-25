@@ -15,7 +15,6 @@ import { CategoryIndex, type IndexRow } from "@/components/store/category-index"
 import { SaleCountdown } from "@/components/store/sale-countdown";
 import { StoreFilterBar, StoreSearch } from "@/components/store/store-controls";
 import { pick } from "@/content/locale";
-import { tierDiscount } from "@/content/store";
 import {
   categoryFacets,
   filterProducts,
@@ -133,8 +132,8 @@ export default async function StorePage({
             <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-ink-2">
               {pick(
                 locale,
-                `${catalog.products.length} готовых систем: промпты, n8n, агенты, скиллы, голосовые боты. В каждой — файлы, инструкция и обновления. По подписке Pro всё на ${Math.round(tierDiscount.pro * 100)}% дешевле.`,
-                `${catalog.products.length} ready systems: prompts, n8n, agents, skills, voice bots. Each comes with files, a guide and updates. ${Math.round(tierDiscount.pro * 100)}% off everything with Pro.`,
+                `${catalog.products.length} готовых систем: промпты, n8n, агенты, скиллы, голосовые боты. В каждой — файлы, инструкция и обновления.`,
+                `${catalog.products.length} ready systems: prompts, n8n, agents, skills, voice bots. Each comes with files, a guide and updates.`,
               )}
             </p>
           </div>

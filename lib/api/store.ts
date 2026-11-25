@@ -74,9 +74,9 @@ const LICENSE_LABELS: Record<LicenseId, { ru: string; en: string; noteRu: string
 };
 
 function toLicenses(raw: ApiLicense[] | undefined, basePrice: number, locale: Locale): ProductLicense[] {
-  const source = raw?.length
-    ? raw
-    : ([{ id: "personal", priceEur: basePrice, rights: "personal", clientLimit: 1 }] as ApiLicense[]);
+  // Only the personal licence is sold for now; client and agency tiers stay off the site.
+  const personal = raw?.find((license) => license.id === "personal");
+  const source = [personal ?? ({ id: "personal", priceEur: basePrice, rights: "personal", clientLimit: 1 } as ApiLicense)];
 
   return source.map((license) => {
     const labels = LICENSE_LABELS[license.id] ?? LICENSE_LABELS.personal;

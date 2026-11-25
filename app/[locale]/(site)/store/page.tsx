@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Package } from "lucide-react";
+import { ArrowRight, Check, Package } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs } from "@/components/primitives/navigation";
 import { ButtonLink } from "@/components/primitives/button";
@@ -181,50 +181,79 @@ export default async function StorePage({
       {/* --------------------------------- drop ---------------------------------- */}
       {showShelves && drop && (
         <Container size="wide" className="pb-20">
-          <Reveal className="on-dark relative isolate flex min-h-[34rem] flex-col justify-end overflow-hidden rounded-3xl border border-line bg-ground-deep text-ink lg:aspect-[21/9] lg:min-h-0">
-            {drop.video ? (
-              <AmbientVideo
-                src={drop.video}
-                poster={drop.video.replace(/\.mp4$/, ".jpg")}
-                playLabel={pick(locale, "Включить видео", "Play video")}
-                className="-z-10"
-              />
-            ) : (
-              <div className="absolute inset-0 -z-10">
-                <ProductCover product={drop} variant="plain" />
-              </div>
-            )}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 -z-10"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgb(5 5 4 / 0.92) 0%, rgb(5 5 4 / 0.55) 42%, transparent 70%), linear-gradient(0deg, rgb(5 5 4 / 0.85) 0%, transparent 45%)",
-              }}
-            />
+          <Reveal className="drop-card on-dark relative isolate overflow-hidden rounded-[32px] border border-line-2 text-ink">
+            <div className="grid items-center gap-10 p-6 sm:p-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-14">
+              {/* ------------------------------ the pitch ------------------------------ */}
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <Badge tone="accent">{drop.badges.includes("new") ? d.badges.new : d.store.dropOfWeek}</Badge>
+                  <span className="font-mono text-[11.5px] tracking-[0.16em] text-ink-3 uppercase">{drop.categoryLabel}</span>
+                </div>
+                <h2 className="drop-title mt-6 font-display text-[clamp(2.6rem,5.4vw,4.75rem)] leading-[0.9] font-extrabold tracking-[-0.05em]">
+                  {drop.title}
+                </h2>
+                <p className="mt-6 max-w-lg text-[16px] leading-relaxed text-ink-2">{drop.summary}</p>
 
-            <div className="flex flex-col gap-5 p-6 sm:p-10 lg:max-w-[42rem] lg:p-14">
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge tone="accent">{drop.badges.includes("new") ? d.badges.new : d.store.dropOfWeek}</Badge>
-                <span className="text-[13px] text-ink-2">{drop.categoryLabel}</span>
+                {drop.included.length > 0 && (
+                  <ul className="mt-7 grid gap-2.5 sm:grid-cols-2">
+                    {drop.included.slice(0, 4).map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-[13.5px] leading-snug text-ink-2">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden />
+                        <span className="line-clamp-2">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-line-2 pt-7">
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-display text-[2.6rem] leading-none font-extrabold tracking-tight text-ink tabular-nums">
+                      {formatPrice(drop.priceEur, locale)}
+                    </span>
+                    {drop.listPriceEur !== null && drop.listPriceEur > drop.priceEur && (
+                      <>
+                        <span className="font-mono text-[15px] text-ink-3 line-through tabular-nums">
+                          {formatPrice(drop.listPriceEur, locale)}
+                        </span>
+                        <span className="rounded-full bg-accent px-2.5 py-1 font-mono text-[12px] font-semibold text-on-accent tabular-nums">
+                          −{Math.round((1 - drop.priceEur / drop.listPriceEur) * 100)}%
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <ButtonLink href={path(`/store/${drop.slug}`, locale)} size="lg" className="group">
+                    {pick(locale, "Смотреть", "See it")}
+                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+                  </ButtonLink>
+                </div>
               </div>
-              <h2 className="font-display text-[clamp(2.2rem,5vw,4.6rem)] leading-[0.92] font-extrabold tracking-[-0.05em]">
-                {drop.title}
-              </h2>
-              <p className="max-w-lg text-[15.5px] leading-relaxed text-ink-2">{drop.summary}</p>
-              <div className="flex flex-wrap items-center gap-5 pt-1">
-                <ButtonLink href={path(`/store/${drop.slug}`, locale)} size="lg" className="group">
-                  {pick(locale, "Смотреть", "See it")}
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
-                </ButtonLink>
-                <span className="flex items-baseline gap-2.5">
-                  <span className="font-display text-[1.9rem] leading-none font-extrabold tracking-tight tabular-nums">
-                    {formatPrice(drop.priceEur, locale)}
-                  </span>
-                  {drop.listPriceEur !== null && (
-                    <span className="font-mono text-[15px] text-ink-3 line-through tabular-nums">{formatPrice(drop.listPriceEur, locale)}</span>
-                  )}
-                </span>
+
+              {/* ------------------------------ the screen ------------------------------ */}
+              <div className="drop-screen relative">
+                <span aria-hidden className="drop-screen-glow" />
+                <div className="relative overflow-hidden rounded-[20px] border border-white/10 bg-black shadow-2xl">
+                  <div className="flex items-center gap-1.5 border-b border-white/10 bg-white/[0.04] px-4 py-3">
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/20" aria-hidden />
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/20" aria-hidden />
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/20" aria-hidden />
+                    <span className="ml-3 truncate font-mono text-[11px] tracking-[0.12em] text-white/45 uppercase">
+                      {drop.video ? `${drop.title} · ${pick(locale, "шоурил", "showreel")}` : drop.title}
+                    </span>
+                  </div>
+                  <div className="relative aspect-video">
+                    {drop.video ? (
+                      <AmbientVideo
+                        src={drop.video}
+                        poster={drop.video.replace(/\.mp4$/, ".jpg")}
+                        playLabel={pick(locale, "Включить видео", "Play video")}
+                      />
+                    ) : (
+                      <div className="absolute inset-0">
+                        <ProductCover product={drop} variant="plain" />
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </Reveal>

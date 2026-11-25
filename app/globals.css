@@ -1226,6 +1226,41 @@
   .prize-tilt { animation: none; }
 }
 
+/* ==========================================================================
+   Store — the featured drop: pitch on the left, the product on a lit screen
+   ========================================================================== */
+
+.drop-card {
+  background:
+    radial-gradient(46rem 30rem at 85% 50%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 65%),
+    radial-gradient(30rem 22rem at 0% 0%, color-mix(in oklab, var(--accent) 7%, transparent), transparent 70%),
+    var(--ground-deep);
+  box-shadow: 0 50px 140px -80px color-mix(in oklab, var(--accent) 70%, transparent);
+}
+.drop-title {
+  background: linear-gradient(180deg, var(--ink) 30%, color-mix(in oklab, var(--ink) 55%, var(--accent)) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.drop-screen > div {
+  transform: perspective(1600px) rotateY(-6deg) rotateX(2deg);
+  transition: transform 0.9s var(--ease-out-expo);
+}
+.drop-screen:hover > div { transform: perspective(1600px) rotateY(0deg) rotateX(0deg); }
+.drop-screen-glow {
+  position: absolute;
+  inset: 10% 6%;
+  border-radius: 40%;
+  background: var(--accent);
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+@media (max-width: 1023px) {
+  .drop-screen > div { transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

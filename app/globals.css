@@ -1298,6 +1298,39 @@
 }
 .art-parallax[data-active="true"] .art-parallax-glare { opacity: 1; }
 
+/* ------------------------------ floating certificate ------------------------------ */
+@keyframes cert-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-1.2deg); }
+  50% { transform: translate3d(0, -14px, 0) rotate(0.6deg); }
+}
+@keyframes cert-shadow {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.55; }
+  50% { transform: translateX(-50%) scale(0.86); opacity: 0.35; }
+}
+@keyframes cert-sheen {
+  0%, 62% { transform: translateX(-120%) skewX(-18deg); }
+  100% { transform: translateX(220%) skewX(-18deg); }
+}
+.cert-float { animation: cert-float 6s ease-in-out infinite; will-change: transform; }
+@keyframes cert-float-back {
+  0%, 100% { transform: translate3d(13%, -15%, 0) rotate(6deg); }
+  50% { transform: translate3d(13%, calc(-15% - 9px), 0) rotate(4.6deg); }
+}
+.cert-float-back {
+  transform: translate3d(13%, -15%, 0) rotate(6deg);
+  animation: cert-float-back 6s ease-in-out -1.4s infinite;
+  will-change: transform;
+}
+.cert-shadow { animation: cert-shadow 6s ease-in-out infinite; }
+.cert-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  animation: cert-sheen 7s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
@@ -1318,4 +1351,6 @@
   .assistant-caret { animation: none; }
   .art-parallax img, .art-parallax[data-active="true"] img { transform: none; }
   .art-parallax-glare { display: none; }
+  .cert-float, .cert-float-back, .cert-shadow { animation: none; }
+  .cert-sheen::after { display: none; }
 }

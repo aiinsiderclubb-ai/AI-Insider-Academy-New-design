@@ -13,6 +13,17 @@ import { cn } from "@/lib/utils";
 
 /* ============================== four entrances ============================= */
 
+/** The dictionary says "four entrances"; the count follows what is actually on show. */
+function hubsBody(text: string, count: number, locale: Locale) {
+  const words: Record<string, Record<number, string>> = {
+    ru: { 2: "Два входа", 3: "Три входа", 4: "Четыре входа" },
+    ukr: { 2: "Два входи", 3: "Три входи", 4: "Чотири входи" },
+    en: { 2: "Two entrances", 3: "Three entrances", 4: "Four entrances" },
+  };
+  const table = words[locale] ?? words.ru;
+  return table[count] ? text.replace(/^[^.]+/, table[count]) : text;
+}
+
 export function Entrances({
   locale,
   d,
@@ -39,7 +50,7 @@ export function Entrances({
   return (
     <Container size="wide" className="py-20 sm:py-28">
       <Reveal>
-        <SectionHead eyebrow={prelaunch ? d.nav.store : d.nav.learn} title={d.home.hubsTitle} body={prelaunch ? undefined : d.home.hubsBody} />
+        <SectionHead eyebrow={prelaunch ? d.nav.store : d.nav.learn} title={d.home.hubsTitle} body={prelaunch ? undefined : hubsBody(d.home.hubsBody, items.length, locale)} />
       </Reveal>
 
       <RevealGroup

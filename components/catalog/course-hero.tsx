@@ -15,6 +15,7 @@ import { courseTrailer } from "@/content/covers";
 import { pick } from "@/content/locale";
 import type { Course } from "@/lib/api/catalog";
 import { formatPrice, path, plural, type Dictionary, type Locale } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 
 /**
  * The course opener.
@@ -66,6 +67,27 @@ export function CourseHero({
   ];
 
   const trailer = courseTrailer(course.slug);
+
+  /* A paid course on sale offers its two plans right here, each with its price and its own way to checkout. */
+  const sellsPlans = !owned && !course.isFree && !soon && !course.isIntake;
+  const plans = [
+    {
+      id: "self",
+      label: pick(locale, "Самостоятельно", "On your own"),
+      note: pick(locale, "Все уроки и материалы, самопроверка", "Every lesson and resource, self-check"),
+      price: course.priceEur,
+      href: path(`/learn/${course.slug}/buy?tier=self`, locale),
+      featured: false,
+    },
+    {
+      id: "mentor",
+      label: d.learn.withMentor,
+      note: pick(locale, "Проверка заданий, ментор и сертификат", "Reviewed work, a mentor and a certificate"),
+      price: course.mentorPriceEur,
+      href: path(`/learn/${course.slug}/buy?tier=mentor`, locale),
+      featured: true,
+    },
+  ];
 
   return (
     <section data-dark-hero className="ch-ink relative isolate z-10 -mt-16 overflow-x-clip">
@@ -127,6 +149,55 @@ export function CourseHero({
           {/* --------------------------- price and action -------------------------- */}
           <Reveal delay={200} className="lg:pb-2">
             <div className="flex flex-col gap-4 lg:items-end lg:text-right">
+              {sellsPlans ? (
+                <div className="w-full lg:w-[22rem]">
+                  <p className="eyebrow">{d.learn.priceYours}</p>
+                  <div className="mt-3 flex flex-col gap-2.5 text-left">
+                    {plans.map((plan) => (
+                      <Link
+                        key={plan.id}
+                        href={plan.href}
+                        className={cn(
+                          "group flex items-center justify-between gap-4 rounded-xl border p-4 transition-[border-color,background-color,transform] duration-200 hover:-translate-y-px",
+                          plan.featured
+                            ? "border-accent bg-accent-soft hover:bg-[color-mix(in_oklab,var(--accent)_18%,transparent)]"
+                            : "border-line bg-surface hover:border-line-2 hover:bg-surface-2",
+                        )}
+                      >
+                        <span className="min-w-0">
+                          <span className="flex items-center gap-2 text-[14.5px] font-medium text-ink">
+                            {plan.label}
+                            {plan.featured && (
+                              <span className="rounded-full bg-accent px-2 py-0.5 font-mono text-[10px] tracking-wide text-on-accent uppercase">
+                                {pick(locale, "с проверкой", "reviewed")}
+                              </span>
+                            )}
+                          </span>
+                          <span className="mt-0.5 block text-[12.5px] leading-snug text-muted">{plan.note}</span>
+                        </span>
+                        <span className="flex shrink-0 items-center gap-3">
+                          <span className="font-display text-[22px] leading-none font-extrabold tabular-nums text-ink">
+                            {formatPrice(plan.price, locale)}
+                          </span>
+                          <span
+                            aria-hidden
+                            className={cn(
+                              "flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5",
+                              plan.featured ? "bg-accent text-on-accent" : "border border-line text-ink-2 group-hover:border-accent group-hover:text-accent",
+                            )}
+                          >
+                            <ArrowRight className="h-4 w-4" />
+                          </span>
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                  <p className="mt-2.5 text-[12.5px] text-muted lg:text-right">
+                    {pick(locale, "Разовая оплата · доступ навсегда · можно доплатить до ментора позже", "One payment · yours for good · upgrade to a mentor any time")}
+                  </p>
+                </div>
+              ) : (
+              <>
               <div>
                 <p className="eyebrow">{owned ? pick(locale, "Ваш курс", "Yours") : d.learn.priceYours}</p>
                 <p className="mt-3 flex items-baseline gap-3 lg:justify-end">
@@ -183,6 +254,8 @@ export function CourseHero({
                   <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                 </ButtonLink>
               </Magnetic>
+              </>
+              )}
 
               {course.isIntake && !owned && (
                 <p className="max-w-[17rem] text-[12.5px] leading-snug text-muted">

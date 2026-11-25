@@ -5,6 +5,7 @@ import { Marquee } from "@/components/motion/marquee";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { Access, Closing, Entrances, Reviews, type AccessOption } from "@/components/home/sections";
 import { CourseCard } from "@/components/catalog/course-card";
+import { CertificateShowcase } from "@/components/home/certificate";
 import { ProductCard } from "@/components/store/product-card";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container, SectionHead } from "@/components/primitives/surface";
@@ -103,8 +104,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   const stops = [
     { id: "start", label: pick(locale, "Начало", "Start") },
-    { id: "entrances", label: pick(locale, "Четыре входа", "Four entrances") },
+    { id: "entrances", label: pick(locale, "Входы", "Entrances") },
     { id: "programmes", label: pick(locale, "Программы", "Programmes") },
+    { id: "certificate", label: pick(locale, "Сертификат", "Certificate") },
     { id: "store", label: pick(locale, "Магазин", "Store") },
     { id: "access", label: pick(locale, "Доступ", "Access") },
     { id: "path", label: pick(locale, "Маршрут", "Route") },
@@ -114,7 +116,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   // The access block (one-off course vs subscription) returns with the plans.
   const showAccess = open && plansPublic();
-  const visibleStops = (open ? stops : stops.filter((stop) => !["programmes", "path", "voices", "finish"].includes(stop.id))).filter(
+  const visibleStops = (open ? stops : stops.filter((stop) => !["programmes", "certificate", "path", "voices", "finish"].includes(stop.id))).filter(
     (stop) => showAccess || stop.id !== "access",
   );
 
@@ -170,6 +172,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </RevealGroup>
         </Container>
       )}
+
+      {open && <CertificateShowcase locale={locale} />}
 
       <Container size="wide" id="store">
         <Reveal>

@@ -1398,7 +1398,7 @@
      "descriptionEn": "Free demo lesson. We build it together in n8n.",
      "duration": "25 мин",
      "durationEn": "25 min",
-     "videoUrl": "",
+     "videoUrl": "ai-automation-engineer/ae1-dima.mp4",
      "videoNumber": 1
     },
     {
@@ -1409,7 +1409,7 @@
      "descriptionEn": "We build it together in n8n.",
      "duration": "22 мин",
      "durationEn": "22 min",
-     "videoUrl": "",
+     "videoUrl": "ai-automation-engineer/ae2-dima.mp4",
      "videoNumber": 2
     },
     {
@@ -1420,7 +1420,7 @@
      "descriptionEn": "We build it together in n8n.",
      "duration": "28 мин",
      "durationEn": "28 min",
-     "videoUrl": "",
+     "videoUrl": "ai-automation-engineer/ae3-dima.mp4",
      "videoNumber": 3
     },
     {
@@ -1431,7 +1431,7 @@
      "descriptionEn": "We build it together in n8n.",
      "duration": "30 мин",
      "durationEn": "30 min",
-     "videoUrl": "",
+     "videoUrl": "ai-automation-engineer/ae4-dima.mp4",
      "videoNumber": 4
     },
     {
@@ -1442,7 +1442,7 @@
      "descriptionEn": "We build it together in n8n.",
      "duration": "25 мин",
      "durationEn": "25 min",
-     "videoUrl": "",
+     "videoUrl": "ai-automation-engineer/ae5-dima.mp4",
      "videoNumber": 5
     },
     {
@@ -1453,7 +1453,7 @@
      "descriptionEn": "We build it together in n8n.",
      "duration": "28 мин",
      "durationEn": "28 min",
-     "videoUrl": "",
+     "videoUrl": "ai-automation-engineer/ae6-dima.mp4",
      "videoNumber": 6
     },
     {
@@ -1508,7 +1508,7 @@
      "descriptionEn": "Explained with slides and examples.",
      "duration": "20 мин",
      "durationEn": "20 min",
-     "videoUrl": "",
+     "videoUrl": "ai-automation-engineer/ae11-dima.mp4",
      "videoNumber": 11
     },
     {
@@ -1526,7 +1526,7 @@
    "difficulty": 2,
    "audienceLabelRu": "Для фрилансеров и внедренцев",
    "audienceLabelEn": "For freelancers and integrators",
-   "status": "in-development"
+   "status": "published"
   },
   {
    "id": "ai-agent-engineer",

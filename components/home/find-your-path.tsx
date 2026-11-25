@@ -32,8 +32,8 @@ export function FindYourPath({ course, locale }: { course: Course; locale: Local
     },
     {
       icon: Gift,
-      title: pick(locale, "Подарок: первый платный курс бесплатно", "A gift: your first paid course free"),
-      body: pick(locale, "Промокод придёт следом и действует 24 часа.", "The code follows and works for 24 hours."),
+      title: pick(locale, "Бонусы для участников", "Bonuses for participants"),
+      body: pick(locale, "Одобренные участники получают бонусы — подробности придут на почту.", "Approved participants get bonuses — the details arrive by email."),
     },
   ];
 

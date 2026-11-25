@@ -7,7 +7,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { links } from "@/content/site";
 import type { Dictionary } from "@/lib/i18n";
 import { localeShort, locales, path, type Locale } from "@/lib/i18n/config";
-import { coursesPublic, plansPublic } from "@/lib/visibility";
+import { coursesPublic, packsPublic, plansPublic } from "@/lib/visibility";
 
 /** `https://t.me/name` → `@name`, the way a person would write it. */
 function handle(url: string) {
@@ -36,7 +36,7 @@ export function SiteFooter({ locale, d }: { locale: Locale; d: Dictionary }) {
       title: d.footer.learning,
       links: [
         { label: d.nav.catalog, href: p("/learn") },
-        { label: d.nav.bundles, href: p("/learn?tab=bundles") },
+        ...(packsPublic() ? [{ label: d.nav.bundles, href: p("/learn?tab=bundles") }] : []),
         ...(plansPublic() ? [{ label: d.nav.plans, href: p("/plans") }] : []),
       ],
     },
@@ -44,7 +44,7 @@ export function SiteFooter({ locale, d }: { locale: Locale; d: Dictionary }) {
       title: d.footer.product,
       links: [
         { label: d.nav.store, href: p("/store") },
-        { label: d.nav.vault, href: p("/store?collection=vault") },
+        ...(packsPublic() ? [{ label: d.nav.vault, href: p("/store?collection=vault") }] : []),
       ],
     },
     {

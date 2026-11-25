@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, Check, Package } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumbs } from "@/components/primitives/navigation";
@@ -11,7 +9,6 @@ import { EmptyState } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
 import { ProductCover } from "@/components/store/product-cover";
 import { AmbientVideo } from "@/components/store/hover-video";
-import { CategoryIndex, type IndexRow } from "@/components/store/category-index";
 import { SaleCountdown } from "@/components/store/sale-countdown";
 import { StoreFilterBar, StoreSearch } from "@/components/store/store-controls";
 import { pick } from "@/content/locale";
@@ -19,7 +16,6 @@ import {
   categoryFacets,
   filterProducts,
   getStoreCatalog,
-  storeCategories,
   type Product,
   type StoreSort as SortKey,
 } from "@/lib/api/store";
@@ -60,8 +56,12 @@ export default async function StorePage({
 
   const scoped = collection && collectionIds.size ? catalog.products.filter((item) => collectionIds.has(item.id)) : catalog.products;
 
+  // What can be bought now leads; announced items wait on their own shelf below.
+  const onSale = scoped.filter((item) => item.available);
+  const upcoming = scoped.filter((item) => !item.available);
+
   const band = query.price ? PRICE_BANDS[query.price] : undefined;
-  const results = filterProducts(scoped, {
+  const results = filterProducts(onSale, {
     q: query.q,
     category: query.category,
     sort: (query.sort as SortKey) ?? "popular",
@@ -71,7 +71,8 @@ export default async function StorePage({
     badge: query.badge,
   });
 
-  const facets = categoryFacets(scoped);
+  const facets = categoryFacets(onSale).filter((facet) => facet.count > 0);
+  const soonResults = filterProducts(upcoming, { q: query.q, category: query.category, sort: "popular" });
   const filtered = Boolean(query.q || query.category || query.price || query.rating || query.badge);
 
   // The featured slot goes to a product that can show itself moving, if there is one.
@@ -88,28 +89,6 @@ export default async function StorePage({
 
   const showShelves = !filtered && !collection;
 
-  const indexRows: IndexRow[] = storeCategories
-    .map((category) => {
-      const items = catalog.products.filter((item) => item.categoryId === category.id);
-      const onSale = items.filter((item) => item.available);
-      const cheapest = onSale.length ? Math.min(...onSale.map((item) => item.priceEur)) : null;
-      const covers = [...onSale]
-        .sort((a, b) => Number(Boolean(b.video)) - Number(Boolean(a.video)) || b.badges.length - a.badges.length)
-        .map((item) => item.slug);
-      return {
-        slug: category.slug,
-        label: pick(locale, category.titleRu, category.titleEn),
-        description: pick(locale, category.descRu, category.descEn),
-        count: items.length,
-        meta:
-          cheapest !== null
-            ? `${pick(locale, "от", "from")} ${formatPrice(cheapest, locale)}`
-            : pick(locale, "скоро", "soon"),
-        covers,
-        href: path(`/store?category=${category.slug}`, locale),
-      };
-    })
-    .filter((row) => row.count > 0);
 
   return (
     <>
@@ -170,10 +149,68 @@ export default async function StorePage({
         </Container>
       )}
 
-      {/* ------------------------------- the index ------------------------------- */}
-      {showShelves && (
+      {/* -------------------------------- catalogue ------------------------------ */}
+      <Container size="wide" className="pb-24" id="catalogue">
+        {showShelves && (
+          <Reveal>
+            <SectionHead
+              title={
+                catalog.sale
+                  ? pick(locale, `Всё по ${formatPrice(catalog.sale.priceEur, locale)}`, `Everything at ${formatPrice(catalog.sale.priceEur, locale)}`)
+                  : pick(locale, "В продаже", "On sale now")
+              }
+              as="h2"
+              className="mb-5"
+            />
+          </Reveal>
+        )}
+        <div className="sticky top-16 z-20 -mx-5 mb-8 border-b border-line bg-[color-mix(in_oklab,var(--ground)_88%,transparent)] px-5 py-3 backdrop-blur-xl sm:-mx-7 sm:px-7">
+          <StoreFilterBar
+            d={d}
+            rated={rated}
+            total={onSale.length}
+            categories={facets.map((facet) => ({ slug: facet.slug, label: pick(locale, facet.titleRu, facet.titleEn), count: facet.count }))}
+          />
+        </div>
+
+        <p className="mb-6 text-[13px] text-muted tabular-nums">{resultCount(results.length, locale, d)}</p>
+
+        {results.length ? (
+          <RevealGroup step={45} className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+            {results.map((product: Product) => (
+              <ProductCard key={product.id} product={product} locale={locale} d={d} />
+            ))}
+          </RevealGroup>
+        ) : (
+          <EmptyState
+            icon={<Package className="h-5 w-5" aria-hidden />}
+            title={d.store.emptyTitle}
+            body={d.store.emptyBody}
+            action={
+              <ButtonLink href={path("/store", locale)} size="sm">
+                {d.common.clearFilters}
+              </ButtonLink>
+            }
+          />
+        )}
+      </Container>
+
+      {/* ---------------------------------- soon ---------------------------------- */}
+      {soonResults.length > 0 && (
         <Container size="wide" className="pb-20">
-          <CategoryIndex rows={indexRows} />
+          <Reveal>
+            <SectionHead
+              eyebrow={d.badges.soon}
+              title={pick(locale, "Скоро в магазине", "Coming to the store")}
+              body={pick(locale, "Эти системы ещё дописываем — добавляем каждый день.", "Still being finished — new ones land every day.")}
+              as="h2"
+            />
+          </Reveal>
+          <RevealGroup step={40} className="grid gap-x-6 gap-y-10 opacity-80 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+            {soonResults.map((product: Product) => (
+              <ProductCard key={product.id} product={product} locale={locale} d={d} compact />
+            ))}
+          </RevealGroup>
         </Container>
       )}
 
@@ -258,108 +295,6 @@ export default async function StorePage({
           </Reveal>
         </Container>
       )}
-
-      {/* ------------------------------ collections ------------------------------ */}
-      {showShelves && catalog.bundles.length > 0 && (
-        <Container size="wide" className="pb-20">
-          <Reveal>
-            <SectionHead
-              title={pick(locale, "Наборы", "Bundles")}
-              body={pick(
-                locale,
-                "Несколько систем под одну задачу — дешевле, чем по отдельности.",
-                "Several systems for one job — cheaper than buying them one by one.",
-              )}
-              as="h2"
-            />
-          </Reveal>
-          <div className="scroll-x -mx-5 px-5 pb-2 sm:mx-0 sm:px-0">
-            <ul className="flex min-w-max gap-5 sm:grid sm:min-w-0 sm:grid-cols-2 lg:grid-cols-3">
-              {catalog.bundles.slice(0, 6).map((bundle) => {
-                const saving = bundle.fullPriceEur > 0 ? Math.round((bundle.savingEur / bundle.fullPriceEur) * 100) : 0;
-                return (
-                  <li key={bundle.id} className="w-76 sm:w-auto">
-                    <Link
-                      href={path(`/store?collection=${bundle.vertical}`, locale)}
-                      className="group flex h-full flex-col gap-5 rounded-2xl border border-line bg-surface p-5 transition-[border-color,background-color] duration-300 hover:border-line-2 hover:bg-surface-2"
-                    >
-                      {/* The bundle's own products, fanned like a hand of cards. */}
-                      <div aria-hidden className="relative h-36">
-                        {bundle.products.slice(0, 3).map((item, layer) => (
-                          <div
-                            key={item.id}
-                            className="absolute top-3 left-1/2 h-[7.25rem] w-[12.75rem] overflow-hidden rounded-md border border-line bg-ground shadow-lg transition-transform duration-500 ease-[var(--ease-out-quart)]"
-                            style={{
-                              zIndex: 3 - Math.abs(layer - 1),
-                              transform: `translateX(calc(-50% + ${(layer - 1) * 58}px)) rotate(${(layer - 1) * 6}deg)`,
-                            }}
-                          >
-                            <Image src={`/covers/shelf/${item.slug}.jpg`} alt="" fill sizes="204px" className="object-cover" />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="flex items-end justify-between gap-4">
-                        <div className="min-w-0">
-                          <p className="font-display text-[19px] leading-tight font-extrabold tracking-tight text-ink">{bundle.title}</p>
-                          <p className="mt-1 text-[13px] text-muted">
-                            {bundle.products.length} {pick(locale, "систем в наборе", "systems inside")}
-                          </p>
-                        </div>
-                        <div className="shrink-0 text-right">
-                          <p className="font-mono text-[18px] font-medium text-ink tabular-nums">{formatPrice(bundle.priceEur, locale)}</p>
-                          {saving > 0 && (
-                            <p className="mt-0.5 text-[12px] text-accent-ink tabular-nums">
-                              −{saving}% <span className="text-faint line-through">{formatPrice(bundle.fullPriceEur, locale)}</span>
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </Container>
-      )}
-
-      {/* -------------------------------- catalogue ------------------------------ */}
-      <Container size="wide" className="pb-24" id="catalogue">
-        {showShelves && (
-          <Reveal>
-            <SectionHead title={pick(locale, "Весь каталог", "Everything")} as="h2" className="mb-5" />
-          </Reveal>
-        )}
-        <div className="sticky top-16 z-20 -mx-5 mb-8 border-b border-line bg-[color-mix(in_oklab,var(--ground)_88%,transparent)] px-5 py-3 backdrop-blur-xl sm:-mx-7 sm:px-7">
-          <StoreFilterBar
-            d={d}
-            rated={rated}
-            total={scoped.length}
-            categories={facets.map((facet) => ({ slug: facet.slug, label: pick(locale, facet.titleRu, facet.titleEn), count: facet.count }))}
-          />
-        </div>
-
-        <p className="mb-6 text-[13px] text-muted tabular-nums">{resultCount(results.length, locale, d)}</p>
-
-        {results.length ? (
-          <RevealGroup step={45} className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-            {results.map((product: Product) => (
-              <ProductCard key={product.id} product={product} locale={locale} d={d} />
-            ))}
-          </RevealGroup>
-        ) : (
-          <EmptyState
-            icon={<Package className="h-5 w-5" aria-hidden />}
-            title={d.store.emptyTitle}
-            body={d.store.emptyBody}
-            action={
-              <ButtonLink href={path("/store", locale)} size="sm">
-                {d.common.clearFilters}
-              </ButtonLink>
-            }
-          />
-        )}
-      </Container>
 
       {/* --------------------------------- shelves ------------------------------- */}
       {showShelves && topRated.length > 0 && (

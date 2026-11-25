@@ -9,6 +9,7 @@ import { ButtonLink } from "@/components/primitives/button";
 import { Container, SectionHead } from "@/components/primitives/surface";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { Stat } from "@/components/primitives/badge";
+import { packsPublic } from "@/lib/visibility";
 import { courseBundles, vaultBundle, vaultHub, vaultProducts } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import { difficultyFilters } from "@/content/site";
@@ -43,6 +44,8 @@ export default async function LearnPage({
   const locale = raw as Locale;
   const query = await searchParams;
   const d = getDictionary(locale);
+  // Packs and the Vault stay hidden until they can be bought (lib/visibility.ts).
+  const packs = packsPublic();
 
   const [courses, reviews] = await Promise.all([getCourses(locale), getReviews(locale)]);
   const groups = groupCourses(courses);
@@ -69,8 +72,12 @@ export default async function LearnPage({
         { value: "all", label: d.learn.tabAll, count: courses.length },
         { value: "paid", label: d.learn.tabPaid, count: groups.paid.length },
         { value: "free", label: d.learn.tabFree, count: groups.free.length },
-        { value: "bundles", label: d.learn.tabBundles, count: courseBundles.length },
-        { value: "vault", label: d.learn.tabVault, count: vaultProducts.length },
+        ...(packs
+          ? [
+              { value: "bundles", label: d.learn.tabBundles, count: courseBundles.length },
+              { value: "vault", label: d.learn.tabVault, count: vaultProducts.length },
+            ]
+          : []),
         { value: "intake", label: d.learn.tabIntake, count: groups.intake.length },
       ],
     },
@@ -127,8 +134,8 @@ export default async function LearnPage({
           <RevealGroup step={70} as="dl" className="grid grid-cols-2 gap-x-6 gap-y-6 self-end sm:grid-cols-4 lg:grid-cols-2">
             <Stat value={courses.length} label={d.home.statsCourses} />
             <Stat value={courses.reduce((sum, course) => sum + course.lessonCount, 0)} label={d.home.statsLessons} />
-            <Stat value={courseBundles.length} label={d.nav.bundles} />
-            <Stat value={vaultProducts.length} label={d.nav.vault} />
+            {packs && <Stat value={courseBundles.length} label={d.nav.bundles} />}
+            {packs && <Stat value={vaultProducts.length} label={d.nav.vault} />}
           </RevealGroup>
         </div>
       </Container>
@@ -263,7 +270,7 @@ export default async function LearnPage({
       )}
 
       {/* ------------------------------ bundles ----------------------------- */}
-      {(tab === "all" || tab === "bundles") && (
+      {packs && (tab === "all" || tab === "bundles") && (
         <Container size="wide" className="pb-16">
           <Reveal>
             <SectionHead
@@ -293,7 +300,7 @@ export default async function LearnPage({
       )}
 
       {/* ------------------------------- vault ------------------------------ */}
-      {(tab === "all" || tab === "vault") && (
+      {packs && (tab === "all" || tab === "vault") && (
         <Container size="wide" className="pb-20">
           <Reveal>
             <SectionHead

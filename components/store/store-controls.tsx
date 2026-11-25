@@ -285,7 +285,7 @@ function StoreFilterBarInner({
 
   return (
     <div className={cn("flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6", pending && "opacity-80")}>
-      <div ref={strip} className="scroll-x relative -mx-5 min-w-0 px-5 sm:mx-0 sm:px-0" role="tablist" aria-label={d.store.categories}>
+      <div ref={strip} className="scroll-x no-scrollbar relative -mx-5 min-w-0 px-5 sm:mx-0 sm:px-0" role="tablist" aria-label={d.store.categories}>
         <div className="flex gap-1">
           <button type="button" role="tab" aria-selected={category === "all"} onClick={() => write({ category: null })} className={tab(category === "all")}>
             {d.common.all}

@@ -16,7 +16,7 @@ import { getStoreCatalog } from "@/lib/api/store";
 import { getReviews } from "@/lib/api/public";
 import { storeCategories } from "@/content/store";
 import { formatPrice, getDictionary, locales, path, type Locale } from "@/lib/i18n";
-import { coursesPublic, plansPublic } from "@/lib/visibility";
+import { coursesPublic, packsPublic, plansPublic } from "@/lib/visibility";
 
 export const revalidate = 300;
 
@@ -193,7 +193,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {open && (
         <>
           <div id="access" />
-          <Access d={d} options={plansPublic() ? accessOptions : accessOptions.filter((option) => option.href !== path("/plans", locale))} />
+          <Access
+            d={d}
+            options={accessOptions.filter(
+              (option) =>
+                (plansPublic() || option.href !== path("/plans", locale)) &&
+                (packsPublic() || option.href !== path("/learn?tab=bundles", locale)),
+            )}
+          />
 
           <div id="voices" />
           <Reviews locale={locale} d={d} reviews={reviews} />

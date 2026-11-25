@@ -1,6 +1,6 @@
 import type { Dictionary } from "@/lib/i18n";
 import { path, type Locale } from "@/lib/i18n/config";
-import { coursesPublic, plansPublic } from "@/lib/visibility";
+import { coursesPublic, packsPublic, plansPublic } from "@/lib/visibility";
 
 export interface NavLink {
   label: string;
@@ -34,7 +34,7 @@ export function buildNav(d: Dictionary, locale: Locale): NavSection[] {
           title: d.learn.title,
           links: [
             { label: d.nav.catalog, href: p("/learn"), note: d.learn.body },
-            { label: d.nav.bundles, href: p("/learn?tab=bundles"), note: d.learn.inBundles },
+            ...(packsPublic() ? [{ label: d.nav.bundles, href: p("/learn?tab=bundles"), note: d.learn.inBundles }] : []),
             { label: d.nav.accelerator, href: p("/learn/ai-insider-accelerator"), note: d.learn.apply },
             {
               label: locale === "en" ? "Mentors" : "Менторы",
@@ -63,7 +63,7 @@ export function buildNav(d: Dictionary, locale: Locale): NavSection[] {
             { label: d.store.featured, href: p("/store"), note: d.store.body },
             { label: d.store.newArrivals, href: p("/store?badge=new") },
             { label: d.store.bestSellers, href: p("/store?sort=rating") },
-            { label: d.nav.vault, href: p("/store?collection=vault") },
+            ...(packsPublic() ? [{ label: d.nav.vault, href: p("/store?collection=vault") }] : []),
             { label: d.nav.tools, href: p("/store/tools"), note: d.tools.subtitle },
           ],
         },

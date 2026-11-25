@@ -32,3 +32,12 @@ export function isPlanPath(rest: string): boolean {
 export function isCourseOnlyPath(rest: string): boolean {
   return COURSE_ONLY_PATHS.some((prefix) => rest === prefix || rest.startsWith(`${prefix}/`));
 }
+
+/**
+ * Course packs (bundles) and the Vault collection stay off the site until they
+ * can be bought: no tabs, sections, links or pack pages. PACKS_PUBLIC=1 on
+ * Vercel shows them; unset keeps them hidden.
+ */
+export function packsPublic(): boolean {
+  return coursesPublic() && process.env.PACKS_PUBLIC === "1";
+}

@@ -7,6 +7,7 @@ import { Container, SectionHead } from "@/components/primitives/surface";
 import { Reveal } from "@/components/motion/reveal";
 import { CourseCard } from "@/components/catalog/course-card";
 import { bundleById, courseBundles } from "@/content/catalog";
+import { packsPublic } from "@/lib/visibility";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
@@ -40,7 +41,7 @@ export default async function BundlePage({
   const d = getDictionary(locale);
 
   const bundle = bundleById(id);
-  if (!bundle) notFound();
+  if (!bundle || !packsPublic()) notFound();
 
   const [courses, status, user] = await Promise.all([getCourses(locale), getCheckoutStatus(), getSession()]);
   const included = bundle.courseIds

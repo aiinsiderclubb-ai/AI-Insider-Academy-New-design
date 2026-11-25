@@ -7,7 +7,7 @@ import { giveawayList } from "@/content/community";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
 import { getAllBlogPosts } from "@/lib/api/public";
-import { coursesPublic, plansPublic } from "@/lib/visibility";
+import { coursesPublic, plansPublic, packsPublic } from "@/lib/visibility";
 
 const SITE = resolveSiteUrl();
 
@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const dynamicPaths = [
     ...courses.map((course) => ({ path: `/learn/${course.slug}`, priority: 0.8, changeFrequency: "weekly" as const })),
-    ...(open ? courseBundles : []).map((bundle) => ({ path: `/learn/bundles/${bundle.id}`, priority: 0.7, changeFrequency: "monthly" as const })),
+    ...(open && packsPublic() ? courseBundles : []).map((bundle) => ({ path: `/learn/bundles/${bundle.id}`, priority: 0.7, changeFrequency: "monthly" as const })),
     ...catalog.products.map((product) => ({ path: `/store/${product.slug}`, priority: 0.75, changeFrequency: "weekly" as const })),
     ...giveawayList.map((giveaway) => ({ path: `/community/giveaways/${giveaway.slug}`, priority: 0.6, changeFrequency: "weekly" as const })),
     ...posts.map((post) => ({ path: `/community/blog/${post.slug}`, priority: 0.65, changeFrequency: "monthly" as const, lastModified: post.date })),

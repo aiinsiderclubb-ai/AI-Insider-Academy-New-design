@@ -12,6 +12,7 @@ import { Magnetic, Spotlight } from "@/components/motion/pointer";
 import { Marquee } from "@/components/motion/marquee";
 import { Wipe } from "@/components/motion/wipe";
 import { AccessTiers } from "@/components/catalog/access-tiers";
+import { packsPublic } from "@/lib/visibility";
 import { MentorSpotlight } from "@/components/mentors/mentor-spotlight";
 import { mentorForCourse } from "@/content/mentors";
 import { CourseBar } from "@/components/catalog/course-bar";
@@ -74,7 +75,7 @@ export default async function CoursePage({
   ]);
 
   const profile = profileFor(course.id);
-  const bundles = bundlesWithCourse(course.id);
+  const bundles = packsPublic() ? bundlesWithCourse(course.id) : [];
   const image = courseCover(course.image, course.slug);
   /* The opener's media block crosses into this chapter, so the padding below
      has to know whether there is anything to cross. */

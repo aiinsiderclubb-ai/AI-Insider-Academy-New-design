@@ -13,6 +13,8 @@ export interface ProductLicense {
   note: string;
   priceEur: number;
   clientLimit: number | null;
+  /** The price before the opening sale, when the sale applies to this license. */
+  listEur?: number;
 }
 
 export interface Product {
@@ -46,6 +48,8 @@ export interface Product {
   video: string | null;
   /** Example clips (MP4), each with a poster beside it under the same name + `.jpg`. */
   clips: string[];
+  /** The list price while the opening sale has `priceEur` lower; null otherwise. */
+  listPriceEur: number | null;
 }
 
 export interface Bundle extends ApiBundle {
@@ -57,6 +61,8 @@ export interface Bundle extends ApiBundle {
 export interface StoreCatalog {
   /** Mirrors the marketplace feature flag; drives the "opening later" state. */
   enabled: boolean;
+  /** The opening sale while it runs. */
+  sale: { priceEur: number; endsAt: string } | null;
   products: Product[];
   bundles: Bundle[];
 }
@@ -128,6 +134,7 @@ function toProduct(raw: ApiProduct, locale: Locale): Product {
     outcome: suffixed(raw as unknown as Record<string, unknown>, "outcome", locale),
     setupTime: raw.setupTime ?? "",
     priceModel: raw.priceModel ?? "",
+    listPriceEur: null,
     video: raw.videoPreview || null,
     clips: (raw.screenshots ?? []).filter((item) => item.endsWith(".mp4")),
   };
@@ -143,6 +150,7 @@ export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
     tryApi<{ enabled?: boolean; onSale?: string[] }>("/payments/gumroad/status", { revalidate: 120 }, {}),
   ]);
   const onSale = till.enabled && Array.isArray(till.onSale) ? new Set(till.onSale) : null;
+  const sale = raw.sale && Date.parse(raw.sale.endsAt) > Date.now() ? raw.sale : null;
 
   // Ratings come only from real buyer reviews, which the API will serve once there are any.
   const localById = new Map(fallbackProducts.map((product) => [product.id, product]));
@@ -166,16 +174,32 @@ export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
         locale,
       );
     })
-    .map((product) => (onSale && product.available && !onSale.has(product.id) ? { ...product, available: false } : product));
+    .map((product) => (onSale && product.available && !onSale.has(product.id) ? { ...product, available: false } : product))
+    .map((product) => (sale && product.available ? onOpeningSale(product, sale) : product));
   const byId = new Map(products.map((product) => [product.id, product]));
 
   const bundles: Bundle[] = (raw.bundles ?? []).map((bundle) => {
     const items = bundle.productIds.map((id) => byId.get(id)).filter((item): item is Product => Boolean(item));
-    const fullPriceEur = items.reduce((sum, item) => sum + item.priceEur, 0);
+    // A bundle's saving is measured against list prices, not the opening sale.
+    const fullPriceEur = items.reduce((sum, item) => sum + (item.listPriceEur ?? item.priceEur), 0);
     return { ...bundle, products: items, fullPriceEur, savingEur: Math.max(0, fullPriceEur - bundle.priceEur) };
   });
 
-  return { enabled: Boolean(raw.enabled), products, bundles };
+  return { enabled: Boolean(raw.enabled), products, bundles, sale: sale ? { priceEur: sale.priceEur, endsAt: sale.endsAt } : null };
+}
+
+/** A product on the opening sale: its license (and so its headline price) at the sale price. */
+function onOpeningSale(product: Product, sale: NonNullable<ApiCatalog["sale"]>): Product {
+  const license = product.licenses.find((item) => item.id === sale.license);
+  if (!license || license.priceEur <= sale.priceEur) return product;
+  return {
+    ...product,
+    priceEur: sale.license === "personal" ? sale.priceEur : product.priceEur,
+    listPriceEur: sale.license === "personal" ? product.priceEur : null,
+    licenses: product.licenses.map((item) =>
+      item.id === sale.license ? { ...item, priceEur: sale.priceEur, listEur: item.priceEur } : item,
+    ),
+  };
 }
 
 export async function getProduct(slug: string, locale: Locale) {

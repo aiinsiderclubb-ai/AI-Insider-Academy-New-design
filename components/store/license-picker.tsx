@@ -33,7 +33,7 @@ export function LicensePicker({
 }) {
   const [selected, setSelected] = React.useState(licenses[0]?.id ?? "personal");
   const license = licenses.find((item) => item.id === selected) ?? licenses[0];
-  const discounted = discountPercent ? Math.round(license.priceEur * (1 - discountPercent)) : null;
+  const discounted = discountPercent && license.listEur === undefined ? Math.round(license.priceEur * (1 - discountPercent)) : null;
 
   return (
     <div className="rounded-lg border border-line bg-surface p-5 shadow-sm">
@@ -65,7 +65,14 @@ export function LicensePicker({
                     <Icon className="h-3.5 w-3.5 text-accent" aria-hidden />
                     {item.label}
                   </span>
-                  <span className="font-mono text-[14px] tabular-nums text-ink">{formatPrice(item.priceEur, locale)}</span>
+                  <span className="flex items-baseline gap-1.5">
+                    {item.listEur !== undefined && (
+                      <span className="font-mono text-[12px] text-faint line-through tabular-nums">{formatPrice(item.listEur, locale)}</span>
+                    )}
+                    <span className={cn("font-mono text-[14px] tabular-nums", item.listEur !== undefined ? "text-accent-ink" : "text-ink")}>
+                      {formatPrice(item.priceEur, locale)}
+                    </span>
+                  </span>
                 </span>
                 <span className="mt-1 block text-[12.5px] leading-snug text-ink-3">{item.note}</span>
               </span>
@@ -83,6 +90,9 @@ export function LicensePicker({
             <span className="font-mono text-[13px] text-faint line-through tabular-nums">
               {formatPrice(license.priceEur, locale)}
             </span>
+          )}
+          {discounted === null && license.listEur !== undefined && (
+            <span className="font-mono text-[14px] text-faint line-through tabular-nums">{formatPrice(license.listEur, locale)}</span>
           )}
         </p>
         {discounted !== null && (

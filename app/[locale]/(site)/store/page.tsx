@@ -12,6 +12,7 @@ import { ProductCard } from "@/components/store/product-card";
 import { ProductCover } from "@/components/store/product-cover";
 import { AmbientVideo } from "@/components/store/hover-video";
 import { CategoryIndex, type IndexRow } from "@/components/store/category-index";
+import { SaleCountdown } from "@/components/store/sale-countdown";
 import { StoreFilterBar, StoreSearch } from "@/components/store/store-controls";
 import { pick } from "@/content/locale";
 import { tierDiscount } from "@/content/store";
@@ -141,6 +142,35 @@ export default async function StorePage({
         </Reveal>
       </Container>
 
+      {/* ------------------------------ opening sale ----------------------------- */}
+      {catalog.sale && (
+        <Container size="wide" className="pb-10">
+          <Reveal className="relative isolate flex flex-col gap-4 overflow-hidden rounded-2xl border border-accent/40 bg-accent-soft px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+            <div
+              aria-hidden
+              className="absolute inset-y-0 -left-10 -z-10 w-40 -skew-x-12 opacity-25"
+              style={{ background: "repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 22px)" }}
+            />
+            <div>
+              <p className="font-display text-[clamp(1.35rem,2.6vw,1.9rem)] leading-tight font-extrabold tracking-tight text-ink">
+                {pick(locale, `В честь открытия — всё по ${formatPrice(catalog.sale.priceEur, locale)}`, `Opening week — everything ${formatPrice(catalog.sale.priceEur, locale)}`)}
+              </p>
+              <p className="mt-1 text-[13.5px] text-ink-2">
+                {pick(
+                  locale,
+                  "Все готовые системы магазина с личной лицензией. Остальные ещё в разработке — добавляем каждый день.",
+                  "Every ready system in the store, personal license. The rest are still being built — more every day.",
+                )}
+              </p>
+            </div>
+            <p className="flex shrink-0 items-baseline gap-2.5">
+              <span className="text-[12.5px] text-ink-3">{pick(locale, "До конца", "Ends in")}</span>
+              <SaleCountdown endsAt={catalog.sale.endsAt} className="font-mono text-[1.6rem] font-medium text-accent-ink tabular-nums" />
+            </p>
+          </Reveal>
+        </Container>
+      )}
+
       {/* ------------------------------- the index ------------------------------- */}
       {showShelves && (
         <Container size="wide" className="pb-20">
@@ -187,8 +217,13 @@ export default async function StorePage({
                   {pick(locale, "Смотреть", "See it")}
                   <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                 </ButtonLink>
-                <span className="font-display text-[1.9rem] leading-none font-extrabold tracking-tight tabular-nums">
-                  {formatPrice(drop.priceEur, locale)}
+                <span className="flex items-baseline gap-2.5">
+                  <span className="font-display text-[1.9rem] leading-none font-extrabold tracking-tight tabular-nums">
+                    {formatPrice(drop.priceEur, locale)}
+                  </span>
+                  {drop.listPriceEur !== null && (
+                    <span className="font-mono text-[15px] text-ink-3 line-through tabular-nums">{formatPrice(drop.listPriceEur, locale)}</span>
+                  )}
                 </span>
               </div>
             </div>

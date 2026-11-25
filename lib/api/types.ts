@@ -130,6 +130,8 @@ export interface ApiCatalog {
   enabled: boolean;
   products: ApiProduct[];
   bundles: ApiBundle[];
+  /** The opening sale while it runs: this price for the given license, until `endsAt`. */
+  sale?: { priceEur: number; license: LicenseId; endsAt: string } | null;
 }
 
 /* ------------------------------------ misc -------------------------------- */

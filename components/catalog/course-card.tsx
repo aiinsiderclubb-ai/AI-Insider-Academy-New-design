@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight, Lock, Play } from "lucide-react";
 import { Badge } from "@/components/primitives/badge";
 import { courseCover } from "@/content/covers";
+import { ArtParallax } from "@/components/catalog/art-parallax";
 import { pick } from "@/content/locale";
 import type { Course } from "@/lib/api/catalog";
 import { formatPrice, lessonCount, path, type Dictionary, type Locale } from "@/lib/i18n";
@@ -66,19 +67,22 @@ export function CourseCard({
       )}
     >
       {/* The artwork is a finished card — logo, badge, title, lesson count — so it is shown whole. */}
-      <div className={cn("relative overflow-hidden border-b border-line bg-surface-3", image ? "aspect-[3/2]" : "aspect-[21/9]")}>
+      <div className={cn("relative overflow-hidden bg-surface-3", image ? "aspect-[3/2]" : "aspect-[21/9] border-b border-line")}>
         {image ? (
-          <Image
-            src={image}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw"
-            priority={priority}
-            className={cn(
-              "object-cover transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.03]",
-              soon && "opacity-60 saturate-50",
-            )}
-          />
+          <>
+            <ArtParallax>
+              <Image
+                src={image}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                priority={priority}
+                className={cn("object-cover", soon && "opacity-60 saturate-50")}
+              />
+            </ArtParallax>
+            {/* No hard line under the art: its dark bottom edge melts into the card. */}
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[9%] bg-gradient-to-b from-transparent to-surface" />
+          </>
         ) : (
           <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_20%_0%,var(--accent-soft),transparent_60%)]" />
         )}
@@ -107,10 +111,15 @@ export function CourseCard({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-5">
+      <div className={cn("flex flex-1 flex-col gap-3", image ? "px-5 pt-2 pb-5" : "p-5")}>
         <div className="flex items-center gap-3 text-[12.5px] text-muted">
-          <span className="tabular-nums">{lessonCount(course.lessonCount, locale, d)}</span>
-          <span className="h-3 w-px bg-line-2" aria-hidden />
+          {/* the art already states the lesson count */}
+          {!image && (
+            <>
+              <span className="tabular-nums">{lessonCount(course.lessonCount, locale, d)}</span>
+              <span className="h-3 w-px bg-line-2" aria-hidden />
+            </>
+          )}
           <Difficulty level={course.difficulty} label={course.difficultyLabel} />
           {course.isProOnly && (
             <>
@@ -147,12 +156,15 @@ export function CourseCard({
 
         <div className="mt-auto flex items-end justify-between gap-4 pt-3">
           <Price course={course} locale={locale} d={d} />
-          <span
-            aria-hidden
-            className="flex h-8 w-8 items-center justify-center rounded-md border border-line text-ink-3 transition-[background-color,color,transform] duration-200 group-hover:border-accent group-hover:bg-accent group-hover:text-on-accent"
-          >
-            <ArrowUpRight className="h-4 w-4" />
-          </span>
+          {/* the art carries its own arrow; a second one only doubled it */}
+          {!image && (
+            <span
+              aria-hidden
+              className="flex h-8 w-8 items-center justify-center rounded-md border border-line text-ink-3 transition-[background-color,color,transform] duration-200 group-hover:border-accent group-hover:bg-accent group-hover:text-on-accent"
+            >
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
+          )}
         </div>
       </div>
     </article>

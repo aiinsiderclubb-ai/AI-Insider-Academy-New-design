@@ -1942,28 +1942,28 @@
    },
    "fn2": {
     "tasks": [
-     "Запустите workflow из урока у себя: Webhook → AI Agent → Code → Google Sheets → Telegram",
-     "Подключите свою таблицу и своего Telegram-бота",
-     "Отправьте через систему минимум пять разных заявок: обычный вопрос, горячую заявку, очень короткое сообщение, заявку без части данных и что-нибудь похожее на спам",
-     "Специально сломайте формат: попросите AI ответить обычным текстом, найдите упавший запуск в Executions и верните всё в рабочее состояние",
+     "Запустите workflow из урока у себя: Webhook → AI Agent → Code → Google Sheets → Telegram. Соберите его с нуля вместе с видео или возьмите готовый JSON-файл из материалов урока",
+     "Адаптируйте его под свои аккаунты: подключите свою таблицу и своего Telegram-бота",
+     "Отправьте через систему несколько разных тестовых заявок, а не пять одинаковых: обычный вопрос, горячую заявку, очень короткое сообщение, заявку без части данных и что-нибудь похожее на спам. Посмотрите, как AI их классифицирует",
+     "Повторите проверку из урока: попросите AI ответить обычным текстом вместо JSON, найдите упавший запуск в Executions, посмотрите выход AI Agent и верните всё в рабочее состояние",
      "Подумайте, какие поля были бы полезны именно для вашего процесса"
     ],
     "tasksEn": [
-     "Run the workflow from the lesson yourself: Webhook → AI Agent → Code → Google Sheets → Telegram",
-     "Connect your own spreadsheet and your own Telegram bot",
-     "Send at least five different requests through it: a plain question, a hot lead, a very short message, a request with some data missing and something that looks like spam",
-     "Break the format on purpose: ask the AI to answer in plain text, find the failed run in Executions and put everything back in working order",
+     "Run the workflow from the lesson yourself: Webhook → AI Agent → Code → Google Sheets → Telegram. Build it from scratch along with the video or take the ready JSON file from the lesson materials",
+     "Adapt it to your own accounts: connect your own spreadsheet and your own Telegram bot",
+     "Send several different test requests through it, not five identical ones: a plain question, a hot lead, a very short message, a request with some data missing and something that looks like spam. See how the AI classifies them",
+     "Repeat the check from the lesson: ask the AI to answer in plain text instead of JSON, find the failed run in Executions, look at the AI Agent output and put everything back in working order",
      "Think about which fields would be useful for your own process"
     ],
     "deliverables": [
-     "Работающий workflow из пяти узлов в вашем n8n",
-     "Таблица, в которой пять тестовых заявок лежат отдельными строками с категорией, приоритетом и резюме",
+     "Работающий workflow из пяти узлов в вашем n8n, подключённый к вашим таблице и боту",
+     "Таблица, в которой тестовые заявки разных типов лежат отдельными строками с категорией, приоритетом и резюме",
      "Уведомления о них в вашем Telegram",
      "Один запуск с ошибкой в истории и понимание, на каком узле и почему он остановился"
     ],
     "deliverablesEn": [
-     "A working five-node workflow in your n8n",
-     "A sheet where five test requests sit in separate rows with a category, a priority and a summary",
+     "A working five-node workflow in your n8n, connected to your own spreadsheet and bot",
+     "A sheet where test requests of different kinds sit in separate rows with a category, a priority and a summary",
      "Their notifications in your Telegram",
      "One failed run in the history, and knowing which node stopped it and why"
     ],
@@ -1982,40 +1982,40 @@
    },
    "fn3": {
     "tasks": [
-     "Откройте workflow ещё раз и измените хотя бы три вещи: добавьте категорию заявок, поменяйте критерии приоритета, добавьте поле бюджета или сделайте так, чтобы заявки с HIGH выглядели иначе",
-     "Выберите нишу и соберите список из 10 небольших компаний, которые получают заявки через сайт, Instagram или мессенджеры",
-     "Для одной компании найдите человека, который принимает решение, и адаптируйте демо под её бизнес",
-     "Запишите видео на две минуты и напишите короткое персональное сообщение — без продажи, по образцу из урока"
+     "Откройте workflow ещё раз и измените хотя бы несколько вещей сами: добавьте категорию заявок, поменяйте критерии приоритета, добавьте поле бюджета, измените текст Telegram-уведомления или сделайте так, чтобы заявки с High выглядели иначе",
+     "Если что-то сломалось, разберитесь по правилу из второго урока: где данные были правильными в последний раз, что получил следующий блок и что он вернул",
+     "Примените ту же логику — событие, данные, обработка, решение, действие — к другому процессу: например, к входящим письмам или к небольшой реальной задаче из своей работы",
+     "Если хотите делать такие проекты для других, выберите нишу, найдите подходящую небольшую компанию, которая получает заявки через сайт, Instagram или мессенджеры, и адаптируйте демо под неё: её название, реалистичные тестовые заявки, свои категории",
+     "Напишите человеку, который принимает решение, короткое персональное сообщение по образцу из урока — о его процессе и результате, без продажи, с предложением показать видео на две минуты"
     ],
     "tasksEn": [
-     "Open the workflow again and change at least three things: add a request category, change the priority criteria, add a budget field or make HIGH requests look different",
-     "Choose a niche and gather a list of 10 small companies that take enquiries through a website, Instagram or messengers",
-     "For one of them, find the person who makes the decision and adapt the demo to that business",
-     "Record a two-minute video and write a short personal message — no selling, on the pattern from the lesson"
+     "Open the workflow again and change at least a few things yourself: add a request category, change the priority criteria, add a budget field, change the Telegram notification text or make High requests look different",
+     "If something breaks, work through it with the rule from lesson two: where the data was last correct, what the next node received and what it returned",
+     "Apply the same logic — event, data, processing, decision, action — to another process: for example incoming emails, or a small real task from your own work",
+     "If you want to build these for others, pick a niche, find a small company that fits and takes enquiries through a website, Instagram or messengers, and adapt the demo to it: its name, realistic test requests, its own categories",
+     "Write the person who makes the decision a short personal message on the pattern from the lesson — about their process and the result, no selling, offering to show a two-minute video"
     ],
     "deliverables": [
      "Изменённый workflow, который по-прежнему проходит от заявки до уведомления",
-     "Список из 10 компаний с пометкой, почему каждая подходит",
-     "Демо под одну компанию: её название, реалистичные тестовые заявки, свои категории",
-     "Видео на две минуты и текст первого сообщения"
+     "Ещё один процесс, разложенный по той же схеме: событие → данные → обработка → решение → действие",
+     "Если выбрали путь с клиентами — демо под одну компанию и текст первого сообщения"
     ],
     "deliverablesEn": [
      "A changed workflow that still runs from request to notification",
-     "A list of 10 companies with a note on why each one fits",
-     "A demo for one company: its name, realistic test requests, its own categories",
-     "A two-minute video and the text of the first message"
+     "One more process laid out on the same pattern: event → data → processing → decision → action",
+     "If you went the client route — a demo for one company and the text of the first message"
     ],
     "criteria": [
+     "Изменения ваши, а не повтор урока один в один",
      "После изменений workflow работает; если ломался — вы нашли, где данные были правильными в последний раз",
-     "Сообщение говорит о результате для бизнеса, а не об n8n и AI",
-     "В видео виден работающий процесс на примере этой компании, а не слайды",
-     "Это адресное обращение к подходящей компании, а не рассылка всем подряд"
+     "Сообщение говорит о проблеме компании и результате для бизнеса, а не об n8n и AI",
+     "Это адресное обращение к подходящей компании и конкретному человеку, а не рассылка всем подряд"
     ],
     "criteriaEn": [
+     "The changes are your own, not a one-to-one repeat of the lesson",
      "The workflow runs after your changes; if it broke, you found where the data was last correct",
-     "The message is about a result for the business, not about n8n and AI",
-     "The video shows the process working on this company's example, not slides",
-     "It is a targeted approach to a company that fits, not a mailing to everyone"
+     "The message is about the company's problem and a result for the business, not about n8n and AI",
+     "It is a targeted approach to a company that fits and to a specific person, not a mailing to everyone"
     ]
    }
   },
@@ -2066,13 +2066,13 @@
     "deliverables": [
      "Разбор письма и черновик ответа, который вы проверили перед отправкой",
      "Структурированный анализ документа",
-     "Протокол встречи с решениями, задачами и ответственными",
+     "Протокол встречи с решениями, открытыми вопросами и задачами, а на его основе — черновик фоллоуап-письма",
      "Три пары цифр «до → после»"
     ],
     "deliverablesEn": [
      "An email breakdown and a draft reply you checked before sending",
      "A structured analysis of a document",
-     "Meeting minutes with decisions, tasks and owners",
+     "Meeting minutes with decisions, open questions and tasks, and a follow-up email draft built from them",
      "Three before → after pairs of numbers"
     ],
     "criteria": [
@@ -2090,16 +2090,16 @@
    },
    "ap3": {
     "tasks": [
-     "Следующую неделю используйте в работе два сценария из курса — только два. Например, почту и встречи",
+     "Следующую неделю используйте в работе два сценария из курса — только два. Например, почту и встречи или документы и почту",
      "Каждый раз примерно фиксируйте время: сколько заняло бы раньше и сколько заняло сейчас. Без секундомера",
-     "Через неделю сложите результат в таблице из материалов",
-     "Сформулируйте результат так, как рассказали бы руководителю или клиенту"
+     "Ведите простую таблицу из четырёх колонок: задача, сколько занимала раньше, сколько занимает сейчас, что изменилось — например, меньше пропущенных задач или вопросов",
+     "Через неделю сложите результат и сформулируйте его так, как рассказали бы руководителю или клиенту"
     ],
     "tasksEn": [
-     "For the next week, use two scenarios from the course in your work — only two. For example, email and meetings",
+     "For the next week, use two scenarios from the course in your work — only two. For example, email and meetings, or documents and email",
      "Each time, roughly note the time: how long it would have taken before and how long it took now. No stopwatch",
-     "After a week, add up the result in the tracker from the materials",
-     "Word the result the way you would tell a manager or a client"
+     "Keep a simple four-column table: the task, how long it took before, how long it takes now, what changed — for example fewer missed tasks or questions",
+     "After a week, add up the result and word it the way you would tell a manager or a client"
     ],
     "deliverables": [
      "Заполненная таблица за неделю",
@@ -2107,18 +2107,18 @@
      "Две-три фразы на языке результата: процесс, «до», «после», куда ушло освободившееся время"
     ],
     "deliverablesEn": [
-     "A filled-in tracker for the week",
+     "A filled-in table for the week",
      "Your own number for time saved — in minutes or hours",
      "Two or three sentences in the language of results: the process, before, after, where the freed time went"
     ],
     "criteria": [
      "Цифра ваша, из реальной недели, а не из рекламы",
-     "В формулировке есть процесс и время «до» и «после», а не «я использую AI»",
+     "В формулировке есть процесс и время «до» и «после», а не «я использую AI» или «AI делает всё за меня»",
      "Если сценарий не дал экономии, вы это честно отметили и вернули старый способ"
     ],
     "criteriaEn": [
      "The number is yours, from a real week, not from an advert",
-     "The wording names the process and the before and after times, not \"I use AI\"",
+     "The wording names the process and the before and after times, not \"I use AI\" or \"AI does everything for me\"",
      "If a scenario saved nothing, you noted that honestly and went back to the old way"
     ]
    }

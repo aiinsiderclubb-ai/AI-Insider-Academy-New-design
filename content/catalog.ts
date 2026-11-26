@@ -5,6 +5,7 @@ import vaultDetails from "./data/vaultDetails.json";
 import programs from "./data/courseLessonPrograms.json";
 import homework from "./data/courseHomework.json";
 import materials from "./data/lessonMaterials.json";
+import lessonAboutData from "./data/lessonAbout.json";
 import landing from "./data/courseLanding.json";
 import profiles from "./data/courseProfiles.json";
 
@@ -304,6 +305,23 @@ export interface LessonMaterial {
 }
 
 const materialsByLesson = materials.MATERIALS_BY_LESSON as Record<string, Record<string, LessonMaterial[]>>;
+
+export interface LessonAboutSpec {
+  summary: string;
+  summaryEn?: string;
+  points: string[];
+  pointsEn?: string[];
+  outcome: string;
+  outcomeEn?: string;
+  tools: string[];
+}
+
+const aboutByLesson = lessonAboutData.LESSON_ABOUT as Record<string, Record<string, LessonAboutSpec>>;
+
+/** The About tab's write-up of one lesson, made from its recording. Keyed by ids, like homework. */
+export function lessonAbout(courseId: string, lessonId: string): LessonAboutSpec | null {
+  return aboutByLesson[courseId]?.[lessonId] ?? null;
+}
 
 /** Materials for one lesson, in the order they should be shown. Keyed by ids, like homework. */
 export function lessonMaterials(courseId: string, lessonId: string): LessonMaterial[] {

@@ -30,6 +30,8 @@ import { EmptyState, Note } from "@/components/primitives/states";
 import { useToast } from "@/components/primitives/toast";
 import { LessonAssistant } from "@/components/assistant/lesson-assistant";
 import { LessonMaterials, type StudyMaterial } from "@/components/study/lesson-materials";
+import { LessonAbout, type StudyLessonAbout } from "@/components/study/lesson-about";
+import { HomeworkBrief } from "@/components/study/lesson-homework";
 import type { Dictionary } from "@/lib/i18n";
 import { path, type Locale } from "@/lib/i18n/config";
 import { DEMO_HOURS } from "@/lib/demo";
@@ -82,6 +84,7 @@ export function StudyRoom({
   lessons,
   current,
   homework,
+  about,
   materials,
   watched,
   progress,
@@ -95,6 +98,8 @@ export function StudyRoom({
   lessons: StudyLesson[];
   current: StudyLesson;
   homework: StudyHomework | null;
+  /** The current lesson's write-up for the About tab, when one exists. */
+  about: StudyLessonAbout | null;
   materials: StudyMaterial[];
   watched: number[];
   /** The course's whole progress record, so a save keeps the fields it does not change. */
@@ -591,40 +596,25 @@ export function StudyRoom({
 
             <div className="py-7">
               {activeTab === "lesson" && (
-                <div className="prose-body text-[15px]">
-                  <p>{current.description || d.study.videoSoonBody}</p>
-                </div>
+                <LessonAbout
+                  about={about}
+                  description={current.description || d.study.videoSoonBody}
+                  locale={locale}
+                  onHomework={homework ? () => setTab("homework") : undefined}
+                  onMaterials={() => setTab("materials")}
+                  materialsCount={materials.length}
+                />
               )}
 
               {activeTab === "homework" && homework && (
-                <div className="flex flex-col gap-4">
-                  {[
-                    { label: d.study.homeworkTask, points: homework.tasks, numbered: true },
-                    { label: d.study.homeworkResult, points: homework.deliverables, numbered: false },
-                    { label: d.study.homeworkCriteria, points: homework.criteria, numbered: false },
-                  ].map((block) => (
-                    <div key={block.label} className="rounded-lg border border-line bg-surface p-5">
-                      <p className="eyebrow">{block.label}</p>
-                      {block.points.length === 1 ? (
-                        <p className="mt-2.5 text-[14.5px] leading-relaxed text-ink-2">{block.points[0]}</p>
-                      ) : (
-                        <ol className="mt-3 flex flex-col gap-2.5">
-                          {block.points.map((point, position) => (
-                            <li key={point} className="flex gap-3 text-[14.5px] leading-relaxed text-ink-2">
-                              {block.numbered ? (
-                                <span className="numeral w-5 shrink-0 pt-px text-[12px]" aria-hidden>
-                                  {String(position + 1).padStart(2, "0")}
-                                </span>
-                              ) : (
-                                <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden />
-                              )}
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ol>
-                      )}
-                    </div>
-                  ))}
+                <div className="flex flex-col gap-5">
+                  <HomeworkBrief
+                    tasks={homework.tasks}
+                    deliverables={homework.deliverables}
+                    criteria={homework.criteria}
+                    locale={locale}
+                    selfCheck={homework.selfCheck || Boolean(homework.upgrade)}
+                  />
 
                   {homework.upgrade ? (
                     <Note>
@@ -636,7 +626,7 @@ export function StudyRoom({
                   ) : homework.selfCheck ? (
                     <Note>{d.study.homeworkSelfCheck}</Note>
                   ) : canSubmitHomework ? (
-                    <HomeworkForm course={course} lesson={current} d={d} />
+                    <HomeworkForm course={course} lesson={current} d={d} locale={locale} />
                   ) : (
                     <Note tone="warning">{d.study.lockedBody}</Note>
                   )}
@@ -805,10 +795,12 @@ function HomeworkForm({
   course,
   lesson,
   d,
+  locale,
 }: {
   course: { id: string; title: string };
   lesson: StudyLesson;
   d: Dictionary;
+  locale: Locale;
 }) {
   const { push } = useToast();
   const [content, setContent] = React.useState("");
@@ -852,8 +844,16 @@ function HomeworkForm({
   }
 
   return (
-    <form onSubmit={submit} className="rounded-lg border border-line bg-surface p-5">
-      <Field label={d.study.submitHomework} htmlFor="hw-content">
+    <form onSubmit={submit} className="rounded-2xl border border-line-2 bg-surface p-6 sm:p-7">
+      <p className="font-display text-[20px] leading-tight font-extrabold tracking-tight text-ink">{d.study.submitHomework}</p>
+      <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-3">
+        {pick(
+          locale,
+          "Ссылка на результат (Google Docs, Drive, n8n, видео) или короткий отчёт: что сделали и что получилось.",
+          "A link to your result (Google Docs, Drive, n8n, a video) or a short note on what you did and what came out.",
+        )}
+      </p>
+      <Field htmlFor="hw-content" className="mt-4">
         <Textarea
           id="hw-content"
           value={content}
@@ -864,9 +864,11 @@ function HomeworkForm({
         />
       </Field>
 
-      <label className="mt-3 flex cursor-pointer items-center gap-2.5 rounded-md border border-dashed border-line-2 px-3.5 py-3 text-[13px] text-ink-3 transition-colors hover:border-line-3 hover:bg-surface-2">
-        <Paperclip className="h-4 w-4 shrink-0" aria-hidden />
-        <span className="min-w-0 flex-1 truncate">{file ? file.name : d.common.download}</span>
+      <label className="mt-3 flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-line-2 px-4 py-3.5 text-[13.5px] text-ink-3 transition-colors hover:border-accent/50 hover:bg-surface-2">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-surface-3 text-accent">
+          <Paperclip className="h-4 w-4" aria-hidden />
+        </span>
+        <span className="min-w-0 flex-1 truncate">{file ? file.name : pick(locale, "Прикрепить файл — по желанию", "Attach a file — optional")}</span>
         <input
           type="file"
           className="sr-only"

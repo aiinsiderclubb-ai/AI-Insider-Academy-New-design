@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { StudyRoom, type StudyHomework, type StudyLesson } from "@/components/study/study-room";
 import type { StudyMaterial } from "@/components/study/lesson-materials";
-import { defaultHomework, lessonHomework, lessonMaterials, type HomeworkSpec } from "@/content/catalog";
+import { defaultHomework, lessonAbout, lessonHomework, lessonMaterials, type HomeworkSpec } from "@/content/catalog";
 import { pick } from "@/content/locale";
 import { getCourse } from "@/lib/api/catalog";
 import { canOpenLesson, demoState, getAccess, getMe, onSelfPlan } from "@/lib/api/session";
@@ -69,6 +69,16 @@ export default async function StudyPage({
    * course falls back to the shared wording from its second lesson on — the
    * first is the free sample and has never carried one.
    */
+  const aboutSpec = lessonAbout(course.id, current.id);
+  const about = aboutSpec
+    ? {
+        summary: pick(locale, aboutSpec.summary, aboutSpec.summaryEn ?? aboutSpec.summary),
+        points: pick(locale, aboutSpec.points, aboutSpec.pointsEn ?? aboutSpec.points),
+        outcome: pick(locale, aboutSpec.outcome, aboutSpec.outcomeEn ?? aboutSpec.outcome),
+        tools: aboutSpec.tools,
+      }
+    : null;
+
   const own = lessonHomework(course.id, current.id);
   /* The self-study plan has no review: its assignments are checked against the criteria. */
   const selfPlan = onSelfPlan(access, course);
@@ -116,6 +126,7 @@ export default async function StudyPage({
       lessons={lessons}
       current={current}
       homework={homework}
+      about={about}
       materials={materials}
       watched={access.progress[course.id]?.watched ?? []}
       progress={{ ...access.progress[course.id] }}

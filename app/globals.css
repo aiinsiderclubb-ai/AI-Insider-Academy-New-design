@@ -1333,6 +1333,28 @@
   animation: cert-sheen 7s ease-in-out infinite;
 }
 
+/* ==========================================================================
+   Study room — the About and Assignment tabs
+   ========================================================================== */
+
+.lesson-about-lead,
+.homework-brief {
+  background:
+    radial-gradient(36rem 18rem at 0% 0%, color-mix(in oklab, var(--accent) 12%, transparent), transparent 65%),
+    var(--surface);
+}
+/* the thread that runs through the numbered steps */
+.homework-steps::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  background: linear-gradient(var(--accent), color-mix(in oklab, var(--accent) 10%, transparent));
+  opacity: 0.45;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

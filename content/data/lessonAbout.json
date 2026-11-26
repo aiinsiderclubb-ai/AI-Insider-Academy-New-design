@@ -360,14 +360,14 @@
      "Развитие для своего бизнеса: CRM вместо таблицы, срочная задача при высоком приоритете, напоминание через 30 минут, черновик ответа от AI",
      "Чем продакшен отличается от демо: дубли, пустые поля, недоступный AI или лимит API, повторные попытки, логирование, ручная проверка",
      "Поиск клиентов: компании из Google Maps через Apify, отбор и ресёрч лиц, принимающих решения, в Claude Code, короткое личное сообщение с демо",
-     "Цена считается от решаемой проблемы, а не от числа нод; ориентир автора — от 300 евро за небольшие автоматизации, от 600 евро за серьёзные"
+     "Как назначать цену: от проблемы, которую решает автоматизация, и денег, которые она экономит клиенту, а не от числа нод"
     ],
     "pointsEn": [
      "The common logic of any automation and other triggers: an email, a payment, a new order, a CRM contact, a schedule",
      "Growing it for your own business: a CRM instead of a sheet, an urgent task for high priority, a reminder after 30 minutes, an AI reply draft",
      "What separates production from a demo: duplicates, empty fields, AI down or API limits, retries, logging, human review",
      "Finding clients: companies from Google Maps via Apify, shortlisting and researching decision makers in Claude Code, a short personal message with the demo",
-     "Price follows the problem solved, not the node count; the author's guide is from 300 euros for small automations and from 600 euros for serious ones"
+     "How to price it: by the problem the automation solves and the money it saves the client, not by the number of nodes"
     ],
     "outcome": "Понимание, как развить учебный воркфлоу в рабочий процесс, и план, как адаптировать демо под конкретный бизнес и найти первого клиента.",
     "outcomeEn": "A clear idea of how to grow the practice workflow into a real process, and a plan to adapt the demo to a specific business and find a first client.",

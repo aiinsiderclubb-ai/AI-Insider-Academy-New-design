@@ -2536,6 +2536,384 @@
      "The video shows what the system does, not how the nodes were assembled"
     ]
    }
+  },
+  "ai-insider-accelerator": {
+   "acc2": {
+    "tasks": [
+     "Возьмите две свои реальные задачи из работы или учёбы — письмо, документ, встречу, отчёт: то, что делаете регулярно",
+     "Для каждой напишите промпт по формуле «Контекст → Задача → Формат → Проверка» и запустите его",
+     "Сохраните оба промпта в файл промптов с коротким названием",
+     "Запишите, сколько времени задача занимала раньше и сколько теперь, включая проверку"
+    ],
+    "tasksEn": [
+     "Take two real tasks from your work or studies — an email, a document, a meeting, a report: something you do regularly",
+     "For each, write a prompt with the Context → Task → Format → Check formula and run it",
+     "Save both prompts in your prompt file with a short name",
+     "Note how long each task took before and how long now, checking included"
+    ],
+    "deliverables": [
+     "Два промпта и результаты их работы",
+     "Файл промптов с этими промптами",
+     "Время до и после для каждой задачи"
+    ],
+    "deliverablesEn": [
+     "Two prompts and what they produced",
+     "The prompt file with them in it",
+     "Before-and-after time for each task"
+    ],
+    "criteria": [
+     "В каждом промпте есть все четыре части формулы",
+     "Задачи реальные, а не примеры из урока",
+     "Цифры времени посчитаны честно, а не на глаз"
+    ],
+    "criteriaEn": [
+     "Each prompt has all four parts of the formula",
+     "The tasks are real, not the lesson's examples",
+     "The time figures are counted honestly, not guessed"
+    ]
+   },
+   "acc3": {
+    "tasks": [
+     "Сделайте Brand Brain для учебного бизнеса по шаблону: кто мы, для кого, как говорим, чего никогда не говорим, пример текста",
+     "Выберите одну тему и получите у AI три угла подачи",
+     "Выберите один угол и напишите пост с Brand Brain в контексте",
+     "Сделайте визуал — генерацию или шаблон с крупным заголовком — и проверьте пост по чек-листу из урока"
+    ],
+    "tasksEn": [
+     "Write a Brand Brain for the practice business from the template: who we are, for whom, how we talk, what we never say, a sample text",
+     "Pick one topic and get three angles from the AI",
+     "Pick one angle and write the post with the Brand Brain in context",
+     "Make the visual — generated, or a template with a large headline — and check the post against the lesson's list"
+    ],
+    "deliverables": [
+     "Brand Brain на одну страницу",
+     "Три угла подачи",
+     "Готовый текст поста и картинку"
+    ],
+    "deliverablesEn": [
+     "A one-page Brand Brain",
+     "The three angles",
+     "The finished post text and its image"
+    ],
+    "criteria": [
+     "Пост звучит как этот бизнес, а не как любой другой",
+     "В тексте нет выдуманных фактов, цифр и обещаний",
+     "На картинке нет текста от генератора и странных деталей; формат подходит площадке"
+    ],
+    "criteriaEn": [
+     "The post sounds like this business and not any other",
+     "No invented facts, numbers or promises in the text",
+     "No generator-made text or odd details on the image; the format fits the platform"
+    ]
+   },
+   "acc4": {
+    "tasks": [
+     "Напишите сценарий из трёх кадров для учебного бизнеса: атмосфера → процесс → результат",
+     "Сделайте вертикальные исходные фотографии 9:16 и сгенерируйте минимум два AI-клипа по 5 секунд",
+     "Смонтируйте ролик на 10–15 секунд: самый живой кадр первым, крупный текст поверх, музыка из библиотеки редактора",
+     "Отдельно сохраните один неудачный клип и разберитесь, что поменять в промпте"
+    ],
+    "tasksEn": [
+     "Write a three-shot script for the practice business: mood → process → result",
+     "Make vertical 9:16 source photos and generate at least two 5-second AI clips",
+     "Edit a 10–15 second clip: the liveliest shot first, large text on top, music from the editor's library",
+     "Keep one failed clip and work out what to change in the prompt"
+    ],
+    "deliverables": [
+     "Ролик 10–15 секунд в формате 9:16 с текстом и музыкой",
+     "Один неудачный клип и одна фраза: что поменяли в промпте, чтобы его исправить"
+    ],
+    "deliverablesEn": [
+     "A 10–15 second 9:16 clip with text and music",
+     "One failed clip and one sentence on what you changed in the prompt to fix it"
+    ],
+    "criteria": [
+     "В ролике минимум два AI-клипа",
+     "Текст не уходит в нижнюю часть кадра, где его закроет интерфейс",
+     "Разбор неудачного клипа показывает, что вы понимаете, почему он не вышел"
+    ],
+    "criteriaEn": [
+     "At least two AI clips in the video",
+     "The text stays out of the bottom of the frame, where the app's interface covers it",
+     "The failed-clip note shows you understand why it failed"
+    ]
+   },
+   "acc5": {
+    "tasks": [
+     "Соберите в n8n такой же workflow для учебного бизнеса: форма → AI → таблица → условие → Telegram",
+     "Поменяйте поля формы и тон ответа под свой бизнес — для автосервиса это механик и услуга, а не мастер",
+     "Отправьте три отзыва: позитивный, нейтральный и негативный",
+     "Опубликуйте workflow, чтобы форма работала по постоянной ссылке"
+    ],
+    "tasksEn": [
+     "Build the same n8n workflow for the practice business: form → AI → table → condition → Telegram",
+     "Change the form fields and the reply tone to fit your business — for a garage it's a mechanic and a service, not a stylist",
+     "Send three reviews: positive, neutral and negative",
+     "Publish the workflow so the form works on its permanent link"
+    ],
+    "deliverables": [
+     "Скриншот workflow",
+     "Скриншот таблицы с тремя отзывами",
+     "Скриншот уведомления в Telegram"
+    ],
+    "deliverablesEn": [
+     "A screenshot of the workflow",
+     "A screenshot of the table with the three reviews",
+     "A screenshot of the Telegram alert"
+    ],
+    "criteria": [
+     "Все три отзыва сохранились в таблице с тональностью, темой и черновиком ответа",
+     "Уведомление пришло только по негативному отзыву или оценке 3 и ниже",
+     "Workflow опубликован, а не работает только в тестовом режиме"
+    ],
+    "criteriaEn": [
+     "All three reviews are in the table with sentiment, topic and a draft reply",
+     "The alert came only for the negative review or a rating of 3 and below",
+     "The workflow is published, not running only in test mode"
+    ]
+   },
+   "acc6": {
+    "tasks": [
+     "Напишите базу знаний учебного бизнеса: минимум 10 фактов и 5 частых вопросов, цены — со словом «от»",
+     "Соберите бота в n8n: Telegram Trigger, проверка текста, AI с полями «ответ» и «нужен администратор»",
+     "Настройте уведомление администратору, когда ответа в базе нет",
+     "Проверьте бота тремя диалогами: вопрос из базы, вопрос не из базы, попытка записаться"
+    ],
+    "tasksEn": [
+     "Write the practice business's knowledge base: at least 10 facts and 5 common questions, prices with 'from'",
+     "Build the bot in n8n: Telegram Trigger, a text check, AI with 'answer' and 'needs administrator' fields",
+     "Set up an alert to the administrator when the base has no answer",
+     "Test it with three chats: a question in the base, a question outside it, an attempt to book"
+    ],
+    "deliverables": [
+     "Базу знаний",
+     "Скриншоты трёх диалогов",
+     "Скриншоты уведомлений администратору по второму и третьему диалогу"
+    ],
+    "deliverablesEn": [
+     "The knowledge base",
+     "Screenshots of the three chats",
+     "Screenshots of the administrator alerts for the second and third"
+    ],
+    "criteria": [
+     "На вопрос из базы бот отвечает точно по базе",
+     "На вопрос не из базы бот не придумывает ответ, а передаёт его человеку",
+     "Уведомление приходит во втором и третьем случае"
+    ],
+    "criteriaEn": [
+     "The bot answers the in-base question exactly as the base says",
+     "On the off-base question it invents nothing and hands it to a person",
+     "The alert arrives in the second and third case"
+    ]
+   },
+   "acc7": {
+    "tasks": [
+     "Создайте голосового агента для учебного бизнеса: язык, голос, короткая первая фраза",
+     "Напишите системный промпт по правилам голоса и загрузите базу знаний, переписанную для произношения; включите End Call",
+     "Проведите три тестовых звонка: обычный вопрос, вопрос не из базы и запись",
+     "После первого звонка улучшите одну фразу агента"
+    ],
+    "tasksEn": [
+     "Create a voice agent for the practice business: language, voice, a short first line",
+     "Write the system prompt by the voice rules and upload the knowledge base rewritten for speech; turn on End Call",
+     "Make three test calls: an ordinary question, an off-base question and a booking",
+     "After the first call, improve one of the agent's lines"
+    ],
+    "deliverables": [
+     "Системный промпт",
+     "Ссылки или скриншоты расшифровок трёх звонков",
+     "Описание улучшения: что именно поменяли в промпте"
+    ],
+    "deliverablesEn": [
+     "The system prompt",
+     "Links to or screenshots of the three call transcripts",
+     "What you changed in the prompt and why"
+    ],
+    "criteria": [
+     "Агент говорит короткими репликами и задаёт по одному вопросу",
+     "Не придумывает ответ на вопрос не из базы",
+     "Не подтверждает время записи сам"
+    ],
+    "criteriaEn": [
+     "The agent speaks in short turns and asks one question at a time",
+     "It invents no answer to the off-base question",
+     "It doesn't confirm a booking time itself"
+    ]
+   },
+   "acc8": {
+    "tasks": [
+     "Сделайте Data Table с расписанием учебного бизнеса — минимум 10 окон, часть свободных, часть занятых",
+     "Соберите агента в n8n: модель, память, системная инструкция с сегодняшней датой",
+     "Добавьте три инструмента с понятными описаниями: найти свободные окна, записать, уведомить администратора",
+     "Проведите два разговора: успешная запись от начала до конца и запрос на время, которого нет в расписании"
+    ],
+    "tasksEn": [
+     "Build a schedule Data Table for the practice business — at least 10 slots, some free, some booked",
+     "Assemble the agent in n8n: model, memory, a system message with today's date",
+     "Add three tools with clear descriptions: find free slots, book, notify the administrator",
+     "Hold two chats: a successful booking start to finish, and a request for a time that isn't in the schedule"
+    ],
+    "deliverables": [
+     "Скриншоты обоих диалогов",
+     "Логи шагов агента в первом разговоре",
+     "Таблицу после записи и уведомление в Telegram"
+    ],
+    "deliverablesEn": [
+     "Screenshots of both chats",
+     "The agent's step log for the first chat",
+     "The table after the booking and the Telegram alert"
+    ],
+    "criteria": [
+     "Агент берёт время из таблицы, а не придумывает",
+     "Записывает только после подтверждения клиента",
+     "Окно в таблице сменило статус, уведомление пришло, на занятое время агент предлагает другое"
+    ],
+    "criteriaEn": [
+     "The agent takes times from the table, not from thin air",
+     "It books only after the client confirms",
+     "The slot changed status, the alert arrived, and for a taken time it offers another"
+    ]
+   },
+   "acc9": {
+    "tasks": [
+     "Напишите бриф лендинга из Brand Brain: одно целевое действие, блоки, стиль, что не делать",
+     "Соберите лендинг в любом инструменте и вносите правки по одной за сообщение",
+     "Сделайте так, чтобы кнопка записи вела в вашего бота из урока 6; проверьте мобильную версию",
+     "Настройте превью ссылки и опубликуйте сайт"
+    ],
+    "tasksEn": [
+     "Write the landing-page brief from the Brand Brain: one goal action, blocks, style, what not to do",
+     "Build the page in any tool, one change per message",
+     "Point the booking button at your bot from lesson 6; check the mobile version",
+     "Set up the link preview and publish the site"
+    ],
+    "deliverables": [
+     "Ссылку на опубликованный сайт",
+     "Бриф",
+     "Список правок после первой версии"
+    ],
+    "deliverablesEn": [
+     "A link to the published site",
+     "The brief",
+     "The list of changes after the first version"
+    ],
+    "criteria": [
+     "Цены и адрес совпадают с базой знаний; нет выдуманных отзывов и цифр",
+     "Кнопка записи ведёт в бота",
+     "Сайт нормально выглядит на телефоне, превью ссылки настроено"
+    ],
+    "criteriaEn": [
+     "Prices and address match the knowledge base; no invented reviews or numbers",
+     "The booking button opens the bot",
+     "The site works on a phone and the link preview is set"
+    ]
+   },
+   "acc10": {
+    "tasks": [
+     "Выберите один реальный бизнес и разберите его по чек-листу: три наблюдения, у каждого конкретный факт",
+     "Сформулируйте предложение в одну фразу по формуле «для кого → результат → срок»",
+     "Дайте вилку цены — запуск и поддержка — и посчитайте выгоду для этого бизнеса: время и деньги в месяц",
+     "Напишите первое сообщение и сообщение-напоминание; составьте список из 10 бизнесов, кому его можно отправить"
+    ],
+    "tasksEn": [
+     "Pick one real business and review it with the checklist: three observations, each with a concrete fact",
+     "Phrase a one-line offer with 'for whom → result → how fast'",
+     "Give a price range — setup and support — and work out the benefit for that business: time and money a month",
+     "Write the first message and a follow-up; list 10 businesses you could send it to"
+    ],
+    "deliverables": [
+     "Разбор бизнеса с тремя наблюдениями",
+     "Предложение, вилку цены и расчёт выгоды",
+     "Первое сообщение, напоминание и список из 10 бизнесов",
+     "Если отправили сообщение — что ответили"
+    ],
+    "deliverablesEn": [
+     "The business review with three observations",
+     "The offer, the price range and the benefit worked out",
+     "The first message, the follow-up and the list of 10 businesses",
+     "If you sent it — what they replied"
+    ],
+    "criteria": [
+     "Наблюдения опираются на факты, которые можно проверить",
+     "В предложении и сообщении нет технических слов",
+     "Расчёт выгоды осторожный и обоснованный"
+    ],
+    "criteriaEn": [
+     "The observations rest on facts that can be checked",
+     "No technical words in the offer or the message",
+     "The benefit is worked out carefully and can be backed up"
+    ]
+   },
+   "acc11": {
+    "tasks": [
+     "Выпишите три боли учебного (или реального) бизнеса и напротив каждой — решение из курса",
+     "Свяжите минимум три решения в одну систему, одно из них — из блока «Строю системы»",
+     "Пройдите систему целиком по чек-листу: три сценария клиента, опубликованные workflow, телефон, данные в таблицах",
+     "Напишите описание на одну страницу с блоком ограничений, нарисуйте схему и запишите демо на 2 минуты"
+    ],
+    "tasksEn": [
+     "List three pains of the practice (or a real) business and set a course solution against each",
+     "Connect at least three solutions into one system, one of them from 'build systems'",
+     "Run the whole system through the checklist: three client scenarios, published workflows, the phone, data in the tables",
+     "Write a one-page description with a limits section, draw the diagram and record a two-minute demo"
+    ],
+    "deliverables": [
+     "Одна ссылка на папку или документ: описание, схема картинкой, ссылка на демо-видео",
+     "Ссылки на опубликованный сайт и бота",
+     "Экспорт workflow из n8n — без ключей и токенов в тексте нод"
+    ],
+    "deliverablesEn": [
+     "One link to a folder or document: the description, the diagram as an image, a link to the demo video",
+     "Links to the published site and the bot",
+     "Your n8n workflow exports — with no keys or tokens in node text"
+    ],
+    "criteria": [
+     "Система связана: путь клиента проходит от начала до конца",
+     "Решения закрывают боли из карточки бизнеса",
+     "Описание честное: цифры обоснованы, ограничения названы",
+     "Видео понятно владельцу, который ничего не знает про n8n"
+    ],
+    "criteriaEn": [
+     "The system is connected: the client's path runs from start to end",
+     "The solutions answer the pains on the business card",
+     "The description is honest: numbers backed, limits named",
+     "The video makes sense to an owner who knows nothing about n8n"
+    ]
+   },
+   "acc12": {
+    "tasks": [
+     "Посчитайте итог по каждому направлению: интерес + получилось + 2 × «готов делать каждый день»",
+     "Отсортируйте направления, посмотрите на первые два и определите свой профиль",
+     "Проверьте выбор на пять ловушек",
+     "Заполните план на месяц: направление, часы в неделю, результат через месяц, первый шаг на этой неделе — и разложите первую неделю промптом"
+    ],
+    "tasksEn": [
+     "Total each direction: interest + worked out + 2 × 'would do it every day'",
+     "Sort the directions, look at the top two and name your profile",
+     "Check your choice against the five traps",
+     "Fill in the month plan: direction, hours a week, the result in a month, the first step this week — and plan the first week with a prompt"
+    ],
+    "deliverables": [
+     "Карту интереса с итогами по формуле",
+     "Ваш профиль и выбранное направление",
+     "План на месяц из четырёх строк"
+    ],
+    "deliverablesEn": [
+     "The Interest Map with the formula totals",
+     "Your profile and chosen direction",
+     "The four-line month plan"
+    ],
+    "criteria": [
+     "Выбрано одно направление, а не несколько сразу",
+     "Результат через месяц конкретный и проверяемый",
+     "Первый шаг настолько маленький, что его можно сделать на этой неделе"
+    ],
+    "criteriaEn": [
+     "One direction is chosen, not several at once",
+     "The one-month result is concrete and checkable",
+     "The first step is small enough to do this week"
+    ]
+   }
   }
  }
 }

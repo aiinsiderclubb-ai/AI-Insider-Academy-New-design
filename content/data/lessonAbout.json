@@ -1,3 +1,304 @@
 {
- "LESSON_ABOUT": {}
+ "LESSON_ABOUT": {
+  "ai-insider-accelerator": {
+   "acc1": {
+    "summary": "Карта из девяти направлений AI в трёх зонах — «Делаю сам быстрее», «Строю системы», «Продаю» — и правила курса: 12 коротких уроков, три ведущих, задание после каждого урока и один учебный бизнес на весь курс.",
+    "summaryEn": "A map of nine AI directions in three zones — do it faster myself, build systems, sell — and how the course runs: 12 short lessons, three hosts, an assignment after each lesson and one practice business for the whole course.",
+    "points": [
+     "Девять направлений: продуктивность, контент, AI-видео, автоматизации, чат-боты, голосовые роботы, AI-агенты, вайб-кодинг и продажа AI-услуг",
+     "Почему направление нужно не угадать, а проверить руками",
+     "Как устроен поток: задание после каждого урока, проверка куратором, следующий урок — после проверки",
+     "Учебный бизнес: свой, знакомого или придуманный — и карточка с тремя самыми больными задачами",
+     "Карта интереса: три оценки после каждого урока — интересно, получилось, готов делать каждый день"
+    ],
+    "pointsEn": [
+     "The nine directions: productivity, content, AI video, automation, chatbots, voice agents, AI agents, vibe coding and selling AI services",
+     "Why a direction is something to test by hand, not to guess",
+     "How the cohort works: an assignment after each lesson, a curator's review, the next lesson after the review",
+     "The practice business — yours, a friend's or an invented one — and its card with the three most painful tasks",
+     "The Interest Map: three scores after every lesson — interesting, worked out, would do it every day"
+    ],
+    "outcome": "Выбранный учебный бизнес с заполненной карточкой и карта интереса, готовая к первым оценкам.",
+    "outcomeEn": "A chosen practice business with its card filled in, and an Interest Map ready for its first scores.",
+    "tools": [
+     "ChatGPT или Claude",
+     "Карточка учебного бизнеса",
+     "Карта интереса"
+    ]
+   },
+   "acc2": {
+    "summary": "Почему у большинства AI «не работает» и формула промпта «Контекст → Задача → Формат → Проверка», на которой держится весь курс. Два рабочих сценария: ответ на сложное письмо и протокол встречи из расшифровки.",
+    "summaryEn": "Why AI 'doesn't work' for most people, and the Context → Task → Format → Check prompt formula the whole course rests on. Two working cases: a reply to a hard email and meeting minutes from a transcript.",
+    "points": [
+     "Почему запрос «напиши ответ на письмо» даёт безопасный, но бесполезный текст",
+     "Формула: контекст, задача, формат и проверка — и почему последний пункт защищает от выдумок",
+     "Сценарий 1: письмо клиента с жалобой и просьбой о скидке — разбор по пунктам и короткий ответ",
+     "Сценарий 2: сырая расшифровка созвона превращается в таблицу «кто, что, к какому сроку»",
+     "Файл промптов и честный подсчёт сэкономленного времени"
+    ],
+    "pointsEn": [
+     "Why 'write a reply to this email' gives a safe but useless text",
+     "The formula: context, task, format and check — and why the last step guards against made-up answers",
+     "Case 1: a client email with a complaint and a discount request — broken into points and answered briefly",
+     "Case 2: a raw call transcript becomes a 'who, what, by when' table",
+     "A prompt file and an honest count of the time saved"
+    ],
+    "outcome": "Две свои рабочие задачи, решённые промптом по формуле, файл промптов и цифра — сколько времени уходило раньше и сколько теперь.",
+    "outcomeEn": "Two of your own work tasks done with a formula prompt, a prompt file, and a number: how long each took before and how long now.",
+    "tools": [
+     "ChatGPT или Claude",
+     "Расшифровка видеозвонка",
+     "Документ «файл промптов»"
+    ]
+   },
+   "acc3": {
+    "summary": "Как сделать так, чтобы посты от AI звучали как ваш бренд, а не как любой салон. Собираем Brand Brain на одну страницу, выбираем угол подачи и делаем пост с визуалом для учебного бизнеса.",
+    "summaryEn": "How to make AI-written posts sound like your brand and not like any salon. We build a one-page Brand Brain, pick an angle and make a post with a visual for the practice business.",
+    "points": [
+     "Brand Brain из пяти блоков: кто мы, для кого, как говорим, чего никогда не говорим, пример текста",
+     "Сначала три угла подачи — через ошибку, через миф, через историю клиента — и только потом текст",
+     "Визуал двумя путями: генерация изображения или шаблон с крупным заголовком",
+     "Почему текст на картинку добавляют в Canva, а не просят у генератора, и какие форматы под ленту и Stories",
+     "Чек-лист из пяти пунктов перед публикацией"
+    ],
+    "pointsEn": [
+     "A five-block Brand Brain: who we are, for whom, how we talk, what we never say, a sample text",
+     "Three angles first — through a mistake, a myth, a client's story — and only then the text",
+     "The visual two ways: an image generator, or a template with a large headline",
+     "Why text goes onto the image in Canva instead of the generator, and which formats suit the feed and Stories",
+     "A five-point check before publishing"
+    ],
+    "outcome": "Brand Brain вашего учебного бизнеса и готовый пост с картинкой, который звучит как этот бизнес.",
+    "outcomeEn": "A Brand Brain for your practice business and a finished post with a visual that sounds like that business.",
+    "tools": [
+     "ChatGPT или Claude",
+     "Генератор изображений",
+     "Canva"
+    ]
+   },
+   "acc4": {
+    "summary": "Юлия проводит через весь путь AI-видео: от одной вертикальной фотографии до 15-секундного ролика с текстом и музыкой. Где AI-видео полезно бизнесу, что модели делают хорошо и что плохо, и как чинить неудачные генерации.",
+    "summaryEn": "Yuliia walks through the whole AI-video path: from one vertical photo to a 15-second clip with text and music. Where AI video helps a business, what the models do well and badly, and how to fix failed generations.",
+    "points": [
+     "Зачем бизнесу AI-видео: Reels и Shorts, видео товара, варианты для рекламы, живой фон для сайта",
+     "Что получается хорошо (медленная камера, волосы, пар, лёгкое движение) и плохо (точные движения рук, текст, длинные клипы)",
+     "Промпт для видео из пяти частей: кто в кадре, одно движение, камера, свет, стиль — плюс негативный промпт",
+     "Сценарий из трёх кадров: атмосфера → процесс → результат, клипы по 5 секунд в формате 9:16",
+     "Шпаргалка исправлений, монтаж в CapCut или Canva и правила: лица, музыка, честность"
+    ],
+    "pointsEn": [
+     "Why a business wants AI video: Reels and Shorts, product clips, ad variants, a live background for a site",
+     "What works (slow camera, hair, steam, light motion) and what doesn't (precise hand work, text, long clips)",
+     "A five-part video prompt: subject, one movement, camera, light, style — plus a negative prompt",
+     "A three-shot script: mood → process → result, 5-second clips in 9:16",
+     "A fix-it cheat sheet, editing in CapCut or Canva, and the rules on faces, music and honesty"
+    ],
+    "outcome": "Вертикальный ролик на 10–15 секунд для учебного бизнеса и понимание, почему клип не получился и что поменять в промпте.",
+    "outcomeEn": "A 10–15 second vertical clip for the practice business, and knowing why a clip failed and what to change in the prompt.",
+    "tools": [
+     "Kling, Veo или Runway",
+     "Генератор изображений",
+     "CapCut или Canva"
+    ]
+   },
+   "acc5": {
+    "summary": "Первая система, которая работает без вас. Дмитрий собирает в n8n автоматизацию отзывов: форма → AI определяет тональность и тему и пишет черновик ответа → таблица → при негативе сообщение владельцу в Telegram.",
+    "summaryEn": "The first system that runs without you. Dmitry builds a review automation in n8n: form → AI reads sentiment and topic and drafts a reply → table → on a negative review, a Telegram message to the owner.",
+    "points": [
+     "Схема из пяти блоков: форма, AI, таблица, проверка, Telegram",
+     "Data Table «Reviews» и форма n8n со ссылкой, которую можно дать клиенту или превратить в QR-код",
+     "Basic LLM Chain со Structured Output Parser: тональность, тема и черновик ответа отдельными полями",
+     "Условие «негатив ИЛИ оценка 3 и ниже» и бот от BotFather, который пишет владельцу",
+     "Публикация workflow: тестовая ссылка против постоянной Production URL"
+    ],
+    "pointsEn": [
+     "A five-block outline: form, AI, table, check, Telegram",
+     "A 'Reviews' Data Table and an n8n form with a link you can give clients or turn into a QR code",
+     "A Basic LLM Chain with a Structured Output Parser: sentiment, topic and a draft reply as separate fields",
+     "The 'negative OR rating 3 and below' condition and a BotFather bot that messages the owner",
+     "Publishing the workflow: the test link versus the permanent Production URL"
+    ],
+    "outcome": "Работающая автоматизация отзывов для учебного бизнеса: каждый отзыв в таблице, о негативных владелец узнаёт сразу и с готовым черновиком ответа.",
+    "outcomeEn": "A working review automation for the practice business: every review in a table, and the owner hears about negative ones at once, with a draft reply ready.",
+    "tools": [
+     "n8n",
+     "OpenAI API",
+     "Telegram и BotFather"
+    ]
+   },
+   "acc6": {
+    "summary": "Telegram-бот, который отвечает клиентам по базе знаний, ничего не придумывает и передаёт администратору всё, в чём не уверен. Главное правило хорошего бизнес-бота — отвечать только на то, что знаешь.",
+    "summaryEn": "A Telegram bot that answers clients from a knowledge base, invents nothing and hands everything it's unsure of to the administrator. The rule of a good business bot: answer only what you know.",
+    "points": [
+     "База знаний как инструкция новому администратору: коротко, конкретно, цены со словом «от»",
+     "Telegram Trigger, проверка «есть ли текст» и ID чата для ответа",
+     "AI отвечает двумя полями: ответ клиенту и отметка «нужен администратор»",
+     "Передача человеку: уведомление администратору, когда ответа в базе нет",
+     "Как ломать бота вопросами, которых нет в базе, и его честные ограничения: нет памяти, не умеет записывать"
+    ],
+    "pointsEn": [
+     "A knowledge base written like a briefing for a new administrator: short, specific, prices with 'from'",
+     "A Telegram Trigger, a has-text check and the chat ID to reply to",
+     "The AI answers with two fields: the reply and a 'needs an administrator' flag",
+     "Handing over to a person: an alert to the administrator when the base has no answer",
+     "Breaking the bot with questions the base doesn't cover, and its honest limits: no memory, no booking"
+    ],
+    "outcome": "Бот для учебного бизнеса, который сам отвечает на частые вопросы и зовёт человека, когда не знает ответа.",
+    "outcomeEn": "A bot for the practice business that answers the common questions itself and calls a person when it doesn't know.",
+    "tools": [
+     "n8n",
+     "Telegram",
+     "OpenAI API"
+    ]
+   },
+   "acc7": {
+    "summary": "Голосовой администратор в ElevenLabs и правила голоса, которые не похожи на текстовый бот: короткие реплики, никаких списков, цифры и адреса так, как их произносят, и один вопрос за раз.",
+    "summaryEn": "A voice administrator in ElevenLabs and the rules of voice that a text bot doesn't follow: short turns, no lists, numbers and addresses as spoken, one question at a time.",
+    "points": [
+     "Три отличия голоса от чата: длина реплик, форматирование, цифры и адреса",
+     "Агент с чистого листа: язык, голос, короткая первая фраза",
+     "Системный промпт: по одному вопросу за раз и не подтверждать время записи самому",
+     "База знаний, переписанная для произношения, и инструмент End Call",
+     "Тестовые звонки, перебивания, вопрос не из базы и разбор расшифровок для правки промпта"
+    ],
+    "pointsEn": [
+     "Three ways voice differs from chat: length, formatting, numbers and addresses",
+     "An agent from a blank template: language, voice, a short first line",
+     "The system prompt: one question at a time, and never confirm a booking time itself",
+     "A knowledge base rewritten for speech, and the End Call tool",
+     "Test calls, interruptions, an off-base question and reading transcripts to fix the prompt"
+    ],
+    "outcome": "Голосовой агент учебного бизнеса, который отвечает на звонок, называет цены по базе и честно передаёт то, чего не знает.",
+    "outcomeEn": "A voice agent for the practice business that answers the call, quotes prices from the base and honestly hands over what it doesn't know.",
+    "tools": [
+     "ElevenLabs Agents",
+     "База знаний из урока 6"
+    ]
+   },
+   "acc8": {
+    "summary": "Бот отвечает, агент действует. Собираем в n8n AI-агента записи с памятью и тремя инструментами: найти свободные окна, записать клиента, уведомить администратора. Порядок шагов агент выбирает сам.",
+    "summaryEn": "A bot answers; an agent acts. In n8n we build a booking AI agent with memory and three tools: find free slots, book the client, notify the administrator. The agent picks the order itself.",
+    "points": [
+     "Чем агент отличается от бота: инструкция плюс набор инструментов вместо жёсткой цепочки",
+     "Data Table «Slots» как расписание и Chat Trigger для тестов прямо в n8n",
+     "Нода AI Agent: модель, Simple Memory на 10 сообщений и сегодняшняя дата в системной инструкции",
+     "Три инструмента и $fromAI: Find_Free_Slots, Book_Slot, Notify_Admin — и почему всё решает описание инструмента",
+     "Типичные ошибки агентов и правило безопасности: давать только нужные инструменты"
+    ],
+    "pointsEn": [
+     "How an agent differs from a bot: instructions plus tools instead of a fixed chain",
+     "A 'Slots' Data Table as the schedule and a Chat Trigger to test inside n8n",
+     "The AI Agent node: model, Simple Memory of 10 messages and today's date in the system message",
+     "Three tools and $fromAI: Find_Free_Slots, Book_Slot, Notify_Admin — and why the tool description decides everything",
+     "Common agent mistakes and the safety rule: give it only the tools it needs"
+    ],
+    "outcome": "Агент, который сам проверяет расписание, записывает клиента после подтверждения и сообщает администратору о каждой записи.",
+    "outcomeEn": "An agent that checks the schedule itself, books the client after confirmation and tells the administrator about every booking.",
+    "tools": [
+     "n8n AI Agent",
+     "Data Tables",
+     "Telegram"
+    ]
+   },
+   "acc9": {
+    "summary": "Вайб-кодинг с Юлией: лендинг для учебного бизнеса без единой строчки кода. Сначала бриф, потом код, одна правка — одно сообщение, обязательная проверка мобильной версии и превью ссылки.",
+    "summaryEn": "Vibe coding with Yuliia: a landing page for the practice business without writing a line of code. Brief first, then code; one change per message; always check mobile and the link preview.",
+    "points": [
+     "Где у вайб-кодинга границы: лендинги и внутренние инструменты — сами, оплата и персональные данные — с разработчиком",
+     "Бриф из Brand Brain: одно целевое действие и никаких выдуманных отзывов",
+     "Правило «одна правка — одно сообщение» и откат по истории версий",
+     "Мобильная версия, превью ссылки для мессенджеров и публикация",
+     "Как работают разработчики: агенты в коде, сначала план, контроль версий в Git, три правила безопасности"
+    ],
+    "pointsEn": [
+     "Where vibe coding stops: landing pages and internal tools yourself, payments and personal data with a developer",
+     "A brief built from the Brand Brain: one goal action and no invented reviews",
+     "The 'one change, one message' rule and rolling back through version history",
+     "The mobile version, a link preview for messengers, and publishing",
+     "How developers work: agents in the codebase, plan before code, Git, three security rules"
+    ],
+    "outcome": "Опубликованный лендинг учебного бизнеса с кнопкой записи, которая ведёт в вашего бота из урока 6.",
+    "outcomeEn": "A published landing page for the practice business whose booking button opens your bot from lesson 6.",
+    "tools": [
+     "Lovable",
+     "Claude Code или Cursor",
+     "Бот из урока 6"
+    ]
+   },
+   "acc10": {
+    "summary": "Как продать то, что вы собрали. Говорим на языке результата, находим боли бизнеса ещё до разговора, формулируем предложение для ниши, считаем цену как запуск плюс поддержка и проводим первый созвон, где сначала говорит клиент.",
+    "summaryEn": "How to sell what you've built. Speak in outcomes, find a business's pains before the call, phrase an offer for a niche, price it as setup plus support, and run a first call where the client talks first.",
+    "points": [
+     "Язык владельца: время, деньги и спокойствие вместо n8n, моделей и агентов",
+     "Чек-лист на 15 минут: комментарии, отзывы на картах, скорость ответа, звонок в час пик, сайт и запись",
+     "Формула предложения «для кого → какой результат → за какой срок» и выбор ниши по трём вопросам",
+     "Цена: запуск плюс поддержка, расчёт выгоды на цифрах клиента и пилот вместо бесплатной работы",
+     "Первое сообщение с живым демо, одно напоминание, созвон 5 + 5 + 5 минут и четыре частых возражения"
+    ],
+    "pointsEn": [
+     "The owner's language: time, money and peace of mind instead of n8n, models and agents",
+     "A 15-minute check: comments, map reviews, reply speed, a peak-hour call, the site and booking",
+     "The 'for whom → what result → how fast' offer formula and picking a niche with three questions",
+     "Price: setup plus support, the benefit worked out on the client's numbers, and a paid pilot instead of free work",
+     "A first message with a live demo, one follow-up, a 5 + 5 + 5 minute call and the four common objections"
+    ],
+    "outcome": "Разбор реального бизнеса, предложение в одну фразу, вилка цены с расчётом выгоды и готовое первое сообщение.",
+    "outcomeEn": "A review of a real business, a one-line offer, a price range with the benefit worked out, and a first message ready to send.",
+    "tools": [
+     "ChatGPT или Claude",
+     "Google Maps",
+     "Ваши демо из курса"
+    ]
+   },
+   "acc11": {
+    "summary": "Собираем всё в финальный проект: систему минимум из трёх связанных решений, описание на одну страницу и демо-видео на две минуты. Плюс на что куратор смотрит при проверке.",
+    "summaryEn": "Putting it all into the final project: a system of at least three connected solutions, a one-page description and a two-minute demo video. Plus what the curator looks at.",
+    "points": [
+     "Три части проекта: связанная система, описание на страницу, демо на 2 минуты",
+     "Как выбрать решения: от трёх болей бизнеса, а не от того, что лучше получилось",
+     "Описание: что получил бизнес, только обоснованные цифры и обязательный блок ограничений",
+     "Сквозная проверка: три сценария клиента, опубликованные workflow, телефон, данные в таблицах",
+     "Демо-видео по таймингу и четыре вопроса куратора: связана ли система, решает ли боль, честно ли описание, понятно ли видео"
+    ],
+    "pointsEn": [
+     "Three parts: a connected system, a one-page description, a two-minute demo",
+     "How to pick the solutions: from the business's three pains, not from what came out best",
+     "The description: what the business gets, only numbers you can back, and a required limits section",
+     "An end-to-end check: three client scenarios, published workflows, the phone, data in the tables",
+     "A timed demo video and the curator's four questions: connected, solves the pain, honest, clear to an owner"
+    ],
+    "outcome": "Финальный проект, который можно показать клиенту или работодателю, — ваше главное демо.",
+    "outcomeEn": "A final project you can show a client or an employer — your main demo.",
+    "tools": [
+     "Ваши решения из уроков 3–10",
+     "Canva или Excalidraw",
+     "Loom или запись экрана"
+    ]
+   },
+   "acc12": {
+    "summary": "Читаем карту интереса по формуле, разбираем пример, сверяемся с пятью профилями, проверяем выбор на пять ловушек и составляем план на первый месяц, который не останется в заметках.",
+    "summaryEn": "Reading the Interest Map with a formula, working through an example, checking five profiles and five traps, and writing a first-month plan that won't stay in your notes.",
+    "points": [
+     "Формула: интерес + получилось + 2 × «готов делать каждый день» и почему «получилось» нельзя переоценивать",
+     "Пример студентки Марины: почему агенты оказались выше видео",
+     "Пять профилей — создатель, строитель систем, голос, разработчик, предприниматель — и продуктивность как отдельный путь",
+     "Пять ловушек: хайп, только деньги, «что получилось», сравнение с другими, ожидание готовности",
+     "План на месяц из четырёх строк, неделя по формуле из урока 2 и три правила, чтобы не потерять темп"
+    ],
+    "pointsEn": [
+     "The formula: interest + worked out + 2 × 'would do it every day', and why not to overrate 'worked out'",
+     "Marina's example: why agents came out above video",
+     "Five profiles — creator, systems builder, voice, developer, entrepreneur — and productivity as its own path",
+     "Five traps: hype, money only, 'what came easily', comparing yourself, waiting to be ready",
+     "A four-line month plan, a week planned with the lesson-2 formula, and three rules to keep the pace"
+    ],
+    "outcome": "Ваше направление, подтверждённое цифрами, и конкретный план на первый месяц с первым шагом на этой неделе.",
+    "outcomeEn": "Your direction, backed by numbers, and a concrete first-month plan with a first step this week.",
+    "tools": [
+     "Карта интереса",
+     "ChatGPT или Claude"
+    ]
+   }
+  }
+ }
 }

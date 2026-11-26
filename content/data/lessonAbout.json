@@ -299,6 +299,458 @@
      "ChatGPT или Claude"
     ]
    }
+  },
+  "first-automation-n8n": {
+   "fn1": {
+    "summary": "Владислав показывает готовую автоматизацию курса — заявка с сайта, разбор через AI, запись в Google Sheets и уведомление в Telegram — и объясняет, с чего начинается любая автоматизация. Главное в уроке — как выбрать первый процесс и посчитать, сколько времени и денег на нём теряется.",
+    "summaryEn": "Vladyslav shows the automation the course builds — a website request, AI analysis, a row in Google Sheets and a Telegram alert — and explains where any automation starts. The core of the lesson is choosing your first process and counting the time and money it costs you.",
+    "points": [
+     "Демо результата курса: заявка из формы → AI определяет тип, приоритет и резюме → строка в Google Sheets → уведомление в Telegram",
+     "Автоматизация простыми словами: триггер, данные, действия над данными и результат",
+     "Три признака хорошего первого кандидата: процесс повторяется, он однотипный, ошибка в нём чего-то стоит — и что не стоит автоматизировать первым",
+     "Три примера: обработка заявок, еженедельные отчёты, ответы на типовые вопросы с черновиком от AI",
+     "Расчёт рутины: 5 минут × 30 заявок в неделю — около 10 часов в месяц, при 40 евро за час это 400 евро"
+    ],
+    "pointsEn": [
+     "Demo of the course result: form request → AI sets type, priority and summary → row in Google Sheets → Telegram alert",
+     "Automation in plain words: a trigger, data, actions on that data and a result",
+     "Three signs of a good first candidate: it repeats, it is uniform, and a mistake in it costs something — plus what not to automate first",
+     "Three examples: handling requests, weekly reports, answering typical questions with an AI draft",
+     "Counting the routine: 5 minutes × 30 requests a week is about 10 hours a month, or 400 euros at 40 euros an hour"
+    ],
+    "outcome": "Список из трёх повторяющихся процессов с подсчётом часов в месяц и один выбранный процесс для первой автоматизации.",
+    "outcomeEn": "A list of three repeating processes with hours per month counted, and one process picked for your first automation.",
+    "tools": [
+     "n8n",
+     "Google Sheets",
+     "Telegram"
+    ]
+   },
+   "fn2": {
+    "summary": "Практический урок: с пустого воркфлоу в n8n собирается цепочка от формы с заявкой до записи в таблицу и уведомления в Telegram. В конце автоматизацию специально ломают, чтобы научиться находить ошибку.",
+    "summaryEn": "A hands-on lesson: starting from an empty n8n workflow, you build the chain from a request form to a table row and a Telegram alert. At the end the automation is broken on purpose so you learn how to find the error.",
+    "points": [
+     "Webhook как первый блок: тестовый и рабочий адрес, приём тестовой заявки из формы (имя, email, телефон, сообщение)",
+     "Блок с языковой моделью: конкретный промпт на категорию (Sales, Support, Partnership, Other), приоритет Low, Medium или High и резюме в одно предложение",
+     "Google Sheets: колонки под данные клиента и ответ AI, маппинг полей и частая ошибка — данные не в той колонке",
+     "Уведомление в Telegram через бота из BotFather: имя, приоритет, категория и резюме; токены и ключи никому не показывать",
+     "Code node с проверкой JSON от AI, специально сломанный промпт и поиск причины через Executions"
+    ],
+    "pointsEn": [
+     "Webhook as the first node: test and production URLs, catching a test request from the form (name, email, phone, message)",
+     "Language model node: a precise prompt for category (Sales, Support, Partnership, Other), priority Low, Medium or High and a one-sentence summary",
+     "Google Sheets: columns for client data and the AI answer, field mapping and the common mistake of data landing in the wrong column",
+     "Telegram alert via a BotFather bot: name, priority, category and summary; never show tokens or keys",
+     "A Code node that checks the AI's JSON, a deliberately broken prompt and tracing the cause in Executions"
+    ],
+    "outcome": "Работающий воркфлоу в n8n, который принимает заявку, классифицирует её через AI, проверяет ответ, пишет строку в Google Sheets и присылает уведомление в Telegram.",
+    "outcomeEn": "A working n8n workflow that takes a request, classifies it with AI, checks the answer, writes a row to Google Sheets and sends a Telegram alert.",
+    "tools": [
+     "n8n",
+     "OpenAI или Anthropic",
+     "Google Sheets",
+     "Telegram"
+    ]
+   },
+   "fn3": {
+    "summary": "Заключительный урок: схема «событие → данные → обработка → решение → действие» на примере собранной автоматизации и что нужно добавить, чтобы она выдержала реальный бизнес. Вторая половина — как превратить демо в первый клиентский проект: поиск компаний, первое сообщение и цена работы.",
+    "summaryEn": "The final lesson: the «event → data → processing → decision → action» pattern on the automation you built, and what it needs before a real business can rely on it. The second half covers turning the demo into a first client project: finding companies, the first message and pricing.",
+    "points": [
+     "Общая логика любой автоматизации и другие триггеры: письмо, оплата, новый заказ, контакт в CRM, расписание",
+     "Развитие для своего бизнеса: CRM вместо таблицы, срочная задача при высоком приоритете, напоминание через 30 минут, черновик ответа от AI",
+     "Чем продакшен отличается от демо: дубли, пустые поля, недоступный AI или лимит API, повторные попытки, логирование, ручная проверка",
+     "Поиск клиентов: компании из Google Maps через Apify, отбор и ресёрч лиц, принимающих решения, в Claude Code, короткое личное сообщение с демо",
+     "Цена считается от решаемой проблемы, а не от числа нод; ориентир автора — от 300 евро за небольшие автоматизации, от 600 евро за серьёзные"
+    ],
+    "pointsEn": [
+     "The common logic of any automation and other triggers: an email, a payment, a new order, a CRM contact, a schedule",
+     "Growing it for your own business: a CRM instead of a sheet, an urgent task for high priority, a reminder after 30 minutes, an AI reply draft",
+     "What separates production from a demo: duplicates, empty fields, AI down or API limits, retries, logging, human review",
+     "Finding clients: companies from Google Maps via Apify, shortlisting and researching decision makers in Claude Code, a short personal message with the demo",
+     "Price follows the problem solved, not the node count; the author's guide is from 300 euros for small automations and from 600 euros for serious ones"
+    ],
+    "outcome": "Понимание, как развить учебный воркфлоу в рабочий процесс, и план, как адаптировать демо под конкретный бизнес и найти первого клиента.",
+    "outcomeEn": "A clear idea of how to grow the practice workflow into a real process, and a plan to adapt the demo to a specific business and find a first client.",
+    "tools": [
+     "n8n",
+     "Claude Code",
+     "Apify",
+     "Google Maps"
+    ]
+   }
+  },
+  "ai-for-productivity": {
+   "ap1": {
+    "summary": "Юлия объясняет идею курса: AI должен забирать рутинную часть работы, а не становиться ещё одним инструментом, который нужно обслуживать. В уроке — с каких задач начинать и как найти в своём рабочем дне первый сценарий.",
+    "summaryEn": "Yulia explains the idea of the course: AI should take over the routine part of your work, not become one more tool you have to maintain. The lesson covers which tasks to start with and how to find a first scenario in your own working day.",
+    "points": [
+     "Частая ошибка — начинать с инструмента и сборников промптов, а не со своих повторяющихся задач",
+     "Почта и сообщения: длинное письмо в три пункта (что произошло, что требуется, к какому сроку) и черновик ответа в нужном тоне",
+     "Документы: резюме, поиск пунктов об оплате, обязательства сторон, сравнение двух версий — с ручной проверкой критичного",
+     "Встречи: напоминание по прошлому протоколу перед звонком, а после — резюме, решения, задачи, ответственные, сроки и фоллоуап",
+     "Принцип первого черновика: AI делает подготовительную работу, решение и отправка остаются за человеком"
+    ],
+    "pointsEn": [
+     "A common mistake: starting with the tool and prompt collections instead of your own repeating tasks",
+     "Email and messages: a long email turned into three points (what happened, what is needed, by when) and a reply draft in the right tone",
+     "Documents: a summary, finding payment clauses, each side's obligations, comparing two versions — with critical parts checked by hand",
+     "Meetings: a recap from the last notes before a call, and after it a summary, decisions, tasks, owners, deadlines and a follow-up",
+     "The first-draft principle: AI does the prep work, the decision and the send button stay with you"
+    ],
+    "outcome": "Одна реальная задача из своего рабочего дня — письмо, документ или встреча — выбранная для разбора во втором уроке.",
+    "outcomeEn": "One real task from your working day — an email, a document or a meeting — picked to work through in the second lesson.",
+    "tools": [
+     "ChatGPT",
+     "Claude"
+    ]
+   },
+   "ap2": {
+    "summary": "Практика на трёх рабочих ситуациях: длинное письмо, большой документ и заметки после встречи. Для каждой строится запрос из трёх частей — контекст, задача, формат результата.",
+    "summaryEn": "Practice on three work situations: a long email, a large document and notes after a meeting. For each one you build a request from three parts — context, task and result format.",
+    "points": [
+     "Конструкция запроса: контекст, задача, формат результата — на примере менеджера диджитал-агентства и ответа до 150 слов",
+     "Письмо в два этапа: сначала разбор (резюме, чего хочет клиент, действия, сроки, открытые вопросы), потом ответ по вашей инструкции",
+     "Коммерческое предложение: десять пунктов для решения со ссылкой на место в документе и «в документе не указано» вместо догадок; сравнение старой и новой версии",
+     "Протокол встречи: резюме, только принятые решения, открытые вопросы, action items без выдуманных ответственных, затем фоллоуап-письмо",
+     "Брифинг перед следующей встречей по прошлому протоколу и доработка своих шаблонов вместо сборников из сотен промптов"
+    ],
+    "pointsEn": [
+     "The request structure: context, task, result format — shown with a digital agency manager and a reply of up to 150 words",
+     "An email in two steps: first the breakdown (summary, what the client wants, actions, deadlines, open questions), then a reply to your instructions",
+     "A commercial offer: ten decision points with where each sits in the document and «not stated in the document» instead of guesses; comparing old and new versions",
+     "Meeting minutes: summary, only decisions actually made, open questions, action items without invented owners, then a follow-up email",
+     "A briefing before the next meeting from the previous minutes, and refining your own templates instead of collecting hundreds of prompts"
+    ],
+    "outcome": "Три сценария — для почты, документов и встреч, — опробованные на своих реальных примерах, файл промптов к уроку и замеры времени до и после AI.",
+    "outcomeEn": "Three scenarios — for email, documents and meetings — tried on your own real examples, the lesson's prompt file and before-and-after time estimates.",
+    "tools": [
+     "ChatGPT или другой AI-чат",
+     "Загрузка файлов в чат"
+    ]
+   },
+   "ap3": {
+    "summary": "Урок о том, как измерить пользу AI: время до и после, меньше ошибок и повторной работы. И как рассказать о результате руководителю или клиенту языком процесса, а не технологии.",
+    "summaryEn": "A lesson on measuring what AI actually gives you: time before and after, fewer mistakes and less rework. And how to present the result to a manager or client in terms of the process, not the technology.",
+    "points": [
+     "Подсчёт по трём сценариям: письмо 20 → 7 минут, документ 40 → 10, протокол и фоллоуап 20 → 5",
+     "Не только минуты: меньше пропущенных задач и вопросов, проще вернуться в контекст через неделю",
+     "Простая таблица на неделю: задача, сколько было, сколько стало, что изменилось",
+     "Как показать результат руководителю или клиенту: процесс, цифры до и после, куда ушло освободившееся время, что проверяется вручную",
+     "Когда AI не нужен, и почему автоматизировать стоит только сценарий, проверенный руками"
+    ],
+    "pointsEn": [
+     "Counting the three scenarios: an email 20 → 7 minutes, a document 40 → 10, minutes and follow-up 20 → 5",
+     "Not just minutes: fewer missed tasks and questions, an easier way back into context a week later",
+     "A simple one-week table: the task, time before, time now, what changed",
+     "Showing the result to a manager or client: the process, before and after numbers, where the freed time went, what you still check by hand",
+     "When AI is not worth it, and why only a scenario proven by hand should be automated"
+    ],
+    "outcome": "Своя цифра сэкономленного времени за неделю по двум сценариям курса и короткая формулировка результата для руководителя или клиента.",
+    "outcomeEn": "Your own figure for time saved over a week on two of the course scenarios, and a short way to state the result to a manager or client.",
+    "tools": [
+     "ChatGPT",
+     "Claude",
+     "Таблица учёта времени"
+    ]
+   }
+  },
+  "ai-automation-engineer": {
+   "ae1": {
+    "summary": "Вводный урок без теории: сразу собираем в n8n AI-помощника для почты магазина керамики «Глина и Ко». Он разбирает каждое новое письмо по четырём категориям, ставит метку в Gmail и для важных писем готовит черновик ответа.",
+    "summaryEn": "An intro lesson with no theory: straight away you build an AI email assistant in n8n for the ceramics shop «Glina & Co». It sorts every new email into one of four categories, adds a Gmail label and prepares a reply draft for the important ones.",
+    "points": [
+     "Gmail Trigger с проверкой раз в минуту и упрощённым выводом, отдельный тестовый ящик и три подготовленных письма",
+     "Text Classifier на недорогой модели OpenAI: четыре категории с описаниями, включая обязательную «всё остальное»",
+     "Метка Gmail на каждую ветку классификатора, ID письма берётся напрямую из триггера",
+     "Basic LLM Chain с промптом из четырёх частей — кто ты, что знаешь, что сделать, чего нельзя — и черновик прямо в переписке с клиентом",
+     "Активация workflow, список выполнений и проверка на трудных письмах: на английском, с двумя темами, почти без текста"
+    ],
+    "pointsEn": [
+     "Gmail Trigger polling every minute with simplified output, a separate test inbox and three prepared emails",
+     "Text Classifier on an inexpensive OpenAI model: four categories with descriptions, including a mandatory “everything else”",
+     "A Gmail label on each classifier branch, with the email ID taken directly from the trigger",
+     "Basic LLM Chain with a four-part prompt — who you are, what you know, what to do, what not to do — and a draft placed in the customer’s thread",
+     "Activating the workflow, the executions list and tests on tricky emails: in English, with two topics, with almost no text"
+    ],
+    "outcome": "Работающий почтовый помощник: письма размечены по категориям, а на заказы, возвраты и оптовые запросы в переписке ждут черновики, которые человек проверяет и отправляет.",
+    "outcomeEn": "A working email assistant: emails are labelled by category, and orders, returns and wholesale requests get reply drafts in the thread for a person to check and send.",
+    "tools": [
+     "n8n",
+     "Gmail",
+     "OpenAI API"
+    ]
+   },
+   "ae2": {
+    "summary": "Разбираем основы n8n: облако или свой сервер и сколько это стоит, из чего состоит workflow, как данные переходят от узла к узлу и как работают выражения в фигурных скобках. На практике собираем форму оптовой заявки, которая присылает менеджеру письмо со всеми данными.",
+    "summaryEn": "The n8n fundamentals: cloud or your own server and what each costs, what a workflow is made of, how data moves from node to node and how expressions in curly braces work. In practice you build a wholesale request form that sends the manager an email with all the details.",
+    "points": [
+     "Облако n8n против своего сервера: в облаке платят за выполнения, а не за узлы, и практическое правило, что когда выбирать",
+     "Холст, триггеры, три вида узлов и заметки; в каждом узле слева вход, в центре настройки, справа выход",
+     "Данные в JSON и айтемы: узел срабатывает для каждого айтема, переключатель «выполнить один раз»",
+     "Form Trigger с типами полей, закрепление тестовых данных и Edit Fields с вычисляемым полем «размер заказа»",
+     "Письмо менеджеру через Gmail, тестовая и рабочая ссылка формы, разбор упавшего выполнения и повторный запуск"
+    ],
+    "pointsEn": [
+     "n8n Cloud versus your own server: the cloud charges per execution, not per node, and a rule of thumb for which to pick",
+     "The canvas, triggers, three kinds of nodes and sticky notes; in every node the input is on the left, settings in the middle, output on the right",
+     "Data as JSON and items: a node runs once per item, and the “execute once” toggle",
+     "Form Trigger with field types, pinning test data and Edit Fields with a computed “order size” field",
+     "An email to the manager via Gmail, the form’s test and production URLs, reading a failed execution and retrying it"
+    ],
+    "outcome": "Форма оптовой заявки по рабочей ссылке, которая присылает менеджеру готовое письмо, и понимание, как читать данные и ошибки в n8n.",
+    "outcomeEn": "A wholesale request form on a production URL that sends the manager a ready email, plus an understanding of how to read data and errors in n8n.",
+    "tools": [
+     "n8n",
+     "Gmail",
+     "ChatGPT или Claude"
+    ]
+   },
+   "ae3": {
+    "summary": "Учим workflow принимать решения и переживать ошибки. Форму оптовой заявки дорабатываем фильтром от мусора, развилками по размеру заказа и городу, вечерней сводкой и рассылкой с паузами, а затем ставим три уровня защиты от сбоев.",
+    "summaryEn": "Teaching workflows to make decisions and survive errors. The wholesale form gets a junk filter, branching by order size and city, an evening digest and a paced mailing, and then three levels of protection against failures.",
+    "points": [
+     "Filter в режиме «И» с правильным типом сравнения, IF для крупных заказов и Merge, чтобы снова свести ветки в одну",
+     "Switch по городам с запасным выходом и проверка каждой ветки на закреплённых данных",
+     "Aggregate для одной вечерней сводки вместо 20 писем и Split Out для обратной задачи",
+     "Loop Over Items: персональная рассылка оптовым клиентам по одному письму с паузой Wait на 20 секунд",
+     "Четыре типа ошибок и три уровня защиты: повтор при ошибке, отдельный выход для ошибок и общий workflow с Error Trigger"
+    ],
+    "pointsEn": [
+     "Filter in “AND” mode with the right comparison type, IF for large orders and Merge to bring the branches back together",
+     "Switch by city with a fallback output, and testing each branch on pinned data",
+     "Aggregate for one evening digest instead of 20 emails, and Split Out for the reverse task",
+     "Loop Over Items: a personal mailing to wholesale clients, one email at a time with a 20-second Wait",
+     "Four types of errors and three levels of protection: retry on fail, an error output and a shared workflow with Error Trigger"
+    ],
+    "outcome": "Форма заявки с фильтрацией, маршрутизацией и сводкой плюс общий обработчик ошибок, который присылает письмо о любом упавшем workflow.",
+    "outcomeEn": "A request form with filtering, routing and a digest, plus a shared error handler that emails you about any failed workflow.",
+    "tools": [
+     "n8n",
+     "Gmail",
+     "ChatGPT"
+    ]
+   },
+   "ae4": {
+    "summary": "Как подключить к n8n сервис, для которого нет готового узла: читаем документацию API и принимаем данные через webhook. Собираем приём заказов с сайта на защищённый webhook с проверкой полей, пересчётом суммы по курсу валют и ответом сайту.",
+    "summaryEn": "How to connect n8n to a service that has no ready-made node: reading API documentation and receiving data via webhooks. You build order intake from a website on a secured webhook with field checks, currency conversion of the total and a reply to the site.",
+    "points": [
+     "API на примере ресторана: адрес, метод GET или POST, заголовки и тело, коды ответа 200, 400, 401, 404, 429, 500 и постраничная выдача",
+     "HTTP Request к бесплатному API курсов валют: сумма заказа в злотых и фунтах и идея кэшировать курс раз в день",
+     "Ключи только в Credentials — ключ в заголовке, Bearer token, OAuth; импорт cURL из документации и помощь ChatGPT или Claude",
+     "Webhook с методом POST: данные в поле body, ответ через Respond to Webhook с кодом 200 или 400 и правило отвечать как можно раньше",
+     "Защита webhook секретным ключом в заголовке и проверка системы: заказ без телефона, запрос без ключа, недоступный API курсов"
+    ],
+    "pointsEn": [
+     "APIs through a restaurant analogy: URL, GET or POST method, headers and body, status codes 200, 400, 401, 404, 429, 500, and pagination",
+     "HTTP Request to a free currency rates API: the order total in zlotys and pounds, and the idea of caching the rate once a day",
+     "Keys only in Credentials — header key, Bearer token, OAuth; importing cURL from the docs and getting help from ChatGPT or Claude",
+     "Webhook with the POST method: data in the body field, replying via Respond to Webhook with code 200 or 400, and the rule to reply as early as possible",
+     "Securing the webhook with a secret header key and stress-testing the system: an order without a phone, a request without the key, the rates API down"
+    ],
+    "outcome": "Защищённый webhook, который принимает заказ с сайта, проверяет его, пересчитывает сумму в валюту клиента и отвечает отправителю.",
+    "outcomeEn": "A secured webhook that takes an order from the website, validates it, converts the total into the client’s currency and replies to the sender.",
+    "tools": [
+     "n8n",
+     "HTTP Request и Webhook",
+     "cURL",
+     "ChatGPT или Claude"
+    ]
+   },
+   "ae5": {
+    "summary": "Делаем из Google Sheets базу данных заказов и клиентов, которая не развалится через месяц. Подключаем к ней приём заказов из прошлого урока без дублей, ведём карточки клиентов и собираем утреннюю сводку для владелицы.",
+    "summaryEn": "Turning Google Sheets into an orders and customers database that won’t fall apart in a month. You connect last lesson’s order intake to it without duplicates, keep customer records and build a morning digest for the owner.",
+    "points": [
+     "Пять правил таблицы-базы и структура «Глина и Ко БАЗА»: листы «Клиенты» и «Заказы», связь по email, даты в формате год-месяц-день",
+     "Запись заказов через «добавить или обновить строку» по номеру заказа — повторный webhook не создаёт дубль",
+     "Поиск клиента по email с опцией «всегда выдавать данные», IF «новый или существующий» и явное превращение текста в число",
+     "Отдельный workflow поиска заказа по номеру и утренняя сводка в 9:00 по рабочим дням через Summarize с учётом часового пояса",
+     "Границы Google Sheets — лимиты, объём, ручные правки, одновременная запись — и куда расти: Airtable, таблицы n8n, Postgres или Supabase"
+    ],
+    "pointsEn": [
+     "Five rules for a sheet that works as a database and the «Glina & Co BASE» structure: Customers and Orders sheets linked by email, dates as year-month-day",
+     "Writing orders with “append or update row” keyed on order number — a repeated webhook creates no duplicate",
+     "Looking up a customer by email with “always output data”, an IF for new versus existing, and explicitly converting text to numbers",
+     "A separate workflow that finds an order by number, and a 9:00 weekday morning digest via Summarize that accounts for the time zone",
+     "Limits of Google Sheets — rate limits, volume, manual edits, concurrent writes — and where to grow: Airtable, n8n data tables, Postgres or Supabase"
+    ],
+    "outcome": "Таблица из двух листов, куда заказы пишутся без дублей, клиенты создаются или обновляются, а владелица каждое утро получает сводку.",
+    "outcomeEn": "A two-sheet database where orders are written without duplicates, customers are created or updated, and the owner gets a digest every morning.",
+    "tools": [
+     "n8n",
+     "Google Sheets"
+    ]
+   },
+   "ae6": {
+    "summary": "Как использовать AI внутри автоматизации так, чтобы ему можно было доверять: три задачи — выбрать, вытащить, написать — и проверки после модели. Ветку оптовых запросов почтового помощника превращаем в полную обработку: извлечение полей, проверка, приоритет и ответ с ценами из таблицы.",
+    "summaryEn": "How to use AI inside automations so you can trust it: three tasks — choose, extract, write — and checks after the model. The email assistant’s wholesale branch becomes full request handling: field extraction, validation, priority and a reply with prices from a sheet.",
+    "points": [
+     "Три задачи AI по порядку — классификация, извлечение, генерация — и почему писать нужно на основе проверенных фактов",
+     "Information Extractor на шесть полей с описаниями вроде «если указан диапазон, бери большее, если нет — пусто»",
+     "Проверка ответа модели обычными условиями: полнота запроса, Switch по количеству для приоритета, проверка на здравый смысл",
+     "Лист прайса в Google Sheets, ответ клиенту на его основе и запись запроса в таблицу вместе с исходным текстом письма",
+     "Выбор модели и цена в токенах, лимит расходов, температура, примеры в промпте, чувствительные данные и человек в контуре"
+    ],
+    "pointsEn": [
+     "The three AI tasks in order — classification, extraction, generation — and why writing must rely on verified facts",
+     "Information Extractor with six fields and descriptions such as “if a range is given, take the larger number; if none, leave empty”",
+     "Checking the model’s output with plain conditions: request completeness, a Switch on quantity for priority, a sanity check",
+     "A price-list sheet in Google Sheets, a client reply built from it, and logging the request together with the original email text",
+     "Choosing a model and token pricing, a spending limit, temperature, examples in the prompt, sensitive data and a human in the loop"
+    ],
+    "outcome": "Ветка оптовых запросов, которая вытаскивает данные из письма, проверяет их, определяет приоритет и готовит ответ с ценами из прайса.",
+    "outcomeEn": "A wholesale request branch that extracts data from the email, validates it, sets the priority and prepares a reply with prices from the price list.",
+    "tools": [
+     "n8n",
+     "Information Extractor",
+     "Google Sheets"
+    ]
+   },
+   "ae7": {
+    "summary": "Автоматизации выходят в мессенджеры, где клиенты на самом деле пишут. Дмитрий собирает в n8n Telegram-бота для «Глина и Ко», который показывает статус заказа, отвечает на частые вопросы, понимает голосовые и зовёт менеджера, а затем разбирает правила WhatsApp Business.",
+    "summaryEn": "Your automations move into messengers, where customers actually write. Dmitry builds a Telegram bot in n8n for «Глина и Ко» that shows order status, answers common questions, understands voice messages and calls a manager, then walks through the rules of WhatsApp Business.",
+    "points": [
+     "Бот через BotFather, токен только в учётных данных n8n, Telegram Trigger и chat ID; правило «один бот — один воркфлоу с триггером»",
+     "Приветствие и три кнопки: статус заказа, доставка и оплата (готовый текст без AI), позвать менеджера",
+     "Номер заказа ловится регулярным выражением и уходит в подворкфлоу статуса из пятого урока через Execute Workflow",
+     "Свободные вопросы — AI строго по базе, статус «печатает», голосовые через распознавание речи; передача в группу менеджеров с учётом рабочего времени",
+     "WhatsApp: только официальный API от Meta, тестовый номер, правило 24 часов, шаблоны на проверку и платные сообщения"
+    ],
+    "pointsEn": [
+     "A bot via BotFather, the token kept only in n8n credentials, Telegram Trigger and chat ID; the rule «one bot, one workflow with a trigger»",
+     "A greeting and three buttons: order status, delivery and payment (a ready text, no AI), call a manager",
+     "The order number is caught with a regular expression and passed to the order status sub-workflow from lesson five via Execute Workflow",
+     "Free-form questions go to AI that answers only from a knowledge base, a «typing» status, voice messages through speech recognition; handoff to a managers' group that respects working hours",
+     "WhatsApp: only Meta's official API, a test number, the 24-hour rule, templates sent for review and paid messages"
+    ],
+    "outcome": "Работающий Telegram-бот поддержки с кнопками, статусом заказа, ответами по базе, голосовыми и передачей менеджеру, а уведомления об ошибках теперь приходят в Telegram.",
+    "outcomeEn": "A working Telegram support bot with buttons, order status, answers from a knowledge base, voice messages and manager handoff, with error alerts now arriving in Telegram.",
+    "tools": [
+     "n8n",
+     "Telegram и BotFather",
+     "WhatsApp Business API (Meta)"
+    ]
+   },
+   "ae8": {
+    "summary": "Заявки из формы, почты и бота сводятся в одну CRM, чтобы ни одна не потерялась. Дмитрий на примере HubSpot собирает единый вход для лидов, квалификацию «правила плюс AI», маршрутизацию по трём веткам и обратную связь из CRM в бизнес.",
+    "summaryEn": "Leads from the form, email and the bot are brought into one CRM so none get lost. Using HubSpot, Dmitry builds a single entry point for leads, «rules plus AI» qualification, three-way routing and feedback from the CRM back into the business.",
+    "points": [
+     "Контакты, компании, сделки и воронка; схема переносится на Pipedrive, amoCRM или Bitrix24 через HTTP Request",
+     "Один воркфлоу «Лиды — приём», который вызывают все источники; контакт «создать или обновить по email», компания и сделка с суммой и источником",
+     "Квалификация: до 80 баллов по правилам владелицы (объём, тип клиента, срок, логотип, город) и до 20 от AI с объяснением в одно предложение",
+     "Горячий лид — сообщение менеджерам в Telegram и проверка через час, тёплый — задача в CRM, холодный — письмо с каталогом и этап «прогрев»",
+     "Триггер по смене этапа: выигранная сделка создаёт заказ и пишет в мастерскую, проигранная уходит в лист «Вернуться позже»"
+    ],
+    "pointsEn": [
+     "Contacts, companies, deals and the pipeline; the pattern carries over to Pipedrive, amoCRM or Bitrix24 via HTTP Request",
+     "One «Leads — intake» workflow that every source calls; contact «create or update by email», company, and a deal with amount and source",
+     "Qualification: up to 80 points from the owner's rules (quantity, client type, deadline, logo, city) and up to 20 from AI with a one-sentence reason",
+     "Hot lead — a message to managers in Telegram and a check after an hour, warm — a CRM task, cold — an email with the catalogue and a «nurture» stage",
+     "A stage-change trigger: a won deal creates an order and notifies the workshop, a lost one goes to a «Come back later» sheet"
+    ],
+    "outcome": "Все заявки сами попадают в CRM без дублей, с оценкой и объяснением, менеджер видит, кому звонить первым, а выигранная сделка сама запускает работу бизнеса.",
+    "outcomeEn": "Every lead lands in the CRM on its own without duplicates, scored and explained, the manager sees who to call first, and a won deal sets the business in motion by itself.",
+    "tools": [
+     "n8n",
+     "HubSpot",
+     "Telegram"
+    ]
+   },
+   "ae9": {
+    "summary": "Бот по кнопкам теряется, когда клиент пишет всё в одном сообщении, поэтому в нём появляется AI-агент. Дмитрий заменяет простую цепочку на агента с памятью, тремя инструментами и системным промптом, а потом пробует его сломать.",
+    "summaryEn": "A button bot gets lost when a customer packs everything into one message, so it gets an AI agent. Dmitry replaces the simple chain with an agent that has memory, three tools and a system prompt, then tries to break it.",
+    "points": [
+     "Чем агент отличается от заданного пути: модель, память, инструменты и правила; узел AI Agent и модель поумнее",
+     "Память с ключом сессии по chat ID и последними 10 сообщениями, чтобы агент не путал разговоры клиентов",
+     "Три инструмента с описаниями: статус заказа, база знаний магазина и «позвать менеджера» с кратким содержанием разговора",
+     "Системный промпт из шести блоков и проверка на сообщении про заказ 1042 и обмен цвета, разбор шагов в журнале узла",
+     "Проверки провокациями (промпт-инъекция, чужие данные, раздражённый клиент, вопрос не по теме), таблица из 20 тестов, журнал диалогов и чек-лист запуска"
+    ],
+    "pointsEn": [
+     "How an agent differs from a fixed path: model, memory, tools and rules; the AI Agent node and a smarter model",
+     "Memory keyed by chat ID with the last 10 messages, so the agent never mixes up customers' conversations",
+     "Three tools with descriptions: order status, the shop's knowledge base and «call a manager» with a short summary of the conversation",
+     "A six-block system prompt, tested on the message about order 1042 and a colour exchange, with each step read in the node log",
+     "Provocation tests (prompt injection, someone else's data, an angry customer, an off-topic request), a 20-question test table, a conversation log and a launch checklist"
+    ],
+    "outcome": "AI-агент поддержки в Telegram-боте, который сам выбирает инструменты, помнит разговор, не выдаёт лишних данных и проверен таблицей тестов.",
+    "outcomeEn": "An AI support agent inside the Telegram bot that picks its own tools, remembers the conversation, does not leak data it should not have and is checked against a test table.",
+    "tools": [
+     "n8n",
+     "AI Agent",
+     "Telegram"
+    ]
+   },
+   "ae10": {
+    "summary": "Урок о том, что отличает учебную автоматизацию от той, на которую бизнес может положиться. Дмитрий наводит порядок в воркфлоу, добавляет защиту от повторов, мониторинг из трёх уровней, тестовые копии, бэкапы и документ системы.",
+    "summaryEn": "This lesson covers what separates a practice automation from one a business can rely on. Dmitry tidies up the workflows and adds duplicate protection, three-level monitoring, test copies, backups and a system document.",
+    "points": [
+     "Главный воркфлоу-диспетчер и подворкфлоу: бот с 30 узлов сжимается до 8; названия «раздел — что делает» и узлы по смыслу",
+     "Идемпотентность: проверка ID события по встроенной таблице n8n «Обработанные события», сначала отметка, потом письмо клиенту",
+     "Мониторинг: ошибки в Telegram с пометкой критичности, журнал ключевых воркфлоу и утренний «пульс», который ловит тихие поломки",
+     "Правки сначала в тестовой копии со своим ботом и таблицей, откат через историю версий, ночной бэкап через API n8n на Google Drive",
+     "Безопасность и лимиты: ключи только в credentials, аккаунты на клиента, минимальные доступы; документ системы на одну страницу"
+    ],
+    "pointsEn": [
+     "A main dispatcher workflow and sub-workflows: the 30-node bot shrinks to 8; names like «area — what it does» and meaningful node names",
+     "Idempotency: checking the event ID against the built-in n8n table «Processed events», marking it first, emailing the customer second",
+     "Monitoring: errors in Telegram flagged by severity, a log for key workflows and a morning «pulse» that catches silent failures",
+     "Changes go to a test copy with its own bot and table first, rollback via version history, a nightly backup through the n8n API to Google Drive",
+     "Security and limits: keys only in credentials, accounts in the client's name, minimal access; a one-page system document"
+    ],
+    "outcome": "Система из прошлых уроков, приведённая к продакшен-уровню: подворкфлоу, защита от дублей, мониторинг с пульсом, бэкапы, тестовая копия и документ.",
+    "outcomeEn": "The system from earlier lessons brought up to production level: sub-workflows, duplicate protection, monitoring with a pulse, backups, a test copy and a document.",
+    "tools": [
+     "n8n",
+     "Telegram",
+     "Google Drive"
+    ]
+   },
+   "ae11": {
+    "summary": "Урок без n8n — о работе с клиентом, где теряются деньги. Дмитрий разбирает бриф, оценку проекта, коммерческое предложение, сдачу и ежемесячную поддержку.",
+    "summaryEn": "A lesson without n8n, about working with clients, where the money is actually lost. Dmitry covers the brief, project estimation, the proposal, handover and monthly support.",
+    "points": [
+     "Бриф по пяти блокам: как сейчас, объёмы, системы и доступы, исключения, что будет успехом; схемы «как сейчас» и «как будет»",
+     "Оценка по блокам с тестами, запасом в полтора раза и временем на созвоны; почасовая, фиксированная цена и абонемент",
+     "Расчёт ценности для бизнеса: 44 часа администратора в месяц по 10 евро — около 440 евро экономии и окупаемость меньше трёх месяцев",
+     "Предложение на 1–2 страницы с разделом «что не входит», проверяемыми критериями приёмки и оплатой в две части",
+     "Сдача из пяти шагов: проверка по критериям, документ, видео на 10 минут, обучение и гарантийный период; абонемент с ежемесячным отчётом"
+    ],
+    "pointsEn": [
+     "A five-block brief: how it works now, volumes, systems and access, exceptions, what success looks like; «as is» and «to be» diagrams",
+     "Estimation by blocks with testing, a 1.5x buffer and time for calls; hourly, fixed price and retainer",
+     "Calculating business value: 44 admin hours a month at 10 euros is about 440 euros saved, paying back in under three months",
+     "A 1–2 page proposal with an «out of scope» section, testable acceptance criteria and payment in two parts",
+     "A five-step handover: checking against criteria, the document, a 10-minute video, training and a warranty period; a retainer with a monthly report"
+    ],
+    "outcome": "Бриф, схемы «как сейчас» и «как будет» и коммерческое предложение по шаблону с разделом «что не входит» и критериями приёмки.",
+    "outcomeEn": "A brief, «as is» and «to be» diagrams and a proposal built from the template, with an «out of scope» section and acceptance criteria.",
+    "tools": []
+   },
+   "ae12": {
+    "summary": "Финальный урок собирает всё в одну систему для одного бизнеса. Дмитрий разбирает требования к финальному проекту, показывает полную систему «Глина и Ко», типичные ошибки и то, как превратить проект в кейс для портфолио.",
+    "summaryEn": "The final lesson brings everything together into one system for one business. Dmitry goes over the final project requirements, shows the full «Глина и Ко» system, common mistakes and how to turn the project into a portfolio case.",
+    "points": [
+     "Семь обязательных элементов: вход извне, хранение, AI-шаг с проверкой, человек в контуре, надёжность, порядок и документ системы",
+     "Что сдать: экспорт воркфлоу в JSON, документ системы, видео на 5 минут и таблица тестов",
+     "Схема всей системы «Глина и Ко»: пять входов, общие подворкфлоу, хранение, выходы и мониторинг; пример поменьше — бот для стоматологии из трёх воркфлоу",
+     "Частые ошибки: нет исключений, AI без проверки, ключи в экспорте, система, понятная только автору, длинное видео, нет ответственного у клиента",
+     "Кейс «задача — решение — результат» с отзывом владельца и без выдуманных цифр; куда двигаться после курса"
+    ],
+    "pointsEn": [
+     "Seven required elements: an external input, storage, an AI step with validation, a human in the loop, reliability, order and a system document",
+     "What to submit: workflows exported to JSON, the system document, a 5-minute video and a test table",
+     "The full «Глина и Ко» system: five inputs, shared sub-workflows, storage, outputs and monitoring; a smaller example — a three-workflow bot for a dental clinic",
+     "Common mistakes: no exceptions, AI without validation, keys in the export, a system only its author understands, a long video, no owner on the client side",
+     "A «problem — solution — result» case with the owner's testimonial and no made-up numbers; where to go after the course"
+    ],
+    "outcome": "План и критерии финального проекта, который после проверки по семи элементам даёт сертификат курса и первый кейс для портфолио.",
+    "outcomeEn": "A plan and criteria for the final project, which after review against the seven elements earns the course certificate and becomes a first portfolio case.",
+    "tools": [
+     "n8n",
+     "Telegram",
+     "CRM"
+    ]
+   }
   }
  }
 }

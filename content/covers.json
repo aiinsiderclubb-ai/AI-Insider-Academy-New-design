@@ -102,7 +102,9 @@
   "ai-business-builder-promo": "/videos/ai-business-builder-promo.mp4",
   "ai-content-creator-promo": "/videos/ai-content-creator-promo.mp4",
   "ai-for-developers-promo": "/videos/ai-for-developers-promo.mp4",
-  "ai-insider-accelerator-promo": "/videos/ai-insider-accelerator-promo.mp4"
+  "ai-for-productivity-promo": "/videos/ai-for-productivity-promo.mp4",
+  "ai-insider-accelerator-promo": "/videos/ai-insider-accelerator-promo.mp4",
+  "first-automation-n8n-promo": "/videos/first-automation-n8n-promo.mp4"
  },
  "coursesWide": {
   "ai-agent-engineer": "/courses/wide/ai-agent-engineer-v2.jpg",

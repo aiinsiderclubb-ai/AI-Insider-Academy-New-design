@@ -1,0 +1,24 @@
+{
+ "name": "insider-cinematic-studio",
+ "displayName": "Claude Cinematic Studio",
+ "version": "1.0.0",
+ "description": "Nine skills that make an agent work like a motion design, editing and VFX studio: concept, storyboard and art direction; extruded 3D typography living in the same space as objects; camera moves with real lenses, depth of field and graph-editor curves; bloom, light trails, particles, glass, chrome and HUD; compositing real footage with mattes, tracking and speed ramps; photoreal products and logos in Blender; beat-synced editing with synthesized sound design; real motion blur, LUTs, halation and delivery; and QC that flags the AI-video look. Ships a Remotion + three.js project with five looks and five example films.",
+ "author": {
+  "name": "AI Insider Academy",
+  "url": "https://myinsideracademy.com"
+ },
+ "homepage": "https://myinsideracademy.com",
+ "license": "LicenseRef-Proprietary",
+ "keywords": [
+  "video",
+  "motion-design",
+  "vfx",
+  "3d",
+  "remotion",
+  "threejs",
+  "blender",
+  "compositing",
+  "cinematic",
+  "commercial"
+ ]
+}

@@ -1,0 +1,113 @@
+{
+ "title": "AURA — запуск, 15 секунд",
+ "look": "keynote",
+ "format": "16:9",
+ "fps": 30,
+ "music": "public/audio/track-128.mp3",
+ "shots": [
+  {
+   "id": "S1",
+   "start": 0,
+   "end": 3.8,
+   "intent": "Тишина перед событием: зритель понимает, что сейчас покажут что-то дорогое",
+   "breath": true,
+   "camera": {"move": "dolly", "lens_mm": 40, "from": [-1.8, 1.1, 12], "to": [-0.6, 0.45, 7.6]},
+   "layers": [
+    {"kind": "particles", "what": "пыль в луче, передний план — даёт параллакс на наезде"},
+    {"kind": "3d-type", "what": "кикер «Представляем», средний план"},
+    {"kind": "light", "what": "полосы студийного света скользят по металлу, задний план"}
+   ],
+   "type": [{"text": "Представляем", "reveal": "riseFromDepth", "exit": "intoDepth", "at": 0.4, "until": 3.6}],
+   "vfx": ["dof", "bloom", "grain"],
+   "transition_out": {"kind": "cut", "on": "downbeat"},
+   "hits": [],
+   "sound": "низкий дрон, к склейке — обратный свелл"
+  },
+  {
+   "id": "S2",
+   "start": 3.8,
+   "end": 5.6,
+   "intent": "Имя продукта бьёт в такт — главный удар первой половины",
+   "camera": {"move": "push", "lens_mm": 50, "from": [0, 0, 6.5], "to": [0, 0, 5.2]},
+   "layers": [
+    {"kind": "3d-type", "what": "AURA, хромированный объём, центр"},
+    {"kind": "object", "what": "орбитальные кольца — проходят перед и за буквами"},
+    {"kind": "particles", "what": "вспышка частиц в момент удара"}
+   ],
+   "type": [{"text": "AURA", "reveal": "flyIn", "exit": "cut", "at": 3.8, "until": 5.6}],
+   "vfx": ["bloom", "aberration", "particles", "flash"],
+   "transition_out": {"kind": "flash", "on": "beat"},
+   "hits": [{"t": 3.85, "what": "буквы приземляются", "sfx": "impact"}],
+   "sound": "удар + хвост"
+  },
+  {
+   "id": "S3",
+   "start": 5.6,
+   "end": 7.6,
+   "intent": "Технология внутри: зритель видит, что это не просто корпус",
+   "camera": {"move": "orbit", "lens_mm": 50, "from": -20, "to": 25},
+   "layers": [
+    {"kind": "object", "what": "устройство-монолит, центр"},
+    {"kind": "hud", "what": "прицел HUD с подписью, привязан к корпусу в 3D"},
+    {"kind": "background", "what": "сетка пола уходит в туман"}
+   ],
+   "type": [{"text": "Чип A3 · 3 нм", "reveal": "flip", "exit": "none", "at": 5.7, "until": 7.6}],
+   "vfx": ["bloom", "dof", "glow"],
+   "transition_out": {"kind": "whip", "on": "downbeat"},
+   "hits": [{"t": 6.1, "what": "HUD щёлкает и раскрывается", "sfx": "tick"}],
+   "sound": "UI-щелчки, свиш в вип-пэн"
+  },
+  {
+   "id": "S4",
+   "start": 7.6,
+   "end": 9.4,
+   "intent": "Продукт в реальном кадре: текст живёт за ним, а не поверх",
+   "camera": {"move": "dolly", "lens_mm": 85, "from": [0, 0, 5], "to": [0, 0, 4.4]},
+   "layers": [
+    {"kind": "footage", "what": "плейт: вращение устройства"},
+    {"kind": "3d-type", "what": "«Тише. Быстрее. Дольше.» — за объектом"},
+    {"kind": "cutout", "what": "вырезанный по маске объект поверх текста"}
+   ],
+   "type": [{"text": "Тише. Быстрее. Дольше.", "reveal": "swing", "exit": "intoDepth", "at": 7.7, "until": 9.35}],
+   "vfx": ["halation", "grain"],
+   "transition_out": {"kind": "zoom", "on": "downbeat"},
+   "hits": [],
+   "sound": "вуш в зум-сквозь"
+  },
+  {
+   "id": "S5",
+   "start": 9.4,
+   "end": 11.3,
+   "intent": "Скорость и запас хода — короткая энергичная вставка",
+   "camera": {"move": "handheld", "lens_mm": 24},
+   "layers": [
+    {"kind": "trail", "what": "световые трассы проносятся мимо камеры"},
+    {"kind": "3d-type", "what": "«48 часов» раскрывается из центра"}
+   ],
+   "type": [{"text": "48 часов", "reveal": "burst", "exit": "pastCamera", "at": 9.45, "until": 11.2}],
+   "vfx": ["streaks", "bloom", "aberration"],
+   "transition_out": {"kind": "in-camera", "on": "downbeat"},
+   "hits": [{"t": 9.45, "what": "суб-дроп на раскрытие", "sfx": "subdrop"}],
+   "sound": "суб-дроп, свист трасс"
+  },
+  {
+   "id": "S6",
+   "start": 11.3,
+   "end": 15.0,
+   "intent": "Финальный локап: имя и призыв, камера медленно поднимается и замирает",
+   "camera": {"move": "crane", "lens_mm": 35, "from": [0, -0.6, 8], "to": [0, 0.4, 8]},
+   "layers": [
+    {"kind": "3d-type", "what": "AURA, крупно"},
+    {"kind": "3d-type", "what": "«Уже в продаже», мельче, ниже"},
+    {"kind": "light", "what": "свет проходит по металлу ровно на последней доле"}
+   ],
+   "type": [
+    {"text": "AURA", "reveal": "riseFromDepth", "exit": "none", "at": 11.35, "until": 15.0},
+    {"text": "Уже в продаже", "reveal": "flip", "exit": "none", "at": 12.2, "until": 15.0}
+   ],
+   "vfx": ["bloom", "dof", "grain"],
+   "hits": [{"t": 11.3, "what": "локап встаёт", "sfx": "impact"}],
+   "sound": "удар, хвост ревера до конца"
+  }
+ ]
+}

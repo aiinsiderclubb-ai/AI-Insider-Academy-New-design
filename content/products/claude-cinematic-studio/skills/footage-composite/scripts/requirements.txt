@@ -1,0 +1,6 @@
+# Python 3.9–3.12. Install once:  python3 -m pip install -r requirements.txt
+# frames.py needs only ffmpeg; matte.py, track.py and ../../cut-rhythm/scripts/match_cut.py need these.
+numpy>=1.24,<3
+opencv-python>=4.8,<5
+# Only for `matte.py --mode person` (MediaPipe Tasks ImageSegmenter; give the .tflite model with --model).
+mediapipe>=0.10.14,<0.11

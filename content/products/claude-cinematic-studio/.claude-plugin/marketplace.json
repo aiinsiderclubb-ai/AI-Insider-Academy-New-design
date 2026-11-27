@@ -1,0 +1,15 @@
+{
+ "name": "ai-insider-cinematic",
+ "description": "Cinematic motion design, 3D and VFX skills from AI Insider Academy: commercial films made in code with Remotion, three.js and Blender.",
+ "owner": {
+  "name": "AI Insider Academy",
+  "url": "https://myinsideracademy.com"
+ },
+ "plugins": [
+  {
+   "name": "insider-cinematic-studio",
+   "source": "./",
+   "description": "Nine skills for cinematic 3D motion design, VFX, compositing, editing and finishing, and a Remotion + three.js project with five looks."
+  }
+ ]
+}

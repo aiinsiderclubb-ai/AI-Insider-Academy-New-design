@@ -1,0 +1,34 @@
+{
+  "name": "cinematic-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion + Three.js project from Claude Cinematic Studio (AI Insider Academy).",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render",
+    "still": "remotion still",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@expo-google-fonts/inter-tight": "0.4.2",
+    "@expo-google-fonts/jetbrains-mono": "0.4.1",
+    "@expo-google-fonts/playfair-display": "0.4.2",
+    "@expo-google-fonts/unbounded": "0.4.1",
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.2",
+    "@react-three/postprocessing": "3.2.2",
+    "@remotion/cli": "4.0.546",
+    "@remotion/three": "4.0.546",
+    "postprocessing": "6.39.6",
+    "react": "19.2.9",
+    "react-dom": "19.2.9",
+    "remotion": "4.0.546",
+    "three": "0.184.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "@types/three": "0.184.0",
+    "typescript": "5.9.3"
+  }
+}

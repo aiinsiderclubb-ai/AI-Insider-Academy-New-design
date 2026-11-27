@@ -26,6 +26,9 @@ export interface GiveawayState {
   telegramInviteUrl: string;
 }
 
+/** Where a friend's code waits while the visitor signs up and comes back to enter. */
+const FROM_KEY = "aia-giveaway-from";
+
 /** Participants are only social proof once there are enough of them. */
 const PROOF_THRESHOLD = 25;
 
@@ -66,10 +69,33 @@ export function GiveawayPanel({
   const closed = !giveawayIsOpen(state.status, state.endsAt) || countdown.over;
   const [busy, setBusy] = React.useState<string | null>(null);
 
+  // A link like ?from=CODE names the friend who sent it. Keep it through sign-up, then send it on entry.
+  React.useEffect(() => {
+    try {
+      const from = new URLSearchParams(window.location.search).get("from");
+      if (from && /^[A-Za-z0-9-]{2,64}$/.test(from)) window.localStorage.setItem(FROM_KEY, `${state.slug}:${from}`);
+    } catch {
+      /* storage unavailable: the entry goes in without a referrer */
+    }
+  }, [state.slug]);
+
   async function call(action: "enter" | "share" | "verify-telegram") {
     setBusy(action);
     try {
-      const response = await fetch(`/api/giveaways/${encodeURIComponent(state.slug)}/${action}`, { method: "POST" });
+      let referralCode: string | undefined;
+      if (action === "enter") {
+        try {
+          const [slug, code] = (window.localStorage.getItem(FROM_KEY) ?? "").split(":");
+          if (slug === state.slug && code) referralCode = code;
+        } catch {
+          /* no stored code */
+        }
+      }
+      const response = await fetch(`/api/giveaways/${encodeURIComponent(state.slug)}/${action}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(referralCode ? { referralCode } : {}),
+      });
       const payload = (await response.json().catch(() => ({}))) as { errorRu?: string; error?: string };
       if (!response.ok) throw new Error(payload.errorRu ?? payload.error ?? "");
       push({ tone: "success", title: d.common.saved });

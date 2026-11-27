@@ -50,7 +50,8 @@ export default async function GiveawayPage({
   const rules = pick(locale, giveaway.rulesRu, giveaway.rulesEn);
   const faq = pick(locale, giveaway.faqRu ?? [], giveaway.faqEn ?? []);
   const base = process.env.SITE_URL ?? links.academy;
-  const shareUrl = `${base.replace(/\/$/, "")}/${locale}/community/giveaways/${giveaway.slug}`;
+  // An entrant's link carries their code, so a friend who enters by it earns them referral chances.
+  const shareUrl = `${base.replace(/\/$/, "")}/${locale}/community/giveaways/${giveaway.slug}${live?.shareCode ? `?from=${encodeURIComponent(live.shareCode)}` : ""}`;
   const endsAt = live?.endsAt ?? giveaway.endsAt;
   const open = giveawayIsOpen(live?.status ?? giveaway.status, endsAt);
 

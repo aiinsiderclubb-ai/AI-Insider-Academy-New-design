@@ -212,6 +212,8 @@ export interface ApiGiveaway {
   shared: boolean;
   referralCount: number;
   bonusChances: number;
+  /** This entrant's code for their share link; null until they have entered. */
+  shareCode?: string | null;
   chances: number;
   telegramChannel: string;
   result: { winnerName?: string; announcedAt?: string } | null;

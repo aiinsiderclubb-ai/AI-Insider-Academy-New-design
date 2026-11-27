@@ -175,6 +175,25 @@ export async function adminSignOut(locale: Locale = defaultLocale) {
  * bumping the token version and hands back a fresh token for this one, which
  * replaces the cookie — so the person stays signed in here.
  */
+/**
+ * A new email starts unconfirmed: the API signs every old session out and hands
+ * back a token for this one, which is stored here before the learner is sent to
+ * confirm the new address.
+ */
+export async function changeEmail(email: string, currentPassword: string): Promise<AuthResult> {
+  try {
+    const result = await api<{ token?: string }>("/me/email", {
+      method: "PATCH",
+      auth: true,
+      body: { email, currentPassword },
+    });
+    if (result.token) await writeSessionToken(result.token);
+    return { ok: true };
+  } catch (error) {
+    return describe(error);
+  }
+}
+
 export async function changePassword(currentPassword: string, newPassword: string): Promise<AuthResult> {
   try {
     const result = await api<{ token?: string }>("/me/password", {

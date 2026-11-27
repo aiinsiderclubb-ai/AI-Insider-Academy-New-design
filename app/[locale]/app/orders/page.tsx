@@ -1,6 +1,6 @@
 import { plansPublic } from "@/lib/visibility";
 import type { Metadata } from "next";
-import { CreditCard, Receipt } from "lucide-react";
+import { CreditCard, LifeBuoy, Receipt } from "lucide-react";
 import { AppPage } from "@/components/app/page-header";
 import { Badge } from "@/components/primitives/badge";
 import { ButtonLink } from "@/components/primitives/button";
@@ -9,7 +9,7 @@ import { pick } from "@/content/locale";
 import { planByTier } from "@/content/plans";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
-import { getAccess, getMe } from "@/lib/api/session";
+import { getAccess, getMe, getPayments } from "@/lib/api/session";
 import { formatDate, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -19,40 +19,59 @@ export default async function OrdersPage({ params }: { params: Promise<{ locale:
   const locale = raw as Locale;
   const d = getDictionary(locale);
 
-  const [me, access, courses, catalog] = await Promise.all([
+  const [me, access, courses, catalog, payments] = await Promise.all([
     getMe(),
     getAccess(),
     getCourses(locale),
     getStoreCatalog(locale),
+    getPayments(),
   ]);
   if (!me) return null;
 
   const courseById = new Map(courses.map((course) => [course.id, course]));
   const productById = new Map(catalog.products.map((product) => [product.id, product]));
 
-  const orders = me.purchases.map((purchase) => {
-    const course = courseById.get(purchase.id);
-    const product = productById.get(purchase.id);
+  const describe = (itemId: string, fallbackTitle?: string) => {
+    const course = courseById.get(itemId);
+    const product = productById.get(itemId);
     return {
-      id: purchase.id,
-      title: course?.title ?? product?.title ?? purchase.id,
-      kind: course ? d.nav.catalog : d.store.title,
-      priceEur: course?.priceEur ?? product?.priceEur ?? 0,
-      date: purchase.purchasedAt,
+      title: course?.title ?? product?.title ?? fallbackTitle ?? itemId,
+      kind: course ? pick(locale, "Курс", "Course") : pick(locale, "Магазин", "Store"),
       href: course ? path(`/learn/${course.slug}`, locale) : product ? path(`/store/${product.slug}`, locale) : undefined,
     };
-  });
+  };
+
+  // What was actually paid, from the payments ledger. An API without the
+  // endpoint falls back to the owned courses at their catalogue price.
+  const orders = payments
+    ? payments.map((payment) => ({
+        id: payment.id,
+        ...describe(payment.itemId, payment.title),
+        amount: payment.amount,
+        refunded: payment.status === "refunded",
+        date: payment.paidAt,
+      }))
+    : me.purchases
+        .filter((purchase) => !courseById.get(purchase.id)?.isFree)
+        .map((purchase) => ({
+          id: purchase.id,
+          ...describe(purchase.id),
+          amount: courseById.get(purchase.id)?.priceEur ?? productById.get(purchase.id)?.priceEur ?? 0,
+          refunded: false,
+          date: purchase.purchasedAt,
+        }));
 
   const plan = access.tier === "pro" ? planByTier("pro") : access.tier === "club" ? planByTier("club") : null;
+  const showPlans = Boolean(plan) || plansPublic();
 
   return (
     <AppPage
       eyebrow={d.app.orders}
-      title={pick(locale, "Покупки и подписка", "Purchases and subscription")}
+      title={pick(locale, "Покупки", "Purchases")}
       body={pick(
         locale,
-        "История заказов, активная подписка и накопленная скидка.",
-        "Order history, your active subscription and any accumulated discount.",
+        "Всё, что вы оплатили, и сколько. Курсы открываются в «Обучении», файлы из магазина — в «Библиотеке».",
+        "Everything you paid for, and how much. Courses open under Learning, store files under Library.",
       )}
     >
       <div className="grid gap-4 lg:grid-cols-3">
@@ -95,7 +114,11 @@ export default async function OrdersPage({ params }: { params: Promise<{ locale:
                       </td>
                       <td className="py-3 pr-4 text-muted">{order.kind}</td>
                       <td className="py-3 pr-4 text-right font-mono tabular-nums text-ink-2">
-                        {formatPrice(order.priceEur, locale)}
+                        {order.refunded ? (
+                          <Badge tone="neutral">{pick(locale, "возврат", "refunded")}</Badge>
+                        ) : (
+                          formatPrice(order.amount, locale)
+                        )}
                       </td>
                       <td className="py-3 text-right text-muted tabular-nums">{formatDate(order.date, locale)}</td>
                     </tr>
@@ -123,31 +146,50 @@ export default async function OrdersPage({ params }: { params: Promise<{ locale:
         </div>
 
         <div className="flex flex-col gap-4">
+          {showPlans && (
+            <div className="rounded-lg border border-line bg-surface p-5">
+              <h2 className="flex items-center gap-2 text-[15px]">
+                <CreditCard className="h-4 w-4 text-accent" aria-hidden />
+                {d.plans.title}
+              </h2>
+              {plan ? (
+                <>
+                  <p className="mt-3 text-[15px] font-semibold text-ink">{locale === "en" ? plan.nameEn : plan.name}</p>
+                  <p className="mt-1 font-mono text-[14px] tabular-nums text-ink-2">
+                    {formatPrice(plan.priceEur, locale)} {d.common.perMonth}
+                  </p>
+                  <Badge tone="success" className="mt-3">
+                    {pick(locale, "активна", "active")}
+                  </Badge>
+                </>
+              ) : (
+                <>
+                  <p className="mt-3 text-[13.5px] leading-relaxed text-ink-3">{d.plans.body}</p>
+                  {plansPublic() && (
+                    <ButtonLink href={path("/plans", locale)} variant="secondary" size="sm" className="mt-4" full>
+                      {d.plans.compare}
+                    </ButtonLink>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
           <div className="rounded-lg border border-line bg-surface p-5">
             <h2 className="flex items-center gap-2 text-[15px]">
-              <CreditCard className="h-4 w-4 text-accent" aria-hidden />
-              {d.plans.title}
+              <LifeBuoy className="h-4 w-4 text-accent" aria-hidden />
+              {pick(locale, "Чеки и возвраты", "Receipts and refunds")}
             </h2>
-            {plan ? (
-              <>
-                <p className="mt-3 text-[15px] font-semibold text-ink">{locale === "en" ? plan.nameEn : plan.name}</p>
-                <p className="mt-1 font-mono text-[14px] tabular-nums text-ink-2">
-                  {formatPrice(plan.priceEur, locale)} {d.common.perMonth}
-                </p>
-                <Badge tone="success" className="mt-3">
-                  {pick(locale, "активна", "active")}
-                </Badge>
-              </>
-            ) : (
-              <>
-                <p className="mt-3 text-[13.5px] leading-relaxed text-ink-3">{d.plans.body}</p>
-                {plansPublic() && (
-                  <ButtonLink href={path("/plans", locale)} variant="secondary" size="sm" className="mt-4" full>
-                    {d.plans.compare}
-                  </ButtonLink>
-                )}
-              </>
-            )}
+            <p className="mt-3 text-[13.5px] leading-relaxed text-ink-3">
+              {pick(
+                locale,
+                "Чек приходит на почту от Gumroad сразу после оплаты. Вернуть деньги можно в течение 14 дней — напишите нам, и мы всё сделаем.",
+                "Gumroad emails the receipt right after payment. Refunds are open for 14 days — write to us and we'll handle it.",
+              )}
+            </p>
+            <ButtonLink href={path("/app/support", locale)} variant="secondary" size="sm" className="mt-4" full>
+              {pick(locale, "Написать в поддержку", "Contact support")}
+            </ButtonLink>
           </div>
 
           {access.discountPercent > 0 && (

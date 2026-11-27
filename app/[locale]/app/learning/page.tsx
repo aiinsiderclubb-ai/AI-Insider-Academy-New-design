@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/primitives/states";
 import { courseCover } from "@/content/covers";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
-import { courseCompletion, getAccess } from "@/lib/api/session";
+import { courseCompletion, getAccess, ownsCourse, nextLessonIndex } from "@/lib/api/session";
 import { getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -23,15 +23,16 @@ export default async function LearningPage({ params }: { params: Promise<{ local
   const [courses, access] = await Promise.all([getCourses(locale), getAccess()]);
 
   const owned = courses
-    .filter((course) => course.isFree || access.courseIds.has(course.id) || access.tier === "pro")
+    .filter((course) => ownsCourse(access, course))
     .map((course) => ({ course, ...courseCompletion(access, course.id, course.lessonCount) }));
 
   const inProgress = owned.filter((item) => item.done > 0 && item.percent < 100);
   const notStarted = owned.filter((item) => item.done === 0);
   const finished = owned.filter((item) => item.percent === 100);
 
+  // Paid courses not bought yet, and the intake until its application is accepted.
   const locked = courses.filter(
-    (course) => !course.isFree && !access.courseIds.has(course.id) && access.tier !== "pro" && course.status === "published",
+    (course) => !ownsCourse(access, course) && course.status === "published" && (!course.isFree || course.isIntake),
   );
 
   const sections = [
@@ -99,7 +100,7 @@ export default async function LearningPage({ params }: { params: Promise<{ local
                         <div className="flex flex-1 flex-col gap-3 p-5">
                           <h3 className="text-[17px] leading-tight">
                             <Link
-                              href={path(`/study/${course.slug}/${Math.min(done + 1, total)}`, locale)}
+                              href={path(`/study/${course.slug}/${(nextLessonIndex(access, course.id, total) ?? 0) + 1}`, locale)}
                               className="after:absolute after:inset-0 after:content-['']"
                             >
                               {course.title}
@@ -111,7 +112,7 @@ export default async function LearningPage({ params }: { params: Promise<{ local
                           <Progress value={percent} className="mt-auto" tone={percent === 100 ? "success" : "accent"} />
                           <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-accent-ink">
                             <Play className="h-3.5 w-3.5" aria-hidden />
-                            {done > 0 ? d.common.continue : d.common.start}
+                            {percent === 100 ? pick(locale, "Пересмотреть", "Watch again") : done > 0 ? d.common.continue : d.common.start}
                           </span>
                         </div>
                       </article>
@@ -139,8 +140,12 @@ export default async function LearningPage({ params }: { params: Promise<{ local
                     {course.categoryLabel} · {lessonCount(course.lessonCount, locale, d)}
                   </p>
                 </div>
-                <ButtonLink href={path(`/learn/${course.slug}`, locale)} variant="secondary" size="sm">
-                  {d.common.more}
+                <ButtonLink
+                  href={path(course.isIntake ? `/learn/${course.slug}/apply` : `/learn/${course.slug}`, locale)}
+                  variant="secondary"
+                  size="sm"
+                >
+                  {course.isIntake ? d.learn.apply : d.common.more}
                 </ButtonLink>
               </li>
             ))}

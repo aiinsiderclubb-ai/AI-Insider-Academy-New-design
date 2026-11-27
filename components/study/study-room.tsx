@@ -243,16 +243,20 @@ export function StudyRoom({
 
   async function toggleDone() {
     const nextDone = isDone ? done.filter((index) => index !== current.index) : [...done, current.index];
+    // When each lesson was finished: the cabinet's weekly rhythm counts these.
+    const watchedAt = { ...((progressRef.current.watchedAt as Record<string, string> | undefined) ?? {}) };
+    if (isDone) delete watchedAt[String(current.index)];
+    else watchedAt[String(current.index)] = new Date().toISOString();
     setDone(nextDone);
     setSaving(true);
     try {
       const response = await fetch(`/api/me/progress/${encodeURIComponent(course.id)}`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ data: { ...progressRef.current, watched: nextDone } }),
+        body: JSON.stringify({ data: { ...progressRef.current, watched: nextDone, watchedAt } }),
       });
       if (!response.ok) throw new Error("failed");
-      progressRef.current = { ...progressRef.current, watched: nextDone };
+      progressRef.current = { ...progressRef.current, watched: nextDone, watchedAt };
       if (!isDone && next) push({ tone: "success", title: d.study.done, body: next.title });
     } catch {
       setDone(done);

@@ -19,6 +19,7 @@ export default async function ReferralsPage({ params }: { params: Promise<{ loca
   const base = process.env.SITE_URL ?? links.academy;
   const code = rewards?.referralCode ?? me.user.personalId;
   const link = `${base.replace(/\/$/, "")}/${locale}/store?ref=${encodeURIComponent(code)}`;
+  const shown = rewards ?? { friendPercent: 10, referrerPercent: 15, nextPercent: 15, invited: 0, purchased: 0, friendDiscount: 0, codes: [] };
 
   return (
     <AppPage
@@ -26,15 +27,15 @@ export default async function ReferralsPage({ params }: { params: Promise<{ loca
       title={pick(locale, "Приглашайте — и платите меньше", "Invite friends, pay less")}
       body={pick(
         locale,
-        "Друг получает −10% на первую покупку, вы — код −15% за каждого купившего друга.",
-        "Your friend gets 10% off their first purchase; you get a 15% code for every friend who buys.",
+        `Друг получает −${shown.friendPercent}% на первую покупку, вы — код −${shown.referrerPercent}% за каждого купившего друга.`,
+        `Your friend gets ${shown.friendPercent}% off their first purchase; you get a ${shown.referrerPercent}% code for every friend who buys.`,
       )}
     >
       <ReferralPanel
         locale={locale}
         d={d}
         link={link}
-        rewards={rewards ?? { friendPercent: 10, referrerPercent: 15, nextPercent: 15, invited: 0, purchased: 0, friendDiscount: 0, codes: [] }}
+        rewards={shown}
       />
     </AppPage>
   );

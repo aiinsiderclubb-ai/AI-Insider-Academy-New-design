@@ -13,6 +13,8 @@ export interface CourseProgress {
   updatedAt?: string;
   /** When the learner first opened the free demo lesson of a course they do not own. */
   demoStartedAt?: string;
+  /** When each lesson (by index) was marked finished; older records lack it. */
+  watchedAt?: Record<string, string>;
 }
 
 /**
@@ -63,22 +65,53 @@ export const getSession = cache(async (): Promise<ApiUser | null> => {
   return me?.user ?? null;
 });
 
+/** The API stores a notification as message/date/targetPath; the cabinet reads title/createdAt/href. */
+type RawNotification = Partial<ApiNotification> & { message?: string; date?: string; targetPath?: string | null };
+
 export const getNotifications = cache(async (): Promise<ApiNotification[]> => {
-  const payload = await tryApi<ApiNotification[] | { notifications?: ApiNotification[] }>(
+  const payload = await tryApi<RawNotification[] | { notifications?: RawNotification[] }>(
     "/me/notifications",
     { auth: true, soft: true },
     [],
   );
-  return Array.isArray(payload) ? payload : (payload.notifications ?? []);
+  const rows = Array.isArray(payload) ? payload : (payload.notifications ?? []);
+  return rows.map((row) => ({
+    id: Number(row.id),
+    type: String(row.type ?? ""),
+    title: String(row.title ?? row.message ?? ""),
+    body: row.body,
+    read: Boolean(row.read),
+    createdAt: String(row.createdAt ?? row.date ?? ""),
+    href: cabinetPath(row.href ?? row.targetPath ?? undefined),
+  }));
 });
 
+/** Old notifications point at routes the site no longer has; send them to their cabinet equivalents. */
+function cabinetPath(target: string | undefined): string | undefined {
+  if (!target) return undefined;
+  if (/^\/(account|cabinet)(\/|$)/.test(target)) return "/app";
+  const course = target.match(/^\/courses\/([^/?#]+)/);
+  if (course) return `/learn/${course[1]}`;
+  return target.startsWith("/") ? target : undefined;
+}
+
+/** The API names the date `date` and the file `fileDataUrl`; the cabinet reads issuedAt/fileUrl. */
+type RawCertificate = Partial<ApiCertificate> & { date?: string; fileDataUrl?: string | null };
+
 export const getCertificates = cache(async (): Promise<ApiCertificate[]> => {
-  const payload = await tryApi<ApiCertificate[] | { certificates?: ApiCertificate[] }>(
+  const payload = await tryApi<RawCertificate[] | { certificates?: RawCertificate[] }>(
     "/me/certificates",
     { auth: true, soft: true },
     [],
   );
-  return Array.isArray(payload) ? payload : (payload.certificates ?? []);
+  const rows = Array.isArray(payload) ? payload : (payload.certificates ?? []);
+  return rows.map((row) => ({
+    id: String(row.id),
+    courseId: String(row.courseId ?? ""),
+    courseTitle: String(row.courseTitle ?? ""),
+    issuedAt: String(row.issuedAt ?? row.date ?? ""),
+    fileUrl: row.fileUrl ?? row.fileDataUrl ?? null,
+  }));
 });
 
 export const getStats = cache(async () =>
@@ -136,25 +169,45 @@ export const getSupportThread = cache(async () => {
   ]);
 });
 
+export interface Payment {
+  id: string;
+  itemId: string;
+  title: string;
+  amount: number;
+  currency: string;
+  status: "completed" | "refunded";
+  paidAt: string;
+}
+
+/** What the signed-in learner actually paid for, newest first. Null when the API is older than the endpoint. */
+export const getPayments = cache(async (): Promise<Payment[] | null> => {
+  const payload = await tryApi<Payment[] | { error: string } | null>("/me/payments", { auth: true, soft: true }, null);
+  return Array.isArray(payload) ? payload : null;
+});
+
 /** Marketplace entitlements are optional: the endpoint can fail independently. */
+/** The API answers with a bare array (older builds wrapped it in `items`); both are read. */
+type RawEntitlement = { productId: string; license?: string; licenseTier?: string };
+
 export const getEntitlements = cache(async () => {
-  const payload = await tryApi<{ items?: { productId: string; license: string }[] } | { error: string }>(
+  const payload = await tryApi<RawEntitlement[] | { items?: RawEntitlement[] } | { error: string }>(
     "/marketplace/me/entitlements",
     { auth: true, soft: true },
-    {},
+    [],
   );
-  if (!payload || "error" in payload) return [] as { productId: string; license: string }[];
-  return payload.items ?? [];
+  if (!payload || (!Array.isArray(payload) && "error" in payload)) return [] as { productId: string; license: string }[];
+  const rows = Array.isArray(payload) ? payload : (payload.items ?? []);
+  return rows.map((row) => ({ productId: row.productId, license: row.license ?? row.licenseTier ?? "personal" }));
 });
 
 export const getDownloads = cache(async () => {
-  const payload = await tryApi<{ items?: unknown[] } | { error: string }>(
+  const payload = await tryApi<unknown[] | { items?: unknown[] } | { error: string }>(
     "/marketplace/me/downloads",
     { auth: true, soft: true },
-    {},
+    [],
   );
-  if (!payload || "error" in payload) return [] as unknown[];
-  return payload.items ?? [];
+  if (!payload || (!Array.isArray(payload) && "error" in payload)) return [] as unknown[];
+  return Array.isArray(payload) ? payload : (payload.items ?? []);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -208,7 +261,21 @@ export const getAccess = cache(async (): Promise<Access> => {
   };
 });
 
-type AccessCourse = { id: string; isFree: boolean; isProOnly: boolean; inClub: boolean };
+type AccessCourse = { id: string; isFree: boolean; isProOnly: boolean; inClub: boolean; isIntake?: boolean };
+
+/**
+ * Open to every signed-in learner without a purchase. The intake («Найди своё
+ * в AI») costs nothing but opens only to accepted applicants, who get it as a
+ * purchase — so it is free, but not open.
+ */
+export function openToEveryone(course: AccessCourse): boolean {
+  return course.isFree && !course.isIntake;
+}
+
+/** The learner has this course in their cabinet: an open free course, bought, or covered by a plan. */
+export function ownsCourse(access: Access, course: AccessCourse): boolean {
+  return (access.signedIn && openToEveryone(course)) || hasFullAccess(access, course);
+}
 
 /** Every lesson of the course is open to this person: bought, or covered by their plan. */
 function hasFullAccess(access: Access, course: AccessCourse): boolean {
@@ -236,6 +303,7 @@ export type DemoState =
   | { kind: "expired" };
 
 export function demoState(access: Access, course: AccessCourse, now = Date.now()): DemoState {
+  // The intake has no demo lesson: it opens whole on acceptance.
   if (course.isFree || hasFullAccess(access, course)) return { kind: "none" };
   const started = Date.parse(access.progress[course.id]?.demoStartedAt ?? "");
   if (!Number.isFinite(started)) return { kind: "unused" };
@@ -260,9 +328,34 @@ export function onSelfPlan(access: Access, course: AccessCourse): boolean {
 }
 
 export function canOpenLesson(access: Access, course: AccessCourse, lessonIndex: number): boolean {
-  if (course.isFree || hasFullAccess(access, course)) return true;
+  if (openToEveryone(course) || hasFullAccess(access, course)) return true;
+  if (course.isIntake) return false;
   if (lessonIndex === 0) return demoState(access, course).kind !== "expired";
   return false;
+}
+
+/** Lessons finished since Monday, across every course — the weekly rhythm. */
+export function lessonsThisWeek(access: Access, now = new Date()): number {
+  const monday = new Date(now);
+  monday.setUTCHours(0, 0, 0, 0);
+  monday.setUTCDate(monday.getUTCDate() - ((monday.getUTCDay() + 6) % 7));
+  const since = monday.getTime();
+  let count = 0;
+  for (const progress of Object.values(access.progress)) {
+    for (const at of Object.values(progress?.watchedAt ?? {})) if (Date.parse(at) >= since) count++;
+  }
+  return count;
+}
+
+/**
+ * The lesson to continue with, 0-based: the first one not yet watched — not
+ * "how many are done", which skips a lesson when they were watched out of
+ * order. Null when every lesson is done.
+ */
+export function nextLessonIndex(access: Access, courseId: string, lessonCount: number): number | null {
+  const watched = new Set(access.progress[courseId]?.watched ?? []);
+  for (let index = 0; index < lessonCount; index++) if (!watched.has(index)) return index;
+  return null;
 }
 
 export function courseCompletion(access: Access, courseId: string, lessonCount: number) {

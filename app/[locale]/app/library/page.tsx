@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Download, FileArchive, FolderOpen, Heart, Package } from "lucide-react";
+import { FolderOpen, Heart, Package } from "lucide-react";
+import { DownloadFileButton } from "@/components/app/download-file-button";
 import { AppPage } from "@/components/app/page-header";
 import { ButtonLink } from "@/components/primitives/button";
 import { EmptyState, Note } from "@/components/primitives/states";
@@ -8,17 +9,22 @@ import { WishlistPanel } from "@/components/store/wishlist";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
-import { getAccess, getDownloads } from "@/lib/api/session";
-import { formatDate, formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
+import { getAccess, getDownloads, ownsCourse } from "@/lib/api/session";
+import { formatPrice, getDictionary, path, type Locale } from "@/lib/i18n";
 
 export const metadata: Metadata = { robots: { index: false } };
 
 interface DownloadRow {
   assetId?: string;
-  title?: string;
-  productSlug?: string;
+  productId?: string;
+  fileName?: string;
+  sizeBytes?: number;
   version?: number;
-  updatedAt?: string;
+}
+
+function fileSize(bytes?: number) {
+  if (!bytes) return "";
+  return bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
 export default async function LibraryPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -35,9 +41,10 @@ export default async function LibraryPage({ params }: { params: Promise<{ locale
 
   const ownedProducts = catalog.products.filter((product) => access.productIds.has(product.id));
   const ownedCourses = courses.filter(
-    (course) => course.isFree || access.courseIds.has(course.id) || access.tier === "pro",
+    (course) => ownsCourse(access, course),
   );
   const rows = downloads as DownloadRow[];
+  const filesFor = (productId: string) => rows.filter((row) => row.productId === productId && row.assetId);
 
   return (
     <AppPage
@@ -56,18 +63,48 @@ export default async function LibraryPage({ params }: { params: Promise<{ locale
         </h2>
         {ownedProducts.length ? (
           <ul className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
-            {ownedProducts.map((product) => (
-              <li key={product.id} className="flex items-center justify-between gap-4 bg-surface p-4">
-                <div className="min-w-0">
-                  <p className="truncate text-[14px] font-medium text-ink">{product.title}</p>
-                  <p className="mt-0.5 font-mono text-[12px] text-muted">{product.fileTypes.join(" · ")}</p>
-                </div>
-                <ButtonLink href={path(`/store/${product.slug}`, locale)} variant="secondary" size="sm">
-                  <Download className="h-3.5 w-3.5" aria-hidden />
-                  {d.common.download}
-                </ButtonLink>
-              </li>
-            ))}
+            {ownedProducts.map((product) => {
+              const files = filesFor(product.id);
+              return (
+                <li key={product.id} className="flex flex-col gap-3 bg-surface p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="truncate text-[14px] font-medium text-ink">
+                        <a href={path(`/store/${product.slug}`, locale)} className="underline-offset-4 hover:underline">
+                          {product.title}
+                        </a>
+                      </p>
+                      <p className="mt-0.5 font-mono text-[12px] text-muted">{product.fileTypes.join(" · ")}</p>
+                    </div>
+                    {files.length === 0 && (
+                      <ButtonLink href={path(`/store/${product.slug}`, locale)} variant="secondary" size="sm">
+                        {pick(locale, "Открыть", "Open")}
+                      </ButtonLink>
+                    )}
+                  </div>
+                  {files.length > 0 && (
+                    <ul className="flex flex-col gap-2 border-t border-line pt-3">
+                      {files.map((file) => (
+                        <li key={file.assetId} className="flex items-center justify-between gap-3">
+                          <span className="min-w-0">
+                            <span className="block truncate font-mono text-[12.5px] text-ink-2">{file.fileName}</span>
+                            <span className="text-[11.5px] text-muted">
+                              {pick(locale, "версия", "version")} {file.version ?? 1}
+                              {file.sizeBytes ? ` · ${fileSize(file.sizeBytes)}` : ""}
+                            </span>
+                          </span>
+                          <DownloadFileButton
+                            assetId={file.assetId as string}
+                            label={d.common.download}
+                            errorLabel={pick(locale, "Не вышло, попробуйте ещё раз", "Didn't work, try again")}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <EmptyState
@@ -87,41 +124,6 @@ export default async function LibraryPage({ params }: { params: Promise<{ locale
           />
         )}
       </section>
-
-      {rows.length > 0 && (
-        <section className="mt-10">
-          <h2 className="mb-4 flex items-center gap-2 text-[17px]">
-            <FileArchive className="h-4 w-4 text-accent" aria-hidden />
-            {pick(locale, "История скачиваний", "Download history")}
-          </h2>
-          <div className="scroll-x rounded-lg border border-line bg-surface">
-            <table className="w-full min-w-[32rem] text-[13.5px]">
-              <thead>
-                <tr className="border-b border-line bg-surface-2">
-                  <th scope="col" className="p-3.5 text-left font-mono text-2xs tracking-[0.1em] text-muted uppercase">
-                    {d.store.title}
-                  </th>
-                  <th scope="col" className="p-3.5 text-left font-mono text-2xs tracking-[0.1em] text-muted uppercase">
-                    v
-                  </th>
-                  <th scope="col" className="p-3.5 text-left font-mono text-2xs tracking-[0.1em] text-muted uppercase">
-                    {d.common.saved}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, index) => (
-                  <tr key={row.assetId ?? index} className="border-b border-line last:border-b-0">
-                    <td className="p-3.5 text-ink-2">{row.title ?? row.productSlug ?? "—"}</td>
-                    <td className="p-3.5 font-mono text-muted">{row.version ?? 1}</td>
-                    <td className="p-3.5 text-muted">{row.updatedAt ? formatDate(row.updatedAt, locale) : "—"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
 
       <section className="mt-10">
         <h2 className="mb-4 flex items-center gap-2 text-[17px]">

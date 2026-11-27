@@ -76,7 +76,8 @@ export function AppShell({
 
   React.useEffect(() => setMobileOpen(false), [pathname]);
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  // The cabinet root ("Today") matches only itself; every other item also covers its sub-pages.
+  const isActive = (href: string) => pathname === href || (!href.endsWith("/app") && pathname.startsWith(`${href}/`));
   const flat = groups.flatMap((group) => group.items);
   const primary = flat.slice(0, 4);
 
@@ -165,7 +166,7 @@ export function AppShell({
           </Link>
 
           <Link
-            href={path("/app?panel=notifications", locale)}
+            href={path("/app/notifications", locale)}
             aria-label={`${d.nav.notifications}${unread ? ` (${unread})` : ""}`}
             className="relative flex h-9 w-9 items-center justify-center rounded-md text-ink-3 transition-colors hover:bg-surface-3 hover:text-ink"
           >
@@ -205,9 +206,9 @@ export function AppShell({
                   <p className="truncate text-[13.5px] font-semibold text-ink">{user.name}</p>
                   <p className="truncate text-[12px] text-muted">{user.email}</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <Badge tone={user.tier === "pro" ? "accent" : user.tier === "club" ? "success" : "neutral"}>
-                      {user.tier === "free" ? d.plans.title : user.tier}
-                    </Badge>
+                    {user.tier !== "free" && (
+                      <Badge tone={user.tier === "pro" ? "accent" : "success"}>{user.tier}</Badge>
+                    )}
                     {user.personalId && (
                       <span className="font-mono text-2xs tracking-[0.08em] text-faint">{user.personalId}</span>
                     )}

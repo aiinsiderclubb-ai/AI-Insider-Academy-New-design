@@ -18,24 +18,30 @@ import { ButtonLink } from "@/components/primitives/button";
 import { Progress, ProgressRing } from "@/components/primitives/display";
 import { EmptyState, Note } from "@/components/primitives/states";
 import { ProductCard } from "@/components/store/product-card";
-import { courseCover } from "@/content/covers";
+import { courseCover, courseWallpaper } from "@/content/covers";
 import { giveawayIsOpen } from "@/content/community";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
 import { getStoreCatalog } from "@/lib/api/store";
-import { getAccess, getCertificates, getMe, getNotifications, courseCompletion } from "@/lib/api/session";
+import {
+  getAccess,
+  getCertificates,
+  getMe,
+  getNotifications,
+  courseCompletion,
+  lessonsThisWeek,
+  nextLessonIndex,
+  ownsCourse,
+} from "@/lib/api/session";
 import { getGiveaways } from "@/lib/api/public";
 import { formatDate, formatRelative, getDictionary, lessonCount, path, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { robots: { index: false } };
 
+/* The server runs on UTC and does not know the learner's clock, so no "good morning" at their midnight. */
 function greeting(locale: Locale, name: string) {
-  const hour = new Date().getHours();
-  const key = hour < 5 ? "night" : hour < 12 ? "morning" : hour < 18 ? "day" : "evening";
-  const ru = { night: "Доброй ночи", morning: "Доброе утро", day: "Добрый день", evening: "Добрый вечер" };
-  const en = { night: "Good night", morning: "Good morning", day: "Good afternoon", evening: "Good evening" };
-  return `${pick(locale, ru[key], en[key])}, ${name.split(" ")[0]}`;
+  return `${pick(locale, "Привет", "Hi")}, ${name.split(" ")[0]}`;
 }
 
 export default async function TodayPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -56,17 +62,24 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
   if (!me) return null;
 
   const openCourses = courses.filter(
-    (course) => course.isFree || access.courseIds.has(course.id) || access.tier === "pro",
+    (course) => ownsCourse(access, course),
   );
 
   const withProgress = openCourses
-    .map((course) => ({ course, ...courseCompletion(access, course.id, course.lessonCount) }))
-    .sort((a, b) => b.done - a.done || a.course.lessonCount - b.course.lessonCount);
+    .map((course) => ({
+      course,
+      ...courseCompletion(access, course.id, course.lessonCount),
+      next: nextLessonIndex(access, course.id, course.lessonCount),
+      touched: Date.parse(access.progress[course.id]?.updatedAt ?? "") || 0,
+    }))
+    // Started courses first, the one touched last on top; finished ones at the end.
+    .sort((a, b) => Number(a.percent === 100) - Number(b.percent === 100) || b.touched - a.touched || b.done - a.done);
 
-  const current = withProgress.find((item) => item.done > 0 && item.percent < 100) ?? withProgress[0];
-  const nextLessonIndex = current ? Math.min(current.done, current.course.lessonCount - 1) : 0;
-  const nextLesson = current?.course.lessons[nextLessonIndex];
-  const currentImage = current ? courseCover(current.course.image, current.course.slug) : null;
+  const current = withProgress.find((item) => item.percent < 100) ?? null;
+  const allFinished = withProgress.length > 0 && !current;
+  const nextIndex = current?.next ?? 0;
+  const nextLesson = current?.course.lessons[nextIndex];
+  const currentImage = current ? courseWallpaper(current.course.image, current.course.slug) : null;
 
   const activeGiveaway = giveaways.find((giveaway) => giveawayIsOpen(giveaway.status, giveaway.endsAt));
   const unread = notifications.filter((notification) => !notification.read);
@@ -76,7 +89,7 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
     .slice(0, 3);
 
   const weekTarget = 5;
-  const weekDone = Math.min(weekTarget, withProgress.reduce((sum, item) => sum + item.done, 0));
+  const weekDone = lessonsThisWeek(access);
 
   return (
     <AppPage
@@ -101,11 +114,17 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
       {/* ------------------------------ hero row ------------------------------- */}
       <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         {current ? (
-          <article className="relative overflow-hidden rounded-xl border border-line bg-surface shadow-xs">
+          <article className="today-hero relative grid overflow-hidden rounded-xl border border-line-2 shadow-xs md:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)]">
+            {/* The course art carries its own title and badge, so it stands beside the text rather than under it. */}
             {currentImage && (
-              <div className="absolute inset-0 opacity-[0.18]">
-                <Image src={currentImage} alt="" fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
-              </div>
+              <Link
+                href={path(`/study/${current.course.slug}/${nextIndex + 1}`, locale)}
+                className="relative order-first aspect-video overflow-hidden md:order-last md:aspect-auto"
+                tabIndex={-1}
+                aria-hidden
+              >
+                <Image src={currentImage} alt="" fill sizes="(max-width: 768px) 100vw, 35vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+              </Link>
             )}
             <div className="relative flex h-full flex-col justify-between gap-8 p-6 sm:p-8">
               <div>
@@ -117,7 +136,7 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
                 {nextLesson && (
                   <p className="mt-3 max-w-lg text-[14.5px] leading-relaxed text-ink-2">
                     <span className="font-mono text-[12px] tracking-[0.1em] text-muted">
-                      {String(nextLessonIndex + 1).padStart(2, "0")}
+                      {String(nextIndex + 1).padStart(2, "0")}
                     </span>{" "}
                     {nextLesson.title}
                   </p>
@@ -132,7 +151,7 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
                   />
                 </div>
                 <ButtonLink
-                  href={path(`/study/${current.course.slug}/${nextLessonIndex + 1}`, locale)}
+                  href={path(`/study/${current.course.slug}/${nextIndex + 1}`, locale)}
                   size="lg"
                   className="group"
                 >
@@ -143,6 +162,21 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
               </div>
             </div>
           </article>
+        ) : allFinished ? (
+          <EmptyState
+            icon={<Award className="h-5 w-5" aria-hidden />}
+            title={pick(locale, "Все открытые курсы пройдены", "Every open course is done")}
+            body={pick(
+              locale,
+              "Отличная работа. Следующий шаг — программа с проверкой заданий или готовая система из магазина.",
+              "Well done. Next: a programme with reviewed assignments, or a ready-made system from the store.",
+            )}
+            action={
+              <ButtonLink href={path("/learn", locale)} size="sm">
+                {d.nav.catalog}
+              </ButtonLink>
+            }
+          />
         ) : (
           <EmptyState
             icon={<Sparkles className="h-5 w-5" aria-hidden />}
@@ -170,7 +204,9 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
             <div className="min-w-0">
               <p className="eyebrow">{pick(locale, "Ритм недели", "Weekly rhythm")}</p>
               <p className="mt-2 text-[14px] leading-snug text-ink-2">
-                {pick(locale, "Цель — 5 уроков в неделю", "A five-lesson week")}
+                {weekDone >= weekTarget
+                  ? pick(locale, "Цель недели выполнена", "This week's goal is done")
+                  : pick(locale, `Уроков с понедельника. Цель — ${weekTarget}`, `Lessons since Monday. Goal: ${weekTarget}`)}
               </p>
             </div>
           </div>
@@ -181,7 +217,10 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
               <p className="mt-2 font-display text-[2rem] leading-none font-extrabold tabular-nums">
                 {me.streak.current}
               </p>
-              <p className="mt-1.5 text-[13px] text-muted">{pick(locale, "дней подряд", "days in a row")}</p>
+              <p className="mt-1.5 text-[13px] text-muted">
+                {pick(locale, "дней подряд с уроками", "days in a row with a lesson")}
+                {(me.streak.best ?? 0) > me.streak.current ? ` · ${pick(locale, "рекорд", "best")} ${me.streak.best}` : ""}
+              </p>
             </div>
             <Flame
               className={cn("h-9 w-9", me.streak.current > 0 ? "text-accent" : "text-line-3")}
@@ -205,9 +244,13 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
 
         {withProgress.length ? (
           <ul className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
-            {withProgress.slice(0, 4).map(({ course, done, total, percent }) => (
-              <li key={course.id} className="bg-surface transition-colors hover:bg-surface-2">
-                <Link href={path(`/study/${course.slug}/${Math.min(done + 1, total)}`, locale)} className="flex gap-4 p-4">
+            {withProgress.slice(0, 4).map(({ course, done, total, percent, next }, index, shown) => (
+              <li
+                key={course.id}
+                // An odd last card spans the row instead of leaving an empty cell beside it.
+                className={cn("bg-surface transition-colors hover:bg-surface-2", shown.length % 2 === 1 && index === shown.length - 1 && "sm:col-span-2")}
+              >
+                <Link href={path(`/study/${course.slug}/${(next ?? 0) + 1}`, locale)} className="flex gap-4 p-4">
                   <span className="relative h-14 w-20 shrink-0 overflow-hidden rounded-md border border-line bg-surface-3">
                     {courseCover(course.image, course.slug) && (
                       <Image src={courseCover(course.image, course.slug)!} alt="" fill sizes="80px" className="object-cover" />
@@ -216,7 +259,7 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[14.5px] font-medium text-ink">{course.title}</span>
                     <span className="mt-1 block text-[12.5px] text-muted">
-                      {done} / {total} · {lessonCount(total, locale, d)}
+                      {percent === 100 ? pick(locale, "Пройден", "Completed") : `${done} / ${total} · ${lessonCount(total, locale, d)}`}
                     </span>
                     <Progress value={percent} size="sm" className="mt-2.5" />
                   </span>
@@ -245,7 +288,9 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
           <div className="flex items-center justify-between gap-3">
             <h2 className="flex items-center gap-2 text-[15px]">
               <BellRing className="h-4 w-4 text-accent" aria-hidden />
-              {d.nav.notifications}
+              <Link href={path("/app/notifications", locale)} className="hover:text-accent-ink">
+                {d.nav.notifications}
+              </Link>
             </h2>
             {unread.length > 0 && <Badge tone="accent">{unread.length}</Badge>}
           </div>
@@ -255,7 +300,13 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
                 <li key={notification.id} className="flex gap-2.5">
                   {!notification.read && <Dot />}
                   <div className="min-w-0">
-                    <p className="text-[13.5px] leading-snug text-ink">{notification.title}</p>
+                    {notification.href ? (
+                      <Link href={path(notification.href, locale)} className="text-[13.5px] leading-snug text-ink hover:text-accent-ink">
+                        {notification.title}
+                      </Link>
+                    ) : (
+                      <p className="text-[13.5px] leading-snug text-ink">{notification.title}</p>
+                    )}
                     <p className="mt-0.5 text-[12px] text-muted">{formatRelative(notification.createdAt, locale)}</p>
                   </div>
                 </li>
@@ -293,8 +344,8 @@ export default async function TodayPage({ params }: { params: Promise<{ locale: 
             <p className="mt-4 text-[13px] leading-relaxed text-muted">
               {pick(
                 locale,
-                "Первый сертификат выдаётся после приёмки финального проекта.",
-                "The first certificate arrives once your final project is accepted.",
+                "Сертификат выдаётся за программу с проверкой заданий — после приёмки финального проекта.",
+                "Certificates come with reviewed programmes, once the final project is accepted.",
               )}
             </p>
           )}

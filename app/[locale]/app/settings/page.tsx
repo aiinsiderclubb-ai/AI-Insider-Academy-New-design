@@ -16,11 +16,18 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
   const me = await getMe();
   if (!me) return null;
 
-  const telegram = await tryApi<TelegramState>(
+  const telegramDefaults = { botUrl: "https://t.me/InsiderAcademyNotifyBot", botUsername: "InsiderAcademyNotifyBot" };
+  const telegramRaw = await tryApi<TelegramState>(
     "/telegram/status",
     { auth: true, soft: true },
-    { connected: false, username: null, botUrl: "https://t.me/InsiderAcademyNotifyBot", botUsername: "InsiderAcademyNotifyBot", prefs: {} },
+    { connected: false, username: null, ...telegramDefaults, prefs: {} },
   );
+  // An API without the bot configured answers with nulls; the public bot is shown instead of "@null".
+  const telegram: TelegramState = {
+    ...telegramRaw,
+    botUrl: telegramRaw.botUrl || telegramDefaults.botUrl,
+    botUsername: telegramRaw.botUsername || telegramDefaults.botUsername,
+  };
 
   return (
     <AppPage

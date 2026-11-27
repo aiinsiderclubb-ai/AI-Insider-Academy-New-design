@@ -7,7 +7,7 @@ import { ProgressRing } from "@/components/primitives/display";
 import { EmptyState } from "@/components/primitives/states";
 import { pick } from "@/content/locale";
 import { getCourses } from "@/lib/api/catalog";
-import { courseCompletion, getAccess, getCertificates, getMe } from "@/lib/api/session";
+import { courseCompletion, getAccess, getCertificates, getMe, ownsCourse } from "@/lib/api/session";
 import { formatDate, getDictionary, path, type Locale } from "@/lib/i18n";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -25,7 +25,7 @@ export default async function AchievementsPage({ params }: { params: Promise<{ l
   ]);
   if (!me) return null;
 
-  const owned = courses.filter((course) => course.isFree || access.courseIds.has(course.id) || access.tier === "pro");
+  const owned = courses.filter((course) => ownsCourse(access, course));
   const lessonsDone = owned.reduce((sum, course) => sum + courseCompletion(access, course.id, course.lessonCount).done, 0);
   const lessonsTotal = owned.reduce((sum, course) => sum + course.lessonCount, 0);
   const overall = lessonsTotal ? Math.round((lessonsDone / lessonsTotal) * 100) : 0;

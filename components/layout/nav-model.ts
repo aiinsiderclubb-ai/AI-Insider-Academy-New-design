@@ -133,7 +133,7 @@ export function buildAppNav(d: Dictionary, locale: Locale): { title: string; ite
     {
       title: d.community.title,
       items: [
-        { label: d.app.team, href: p("/app/team"), icon: "users" },
+        // Team seats stay off the menu until team purchases are on sale.
         { label: d.app.referrals, href: p("/app/referrals"), icon: "gift" },
         { label: d.app.support, href: p("/app/support"), icon: "lifebuoy" },
       ],

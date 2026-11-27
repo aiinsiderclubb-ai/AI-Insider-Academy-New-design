@@ -10,7 +10,8 @@ import { Tabs } from "@/components/primitives/navigation";
 import { Avatar } from "@/components/primitives/display";
 import { useToast } from "@/components/primitives/toast";
 import { Note } from "@/components/primitives/states";
-import { changePassword } from "@/lib/auth/actions";
+import { changeEmail, changePassword } from "@/lib/auth/actions";
+import { pick } from "@/content/locale";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -75,7 +76,7 @@ export function SettingsPanels({
 
       <div className="min-w-0">
         {section === "profile" && <ProfilePanel d={d} user={user} />}
-        {section === "email" && <EmailPanel d={d} user={user} />}
+        {section === "email" && <EmailPanel d={d} locale={locale} user={user} />}
         {section === "security" && <SecurityPanel d={d} locale={locale} temporary={user.passwordTemporary} />}
         {section === "telegram" && <TelegramPanel d={d} telegram={telegram} personalId={user.personalId} locale={locale} />}
         {section === "notifications" && <NotificationsPanel d={d} telegram={telegram} locale={locale} />}
@@ -151,7 +152,7 @@ function ProfilePanel({
   );
 }
 
-function EmailPanel({ d, user }: { d: Dictionary; user: { email: string; emailVerified: boolean } }) {
+function EmailPanel({ d, locale, user }: { d: Dictionary; locale: Locale; user: { email: string; emailVerified: boolean } }) {
   const { push } = useToast();
   const [email, setEmail] = React.useState(user.email);
   const [password, setPassword] = React.useState("");
@@ -161,15 +162,11 @@ function EmailPanel({ d, user }: { d: Dictionary; user: { email: string; emailVe
     event.preventDefault();
     setSaving(true);
     try {
-      const response = await fetch("/api/me/email", {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const payload = (await response.json().catch(() => ({}))) as { errorRu?: string; error?: string };
-      if (!response.ok) throw new Error(payload.errorRu ?? payload.error ?? "");
-      push({ tone: "success", title: d.common.saved });
+      const result = await changeEmail(email.trim(), password);
+      if (!result.ok) throw new Error(result.message === "network" ? "" : (result.message ?? ""));
       setPassword("");
+      // The new address has to be confirmed before the cabinet opens again.
+      window.location.assign(`/${locale}/verify-email?email=${encodeURIComponent(email.trim())}`);
     } catch (error) {
       push({ tone: "warning", title: (error as Error).message || d.errors.generic });
     } finally {
@@ -184,7 +181,7 @@ function EmailPanel({ d, user }: { d: Dictionary; user: { email: string; emailVe
         {user.emailVerified && (
           <Badge tone="success">
             <Check className="h-3 w-3" aria-hidden />
-            ok
+            {pick(locale, "подтверждён", "confirmed")}
           </Badge>
         )}
       </div>
@@ -244,7 +241,7 @@ function SecurityPanel({ d, locale, temporary }: { d: Dictionary; locale: Locale
         </Note>
       )}
       <form onSubmit={save} className="flex flex-col gap-4">
-        <Field label={temporary ? (ru ? "Временный пароль" : "Temporary password") : d.auth.password} htmlFor="current-password">
+        <Field label={temporary ? (ru ? "Временный пароль" : "Temporary password") : ru ? "Текущий пароль" : "Current password"} htmlFor="current-password">
           <Input
             id="current-password"
             type="password"
@@ -254,7 +251,7 @@ function SecurityPanel({ d, locale, temporary }: { d: Dictionary; locale: Locale
             required
           />
         </Field>
-        <Field label={temporary ? (ru ? "Новый пароль" : "New password") : d.auth.passwordRepeat} htmlFor="next-password" hint="10+ · A-z · 0-9">
+        <Field label={ru ? "Новый пароль" : "New password"} htmlFor="next-password" hint="10+ · A-z · 0-9">
           <Input
             id="next-password"
             type="password"
@@ -271,7 +268,9 @@ function SecurityPanel({ d, locale, temporary }: { d: Dictionary; locale: Locale
 
       <p className="mt-6 flex items-center gap-2 border-t border-line pt-5 text-[12.5px] text-muted">
         <ShieldCheck className="h-3.5 w-3.5 text-success" aria-hidden />
-        {d.checkout.securePayment}
+        {ru
+          ? "После смены пароля все остальные устройства выйдут из аккаунта."
+          : "Changing the password signs every other device out."}
       </p>
     </Card>
   );

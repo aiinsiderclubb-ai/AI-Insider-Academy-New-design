@@ -1355,6 +1355,13 @@
   opacity: 0.45;
 }
 
+/* The cabinet's "next lesson" card: text on a warm surface, the course art beside it. */
+.today-hero {
+  background:
+    radial-gradient(30rem 16rem at 0% 0%, color-mix(in oklab, var(--accent) 11%, transparent), transparent 70%),
+    var(--surface);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

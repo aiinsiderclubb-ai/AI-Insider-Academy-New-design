@@ -42,7 +42,8 @@ async function forward(request: NextRequest, segments: string[]) {
   }
 
   const method = request.method;
-  const body = method === "GET" || method === "HEAD" ? undefined : await request.text();
+  // Bytes, not text: a homework attachment (PDF, image, zip) would lose every non-UTF-8 byte as a string.
+  const body = method === "GET" || method === "HEAD" ? undefined : await request.arrayBuffer();
 
   let upstream: Response;
   try {

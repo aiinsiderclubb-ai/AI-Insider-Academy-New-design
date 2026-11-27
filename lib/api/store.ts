@@ -190,6 +190,7 @@ export async function getStoreCatalog(locale: Locale): Promise<StoreCatalog> {
 
 /** A product on the opening sale: its license (and so its headline price) at the sale price. */
 function onOpeningSale(product: Product, sale: NonNullable<ApiCatalog["sale"]>): Product {
+  if (sale.excluded?.includes(product.id)) return product;
   const license = product.licenses.find((item) => item.id === sale.license);
   if (!license || license.priceEur <= sale.priceEur) return product;
   return {

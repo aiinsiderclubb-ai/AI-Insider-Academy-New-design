@@ -131,7 +131,8 @@ export interface ApiCatalog {
   products: ApiProduct[];
   bundles: ApiBundle[];
   /** The opening sale while it runs: this price for the given license, until `endsAt`. */
-  sale?: { priceEur: number; license: LicenseId; endsAt: string } | null;
+  /** `excluded`: products released at full price while the sale runs. */
+  sale?: { priceEur: number; license: LicenseId; endsAt: string; excluded?: string[] } | null;
 }
 
 /* ------------------------------------ misc -------------------------------- */
